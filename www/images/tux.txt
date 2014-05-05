@@ -1,0 +1,7 @@
+designer: Larry Ewing
+icon-pack: Tux
+website: http://en.wikipedia.org/wiki/Tux
+license: Free with Attribution
+free: 1
+commercial: 1
+trademark: 0

@@ -1,0 +1,7 @@
+designer: pixtea.com
+icon-pack: Wallet Icon
+website: http://pixtea.com/wallet-icon/
+license: Creative Commons Attribution (by)
+free: 1
+commercial: 1
+trademark: 0

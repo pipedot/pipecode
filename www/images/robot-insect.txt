@@ -1,0 +1,7 @@
+designer: Aha-Soft
+icon-pack: Large Android Icons
+website: http://www.large-icons.com/stock-icons/free-large-android-icons.htm http://www.aha-soft.com/
+license: Creative Commons Attribution-Share Alike 3.0
+free: 1
+commercial: 1
+trademark: 0

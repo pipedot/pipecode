@@ -1,0 +1,6 @@
+designer: Mart (Marco Martin)
+website: http://notmart.org/
+license: GPL
+free: 1
+commercial: 1
+trademark: 0

@@ -1,0 +1,7 @@
+designer: Aha-Soft
+icon-pack: 48x48-free-object-icons
+website: http://www.small-icons.com/packs/48x48-free-object-icons.htm
+license: CC-SA3
+free: 1
+commercial: 1
+trademark: 0

@@ -1,0 +1,7 @@
+designer: Oxygen Team
+icon-pack: Oxygen
+website: http://www.oxygen-icons.org/
+license: GPL
+free: 1
+commercial: 1
+trademark: 0

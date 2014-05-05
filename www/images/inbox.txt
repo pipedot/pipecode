@@ -1,0 +1,7 @@
+designer: Yusuke Kamiyamane
+icon-pack: Fugue Icons
+website: http://p.yusukekamiyamane.com/
+license: http://creativecommons.org/licenses/by/3.0/
+free: 1
+commercial: 1
+trademark: 0

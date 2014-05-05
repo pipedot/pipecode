@@ -1,0 +1,7 @@
+designer: Mozilla Foundation
+icon-pack: Feed Icons
+website: http://www.feedicons.com/
+license: Free but with non-free guidelines (not legally binding)
+free: 1
+commercial: 1
+trademark: 0

@@ -1,0 +1,7 @@
+designer: Bitcoin
+icon-pack: Gold style
+website: https://en.bitcoin.it/wiki/Promotional_graphics
+license: free to use
+free: 1
+commercial: 1
+trademark: 0

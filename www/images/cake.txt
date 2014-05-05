@@ -1,0 +1,7 @@
+designer: David Vignoni
+icon-pack: Nuvola Icon Pack
+website: http://www.icon-king.com/
+license: GPL
+free: 1
+commercial: 1
+trademark: 0

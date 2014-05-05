@@ -1,0 +1,7 @@
+designer: pixtea.com
+icon-pack: Sport Ball Icons
+website: http://pixtea.com/sport-ball-icons/
+license: Creative Commons Attribution (by)
+free: 1
+commercial: 1
+trademark: 0

@@ -1,0 +1,7 @@
+designer: VMware
+icon-pack: VMware Tango Icons
+website: http://www.vmware.com/
+license: Creative Commons Attribution-ShareAlike 2.5
+free: 1
+commercial: 1
+trademark: 0

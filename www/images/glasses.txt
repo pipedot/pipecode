@@ -1,0 +1,7 @@
+designer: Lothar Grimme
+icon-pack: Carpelinx
+website: http://www.grafixport.org/
+license: GPL
+free: 1
+commercial: 1
+trademark: 0
