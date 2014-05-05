@@ -21,6 +21,7 @@
 
 include("clean.php");
 include("story.php");
+include("captcha.php");
 
 
 function print_submit_box($title, $body, $story, $tid, $preview)
@@ -56,11 +57,11 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 	writeln('<table class="fill" style="padding: 0px">');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px">Title</td>');
-	writeln('		<td><input name="title" type="text" value="' . $title . '" required="required"/></td>');
+	writeln('		<td colspan="2"><input name="title" type="text" value="' . $title . '" required="required"/></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px">Topic</td>');
-	writeln('		<td>');
+	writeln('		<td colspan="2">');
 	writeln('			<select name="tid">');
 	$topics = db_get_list("topic", "topic", array("promoted" => 1));
 	$k = array_keys($topics);
@@ -77,10 +78,13 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Story</td>');
-	writeln('		<td><textarea name="story" style="height: 200px" required="required">' . $body . '</textarea></td>');
+	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required="required">' . $body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td class="right" colspan="2"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
+	$question = captcha_challenge();
+	writeln('		<td>Captcha</td>');
+	writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"/></td></tr></table></td>');
+	writeln('		<td class="right"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
@@ -98,7 +102,12 @@ if (http_post()) {
 	$title = http_post_string("title", array("len" => 100, "valid" => "[a-z][A-Z][0-9]`~!@#$%^&*()_+-={}|[]\\:\";',./? "));
 	$body = http_post_string("story", array("len" => 64000, "valid" => "[ALL]"));
 	$tid = http_post_int("tid");
+	$answer = http_post_string("answer", array("required" => false));
 	$time = time();
+
+	if (!captcha_verify($answer)) {
+		die("captcha failed");
+	}
 
 	$topic = db_get_rec("topic", $tid);
 

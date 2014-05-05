@@ -1,5 +1,15 @@
+== 0.0.2 ==
+
+2014-05-05 Bryan Beicker
+
+	* added captcha to the submit page
+
 == 0.0.1 ==
 
-2013-04-01 Bryan Beicker
+2014-05-05 Bryan Beicker
+
+	* initial release
+
+2014-04-01 Bryan Beicker
 
 	* initial skeleton version

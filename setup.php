@@ -139,6 +139,5 @@ end_tab();
 right_box("Save");
 
 writeln('</form>');
-
 writeln('</body>');
 writeln('</html>');
