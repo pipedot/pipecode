@@ -42,8 +42,22 @@ writeln('<h1>' . ucwords($a["type"]) . '</h1>');
 writeln('<a href="' . $a["link"] . '">' . $a["title"] . '</a>');
 
 writeln('<h2>Preview</h2>');
-writeln(render_comment($comment["subject"], $comment["zid"], $comment["time"], $comment["cid"], $comment["comment"]));
-writeln('</div>');
+
+$list = array($comment);
+while ($comment["parent"] != 0) {
+	$comment = db_get_rec("comment", $comment["parent"]);
+	$list[] = $comment;
+}
+
+$s = "";
+for ($i = count($list) - 1; $i >= 0; $i--) {
+	$s .= render_comment($list[$i]["subject"], $list[$i]["zid"], $list[$i]["time"], $list[$i]["cid"], $list[$i]["comment"]);
+}
+$s .= str_repeat("</div>", count($list));
+
+//writeln(render_comment($comment["subject"], $comment["zid"], $comment["time"], $comment["cid"], $comment["comment"]));
+//writeln('</div>');
+writeln($s);
 
 writeln('</td>');
 writeln('</tr>');

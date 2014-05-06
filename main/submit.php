@@ -81,10 +81,14 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required="required">' . $body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	$question = captcha_challenge();
-	writeln('		<td>Captcha</td>');
-	writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"/></td></tr></table></td>');
-	writeln('		<td class="right"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
+	if ($auth_zid == "") {
+		$question = captcha_challenge();
+		writeln('		<td>Captcha</td>');
+		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"/></td></tr></table></td>');
+		writeln('		<td class="right"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
+	} else {
+		writeln('		<td colspan="3" class="right"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
+	}
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
@@ -105,7 +109,7 @@ if (http_post()) {
 	$answer = http_post_string("answer", array("required" => false));
 	$time = time();
 
-	if (!captcha_verify($answer)) {
+	if ($auth_zid == "" && !captcha_verify($answer)) {
 		die("captcha failed");
 	}
 
