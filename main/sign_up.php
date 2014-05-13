@@ -65,12 +65,12 @@ if (http_post()) {
 		print_footer();
 		die();
 	}
-	$username = http_post_string("username", array("len" => 20, "valid" => "[a-z][0-9]"));
+	$username = http_post_string("username", array("len" => 20, "valid" => "[a-z][A-Z][0-9]"));
 	$mail_1 = http_post_string("mail_1", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
 	$mail_2 = http_post_string("mail_2", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
 	$answer = http_post_string("answer", array("required" => false));
 
-	$luser = strtolower($username);
+	$username = strtolower($username);
 	if (string_uses(substr($username, 0, 1), "[0-9]")) {
 		die("user_name may not start with a number [$username]");
 	}
@@ -79,11 +79,11 @@ if (http_post()) {
 	}
 
 	$rfc_2142 = array("info", "marketing", "sales", "support", "abuse", "noc", "security", "postmaster", "hostmaster", "usenet", "news", "webmaster", "www", "uucp", "ftp");
-	if (in_array($luser, $rfc_2142)) {
+	if (in_array($username, $rfc_2142)) {
 		die("username is reserved [$username]");
 	}
 	$reserved_usernames = array("admin", "administrator", "anonymous", "blog", "bugs", "code", "donate", "feed", "feedback", "forum", "git", "img", "legal", "list", "lists", "mail", "pipe", "pipecode", "pipedot", "pipeline", "root", "scm", "ssladmin", "wiki");
-	if (in_array($luser, $reserved_usernames)) {
+	if (in_array($username, $reserved_usernames)) {
 		die("username is reserved [$username]");
 	}
 	if ($mail_1 != $mail_2) {
@@ -99,7 +99,7 @@ if (http_post()) {
 	if (strlen($a[1]) < 3 || !string_has($a[1], ".")) {
 		die("invalid domain in email address [$mail_1]");
 	}
-	if (is_local_user("$luser@$server_name")) {
+	if (is_local_user("$username@$server_name")) {
 		die("username already exists [$username]");
 	}
 
@@ -144,9 +144,9 @@ if ($verify != "") {
 	print_header("Email Validated");
 	writeln('<h1>Email Validated</h1>');
 	if ($https_enabled) {
-		writeln('<form action="https://' . $server_name . '/sign_up?verify=' . $verify . '" method="post">');
+		beg_form("https://$server_name/sign_up?verify=$verify");
 	} else {
-		writeln('<form action="/sign_up?verify=' . $verify . '" method="post">');
+		beg_form("/sign_up?verify=$verify");
 	}
 	writeln('<table>');
 	writeln('	<tr>');
@@ -162,7 +162,7 @@ if ($verify != "") {
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('<input type="submit" value="Finish"/>');
-	writeln('</form>');
+	end_form();
 	print_footer();
 
 	die();
@@ -171,9 +171,9 @@ if ($verify != "") {
 print_header("Create Account");
 
 if ($https_enabled) {
-	writeln('<form action="https://' . $server_name . '/sign_up" method="post">');
+	beg_form("https://$server_name/sign_up");
 } else {
-	writeln('<form action="/sign_up" method="post">');
+	beg_form("/sign_up");
 }
 
 ?>
@@ -214,6 +214,6 @@ if ($https_enabled) {
 <input type="submit" value="Create"/>
 <?
 
-writeln('</form>');
+end_form();
 
 print_footer();

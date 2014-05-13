@@ -50,7 +50,7 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 		print_article($a);
 	}
 
-	writeln('<form method="post">');
+	beg_form();
 	writeln('<div class="dialog_title">Submit Story</div>');
 	writeln('<div class="dialog_body">');
 
@@ -92,7 +92,7 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
-	writeln('</form>');
+	end_form();
 
 	writeln('</td>');
 	writeln('</tr>');

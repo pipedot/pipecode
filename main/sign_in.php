@@ -53,9 +53,9 @@ writeln('<hr/>');
 writeln('<h1>Sign In</h1>');
 
 if ($https_enabled) {
-	writeln('<form action="https://' . $server_name . '/sign_in" method="post">');
+	beg_form("https://$server_name/sign_in");
 } else {
-	writeln('<form action="/sign_in" method="post">');
+	beg_form("/sign_in");
 }
 
 writeln('<table>');
@@ -70,6 +70,6 @@ writeln('	</tr>');
 writeln('</table>');
 writeln('<input type="submit" value="Sign In"/>');
 writeln('<a href="/forgot">Forgot Password?</a>');
-writeln('</form>');
+end_form();
 
 print_footer();

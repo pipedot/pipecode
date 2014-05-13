@@ -107,6 +107,18 @@ function db_set_conf($table, $map, $id)
 }
 
 
+function beg_form($action = "", $post = true)
+{
+	writeln('<form' . ($action == '' ? '' : ' action="' . $action . '"' ) . ($post ? ' method="post"' : '' ) . '>');
+}
+
+
+function end_form()
+{
+	writeln('</form>');
+}
+
+
 function random_hash()
 {
 	return crypt_sha256(time() . getmypid() . rand());
@@ -1656,59 +1668,24 @@ function run_sql($sql, $arg = array(), $fatal = true)
 	global $sql_server;
 	global $sql_error;
 
-	if (substr($sql_server, 0, 4) == "http") {
-		$request = array("sql" => $sql, "count" => count($arg));
-		for ($i = 0; $i < count($arg); $i++) {
-			if (is_int($arg[$i])) {
-				$request["type_$i"] = "int";
-			} else if (is_numeric($arg[$i])) {
-				$request["type_$i"] = "float";
-			} else {
-				$request["$type_$i"] = "string";
-			}
-			$request["value_$i"] = $arg[$i];
-		}
+	if (!$sql_open) {
+		open_database();
+	}
+	$sth = $sql_dbh->prepare($sql);
 
-		$request = map_to_url_string($request);
-		$body = http_slap($sql_server, $request);
-
-		$row = array();
-		$a = explode("\n", trim($body));
-		for ($i = 0; $i < count($a); $i++) {
-			if ($a[$i] != "") {
-				$row[] = map_from_tag_string($a[$i]);
-			}
+	try {
+		$sth->execute($arg);
+		if ($sth->columnCount() == 0) {
+			return;
 		}
-	} else {
-		if (!$sql_open) {
-			open_database();
+		$row = $sth->fetchAll();
+	} catch (PDOException $exception) {
+		$msg = $exception->getMessage();
+		$sql_error = "sql [$sql] arg [" . implode(", ", $arg) . "] msg [$msg]";
+		if ($fatal) {
+			default_error($sql_error);
 		}
-		$sth = $sql_dbh->prepare($sql);
-
-		try {
-			//if (string_has($sql_server, "sqlsrv:")) {
-			//	// XXX: bug workaround - can't bind a zero length string when using mssql native client
-			//	for ($i = 0; $i < count($arg); $i++) {
-			//		if (is_string($arg[$i])) {
-			//			if ($arg[$i] == "") {
-			//				$arg[$i] = " ";
-			//			}
-			//		}
-			//	}
-			//}
-			$sth->execute($arg);
-			if ($sth->columnCount() == 0) {
-				return;
-			}
-			$row = $sth->fetchAll();
-		} catch (PDOException $exception) {
-			$msg = $exception->getMessage();
-			$sql_error = "sql [$sql] arg [" . implode(", ", $arg) . "] msg [$msg]";
-			if ($fatal) {
-				default_error($sql_error);
-			}
-			return false;
-		}
+		return false;
 	}
 
 	return $row;

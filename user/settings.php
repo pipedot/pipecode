@@ -27,6 +27,7 @@ $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 
 if (http_post()) {
 	$javascript_enabled = http_post_bool("javascript_enabled", array("numeric" => true));
+	$wysiwyg_enabled = http_post_bool("wysiwyg_enabled", array("numeric" => true));
 	$time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
 	$hide_threshold = http_post_string("hide_threshold", array("valid" => "[0-9]-"));
 	$expand_threshold = http_post_string("expand_threshold", array("valid" => "[0-9]-"));
@@ -38,6 +39,7 @@ if (http_post()) {
 	}
 
 	$user_conf["javascript_enabled"] = $javascript_enabled;
+	$user_conf["wysiwyg_enabled"] = $wysiwyg_enabled;
 	$user_conf["time_zone"] = $time_zone;
 	$user_conf["hide_threshold"] = $hide_threshold;
 	$user_conf["expand_threshold"] = $expand_threshold;
@@ -45,8 +47,6 @@ if (http_post()) {
 	$user_conf["real_name"] = $real_name;
 
 	db_set_conf("user_conf", $user_conf, $auth_zid);
-	//var_dump($user_conf);
-	//die();
 	header("Location: /menu/");
 	die();
 }
@@ -62,9 +62,11 @@ writeln('<td class="fill">');
 
 writeln('<h1>Settings</h1>');
 
-writeln('<form method="post">');
+beg_form();
+
 beg_tab("JavaScript");
 print_row(array("caption" => "Enable JavaScript", "check_key" => "javascript_enabled", "checked" => $user_conf["javascript_enabled"]));
+print_row(array("caption" => "WYSIWYG Editor", "check_key" => "wysiwyg_enabled", "checked" => $user_conf["wysiwyg_enabled"]));
 end_tab();
 
 beg_tab("Date and Time");
@@ -93,7 +95,8 @@ end_tab();
 //
 
 right_box("Save");
-writeln('</form>');
+
+end_form();
 
 writeln('</td>');
 writeln('</tr>');

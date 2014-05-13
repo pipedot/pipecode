@@ -93,7 +93,7 @@ writeln('</tr>');
 writeln('<tr>');
 writeln('<td style="vertical-align: top" colspan="2">');
 
-if ($javascript_enabled) {
+if ($auth_user["javascript_enabled"]) {
 	render_sliders(0, $pid, 0);
 	print_noscript();
 } else {
@@ -104,12 +104,29 @@ writeln('</td>');
 writeln('</tr>');
 writeln('</table>');
 
-if ($javascript_enabled) {
+if ($auth_user["javascript_enabled"]) {
+	if ($auth_zid == "") {
+		$last_seen = 0;
+	} else {
+		if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
+			$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
+			$last_seen = $history["time"];
+		} else {
+			$history = array();
+			$history["pid"] = $pid;
+			$history["zid"] = $auth_zid;
+			$last_seen = 0;
+		}
+		$history["time"] = time();
+		db_set_rec("pipe_history", $history);
+	}
+
 	writeln('<script>');
 	writeln();
 	writeln('var hide_value = ' . $hide_value . ';');
 	writeln('var expand_value = ' . $expand_value . ';');
 	writeln('var auth_zid = "' . $auth_zid . '";');
+	writeln('var last_seen = ' . $last_seen . ';');
 	writeln();
 	writeln('get_comments(0, ' . $pid . ', 0);');
 	writeln('render_page();');

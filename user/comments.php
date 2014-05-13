@@ -46,8 +46,10 @@ writeln('<h1>Comments</h1>');
 
 $row = run_sql("select cid, subject, time, comment from comment where zid = ? order by time desc limit $row_start, $rows_per_page", array($zid));
 for ($i = 0; $i < count($row); $i++) {
-	writeln(render_comment($row[$i]["subject"], $zid, $row[$i]["time"], $row[$i]["cid"], $row[$i]["comment"]));
+	print render_comment($row[$i]["subject"], $zid, $row[$i]["time"], $row[$i]["cid"], $row[$i]["comment"]);
 	writeln('</div>');
+	writeln('</article>');
+	writeln();
 }
 
 $s = "";

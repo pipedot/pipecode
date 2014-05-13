@@ -104,7 +104,7 @@ writeln('</head>');
 writeln('<body>');
 writeln('<img alt="Pipecode" src="/images/logo-top.png" style="margin-bottom: 8px"/>');
 
-writeln('<form method="post">');
+beg_form();
 
 beg_tab();
 print_row(array("caption" => "Server Name", "text_key" => "server_name", "text_value" => "example.com"));
@@ -132,12 +132,12 @@ print_row(array("caption" => "CAPTCHA API Key", "text_key" => "captcha_key", "te
 end_tab();
 
 beg_tab();
-print_row(array("caption" => "Admin Username", "text_key" => "admin_username", "text_value" => "myname"));
+print_row(array("caption" => "Admin Username", "text_key" => "admin_username", "text_value" => "admin"));
 print_row(array("caption" => "Admin Password", "text_key" => "admin_password", "text_value" => "crunchyfrog"));
 end_tab();
 
 right_box("Save");
 
-writeln('</form>');
-writeln('</body>');
-writeln('</html>');
+end_form();
+
+print_footer();

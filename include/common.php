@@ -43,84 +43,6 @@ $db_table["captcha_challenge"]["key"] = "remote_ip";
 $db_table["captcha_challenge"]["col"][] = "remote_ip";
 $db_table["captcha_challenge"]["col"][] = "captcha_id";
 
-$db_table["email_challenge"]["key"] = "challenge";
-$db_table["email_challenge"]["col"][] = "challenge";
-$db_table["email_challenge"]["col"][] = "username";
-$db_table["email_challenge"]["col"][] = "email";
-$db_table["email_challenge"]["col"][] = "expires";
-
-$db_table["mail"]["key"] = "mail_id";
-$db_table["mail"]["col"][] = "mail_id";
-$db_table["mail"]["col"][] = "body";
-$db_table["mail"]["col"][] = "in_reply_to";
-$db_table["mail"]["col"][] = "location";
-$db_table["mail"]["col"][] = "mail_from";
-$db_table["mail"]["col"][] = "message_id";
-$db_table["mail"]["col"][] = "rcpt_to";
-$db_table["mail"]["col"][] = "received_time";
-$db_table["mail"]["col"][] = "reply_to";
-$db_table["mail"]["col"][] = "size";
-$db_table["mail"]["col"][] = "subject";
-$db_table["mail"]["col"][] = "zid";
-
-$db_table["poll_question"]["key"] = "qid";
-$db_table["poll_question"]["col"][] = "qid";
-$db_table["poll_question"]["col"][] = "type_id";
-$db_table["poll_question"]["col"][] = "zid";
-$db_table["poll_question"]["col"][] = "time";
-$db_table["poll_question"]["col"][] = "question";
-//$db_table["poll_question"]["col"][] = "votes";
-
-$db_table["poll_answer"]["key"] = "aid";
-$db_table["poll_answer"]["col"][] = "aid";
-$db_table["poll_answer"]["col"][] = "qid";
-$db_table["poll_answer"]["col"][] = "answer";
-$db_table["poll_answer"]["col"][] = "position";
-//$db_table["poll_answer"]["col"][] = "votes";
-
-$db_table["poll_vote"]["key"][] = "qid";
-$db_table["poll_vote"]["key"][] = "zid";
-$db_table["poll_vote"]["col"][] = "qid";
-$db_table["poll_vote"]["col"][] = "zid";
-$db_table["poll_vote"]["col"][] = "time";
-$db_table["poll_vote"]["col"][] = "score";
-
-$db_table["topic"]["key"] = "tid";
-$db_table["topic"]["col"][] = "tid";
-$db_table["topic"]["col"][] = "topic";
-$db_table["topic"]["col"][] = "icon";
-$db_table["topic"]["col"][] = "promoted";
-
-$db_table["story"]["key"] = "sid";
-$db_table["story"]["col"][] = "sid";
-$db_table["story"]["col"][] = "pid";
-$db_table["story"]["col"][] = "tid";
-$db_table["story"]["col"][] = "title";
-$db_table["story"]["col"][] = "ctitle";
-$db_table["story"]["col"][] = "icon";
-$db_table["story"]["col"][] = "time";
-$db_table["story"]["col"][] = "story";
-
-$db_table["pipe"]["key"] = "pid";
-$db_table["pipe"]["col"][] = "pid";
-$db_table["pipe"]["col"][] = "tid";
-$db_table["pipe"]["col"][] = "zid";
-$db_table["pipe"]["col"][] = "editor";
-$db_table["pipe"]["col"][] = "title";
-$db_table["pipe"]["col"][] = "ctitle";
-$db_table["pipe"]["col"][] = "icon";
-$db_table["pipe"]["col"][] = "time";
-$db_table["pipe"]["col"][] = "closed";
-$db_table["pipe"]["col"][] = "reason";
-$db_table["pipe"]["col"][] = "story";
-
-$db_table["pipe_vote"]["key"][] = "pid";
-$db_table["pipe_vote"]["key"][] = "zid";
-$db_table["pipe_vote"]["col"][] = "pid";
-$db_table["pipe_vote"]["col"][] = "zid";
-$db_table["pipe_vote"]["col"][] = "time";
-$db_table["pipe_vote"]["col"][] = "value";
-
 $db_table["comment"]["key"] = "cid";
 $db_table["comment"]["col"][] = "cid";
 $db_table["comment"]["col"][] = "sid";
@@ -140,6 +62,18 @@ $db_table["comment_vote"]["col"][] = "cid";
 $db_table["comment_vote"]["col"][] = "zid";
 $db_table["comment_vote"]["col"][] = "rid";
 $db_table["comment_vote"]["col"][] = "time";
+
+$db_table["default_conf"]["key"][] = "conf";
+$db_table["default_conf"]["key"][] = "name";
+$db_table["default_conf"]["col"][] = "conf";
+$db_table["default_conf"]["col"][] = "name";
+$db_table["default_conf"]["col"][] = "value";
+
+$db_table["email_challenge"]["key"] = "challenge";
+$db_table["email_challenge"]["col"][] = "challenge";
+$db_table["email_challenge"]["col"][] = "username";
+$db_table["email_challenge"]["col"][] = "email";
+$db_table["email_challenge"]["col"][] = "expires";
 
 $db_table["feed"]["key"] = "fid";
 $db_table["feed"]["col"][] = "fid";
@@ -163,16 +97,105 @@ $db_table["feed_user"]["col"][] = "fid";
 $db_table["feed_user"]["col"][] = "col";
 $db_table["feed_user"]["col"][] = "pos";
 
+$db_table["mail"]["key"] = "mail_id";
+$db_table["mail"]["col"][] = "mail_id";
+$db_table["mail"]["col"][] = "body";
+$db_table["mail"]["col"][] = "in_reply_to";
+$db_table["mail"]["col"][] = "location";
+$db_table["mail"]["col"][] = "mail_from";
+$db_table["mail"]["col"][] = "message_id";
+$db_table["mail"]["col"][] = "rcpt_to";
+$db_table["mail"]["col"][] = "received_time";
+$db_table["mail"]["col"][] = "reply_to";
+$db_table["mail"]["col"][] = "size";
+$db_table["mail"]["col"][] = "subject";
+$db_table["mail"]["col"][] = "zid";
+
+$db_table["page"]["key"] = "slug";
+$db_table["page"]["col"][] = "slug";
+$db_table["page"]["col"][] = "title";
+$db_table["page"]["col"][] = "body";
+
+$db_table["pipe"]["key"] = "pid";
+$db_table["pipe"]["col"][] = "pid";
+$db_table["pipe"]["col"][] = "tid";
+$db_table["pipe"]["col"][] = "zid";
+$db_table["pipe"]["col"][] = "editor";
+$db_table["pipe"]["col"][] = "title";
+$db_table["pipe"]["col"][] = "ctitle";
+$db_table["pipe"]["col"][] = "icon";
+$db_table["pipe"]["col"][] = "time";
+$db_table["pipe"]["col"][] = "closed";
+$db_table["pipe"]["col"][] = "reason";
+$db_table["pipe"]["col"][] = "story";
+
+$db_table["pipe_history"]["key"][] = "pid";
+$db_table["pipe_history"]["key"][] = "zid";
+$db_table["pipe_history"]["col"][] = "pid";
+$db_table["pipe_history"]["col"][] = "zid";
+$db_table["pipe_history"]["col"][] = "time";
+
+$db_table["pipe_vote"]["key"][] = "pid";
+$db_table["pipe_vote"]["key"][] = "zid";
+$db_table["pipe_vote"]["col"][] = "pid";
+$db_table["pipe_vote"]["col"][] = "zid";
+$db_table["pipe_vote"]["col"][] = "time";
+$db_table["pipe_vote"]["col"][] = "value";
+
+$db_table["poll_answer"]["key"] = "aid";
+$db_table["poll_answer"]["col"][] = "aid";
+$db_table["poll_answer"]["col"][] = "qid";
+$db_table["poll_answer"]["col"][] = "answer";
+$db_table["poll_answer"]["col"][] = "position";
+//$db_table["poll_answer"]["col"][] = "votes";
+
+$db_table["poll_history"]["key"][] = "qid";
+$db_table["poll_history"]["key"][] = "zid";
+$db_table["poll_history"]["col"][] = "qid";
+$db_table["poll_history"]["col"][] = "zid";
+$db_table["poll_history"]["col"][] = "time";
+
+$db_table["poll_question"]["key"] = "qid";
+$db_table["poll_question"]["col"][] = "qid";
+$db_table["poll_question"]["col"][] = "type_id";
+$db_table["poll_question"]["col"][] = "zid";
+$db_table["poll_question"]["col"][] = "time";
+$db_table["poll_question"]["col"][] = "question";
+//$db_table["poll_question"]["col"][] = "votes";
+
+$db_table["poll_vote"]["key"][] = "qid";
+$db_table["poll_vote"]["key"][] = "zid";
+$db_table["poll_vote"]["col"][] = "qid";
+$db_table["poll_vote"]["col"][] = "zid";
+$db_table["poll_vote"]["col"][] = "time";
+$db_table["poll_vote"]["col"][] = "score";
+
+$db_table["story"]["key"] = "sid";
+$db_table["story"]["col"][] = "sid";
+$db_table["story"]["col"][] = "pid";
+$db_table["story"]["col"][] = "tid";
+$db_table["story"]["col"][] = "title";
+$db_table["story"]["col"][] = "ctitle";
+$db_table["story"]["col"][] = "icon";
+$db_table["story"]["col"][] = "time";
+$db_table["story"]["col"][] = "story";
+
+$db_table["story_history"]["key"][] = "sid";
+$db_table["story_history"]["key"][] = "zid";
+$db_table["story_history"]["col"][] = "sid";
+$db_table["story_history"]["col"][] = "zid";
+$db_table["story_history"]["col"][] = "time";
+
+$db_table["topic"]["key"] = "tid";
+$db_table["topic"]["col"][] = "tid";
+$db_table["topic"]["col"][] = "topic";
+$db_table["topic"]["col"][] = "icon";
+$db_table["topic"]["col"][] = "promoted";
+
 $db_table["user_conf"]["key"] = "zid";
 $db_table["user_conf"]["col"][] = "zid";
 $db_table["user_conf"]["col"][] = "name";
 $db_table["user_conf"]["col"][] = "value";
-
-$db_table["default_conf"]["key"][] = "conf";
-$db_table["default_conf"]["key"][] = "name";
-$db_table["default_conf"]["col"][] = "conf";
-$db_table["default_conf"]["col"][] = "name";
-$db_table["default_conf"]["col"][] = "value";
 
 
 function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array())
@@ -185,8 +208,8 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	global $server_name;
 	global $https_enabled;
 	global $request_script;
-	global $javascript_enabled;
 	global $protocol;
+	global $request_script;
 	global $story_image_enabled;
 
 	header_expires();
@@ -210,7 +233,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	if ($request_script == "/") {
 		writeln('<link rel="alternate" href="/atom" type="application/atom+xml" title="Stories">');
 	}
-	if ($javascript_enabled) {
+	if ($auth_user["javascript_enabled"]) {
 		writeln('<script type="text/javascript" src="/lib/jquery/jquery.js"></script>');
 		writeln('<script type="text/javascript" src="/common.js"></script>');
 	}
@@ -235,13 +258,16 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 		} else {
 			$link_name[] = "Submit";
 			$link_name[] = "Home";
+			if (($auth_user["editor"] || $auth_user["admin"]) && $request_script != "/menu/") {
+				$link_name[] = "Tools";
+			}
 			$link_name[] = "Sign Out";
 		}
 	} else {
 		if ($auth_zid == "") {
 			$link_name[] = "Sign In";
 		} else {
-			if ($_SERVER["REQUEST_URI"] != "/menu/") {
+			if ($request_script != "/menu/") {
 				$link_name[] = "Home";
 			}
 			$link_name[] = "Sign Out";
@@ -260,6 +286,9 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 		} else if ($name == "Home") {
 			$icon = "home";
 			$link = user_page_link($auth_zid) . "menu/";
+		} else if ($name == "Tools") {
+			$icon = "tools";
+			$link = "/menu/";
 		} else if ($name == "Sign Up") {
 			$icon = "contact-new";
 			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/sign_up";
@@ -444,10 +473,8 @@ function check_auth()
 	global $auth_zid;
 	global $auth_user;
 	global $request_script;
-	global $javascript_enabled;
 
 	$auth_zid = "";
-	$javascript_enabled = false;
 
 	$auth = @$_COOKIE["auth"];
 	$map = map_from_url_string($auth);
@@ -455,7 +482,10 @@ function check_auth()
 	$zid = @$map["zid"];
 	$hash = @$map["hash"];
 
+	$auth_user = db_get_conf("user_conf", $zid);
+
 	if ($zid == "") {
+		$auth_user["javascript_enabled"] = 0;
 		return;
 	}
 	if (!string_uses($expire, "[0-9]")) {
@@ -479,8 +509,7 @@ function check_auth()
 	}
 
 	$auth_zid = $zid;
-	$auth_user = db_get_conf("user_conf", $auth_zid);
-	$javascript_enabled = $auth_user["javascript_enabled"];
+	//$auth_user = db_get_conf("user_conf", $auth_zid);
 }
 
 

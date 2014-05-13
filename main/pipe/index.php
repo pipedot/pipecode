@@ -52,7 +52,7 @@ writeln('</td>');
 writeln('</tr>');
 writeln('</table>');
 
-if ($javascript_enabled) {
+if ($auth_user["javascript_enabled"]) {
 ?>
 <script>
 

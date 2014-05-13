@@ -67,7 +67,7 @@ $topic = $topic["topic"];
 
 print_header();
 
-writeln('<form method="post">');
+beg_form();
 writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td class="left_col">');
@@ -118,7 +118,7 @@ writeln('		<td style="text-align: right"><input name="publish" type="submit" val
 writeln('	</tr>');
 writeln('</table>');
 //right_box("Publish,Preview");
-writeln('</form>');
+end_form();
 
 writeln('</td>');
 writeln('</tr>');

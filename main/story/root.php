@@ -64,7 +64,7 @@ writeln('<td class="fill">');
 print_story($sid);
 //print_story($sid, true, false);
 
-if ($javascript_enabled) {
+if ($auth_user["javascript_enabled"]) {
 	render_sliders($sid, 0, 0);
 	print_noscript();
 } else {
@@ -75,12 +75,29 @@ writeln('</td>');
 writeln('</tr>');
 writeln('</table>');
 
-if ($javascript_enabled) {
+if ($auth_user["javascript_enabled"]) {
+	if ($auth_zid == "") {
+		$last_seen = 0;
+	} else {
+		if (db_has_rec("story_history", array("sid" => $sid, "zid" => $auth_zid))) {
+			$history = db_get_rec("story_history", array("sid" => $sid, "zid" => $auth_zid));
+			$last_seen = $history["time"];
+		} else {
+			$history = array();
+			$history["sid"] = $sid;
+			$history["zid"] = $auth_zid;
+			$last_seen = 0;
+		}
+		$history["time"] = time();
+		db_set_rec("story_history", $history);
+	}
+
 	writeln('<script>');
 	writeln();
 	writeln('var hide_value = ' . $hide_value . ';');
 	writeln('var expand_value = ' . $expand_value . ';');
 	writeln('var auth_zid = "' . $auth_zid . '";');
+	writeln('var last_seen = ' . $last_seen . ';');
 	writeln();
 	writeln('get_comments(' . $sid . ', 0, 0);');
 	writeln('render_page();');

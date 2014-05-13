@@ -72,8 +72,9 @@ function send_notifications($parent, $comment)
 function print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward)
 {
 	global $auth_zid;
+	global $auth_user;
 
-	writeln('<form method="post">');
+	beg_form();
 	if ($sid != 0) {
 		writeln('<input type="hidden" name="sid" value="' . $sid . '"/>');
 	}
@@ -91,11 +92,11 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward)
 	writeln('<table class="fill">');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px">Subject</td>');
-	writeln('		<td colspan="2"><input name="subject" type="text" value="' . $subject . '" required="required"/></td>');
+	writeln('		<td colspan="2" style="padding-bottom: 4px"><input name="subject" type="text" value="' . $subject . '" required="required"/></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Comment</td>');
-	writeln('		<td colspan="2"><textarea name="comment" style="height: 120px" required="required">' . $body . '</textarea></td>');
+	writeln('		<td colspan="2" style="padding-bottom: 4px"><textarea name="comment" style="height: 120px" required="required">' . $body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid == "") {
@@ -110,7 +111,25 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward)
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
-	writeln('</form>');
+	end_form();
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
+		writeln('<script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>');
+		writeln('<script type="text/javascript">');
+		writeln();
+		writeln('CKEDITOR.replace("comment",');
+		writeln('{');
+		writeln('	resize_enabled: false,');
+		writeln('	enterMode: CKEDITOR.ENTER_BR,');
+		writeln('	toolbar :');
+		writeln('	[');
+		writeln('		["Bold","Italic","Underline","Strike"],');
+		writeln('		["NumberedList","BulletedList","Blockquote"],');
+		writeln('		["Link","Unlink"]');
+		writeln('	]');
+		writeln('});');
+		writeln();
+		writeln('</script>');
+	}
 }
 
 

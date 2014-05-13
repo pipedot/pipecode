@@ -27,7 +27,7 @@ if (strlen($verify) != 0 && strlen($verify) != 64) {
 }
 if ($verify != "") {
 	$email_challenge = db_get_rec("email_challenge", array("challenge" => $verify));
-	$zid = strtolower($email_challenge["username"]) . "@$site_name";
+	$zid = strtolower($email_challenge["username"]) . "@$server_name";
 	if (!is_local_user($zid)) {
 		die("no such user [$zid]");
 	}
@@ -63,7 +63,7 @@ if (http_post()) {
 	}
 	$username = http_post_string("username", array("len" => 20, "valid" => "[a-z][A-Z][0-9]"));
 
-	$zid = strtolower($username) . "@$site_name";
+	$zid = strtolower($username) . "@$server_name";
 	if (!is_local_user($zid)) {
 		die("no such user [$zid]");
 	}
@@ -78,7 +78,7 @@ if (http_post()) {
 	$email_challenge = array();
 	$email_challenge["challenge"] = $hash;
 	$email_challenge["username"] = $username;
-	$email_challenge["email"] = $user["email"];
+	$email_challenge["email"] = $user_conf["email"];
 	$email_challenge["expires"] = time() + 86400 * 3;
 	db_set_rec("email_challenge", $email_challenge);
 
@@ -108,9 +108,9 @@ if ($verify != "") {
 	print_header("Reset Password");
 	writeln('<h1>Reset Password</h1>');
 	if ($https_enabled) {
-		writeln('<form action="https://' . $server_name . '/forgot?verify=' . $verify . '" method="post">');
+		beg_form("https://$server_name/forgot?verify=$verify");
 	} else {
-		writeln('<form action="/forgot?verify=' . $verify . '" method="post">');
+		beg_form("/forgot?verify=$verify");
 	}
 	writeln('<table>');
 	writeln('	<tr>');
@@ -126,7 +126,7 @@ if ($verify != "") {
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('<input type="submit" value="Finish"/>');
-	writeln('</form>');
+	end_form();
 	print_footer();
 
 	die();
@@ -136,7 +136,7 @@ print_header("Forgot Password");
 
 writeln('<h1>Forget Password?</h1>');
 
-writeln('<form method="post">');
+beg_form();
 writeln('<table>');
 writeln('	<tr>');
 writeln('		<td>Username</td>');
@@ -144,7 +144,7 @@ writeln('		<td><input name="username" type="text"/></td>');
 writeln('	</tr>');
 writeln('</table>');
 writeln('<input type="submit" value="Send"/>');
-writeln('</form>');
+end_form();
 
 print_footer();
 

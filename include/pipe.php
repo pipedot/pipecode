@@ -52,7 +52,6 @@ function print_pipe_small($pid, $full)
 	global $server_name;
 	global $auth_zid;
 	global $auth_user;
-	global $javascript_enabled;
 
 	$pipe = db_get_rec("pipe", $pid);
 	$date = date("Y-m-d H:i", $pipe["time"]);
@@ -81,16 +80,16 @@ function print_pipe_small($pid, $full)
 		$score = "+$score";
 	}
 
-	if ($javascript_enabled) {
+	if ($auth_user["javascript_enabled"]) {
 		writeln('<div id="title_' . $pid . '" class="pipe_title_collapse">');
 	} else {
-		writeln('<form method="post" action="/pipe/' . $pid . '/vote">');
+		beg_form("/pipe/$pid/vote");
 		writeln('<div id="title_' . $pid . '" class="pipe_title_expand">');
 	}
 	writeln('<table class="fill">');
 	writeln('	<tr>');
 	if ($auth_zid != "") {
-		if ($javascript_enabled) {
+		if ($auth_user["javascript_enabled"]) {
 			if ($value < 0) {
 				writeln('		<td style="width: 32px"><img id="icon_' . $pid . '_a" alt="You Voted Down" title="You Voted Down" style="cursor: pointer;" src="/images/down-32.png" onclick="vote(' . $pid . ', 1)"/></td>');
 				writeln('		<td style="width: 32px"><img id="icon_' . $pid . '_b" alt="Undo Vote" title="Undo Vote" style="cursor: pointer;" src="/images/undo-32.png" onclick="vote(' . $pid . ', 0)"/></td>');
@@ -115,7 +114,7 @@ function print_pipe_small($pid, $full)
 		}
 	}
 	writeln('		<td style="width: 100%">');
-	if ($javascript_enabled) {
+	if ($auth_user["javascript_enabled"]) {
 		writeln('			<table class="fill" style="cursor: pointer;" onclick="toggle_body(' . $pid . ')">');
 	} else {
 		writeln('			<table class="fill">');
@@ -139,10 +138,10 @@ function print_pipe_small($pid, $full)
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
-	if ($javascript_enabled) {
+	if ($auth_user["javascript_enabled"]) {
 		writeln('<div id="body_' . $pid . '" class="pipe_body" style="display: none">');
 	} else {
-		writeln('</form>');
+		end_form();
 		writeln('<div class="pipe_body">');
 	}
 	writeln($pipe["story"]);

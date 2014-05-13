@@ -49,12 +49,12 @@ print_header("Close Submission");
 
 writeln("<h1>Close Submission</h1>");
 
-writeln('<form method="post">');
+beg_form();
 writeln('<p>Are you sure you want to close this submission? The article will no longer show in the pipe, voting will be disabled, and comments will be locked.</p>');
 writeln('<h2>Reason</h2>');
 writeln('<p>Give a short reason for closing the article.</p>');
 writeln('<input name="reason" type="text" len="50" required="required"/>');
 writeln('<input type="submit" value="Close"/>');
-writeln('</form>');
+end_form();
 
 print_footer();

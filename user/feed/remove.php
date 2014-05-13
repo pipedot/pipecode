@@ -42,10 +42,10 @@ if (http_post()) {
 
 print_header();
 
-writeln('<form method="post">');
+beg_form();
 writeln('<h1>Remove Feed</h1>');
 writeln('<p>Are you sure you want to remove <b>' . $feed["title"] . '</b> from your page?</p>');
 writeln('<input type="submit" value="Remove"/>');
-writeln('</form>');
+end_form();
 
 print_footer();

@@ -46,12 +46,12 @@ for ($c = 0; $c < 3; $c++) {
 	for ($i = 0; $i < count($row); $i++) {
 		writeln('				<tr>');
 		writeln('					<td>' . $row[$i]["title"] . '</td>');
-		writeln('					<td class="right"><a href="remove?fid=' . $row[$i]["fid"] . '"><span class="icon_16" style="background-image: url(/images/remove-16.png)">Remove</span></a></td>');
+		writeln('					<td class="right"><a href="remove?fid=' . $row[$i]["fid"] . '" class="icon_16" style="background-image: url(/images/remove-16.png)">Remove</a></td>');
 		writeln('				</tr>');
 		$r = ($r ? 0 : 1);
 	}
 	writeln('			</table>');
-	writeln('			<div class="right"><a href="add?col=' . $c . '"><span class="icon_16" style="background-image: url(/images/add-16.png)">Add</span></a></div>');
+	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon_16" style="background-image: url(/images/add-16.png)">Add</a></div>');
 	writeln('		</td>');
 }
 writeln('	</tr>');

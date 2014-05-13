@@ -145,7 +145,7 @@ writeln('</td>');
 writeln('</tr>');
 end_tab();
 
-writeln('<form method="post">');
+beg_form();
 if ($message["location"] == "Junk") {
 	right_box("Restore,Delete,Expunge");
 } else if ($message["location"] == "Trash") {
@@ -155,6 +155,6 @@ if ($message["location"] == "Junk") {
 } else {
 	right_box("Junk,Delete");
 }
-writeln('</form>');
+end_form();
 
 print_footer();

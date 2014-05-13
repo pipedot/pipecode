@@ -261,6 +261,8 @@ function clean_html($html)
 	$pre = 0;
 
 	$html = clean_unicode($html);
+	$html = str_replace("<br />", "<br/>", $html);
+	$html = str_replace("&nbsp;", " ", $html);
 
 	for ($i = 0; $i < mb_strlen($html); $i++) {
 		//$c = substr($html, $i, 1);

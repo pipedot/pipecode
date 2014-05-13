@@ -224,13 +224,13 @@ function print_mail_dir($location)
 	writeln('</table>');
 
 	if (count($list) > 0) {
-		writeln('<form method="post">');
+		beg_form();
 		if ($location == "Junk" || $location == "Trash") {
 			right_box("Empty");
 		} else {
 			right_box("Delete All");
 		}
-		writeln('</form>');
+		end_form();
 	}
 
 	print_footer();

@@ -40,7 +40,7 @@ writeln('</td>');
 writeln('<td style="vertical-align: text-top; width: 50%;">');
 
 beg_tab();
-print_row(array("caption" => "Wiki", "description" => "Create a new wiki page", "icon" => "html", "link" => "/"));
+print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Links", "description" => "Manage server links", "icon" => "workgroup", "link" => "/link/"));
 }

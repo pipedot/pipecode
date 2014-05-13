@@ -122,6 +122,7 @@ function render(c)
 	var hide = false;
 	var collapse = false;
 	var by;
+	var seen;
 
 	if (c === undefined) {
 		return "";
@@ -148,21 +149,27 @@ function render(c)
 		if (hide) {
 			s += "<div>";
 		} else {
-			if (collapse) {
-				s += "<div id=\"collapse_" + c.cid + "\" class=\"comment_collapse\" onclick=\"show_comment(" + c.cid + ")\"><b>" + c.subject + ":</b> " + c.comment + "</div>";
-
-				s += "<div id=\"subject_" + c.cid + "\" class=\"comment_subject\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.cid + "\">" + c.score + "</span>)</div>";
-				s += "<div id=\"subtitle_" + c.cid + "\" class=\"comment_subtitle\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"/comment/" + c.cid + "\">#" + c.cid + "</a>)</div>";
-				s += "<div class=\"comment_body\">";
-				s += "<div id=\"body_" + c.cid + "\" class=\"comment_contents\" style=\"display: none\">";
+			if (c.time > last_seen) {
+				seen = "h1";
 			} else {
-				s += "<div id=\"subject_" + c.cid + "\" class=\"comment_subject\">" + c.subject + " (Score: <span id=\"score_" + c.cid + "\">" + c.score + "</span>)</div>";
-				s += "<div id=\"subtitle_" + c.cid + "\" class=\"comment_subtitle\">by " + by + " on " + t + " (<a href=\"/comment/" + c.cid + "\">#" + c.cid + "</a>)</div>";
+				seen = "h2";
+			}
+			s += "<article class=\"comment\">";
+			if (collapse) {
+				s += "<h4 id=\"collapse_" + c.cid + "\" onclick=\"show_comment(" + c.cid + ")\"><b>" + c.subject + ":</b> " + c.comment + "</h4>";
+
+				s += "<" + seen + " id=\"subject_" + c.cid + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.cid + "\">" + c.score + "</span>)</" + seen + ">";
+				s += "<h3 id=\"subtitle_" + c.cid + "\" class=\"comment_subtitle\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"/comment/" + c.cid + "\">#" + c.cid + "</a>)</h3>";
 				s += "<div class=\"comment_body\">";
-				s += "<div id=\"body_" + c.cid + "\" class=\"comment_contents\">";
+				s += "<div id=\"body_" + c.cid + "\" class=\"comment_content\" style=\"display: none\">";
+			} else {
+				s += "<" + seen + " id=\"subject_" + c.cid + "\">" + c.subject + " (Score: <span id=\"score_" + c.cid + "\">" + c.score + "</span>)</" + seen + ">";
+				s += "<h3 id=\"subtitle_" + c.cid + "\">by " + by + " on " + t + " (<a href=\"/comment/" + c.cid + "\">#" + c.cid + "</a>)</h3>";
+				s += "<div class=\"comment_body\">";
+				s += "<div id=\"body_" + c.cid + "\" class=\"comment_content\">";
 			}
 			s += c.comment;
-			s += "<div class=\"comment_command\"><a href=\"/post?cid=" + c.cid + "\">Reply</a>";
+			s += "<footer><a href=\"/post?cid=" + c.cid + "\">Reply</a>";
 			if (c.rid >= 0 && c.zid != auth_zid) {
 				s += "<select name=\"s_" + c.cid + "\" onchange=\"moderate(this, " + c.cid + ")\">";
 
@@ -175,7 +182,7 @@ function render(c)
 				}
 				s += "</select>";
 			}
-			s += "</div>";
+			s += "</footer>";
 			s += "</div>";
 		}
 	}
@@ -190,6 +197,7 @@ function render(c)
 		//	s += "</div>";
 		//}
 		s += "</div>";
+		s += "</article>";
 	}
 
 	return s;

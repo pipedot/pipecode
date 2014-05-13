@@ -69,7 +69,7 @@ print_left_bar("account", "feed");
 writeln('</td>');
 writeln('<td class="fill">');
 
-writeln('<form method="post">');
+beg_form();
 writeln('<div class="dialog_title">Add Feed</div>');
 writeln('<div class="dialog_body">');
 
@@ -105,7 +105,7 @@ writeln('	</tr>');
 writeln('</table>');
 
 writeln('</div>');
-writeln('</form>');
+end_form();
 
 writeln('</td>');
 writeln('</tr>');
