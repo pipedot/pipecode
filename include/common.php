@@ -325,7 +325,7 @@ function print_left_bar($type = "main", $selected = "stories")
 	global $auth_zid;
 	global $auth_user;
 	global $server_name;
-	global $user_page;
+	global $zid;
 
 	if ($type == "main") {
 		if ($auth_zid == "") {
@@ -335,27 +335,21 @@ function print_left_bar($type = "main", $selected = "stories")
 			$section_name = array("stories", "pipe", "poll", "search", "topics");
 			$section_link = array("", "pipe/", "poll/", "search", "topic");
 		}
-	} else if ($type == "user") {
-		//$section_name = array("blog", "feed", "submissions", "comments", "achievements");
-		//$section_link = array("blog", "feed", "submissions", "comments", "achievements");
-		$section_name = array("comments");
-		$section_link = array("comments");
-	} elseif ($type == "account") {
-		//$section_name = array("mail", "feed", "comments", "karma", "settings");
-		//$section_link = array("mail/", "feed/edit", "comments", "karma/", "settings");
-		$section_name = array("comments", "feed", "karma", "settings");
-		$section_link = array("comments", "feed/edit", "karma/", "settings");
+	} elseif ($type == "user") {
+		if ($auth_zid == $zid) {
+			$section_name = array("comments", "feed", "karma", "settings");
+			$section_link = array("comments", "feed/edit", "karma/", "settings");
+		} else {
+			//$section_name = array("blog", "feed", "submissions", "comments", "achievements");
+			//$section_link = array("blog", "feed", "submissions", "comments", "achievements");
+			$section_name = array("overview", "comments", "karma");
+			$section_link = array("", "comments", "karma/");
+		}
 	}
 
 	writeln('<nav>');
 	for ($i = 0; $i < count($section_name); $i++) {
 		$link = "/" . $section_link[$i];
-		//if ($user_page == "" && $section_name[$i] == "feed" && $auth_zid != "") {
-		//	$row = run_sql("select count(*) as feed_count from feed_user where zid = ?", array($auth_zid));
-		//	if ($row[0]["feed_count"] > 0) {
-		//		$link = "http://" . $auth_user["username"] . ".$server_name/";
-		//	}
-		//}
 		if ($selected == $section_name[$i]) {
 			writeln('	<a href="' . $link . '"><div class="section_active">' . $section_name[$i] . '</div></a>');
 		} else {
@@ -545,17 +539,17 @@ function article_info($comment)
 		$a["type"] = "story";
 		$a["title"] = $story["title"];
 		$date = gmdate("Y-m-d", $story["time"]);
-		$a["link"] = "http://$server_name/story/$date/" . $story["ctitle"];
+		$a["link"] = "https://$server_name/story/$date/" . $story["ctitle"];
 	} else if ($comment["pid"] > 0) {
 		$pipe = db_get_rec("pipe", $comment["pid"]);
 		$a["type"] = "pipe";
 		$a["title"] = $pipe["title"];
-		$a["link"] = "http://$server_name/pipe/" . $comment["pid"];
+		$a["link"] = "https://$server_name/pipe/" . $comment["pid"];
 	} else if ($comment["qid"] > 0) {
 		$question = db_get_rec("poll_question", $comment["qid"]);
 		$a["type"] = "poll";
 		$a["title"] = $question["question"];
-		$a["link"] = "http://$server_name/poll/" . $comment["qid"];
+		$a["link"] = "https://$server_name/poll/" . $comment["qid"];
 	}
 
 	return $a;

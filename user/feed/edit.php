@@ -28,7 +28,7 @@ print_header();
 writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td class="left_col">');
-print_left_bar("account", "feed");
+print_left_bar("user", "feed");
 writeln('</td>');
 writeln('<td class="fill">');
 

@@ -30,15 +30,10 @@ $row_start = ($page - 1) * $rows_per_page;
 
 print_header("Comments");
 
-//writeln('<hr/>');
 writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td class="left_col">');
-if ($auth_zid == $zid) {
-	print_left_bar("account", "comments");
-} else {
-	print_left_bar("user", "comments");
-}
+print_left_bar("user", "comments");
 writeln('</td>');
 writeln('<td class="fill">');
 

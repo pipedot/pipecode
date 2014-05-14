@@ -28,12 +28,12 @@ if ($zid == $auth_zid) {
 	print_header();
 	writeln('<table class="fill">');
 	writeln('<tr>');
-	writeln('<td class="left_bar">');
-	print_left_bar("user", "comments");
+	writeln('<td class="left_col">');
+	print_left_bar("user", "overview");
 	writeln('</td>');
 	writeln('<td class="fill">');
 
-	writeln('user page [' . $user_page . ']');
+	writeln('<h1>' . $zid . '</h1>');
 
 	writeln('</td>');
 	writeln('</tr>');

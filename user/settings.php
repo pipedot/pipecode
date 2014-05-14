@@ -56,7 +56,7 @@ print_header("Settings");
 writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td class="left_col">');
-print_left_bar("account", "settings");
+print_left_bar("user", "settings");
 writeln('</td>');
 writeln('<td class="fill">');
 

@@ -53,10 +53,7 @@ $s = "";
 for ($i = count($list) - 1; $i >= 0; $i--) {
 	$s .= render_comment($list[$i]["subject"], $list[$i]["zid"], $list[$i]["time"], $list[$i]["cid"], $list[$i]["comment"]);
 }
-$s .= str_repeat("</div>", count($list));
-
-//writeln(render_comment($comment["subject"], $comment["zid"], $comment["time"], $comment["cid"], $comment["comment"]));
-//writeln('</div>');
+$s .= str_repeat("</div>\n</article>\n", count($list));
 writeln($s);
 
 writeln('</td>');

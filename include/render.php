@@ -53,7 +53,6 @@ function render_comment($subject, $zid, $time, $cid, $body, $last_seen = 0)
 		} else {
 			$selected = $row[0]["rid"];
 		}
-		//$s = "selected [$selected]";
 
 		$s .= "<footer><a href=\"/post?cid=$cid\">Reply</a><select name=\"cid_$cid\">";
 		for ($i = 0; $i < count($reason); $i++) {
@@ -105,22 +104,16 @@ function render_comment_json($subject, $zid, $time, $cid, $body)
 
 function recursive_render($render, $parent, $keys, $cid)
 {
-	//global $render;
-	//global $parent;
-	//global $keys;
-	//global $total;
-
 	$s = $render[$cid];
 
-	//$k = array_keys($render);
 	for ($i = 0; $i < count($keys); $i++) {
 		$child = $keys[$i];
-		//writeln("cid [$cid] parent [" . $parent[$child] . "]<br/>\n");
 		if ($parent[$child] == $cid) {
 			$s .= recursive_render($render, $parent, $keys, $child);
 		}
 	}
 	$s .= "</div>\n";
+	$s .= "</article>\n";
 
 	return $s;
 }
@@ -128,18 +121,11 @@ function recursive_render($render, $parent, $keys, $cid)
 
 function recursive_render_json($render, $parent, $keys, $cid, $level)
 {
-	//global $render;
-	//global $parent;
-	//global $keys;
-	//global $total;
-
 	$s = str_replace("\$level", str_repeat("		", $level), $render[$cid]);
 
-	//$k = array_keys($render);
 	$count = 0;
 	for ($i = 0; $i < count($keys); $i++) {
 		$child = $keys[$i];
-		//writeln("cid [$cid] parent [" . $parent[$child] . "]<br/>\n");
 		if ($parent[$child] == $cid) {
 			$s .= recursive_render_json($render, $parent, $keys, $child, $level + 1) . "\n";
 			$count++;
@@ -158,10 +144,6 @@ function recursive_render_json($render, $parent, $keys, $cid, $level)
 function render_page($sid, $pid, $qid, $json)
 {
 	global $auth_zid;
-	//global $render;
-	//global $parent;
-	//global $keys;
-	//global $total;
 	global $can_moderate;
 	global $hide_value;
 	global $expand_value;

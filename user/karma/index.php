@@ -33,7 +33,7 @@ print_header("Karma");
 writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td class="left_col">');
-print_left_bar("account", "karma");
+print_left_bar("user", "karma");
 writeln('</td>');
 writeln('<td class="fill">');
 

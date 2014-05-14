@@ -37,6 +37,8 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeDialogTabs = 'image:advanced;link:advanced;link:target';
 
 	config.removePlugins = 'elementspath';
+
+	config.entities = false;
 };
 
 CKEDITOR.on('dialogDefinition', function(ev)
