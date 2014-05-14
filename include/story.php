@@ -69,7 +69,7 @@ function print_article($a)
 	if ($zid == "") {
 		$by = "<b>Anonymous Coward</b>";
 	} else {
-		$by = "<a href=\"http://$zid\"><b>$zid</b></a>";
+		$by = "<a href=\"" . user_page_link($zid) . "\"><b>$zid</b></a>";
 	}
 	if (array_key_exists("sid", $a)) {
 		$sid = $a["sid"];
