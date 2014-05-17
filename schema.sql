@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.35, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.37, for debian-linux-gnu (x86_64)
 --
 -- Host: yuzu.zenbi.net    Database: pipedot
 -- ------------------------------------------------------
--- Server version	5.5.35-1ubuntu1
+-- Server version	5.5.37-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -237,6 +237,21 @@ CREATE TABLE `mail` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `page`
+--
+
+DROP TABLE IF EXISTS `page`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `page` (
+  `slug` varchar(100) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `body` text NOT NULL,
+  PRIMARY KEY (`slug`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `pipe`
 --
 
@@ -257,6 +272,22 @@ CREATE TABLE `pipe` (
   `story` text NOT NULL,
   PRIMARY KEY (`pid`),
   FULLTEXT KEY `pipe_search` (`title`,`story`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `pipe_history`
+--
+
+DROP TABLE IF EXISTS `pipe_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `pipe_history` (
+  `pid` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`pid`,`zid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -289,6 +320,22 @@ CREATE TABLE `poll_answer` (
   `answer` varchar(200) NOT NULL,
   `position` int(11) NOT NULL,
   PRIMARY KEY (`aid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `poll_history`
+--
+
+DROP TABLE IF EXISTS `poll_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poll_history` (
+  `qid` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`qid`,`zid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -365,6 +412,22 @@ CREATE TABLE `story` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `story_history`
+--
+
+DROP TABLE IF EXISTS `story_history`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `story_history` (
+  `sid` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`sid`,`zid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `topic`
 --
 
@@ -404,4 +467,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-05-04 22:04:22
+-- Dump completed on 2014-05-17 18:46:34

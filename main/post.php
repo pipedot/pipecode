@@ -30,6 +30,10 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward)
 	global $auth_zid;
 	global $auth_user;
 
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
+		$body = str_replace("\n", "<br/>", $body);
+	}
+
 	beg_form();
 	if ($sid != 0) {
 		writeln('<input type="hidden" name="sid" value="' . $sid . '"/>');
@@ -135,7 +139,7 @@ if (http_post()) {
 	}
 	if ($sid != 0) {
 		$story = db_get_rec("story", $sid);
-		$day = date("Y-m-d", $story["time"]);
+		$day = gmdate("Y-m-d", $story["time"]);
 	}
 
 	if (http_post("preview")) {
@@ -183,10 +187,25 @@ if (http_post()) {
 	send_notifications($cid, $comment);
 
 	if ($sid != 0) {
+		if (db_has_rec("story_history", array("sid" => $sid, "zid" => $auth_zid))) {
+			$history = db_get_rec("story_history", array("sid" => $sid, "zid" => $auth_zid));
+			$history["time"] = $history["last_time"];
+			db_set_rec("story_history", $history);
+		}
 		header("Location: /story/$day/" . $story["ctitle"]);
 	} elseif ($pid != 0) {
+		if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
+			$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
+			$history["time"] = $history["last_time"];
+			db_set_rec("pipe_history", $history);
+		}
 		header("Location: /pipe/$pid");
 	} elseif ($qid != 0) {
+		if (db_has_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid))) {
+			$history = db_get_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid));
+			$history["time"] = $history["last_time"];
+			db_set_rec("poll_history", $history);
+		}
 		header("Location: /poll/$qid");
 	}
 	die();

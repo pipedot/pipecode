@@ -31,8 +31,9 @@ if (http_post()) {
 	$time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
 	$hide_threshold = http_post_string("hide_threshold", array("valid" => "[0-9]-"));
 	$expand_threshold = http_post_string("expand_threshold", array("valid" => "[0-9]-"));
-	$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
 	$real_name = http_post_string("real_name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z]- "));
+	$email = http_post_string("email", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
+	$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
 
 	if (!in_array($time_zone, $zones)) {
 		die("invalid time zone [$time_zone]");
@@ -43,8 +44,9 @@ if (http_post()) {
 	$user_conf["time_zone"] = $time_zone;
 	$user_conf["hide_threshold"] = $hide_threshold;
 	$user_conf["expand_threshold"] = $expand_threshold;
-	$user_conf["list_enabled"] = $list_enabled;
 	$user_conf["real_name"] = $real_name;
+	$user_conf["email"] = $email;
+	$user_conf["list_enabled"] = $list_enabled;
 
 	db_set_conf("user_conf", $user_conf, $auth_zid);
 	header("Location: /menu/");
@@ -79,9 +81,13 @@ print_row(array("caption" => "Hide Threshold", "option_key" => "hide_threshold",
 print_row(array("caption" => "Expand Threshold", "option_key" => "expand_threshold", "option_list" => $scores, "option_value" => $user_conf["expand_threshold"]));
 end_tab();
 
+beg_tab("Profile");
+print_row(array("caption" => "Real Name", "text_key" => "real_name", "text_value" => $user_conf["real_name"]));
+print_row(array("caption" => "External Email", "text_key" => "email", "text_value" => $user_conf["email"]));
+end_tab();
+
 beg_tab("Mailing List");
 print_row(array("caption" => "Subscribe to Mailing List (list@$server_name)", "check_key" => "list_enabled", "checked" => $user_conf["list_enabled"]));
-print_row(array("caption" => "Real Name", "text_key" => "real_name", "text_value" => $user_conf["real_name"]));
 end_tab();
 
 //

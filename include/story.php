@@ -101,7 +101,7 @@ function print_article($a)
 	$icon = $a["icon"];
 	$title = $a["title"];
 	$ctitle = clean_url($title);
-	$date = gmdate("Y-m-d H:i", $time);
+	$date = date("Y-m-d H:i", $time);
 	$day = gmdate("Y-m-d", $time);
 
 	writeln("<article class=\"story\">");

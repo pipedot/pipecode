@@ -341,7 +341,6 @@ function dirty_html($clean)
 	$dirty = str_replace("<ul>", "\n<ul>", $dirty);
 	$dirty = str_replace("</ul>", "\n</ul>", $dirty);
 	$dirty = str_replace("<li>", "\n<li>", $dirty);
-
 	$dirty = str_replace("&lt;", "&amp;lt;", $dirty);
 	$dirty = str_replace("&gt;", "&amp;gt;", $dirty);
 

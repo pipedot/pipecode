@@ -110,11 +110,13 @@ if ($auth_user["javascript_enabled"]) {
 	} else {
 		if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
 			$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
+			$history["last_time"] = $history["time"];
 			$last_seen = $history["time"];
 		} else {
 			$history = array();
 			$history["pid"] = $pid;
 			$history["zid"] = $auth_zid;
+			$history["last_time"] = 0;
 			$last_seen = 0;
 		}
 		$history["time"] = time();

@@ -134,6 +134,7 @@ $db_table["pipe_history"]["key"][] = "zid";
 $db_table["pipe_history"]["col"][] = "pid";
 $db_table["pipe_history"]["col"][] = "zid";
 $db_table["pipe_history"]["col"][] = "time";
+$db_table["pipe_history"]["col"][] = "last_time";
 
 $db_table["pipe_vote"]["key"][] = "pid";
 $db_table["pipe_vote"]["key"][] = "zid";
@@ -154,6 +155,7 @@ $db_table["poll_history"]["key"][] = "zid";
 $db_table["poll_history"]["col"][] = "qid";
 $db_table["poll_history"]["col"][] = "zid";
 $db_table["poll_history"]["col"][] = "time";
+$db_table["poll_history"]["col"][] = "last_time";
 
 $db_table["poll_question"]["key"] = "qid";
 $db_table["poll_question"]["col"][] = "qid";
@@ -185,6 +187,7 @@ $db_table["story_history"]["key"][] = "zid";
 $db_table["story_history"]["col"][] = "sid";
 $db_table["story_history"]["col"][] = "zid";
 $db_table["story_history"]["col"][] = "time";
+$db_table["story_history"]["col"][] = "last_time";
 
 $db_table["topic"]["key"] = "tid";
 $db_table["topic"]["col"][] = "tid";
@@ -676,3 +679,6 @@ if ($user_page != "") {
 
 check_auth();
 
+if ($auth_zid != "") {
+	date_default_timezone_set($auth_user["time_zone"]);
+}
