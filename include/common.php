@@ -172,6 +172,10 @@ $db_table["poll_vote"]["col"][] = "zid";
 $db_table["poll_vote"]["col"][] = "time";
 $db_table["poll_vote"]["col"][] = "score";
 
+//$db_table["server_conf"]["key"] = "name";
+$db_table["server_conf"]["col"][] = "name";
+$db_table["server_conf"]["col"][] = "value";
+
 $db_table["story"]["key"] = "sid";
 $db_table["story"]["col"][] = "sid";
 $db_table["story"]["col"][] = "pid";
@@ -214,6 +218,8 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	global $protocol;
 	global $request_script;
 	global $story_image_enabled;
+	global $doc_root;
+	global $server_conf;
 
 	header_expires();
 	header("Content-Type: text/html; charset=utf-8");
@@ -232,13 +238,14 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	}
 	writeln('<title>' . $title . '</title>');
 	writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">');
-	writeln('<link rel="stylesheet" href="/style.css" type="text/css"/>');
+	$theme = $server_conf["theme"];
+	writeln('<link rel="stylesheet" href="/theme/' . $theme . '/style.css?t=' . fs_time("$doc_root/theme/$theme/style.css") . '" type="text/css"/>');
 	if ($request_script == "/") {
 		writeln('<link rel="alternate" href="/atom" type="application/atom+xml" title="Stories">');
 	}
 	if ($auth_user["javascript_enabled"]) {
-		writeln('<script type="text/javascript" src="/lib/jquery/jquery.js"></script>');
-		writeln('<script type="text/javascript" src="/common.js"></script>');
+		writeln('<script type="text/javascript" src="/lib/jquery/jquery.js?t=' . fs_time("$doc_root/lib/jquery/jquery.js") . '"></script>');
+		writeln('<script type="text/javascript" src="/common.js?t=' . fs_time("$doc_root/common.js") . '"></script>');
 	}
 
 	writeln('</head>');
@@ -647,6 +654,7 @@ if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
 	$remote_ip = $_SERVER["REMOTE_ADDR"];
 }
 
+$server_conf = db_get_conf("server_conf");
 $http_host = $_SERVER["HTTP_HOST"];
 $user_page = "";
 $a = explode(".", $http_host);

@@ -1,7 +1,7 @@
 <?
 //
 // tools - general utility functions
-// Copyright (C) 1995-2014 Bryan Beicker <bryan@beicker.com>
+// Copyright (C) 1998-2014 Bryan Beicker <bryan@beicker.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,148 +14,8 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-
-function db_get_conf($table, $id)
-{
-	global $db_table;
-	global $memcache_server;
-
-	$key = $db_table[$table]["key"];
-
-	if (!empty($memcache_server)) {
-		$cache_key = "$table.conf.$id";
-		$s = cache_get($cache_key);
-		if ($s !== false) {
-			//print "cached\n";
-			return map_from_conf_string($s);
-		}
-		//print "not cached\n";
-	}
-
-	$map = array();
-	$row = run_sql("select name, value from default_conf where conf = ?", array($table));
-	for ($i = 0; $i < count($row); $i++) {
-		$map[$row[$i]["name"]] = $row[$i]["value"];
-	}
-
-	$row = run_sql("select name, value from $table where $key = ?", array($id));
-	for ($i = 0; $i < count($row); $i++) {
-		$map[$row[$i]["name"]] = $row[$i]["value"];
-	}
-
-	ksort($map);
-	if (!empty($memcache_server)) {
-		cache_set($cache_key, map_to_conf_string($map));
-	}
-
-	return $map;
-}
-
-
-function db_set_conf($table, $map, $id)
-{
-	global $db_table;
-	global $memcache_server;
-
-	$key = $db_table[$table]["key"];
-	$current = array();
-	$default = array();
-
-	$row = run_sql("select name, value from $table where $key = ?", array($id));
-	for ($i = 0; $i < count($row); $i++) {
-		$current[$row[$i]["name"]] = $row[$i]["value"];
-	}
-
-	$row = run_sql("select name, value from default_conf where conf = ?", array($table));
-	for ($i = 0; $i < count($row); $i++) {
-		$default[$row[$i]["name"]] = $row[$i]["value"];
-	}
-
-	$k = array_keys($map);
-	for ($i = 0; $i < count($k); $i++) {
-		$new_key = $k[$i];
-		$new_value = $map[$new_key];
-
-		if (array_key_exists($new_key, $current)) {
-			if (array_key_exists($new_key, $default) && $new_value == $default[$new_key]) {
-				//print "delete\n";
-				run_sql("delete from $table where $key = ? and name = ?", array($id, $new_key));
-			} else if ($current[$new_key] != $new_value) {
-				//print "update\n";
-				run_sql("update $table set value = ? where $key = ? and name = ?", array($new_value, $id, $new_key));
-			}
-		} else {
-			$insert = true;
-			if (array_key_exists($new_key, $default)) {
-				if ($new_value == $default[$new_key]) {
-					$insert = false;
-				}
-			}
-			if ($insert) {
-				//print "insert\n";
-				run_sql("insert into $table ($key, name, value) values (?, ?, ?)", array($id, $new_key, $new_value));
-			}
-		}
-	}
-
-	if (!empty($memcache_server)) {
-		$cache_key = "$table.conf.$id";
-		cache_set($cache_key, map_to_conf_string($map));
-	}
-}
-
-
-function beg_form($action = "", $post = true)
-{
-	writeln('<form' . ($action == '' ? '' : ' action="' . $action . '"' ) . ($post ? ' method="post"' : '' ) . '>');
-}
-
-
-function end_form()
-{
-	writeln('</form>');
-}
-
-
-function random_hash()
-{
-	return crypt_sha256(time() . getmypid() . rand());
-}
-
-
-function db_has_database($database)
-{
-	$row = run_sql("show databases like '$database'");
-	if (count($row) == 0) {
-		return false;
-	}
-	return true;
-}
-
-
-function run_sql_file($path)
-{
-	$lines = file($path);
-	$sql = "";
-	for ($i = 0; $i < count($lines); $i++) {
-		if ($lines[$i] != "" && substr($lines[$i], 0, 2) != "--") {
-			$sql .= $lines[$i];
-			if (substr(trim($lines[$i]), -1, 1) == ';') {
-				run_sql($sql);
-				$sql = "";
-			}
-		}
-	}
-}
-
-
-function array_has($haystack, $needle)
-{
-	return in_array($needle, $haystack);
-}
-
 
 function auth_check($sign_in_page = "/sign_in")
 {
@@ -223,6 +83,12 @@ function auth_sign_out($next_page = "/")
 }
 
 
+function beg_form($action = "", $post = true)
+{
+	writeln('<form' . ($action == '' ? '' : ' action="' . $action . '"' ) . ($post ? ' method="post"' : '' ) . '>');
+}
+
+
 function beg_tab($caption = "", $a = array())
 {
 	$s = '<table';
@@ -251,9 +117,14 @@ function beg_tab($caption = "", $a = array())
 
 function cache_delete($key)
 {
+	global $cache_enabled;
 	global $apc_enabled;
 	global $memcache;
 	global $memcache_open;
+
+	if (!$cache_enabled) {
+		return;
+	}
 
 	if ($apc_enabled) {
 		apc_delete($key);
@@ -270,9 +141,14 @@ function cache_delete($key)
 
 function cache_get($key)
 {
+	global $cache_enabled;
 	global $apc_enabled;
 	global $memcache;
 	global $memcache_open;
+
+	if (!$cache_enabled) {
+		return false;
+	}
 
 	if ($apc_enabled) {
 		return apc_fetch($key);
@@ -288,6 +164,12 @@ function cache_get($key)
 
 function cache_has($key)
 {
+	global $cache_enabled;
+
+	if (!$cache_enabled) {
+		return false;
+	}
+
 	$s = cache_get($key);
 	if ($s === false) {
 		return false;
@@ -299,10 +181,15 @@ function cache_has($key)
 
 function cache_open()
 {
+	global $cache_enabled;
 	global $apc_enabled;
 	global $memcache;
 	global $memcache_open;
 	global $memcache_server;
+
+	if (!$cache_enabled) {
+		return;
+	}
 
 	if ($apc_enabled || $memcache_open) {
 		return;
@@ -316,10 +203,15 @@ function cache_open()
 
 function cache_set($key, $data = NULL, $expire = -1)
 {
+	global $cache_enabled;
 	global $apc_enabled;
 	global $memcache;
 	global $memcache_open;
 	global $cache_expire;
+
+	if (!$cache_enabled) {
+		return;
+	}
 
 	if ($expire == -1) {
 		if (empty($cache_expire)) {
@@ -534,10 +426,10 @@ function crypt_span($src, $size = 76)
 
 function crypt_tag_decode($src)
 {
-	$s = str_replace("&quote;", "\"", $src);
+	$s = str_replace("&" . "quot;", "\"", $src);
 	$s = str_replace("&cr;", "\r", $s);
 	$s = str_replace("&lf;", "\n", $s);
-	$s = str_replace("&amp;", "&", $s);
+	$s = str_replace("&" . "amp;", "&", $s);
 
 	return $s;
 }
@@ -545,8 +437,8 @@ function crypt_tag_decode($src)
 
 function crypt_tag_encode($src)
 {
-	$s = str_replace("&", "&amp;", $src);
-	$s = str_replace("\"", "&quote;", $s);
+	$s = str_replace("&", "&" . "amp;", $src);
+	$s = str_replace("\"", "&" . "quot;", $s);
 	$s = str_replace("\r", "&cr;", $s);
 	$s = str_replace("\n", "&lf;", $s);
 
@@ -587,6 +479,51 @@ function db_del_rec($table, $id)
 	} else {
 		run_sql("delete from $table where $key = ?", array($id));
 	}
+}
+
+
+function db_get_conf($table, $id = false)
+{
+	global $db_table;
+	global $cache_enabled;
+
+	if ($id !== false) {
+		$key = $db_table[$table]["key"];
+	}
+
+	if ($cache_enabled) {
+		if ($id === false) {
+			$cache_key = "$table.conf";
+		} else {
+			$cache_key = "$table.conf.$id";
+		}
+		$s = cache_get($cache_key);
+		if ($s !== false) {
+			return map_from_conf_string($s);
+		}
+	}
+
+	$map = array();
+	$row = run_sql("select name, value from default_conf where conf = ?", array($table));
+	for ($i = 0; $i < count($row); $i++) {
+		$map[$row[$i]["name"]] = $row[$i]["value"];
+	}
+
+	if ($id === false) {
+		$row = run_sql("select name, value from $table");
+	} else {
+		$row = run_sql("select name, value from $table where $key = ?", array($id));
+	}
+	for ($i = 0; $i < count($row); $i++) {
+		$map[$row[$i]["name"]] = $row[$i]["value"];
+	}
+
+	ksort($map);
+	if ($cache_enabled) {
+		cache_set($cache_key, map_to_conf_string($map));
+	}
+
+	return $map;
 }
 
 
@@ -651,10 +588,8 @@ function db_get_rec($table, $id)
 		$cache_key = "$table.rec.$id";
 		$s = cache_get($cache_key);
 		if ($s !== false) {
-			//print "cached\n";
 			return map_from_conf_string($s);
 		}
-		//print "not cached\n";
 	}
 
 	if (!array_key_exists($table, $db_table)) {
@@ -696,6 +631,16 @@ function db_get_rec($table, $id)
 }
 
 
+function db_has_database($database)
+{
+	$row = run_sql("show databases like '$database'");
+	if (count($row) == 0) {
+		return false;
+	}
+	return true;
+}
+
+
 function db_has_rec($table, $id)
 {
 	global $db_table;
@@ -729,6 +674,78 @@ function db_has_rec($table, $id)
 		return false;
 	}
 	return true;
+}
+
+
+function db_set_conf($table, $map, $id = false)
+{
+	global $db_table;
+	global $cache_enabled;
+
+	if ($id !== false) {
+		$key = $db_table[$table]["key"];
+	}
+	$current = array();
+	$default = array();
+
+	if ($id === false) {
+		$row = run_sql("select name, value from $table");
+	} else {
+		$row = run_sql("select name, value from $table where $key = ?", array($id));
+	}
+	for ($i = 0; $i < count($row); $i++) {
+		$current[$row[$i]["name"]] = $row[$i]["value"];
+	}
+
+	$row = run_sql("select name, value from default_conf where conf = ?", array($table));
+	for ($i = 0; $i < count($row); $i++) {
+		$default[$row[$i]["name"]] = $row[$i]["value"];
+	}
+
+	$k = array_keys($map);
+	for ($i = 0; $i < count($k); $i++) {
+		$new_name = $k[$i];
+		$new_value = $map[$new_name];
+
+		if (array_key_exists($new_name, $current)) {
+			if (array_key_exists($new_name, $default) && $new_value == $default[$new_name]) {
+				if ($id === false) {
+					run_sql("delete from $table where name = ?", array($new_name));
+				} else {
+					run_sql("delete from $table where $key = ? and name = ?", array($id, $new_name));
+				}
+			} else if ($current[$new_name] != $new_value) {
+				if ($id === false) {
+					run_sql("update $table set value = ? where name = ?", array($new_value, $new_name));
+				} else {
+					run_sql("update $table set value = ? where $key = ? and name = ?", array($new_value, $id, $new_name));
+				}
+			}
+		} else {
+			$insert = true;
+			if (array_key_exists($new_name, $default)) {
+				if ($new_value == $default[$new_name]) {
+					$insert = false;
+				}
+			}
+			if ($insert) {
+				if ($id === false) {
+					run_sql("insert into $table (name, value) values (?, ?)", array($new_name, $new_value));
+				} else {
+					run_sql("insert into $table ($key, name, value) values (?, ?, ?)", array($id, $new_name, $new_value));
+				}
+			}
+		}
+	}
+
+	if ($cache_enabled) {
+		if ($id === false) {
+			$cache_key = "$table.conf";
+		} else {
+			$cache_key = "$table.conf.$id";
+		}
+		cache_set($cache_key, map_to_conf_string($map));
+	}
 }
 
 
@@ -820,6 +837,12 @@ function default_error($text)
 		fatal_error($text);
 	}
 	die("error: $text");
+}
+
+
+function end_form()
+{
+	writeln('</form>');
 }
 
 
@@ -982,7 +1005,7 @@ function fs_time($path)
 {
 	$time = @filemtime($path);
 	if ($time === false) {
-		return strtotime("1970-01-01 00:00:00");
+		return 0;
 	}
 
 	return $time;
@@ -1558,7 +1581,7 @@ function print_row($a)
 		}
 		writeln('			<div class="row_tab">');
 		writeln('				<div' . $indent_width . ' class="row_caption">' . $a["caption"] . '</div>');
-		writeln('				<textarea name="' . $a["textarea_key"] . '" style="height: ' . $height . 'px">' . @$a["textarea_value"] . '</textarea>');
+		writeln('				<' . 'textarea name="' . $a["textarea_key"] . '" style="height: ' . $height . 'px">' . @$a["textarea_value"] . '<' . '/textarea>');
 		writeln('			</div>');
 	} else if (array_key_exists("option_key", $a)) {
 		if (array_key_exists("option_change", $a)) {
@@ -1639,6 +1662,12 @@ function print_row($a)
 }
 
 
+function random_hash()
+{
+	return crypt_sha256(time() . getmypid() . rand());
+}
+
+
 function right_box($buttons, $style = "")
 {
 	if ($style == "") {
@@ -1689,6 +1718,22 @@ function run_sql($sql, $arg = array(), $fatal = true)
 	}
 
 	return $row;
+}
+
+
+function run_sql_file($path)
+{
+	$lines = file($path);
+	$sql = "";
+	for ($i = 0; $i < count($lines); $i++) {
+		if ($lines[$i] != "" && substr($lines[$i], 0, 2) != "--") {
+			$sql .= $lines[$i];
+			if (substr(trim($lines[$i]), -1, 1) == ';') {
+				run_sql($sql);
+				$sql = "";
+			}
+		}
+	}
 }
 
 

@@ -159,11 +159,13 @@ function render_page($sid, $pid, $qid, $json)
 		} else {
 			if (db_has_rec("story_history", array("sid" => $sid, "zid" => $auth_zid))) {
 				$history = db_get_rec("story_history", array("sid" => $sid, "zid" => $auth_zid));
+				$history["last_time"] = $history["time"];
 				$last_seen = $history["time"];
 			} else {
 				$history = array();
 				$history["sid"] = $sid;
 				$history["zid"] = $auth_zid;
+				$history["last_time"] = 0;
 				$last_seen = 0;
 			}
 			$history["time"] = time();
@@ -176,11 +178,13 @@ function render_page($sid, $pid, $qid, $json)
 		} else {
 			if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
 				$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
+				$history["last_time"] = $history["time"];
 				$last_seen = $history["time"];
 			} else {
 				$history = array();
 				$history["pid"] = $pid;
 				$history["zid"] = $auth_zid;
+				$history["last_time"] = 0;
 				$last_seen = 0;
 			}
 			$history["time"] = time();
@@ -193,11 +197,13 @@ function render_page($sid, $pid, $qid, $json)
 		} else {
 			if (db_has_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid))) {
 				$history = db_get_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid));
+				$history["last_time"] = $history["time"];
 				$last_seen = $history["time"];
 			} else {
 				$history = array();
 				$history["qid"] = $qid;
 				$history["zid"] = $auth_zid;
+				$history["last_time"] = 0;
 				$last_seen = 0;
 			}
 			$history["time"] = time();

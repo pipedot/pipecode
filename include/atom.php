@@ -64,7 +64,6 @@ function make_atom($topic)
 
 	$body .= "</feed>\n";
 
-	//$date = gmdate("D, j M Y H:i:s") . " GMT");
 	$time = time();
 	$etag = md5($body);
 
@@ -141,9 +140,7 @@ function print_atom($topic)
 	}
 
 	if (!http_modified($time, $etag)) {
-		//header("Not Modified", true, 304);
 		http_response_code(304);
-		//header("ETag: \"$etag\"");
 	} else {
 		header("Content-type: application/atom+xml");
 		header("Last-Modified: " . gmdate("D, j M Y H:i:s", $time) . " GMT");
