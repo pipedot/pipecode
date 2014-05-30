@@ -239,6 +239,7 @@ function print_mail_dir($location)
 
 function format_text_mail($body)
 {
+	$body = htmlentities($body);
 	$body = str_replace("\r", "", $body);
 	$body = str_replace("\n", "<br/>", $body);
 	$body = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s<])?)?)@', '<a href="$1">$1</a>', $body);
@@ -270,7 +271,7 @@ function send_notifications($parent, $comment)
 			$body = "Your comment has a new reply.\n";
 			$body .= "\n";
 			$body .= "In the " . $a["type"] . ":\n";
-			$body .= $a["title"] . "\n";
+			$body .= htmlspecialchars_decode($a["title"]) . "\n";
 			$body .= $a["link"] . "\n";
 			$body .= "\n";
 			$body .= "Your original comment:\n";

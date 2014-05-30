@@ -920,6 +920,17 @@ function fs_dir_name($path)
 
 function fs_ext($path)
 {
+	if (strtolower(substr($path, 0, 4)) == "http") {
+		$pos = strpos($path, "?");
+		if ($pos !== false) {
+			$path = substr($path, 0, $pos);
+		}
+		$pos = strpos($path, "#");
+		if ($pos !== false) {
+			$path = substr($path, 0, $pos);
+		}
+	}
+
 	$pos = strrpos($path, ".");
 	if ($pos === false) {
 		return "";
@@ -1788,6 +1799,16 @@ function string_next(&$src, $sep)
 
 function string_pad($src, $length, $char = "0") {
 	return str_pad($src, $length, $char, STR_PAD_LEFT);
+}
+
+
+function string_replace_all($search, $replacement, $source)
+{
+	while (string_has($source, $search)) {
+		$source = str_replace($search, $replacement, $source);
+	}
+
+	return $source;
 }
 
 

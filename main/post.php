@@ -25,14 +25,10 @@ include("captcha.php");
 include("mail.php");
 
 
-function print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward)
+function print_post_box($sid, $cid, $pid, $qid, $subject, $dirty_body, $coward)
 {
 	global $auth_zid;
 	global $auth_user;
-
-	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
-		$body = str_replace("\n", "<br/>", $body);
-	}
 
 	beg_form();
 	if ($sid != 0) {
@@ -56,7 +52,7 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward)
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Comment</td>');
-	writeln('		<td colspan="2" style="padding-bottom: 4px"><textarea name="comment" style="height: 120px" required="required">' . $body . '</textarea></td>');
+	writeln('		<td colspan="2" style="padding-bottom: 4px"><textarea name="comment" style="height: 120px" required="required">' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid == "") {
@@ -100,8 +96,8 @@ if (http_post()) {
 	$cid = http_post_int("cid", array("required" => false));
 	$pid = http_post_int("pid", array("required" => false));
 	$qid = http_post_int("qid", array("required" => false));
-	$subject = http_post_string("subject", array("len" => 200, "valid" => "[ALL]"));
-	$body = http_post_string("comment", array("len" => 64000, "valid" => "[ALL]"));
+	$subject = clean_subject();
+	list($clean_body, $dirty_body) = clean_body();
 	$answer = http_post_string("answer", array("required" => false));
 	if ($auth_zid == "") {
 		$zid = "";
@@ -119,12 +115,6 @@ if (http_post()) {
 			$zid = $auth_zid;
 		}
 	}
-
-	$subject = clean_unicode($subject);
-	$subject = clean_entities($subject);
-	$new_body = str_replace("\n", "<br>", $body);
-	$new_body = clean_html($new_body);
-	$body = dirty_html($new_body);
 	$time = time();
 
 	if ($sid == 0 && $cid == 0 && $pid == 0 && $qid == 0) {
@@ -157,12 +147,12 @@ if (http_post()) {
 		writeln('<h1>Preview</h1>');
 		writeln('<p>Check your links before you post!</p>');
 		writeln('<div style="margin-bottom: 8px">');
-		print render_comment($subject, ($coward ? "" : $zid), $time, 0, $new_body);
+		print render_comment($subject, ($coward ? "" : $zid), $time, 0, $clean_body);
 		writeln('</div>');
 		writeln('</article>');
 		writeln('</div>');
 
-		print_post_box($sid, $cid, $pid, $qid, $subject, $body, $coward);
+		print_post_box($sid, $cid, $pid, $qid, $subject, $dirty_body, $coward);
 
 		writeln('</td>');
 		writeln('</tr>');
@@ -180,7 +170,7 @@ if (http_post()) {
 	$comment["zid"] = $zid;
 	$comment["time"] = $time;
 	$comment["subject"] = $subject;
-	$comment["comment"] = $new_body;
+	$comment["comment"] = $clean_body;
 	db_set_rec("comment", $comment);
 
 	$comment = db_get_rec("comment", array("zid" => $zid, "time" => $time));

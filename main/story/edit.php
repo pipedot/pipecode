@@ -22,32 +22,27 @@
 include("clean.php");
 include("story.php");
 
-$sid = (int) $s2;
-
 if (!@$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
+$sid = (int) $s2;
 $story = db_get_rec("story", $sid);
 $pipe = db_get_rec("pipe", $story["pid"]);
 $zid = $pipe["zid"];
 
 if (http_post()) {
-	$title = http_post_string("title", array("len" => 100, "valid" => "[a-z][A-Z][0-9]`~!@#$%^&*()_+-={}|[]\\:\";',./? "));
-	$body = http_post_string("story", array("len" => 64000, "valid" => "[ALL]"));
+	$title = clean_subject();
+	list($clean_body, $dirty_body) = clean_body();
 	$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
 	$tid = http_post_int("tid");
-
-	$title = clean_entities($title);
-	$new_body = str_replace("\n", "<br>", $body);
-	$new_body = clean_html($new_body);
 
 	if (http_post("publish")) {
 		$story["tid"] = $tid;
 		$story["title"] = $title;
 		$story["ctitle"] = clean_url($title);
 		$story["icon"] = $icon;
-		$story["story"] = $new_body;
+		$story["story"] = $clean_body;
 		db_set_rec("story", $story);
 
 		header("Location: /story/$sid");
@@ -57,9 +52,8 @@ if (http_post()) {
 	$title = $story["title"];
 	$tid = $story["tid"];
 	$icon = $story["icon"];
-	$body = $story["story"];
-	$new_body = $story["story"];
-	$body = dirty_html($new_body);
+	$clean_body = $story["story"];
+	$dirty_body = dirty_html($clean_body);
 }
 
 $topic = db_get_rec("topic", $tid);
@@ -67,11 +61,10 @@ $topic = $topic["topic"];
 
 print_header();
 
-beg_form();
 writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td class="left_col">');
-print_left_bar("main", "pipe");
+print_left_bar("main", "stories");
 writeln('</td>');
 writeln('<td class="fill">');
 
@@ -92,6 +85,7 @@ for ($i = 0; $i < count($a); $i++) {
 	}
 }
 
+beg_form();
 writeln('<h1>Preview</h1>');
 $a = array();
 $a["title"] = $title;
@@ -100,7 +94,7 @@ $a["pid"] = $story["pid"];
 $a["zid"] = $zid;
 $a["topic"] = $topic;
 $a["icon"] = $icon;
-$a["story"] = $new_body;
+$a["story"] = $clean_body;
 print_article($a);
 
 writeln('<h1>Edit</h1>');
@@ -108,7 +102,7 @@ beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
 print_row(array("caption" => "Topic", "option_key" => "tid", "option_value" => $tid, "option_list" => $topic_list, "option_keys" => $topic_keys));
 print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $icon, "option_list" => $icon_list));
-print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $body, "textarea_height" => "400"));
+print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 end_tab();
 
 writeln('<table class="fill">');

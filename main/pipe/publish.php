@@ -35,15 +35,11 @@ $pipe = db_get_rec("pipe", $pid);
 $zid = $pipe["zid"];
 
 if (http_post()) {
-	$title = http_post_string("title", array("len" => 100, "valid" => "[a-z][A-Z][0-9]`~!@#$%^&*()_+-={}|[]\\:\";',./? "));
-	$body = http_post_string("story", array("len" => 64000, "valid" => "[ALL]"));
+	$title = clean_subject();
+	list($clean_body, $dirty_body) = clean_body();
 	$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
 	$tid = http_post_int("tid");
 	$time = time();
-
-	$title = clean_entities($title);
-	$new_body = str_replace("\n", "<br>", $body);
-	$new_body = clean_html($new_body);
 
 	if (http_post("publish")) {
 		$pipe = db_get_rec("pipe", $pid);
@@ -62,7 +58,9 @@ if (http_post()) {
 		$story["ctitle"] = clean_url($title);
 		$story["icon"] = $icon;
 		$story["time"] = time();
-		$story["story"] = $new_body;
+		$story["story"] = $clean_body;
+		$story["image_id"] = 0;
+		$story["tweet_id"] = 0;
 		db_set_rec("story", $story);
 
 		header("Location: /pipe/$pid");
@@ -72,10 +70,8 @@ if (http_post()) {
 	$title = $pipe["title"];
 	$tid = $pipe["tid"];
 	$icon = $pipe["icon"];
-	$body = $pipe["story"];
-	$new_body = $pipe["story"];
-	//$body = str_replace("<br/>", "\n", $new_body);
-	$body = dirty_html($new_body);
+	$clean_body = $pipe["story"];
+	$dirty_body = dirty_html($clean_body);
 }
 
 $topic = db_get_rec("topic", $tid);
@@ -116,7 +112,7 @@ $a["pid"] = $pid;
 $a["zid"] = $zid;
 $a["topic"] = $topic;
 $a["icon"] = $icon;
-$a["story"] = $new_body;
+$a["story"] = $clean_body;
 print_article($a);
 
 writeln('<h1>Publish</h1>');
@@ -124,7 +120,7 @@ beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
 print_row(array("caption" => "Topic", "option_key" => "tid", "option_value" => $tid, "option_list" => $topic_list, "option_keys" => $topic_keys));
 print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $icon, "option_list" => $icon_list));
-print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $body, "textarea_height" => "400"));
+print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 end_tab();
 
 writeln('<table class="fill">');

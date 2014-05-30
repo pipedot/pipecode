@@ -134,7 +134,7 @@ writeln('		<td>' . date("Y-m-d H:i", $message["received_time"]) . '</td>');
 writeln('	</tr>');
 end_tab();
 
-$body = htmlentities(trim(substr($message["body"], strpos($message["body"], "\r\n\r\n") + 4)));
+$body = trim(substr($message["body"], strpos($message["body"], "\r\n\r\n") + 4));
 $body = format_text_mail($body);
 
 beg_tab();

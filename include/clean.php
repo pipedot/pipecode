@@ -31,7 +31,6 @@ function mb_ord($u) {
 function clean_character($c)
 {
 	$n = mb_ord($c);
-	//writeln("c [$c] n [$n]");
 
 	// Basic Latin
 	if ($n >= 21 && $n <= 126) {
@@ -197,7 +196,6 @@ function clean_tag($tag)
 	}
 
 	$type = string_next($tag, " ");
-	//print "type [$type]\n";
 
 	if ($type == "br") {
 		return "<br/>";
@@ -265,12 +263,10 @@ function clean_html($html)
 	$html = str_replace("&nbsp;", " ", $html);
 
 	for ($i = 0; $i < mb_strlen($html); $i++) {
-		//$c = substr($html, $i, 1);
 		$c = mb_substr($html, $i, 1);
 		if ($c == "<") {
 			$s = "";
 			for ($i = $i + 1; $i < mb_strlen($html); $i++) {
-				//$c = substr($html, $i, 1);
 				$c = mb_substr($html, $i, 1);
 				if ($c == ">") {
 					break;
@@ -285,11 +281,7 @@ function clean_html($html)
 			}
 			$clean .= $tag;
 		} else {
-			//if ($pre > 0 && $c == "\n") {
-			//	$clean .= "<br/>";
-			//} else {
-				$clean .= $c;
-			//}
+			$clean .= $c;
 		}
 	}
 
@@ -305,19 +297,9 @@ function clean_html($html)
 	$clean = str_replace(" <", "<", $clean);
 	$clean = str_replace("FORCEWHITESPACE", " ", $clean);
 	$clean = trim($clean);
-	$clean = str_replace_all("  ", " ", $clean);
-	$clean = str_replace_all("<br/><br/><br/>", "<br/><br/>", $clean);
+	$clean = string_replace_all("  ", " ", $clean);
+	$clean = string_replace_all("<br/><br/><br/>", "<br/><br/>", $clean);
 
-//	print "clean [$clean]";
-//	$clean = str_replace("<pre><br/>", "<pre>", $clean);
-//	$clean = str_replace("<br/></pre>", "</pre>", $clean);
-//	$clean = str_replace("<li><br/>", "<li>", $clean);
-//	$clean = str_replace("<br/></li>", "</li>", $clean);
-//	$clean = str_replace("<ul><br/>", "<ul>", $clean);
-//	$clean = str_replace("<br/></ul>", "</ul>", $clean);
-//	$clean = str_replace("<ol><br/>", "<ol>", $clean);
-//	$clean = str_replace("<br/></ol>", "</ol>", $clean);
-//	print "clean2 [$clean]";
 	$clean = clean_newlines("pre", $clean);
 	$clean = clean_newlines("ol", $clean);
 	$clean = clean_newlines("ul", $clean);
@@ -326,6 +308,7 @@ function clean_html($html)
 
 	$clean = clean_entities($clean);
 	$clean = make_clickable($clean);
+	$clean = trim($clean);
 
 	return $clean;
 }
@@ -353,10 +336,10 @@ function clean_newlines($tag, $text)
 	$beg_tag = "<$tag>";
 	$end_tag = "</$tag>";
 
-	$text = str_replace_all("$beg_tag<br/>", $beg_tag, $text);
-	$text = str_replace_all("<br/>$beg_tag", $beg_tag, $text);
-	$text = str_replace_all("$end_tag<br/>", $end_tag, $text);
-	$text = str_replace_all("<br/>$end_tag", $end_tag, $text);
+	$text = string_replace_all("$beg_tag<br/>", $beg_tag, $text);
+	$text = string_replace_all("<br/>$beg_tag", $beg_tag, $text);
+	$text = string_replace_all("$end_tag<br/>", $end_tag, $text);
+	$text = string_replace_all("<br/>$end_tag", $end_tag, $text);
 
 	return $text;
 }
@@ -659,4 +642,63 @@ function clean_entities($dirty)
 	}
 
 	return $s;
+}
+
+
+function clean_subject()
+{
+	if (array_key_exists("subject", $_POST)) {
+		$subject = $_POST["subject"];
+	} else if (array_key_exists("title", $_POST)) {
+		$subject = $_POST["title"];
+	} else {
+		die("no subject");
+	}
+
+	$subject = htmlspecialchars($subject);
+	$subject = clean_unicode($subject);
+	$subject = clean_entities($subject);
+	$subject = string_replace_all("  ", " ", trim($subject));
+
+	if (strlen($subject) > 200) {
+		$subject = substr($subject, 0, 200);
+	}
+	if (strlen($subject) == 0) {
+		die("no subject");
+	}
+
+	return $subject;
+}
+
+
+function clean_body()
+{
+	global $auth_user;
+
+	if (array_key_exists("body", $_POST)) {
+		$dirty_body = $_POST["body"];
+	} else if (array_key_exists("comment", $_POST)) {
+		$dirty_body = $_POST["comment"];
+	} else if (array_key_exists("story", $_POST)) {
+		$dirty_body = $_POST["story"];
+	} else {
+		var_dump($_POST);
+		die("no body");
+	}
+
+	$clean_body = str_replace("\n", "<br>", $dirty_body);
+	$clean_body = clean_html($clean_body);
+	$dirty_body = dirty_html($clean_body);
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && array_key_exists("comment", $_POST)) {
+		$dirty_body = str_replace("\n", "<br/>", $dirty_body);
+	}
+
+	if (strlen($clean_body) > 64000) {
+		$clean_body = substr($clean_body, 0, 64000);
+	}
+	if (strlen($clean_body) == 0) {
+		die("no body");
+	}
+
+	return array($clean_body, $dirty_body);
 }

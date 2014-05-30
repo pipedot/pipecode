@@ -34,6 +34,7 @@ if (http_post()) {
 	$real_name = http_post_string("real_name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z]- "));
 	$email = http_post_string("email", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
 	$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
+	$story_image_style = http_post_int("story_image_style");
 
 	if (!in_array($time_zone, $zones)) {
 		die("invalid time zone [$time_zone]");
@@ -42,6 +43,7 @@ if (http_post()) {
 	$user_conf["javascript_enabled"] = $javascript_enabled;
 	$user_conf["wysiwyg_enabled"] = $wysiwyg_enabled;
 	$user_conf["time_zone"] = $time_zone;
+	$user_conf["story_image_style"] = $story_image_style;
 	$user_conf["hide_threshold"] = $hide_threshold;
 	$user_conf["expand_threshold"] = $expand_threshold;
 	$user_conf["real_name"] = $real_name;
@@ -71,7 +73,15 @@ print_row(array("caption" => "Enable JavaScript", "check_key" => "javascript_ena
 print_row(array("caption" => "WYSIWYG Editor", "check_key" => "wysiwyg_enabled", "checked" => $user_conf["wysiwyg_enabled"]));
 end_tab();
 
-beg_tab("Date and Time");
+beg_tab("Display");
+$row = run_sql("select image_style_id, description from image_style order by image_style_id");
+$image_styles = array();
+$image_descriptions = array();
+for ($i = 0; $i < count($row); $i++) {
+	$image_styles[] = $row[$i]["image_style_id"];
+	$image_descriptions[] = $row[$i]["description"];
+}
+print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $user_conf["time_zone"]));
 end_tab();
 

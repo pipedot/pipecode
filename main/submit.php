@@ -24,7 +24,7 @@ include("story.php");
 include("captcha.php");
 
 
-function print_submit_box($title, $body, $story, $tid, $preview)
+function print_submit_box($title, $dirty_body, $story, $tid, $preview)
 {
 	global $auth_zid;
 	global $auth_user;
@@ -63,7 +63,7 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 	writeln('		<td style="width: 80px">Topic</td>');
 	writeln('		<td colspan="2">');
 	writeln('			<select name="tid">');
-	$topics = db_get_list("topic", "topic", array("promoted" => 1));
+	$topics = db_get_list("topic", "topic");
 	$k = array_keys($topics);
 	for ($i = 0; $i < count($topics); $i++) {
 		$topic = $topics[$k[$i]];
@@ -78,7 +78,7 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Story</td>');
-	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required="required">' . $body . '</textarea></td>');
+	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required="required">' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid == "") {
@@ -103,8 +103,8 @@ function print_submit_box($title, $body, $story, $tid, $preview)
 
 
 if (http_post()) {
-	$title = http_post_string("title", array("len" => 100, "valid" => "[a-z][A-Z][0-9]`~!@#$%^&*()_+-={}|[]\\:\";',./? "));
-	$body = http_post_string("story", array("len" => 64000, "valid" => "[ALL]"));
+	$title = clean_subject();
+	list($clean_body, $dirty_body) = clean_body();
 	$tid = http_post_int("tid");
 	$answer = http_post_string("answer", array("required" => false));
 	$time = time();
@@ -115,12 +115,8 @@ if (http_post()) {
 
 	$topic = db_get_rec("topic", $tid);
 
-	$title = clean_entities($title);
-	$new_body = str_replace("\n", "<br>", $body);
-	$new_body = clean_html($new_body);
-
 	if (http_post("preview")) {
-		print_submit_box($title, $body, $new_body, $tid, true);
+		print_submit_box($title, $dirty_body, $clean_body, $tid, true);
 		die();
 	}
 
@@ -135,7 +131,7 @@ if (http_post()) {
 	$pipe["time"] = $time;
 	$pipe["closed"] = 0;
 	$pipe["reason"] = "";
-	$pipe["story"] = $new_body;
+	$pipe["story"] = $clean_body;
 
 	db_set_rec("pipe", $pipe);
 

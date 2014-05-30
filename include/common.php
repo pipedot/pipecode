@@ -97,6 +97,28 @@ $db_table["feed_user"]["col"][] = "fid";
 $db_table["feed_user"]["col"][] = "col";
 $db_table["feed_user"]["col"][] = "pos";
 
+$db_table["image"]["key"] = "image_id";
+$db_table["image"]["col"][] = "image_id";
+$db_table["image"]["col"][] = "aspect_width";
+$db_table["image"]["col"][] = "aspect_height";
+//$db_table["image"]["col"][] = "has_160x90";
+//$db_table["image"]["col"][] = "has_160x120";
+//$db_table["image"]["col"][] = "has_160x160";
+//$db_table["image"]["col"][] = "has_320x180";
+//$db_table["image"]["col"][] = "has_320x240";
+//$db_table["image"]["col"][] = "has_320x320";
+//$db_table["image"]["col"][] = "has_640x360";
+//$db_table["image"]["col"][] = "has_640x480";
+//$db_table["image"]["col"][] = "has_640x640";
+$db_table["image"]["col"][] = "has_640";
+$db_table["image"]["col"][] = "original_width";
+$db_table["image"]["col"][] = "original_height";
+$db_table["image"]["col"][] = "original_url";
+$db_table["image"]["col"][] = "parent_url";
+$db_table["image"]["col"][] = "server";
+$db_table["image"]["col"][] = "size";
+$db_table["image"]["col"][] = "time";
+
 $db_table["mail"]["key"] = "mail_id";
 $db_table["mail"]["col"][] = "mail_id";
 $db_table["mail"]["col"][] = "body";
@@ -185,6 +207,8 @@ $db_table["story"]["col"][] = "ctitle";
 $db_table["story"]["col"][] = "icon";
 $db_table["story"]["col"][] = "time";
 $db_table["story"]["col"][] = "story";
+$db_table["story"]["col"][] = "image_id";
+$db_table["story"]["col"][] = "tweet_id";
 
 $db_table["story_history"]["key"][] = "sid";
 $db_table["story_history"]["key"][] = "zid";
@@ -192,6 +216,15 @@ $db_table["story_history"]["col"][] = "sid";
 $db_table["story_history"]["col"][] = "zid";
 $db_table["story_history"]["col"][] = "time";
 $db_table["story_history"]["col"][] = "last_time";
+
+$db_table["tmp_image"]["key"] = "tmp_image_id";
+$db_table["tmp_image"]["col"][] = "tmp_image_id";
+$db_table["tmp_image"]["col"][] = "original_url";
+$db_table["tmp_image"]["col"][] = "original_width";
+$db_table["tmp_image"]["col"][] = "original_height";
+$db_table["tmp_image"]["col"][] = "parent_url";
+$db_table["tmp_image"]["col"][] = "server";
+$db_table["tmp_image"]["col"][] = "time";
 
 $db_table["topic"]["key"] = "tid";
 $db_table["topic"]["col"][] = "tid";
@@ -527,6 +560,10 @@ function clean_url($dirty)
 	$dirty = str_replace("</s>", "", $dirty);
 	$dirty = str_replace("<q>", "", $dirty);
 	$dirty = str_replace("</q>", "", $dirty);
+	$dirty = str_replace("&amp;", "", $dirty);
+	$dirty = str_replace("&lt;", "", $dirty);
+	$dirty = str_replace("&gt;", "", $dirty);
+	$dirty = str_replace("&quot;", "", $dirty);
 	$clean = "";
 	for ($i = 0; $i < strlen($dirty); $i++) {
 		$c = substr($dirty, $i, 1);
@@ -535,6 +572,8 @@ function clean_url($dirty)
 		}
 	}
 	$clean = str_replace(" ", "-", strtolower(trim($clean)));
+	$clean = string_replace_all("--", "-", $clean);
+
 	return $clean;
 }
 
@@ -626,13 +665,21 @@ function user_page_link($zid)
 }
 
 
-function str_replace_all($search, $replacement, $source)
+function public_path($time) //$id, $type)
 {
-	while (string_has($source, $search)) {
-		$source = str_replace($search, $replacement, $source);
-	}
+//	$i = $id;
+//	$path = "/pub";
+//
+//	while ($i > 1000) {
+//		$m = string_pad($i % 1000, 3);
+//		$i = floor($i / 1000);
+//		$path .= "/$m";
+//	}
+//
+//	$path .= "/$type$i";
+//	return $path;
 
-	return $source;
+	return "/pub/" . gmdate("Y", $time) . "/" . gmdate("m", $time) . "/" . gmdate("d", $time);
 }
 
 

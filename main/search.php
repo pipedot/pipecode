@@ -21,7 +21,7 @@
 
 function search_box($needle = "", $haystack = "comments")
 {
-	beg_form("", false));
+	beg_form("", false);
 	writeln('<table class="round">');
 	writeln('	<tr>');
 	writeln('		<td rowspan="2" style="width: 64px"><img alt="Search" src="/images/magnifier-64.png"/></td>');

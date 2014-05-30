@@ -75,6 +75,7 @@ textarea {
 	width: 100%;
 }
 .right_box {
+	clear: both;
 	text-align: right;
 	margin-bottom: 8px;
 }
@@ -208,6 +209,7 @@ textarea {
 	border-top: 0px;
 	border-bottom: 0px;
 	margin: 0px;
+	overflow: auto;
 	padding: 10px;
 }
 .story div a {
@@ -218,6 +220,7 @@ textarea {
 	border-top: 0px;
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
+	xclear: both;
 	padding-top: 0px;
 	padding-bottom: 10px;
 	padding-left: 10px;
