@@ -67,15 +67,10 @@ if (http_post()) {
 }
 
 print_header();
-
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "stories");
-writeln('</td>');
-writeln('<td class="fill">');
-
+beg_main("cell");
 beg_form();
+
 writeln('<h1>Send Tweet</h1>');
 
 $status_text = $story["title"] . " https://$server_name/story/$sid #$topic";
@@ -84,10 +79,7 @@ print_row(array("caption" => "Status Text", "text_key" => "status_text", "text_v
 end_tab();
 
 right_box("Send");
+
 end_form();
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

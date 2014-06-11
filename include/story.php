@@ -23,6 +23,7 @@ function print_story($sid, $ipos = "right")
 {
 	global $server_name;
 	global $auth_user;
+	global $story_image_enabled;
 
 	$story = db_get_rec("story", $sid);
 	$pipe = db_get_rec("pipe", $story["pid"]);
@@ -46,6 +47,10 @@ function print_story($sid, $ipos = "right")
 		$a["comments"] = $row[0]["comments"];
 	} else {
 		$a["comments"] = 0;
+	}
+
+	if ($story_image_enabled && $story["image_id"] == 0 && $ipos == "right") {
+		writeln('<img alt="Story" class="story_image" src="/images/logo-256.png"/>');
 	}
 
 	print_article($a);

@@ -53,16 +53,10 @@ if ($auth_zid != "") {
 $story = db_get_rec("story", $sid);
 
 print_header($story["title"]);
-
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "stories");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 print_story($sid);
-//print_story($sid, true, false);
 
 if ($auth_user["javascript_enabled"]) {
 	render_sliders($sid, 0, 0);
@@ -71,9 +65,7 @@ if ($auth_user["javascript_enabled"]) {
 	render_page($sid, 0, 0, false);
 }
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+end_main();
 
 if ($auth_user["javascript_enabled"]) {
 	if ($auth_zid == "") {

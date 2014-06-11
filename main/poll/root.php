@@ -44,13 +44,8 @@ if ($auth_zid == "") {
 }
 
 print_header("Poll");
-
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "poll");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 vote_box($qid, true, false);
 
@@ -61,9 +56,7 @@ if ($auth_user["javascript_enabled"]) {
 	render_page(0, 0, $qid, false);
 }
 
-writeln('		</td>');
-writeln('	</tr>');
-writeln('</table>');
+end_main();
 
 if ($auth_user["javascript_enabled"]) {
 	if ($auth_zid == "") {

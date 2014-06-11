@@ -79,8 +79,10 @@ if (fs_is_file("$root/$s1.php")) {
 
 http_response_code(404);
 print_header();
+beg_main();
 
 writeln('<h1>404</h1>');
 writeln('request_uri [' . $request_uri . ']');
 
+end_main();
 print_footer();

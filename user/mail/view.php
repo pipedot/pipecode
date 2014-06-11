@@ -114,6 +114,7 @@ if (string_has($message["mail_from"], "no-reply@")) {
 } else {
 	print_header($message["subject"], array("Reply", "Inbox"), array("mail-reply", "inbox"), array("/mail/compose?mid=$mail_id", "/mail/"));
 }
+beg_main();
 
 beg_tab();
 writeln('	<tr>');
@@ -156,5 +157,5 @@ if ($message["location"] == "Junk") {
 	right_box("Junk,Delete");
 }
 end_form();
-
+end_main();
 print_footer();

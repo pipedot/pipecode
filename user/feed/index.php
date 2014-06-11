@@ -21,11 +21,11 @@
 
 include("feed.php");
 
-if ($zid != $auth_zid) {
-	die("not your page");
+if ($zid == $auth_zid) {
+	print_header("Feed", array("Edit"), array("news"), array("/feed/edit"));
+} else {
+	print_header("Feed");
 }
-
-print_header("Feed", array("Edit"), array("news"), array("/feed/edit"));
 
 print_feed_page($zid);
 

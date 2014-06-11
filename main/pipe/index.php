@@ -23,12 +23,8 @@ include("pipe.php");
 
 print_header("Pipe");
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "pipe");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 writeln('<h1>Stories in the Pipe</h1>');
 writeln('<p>These are stories waiting to be published to the main page. Remember, anyone can <a href="/submit">submit</a> a new story!</p>');
@@ -46,11 +42,9 @@ for ($i = 0; $i < count($pipes); $i++) {
 }
 
 if (count($pipes) > 0) {
-	writeln('<div style="margin-top: 8px; text-align: center"><a href="/pipe/history">History</a></div>');
+	writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a href="/pipe/history">History</a></div>');
 }
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+end_main();
 
 if ($auth_user["javascript_enabled"]) {
 ?>

@@ -26,18 +26,18 @@ if ($zid == $auth_zid) {
 	print_feed_page($zid);
 } else {
 	print_header();
-	writeln('<table class="fill">');
-	writeln('<tr>');
-	writeln('<td class="left_col">');
 	print_left_bar("user", "overview");
-	writeln('</td>');
-	writeln('<td class="fill">');
+	beg_main("cell");
 
 	writeln('<h1>' . $zid . '</h1>');
 
-	writeln('</td>');
-	writeln('</tr>');
+	writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
+	writeln('	<tr>');
+	writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="width: 128px\" src="' . profile_picture($zid, 256) . '"/></td>');
+	writeln('	</tr>');
 	writeln('</table>');
+
+	end_main();
 }
 
 print_footer();

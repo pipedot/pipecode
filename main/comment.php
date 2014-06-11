@@ -31,12 +31,8 @@ $a = article_info($comment);
 
 print_header($comment["subject"]);
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "stories");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 writeln('<h1>' . ucwords($a["type"]) . '</h1>');
 writeln('<a href="' . $a["link"] . '">' . $a["title"] . '</a>');
@@ -56,6 +52,4 @@ for ($i = count($list) - 1; $i >= 0; $i--) {
 $s .= str_repeat("</div>\n</article>\n", count($list));
 writeln($s);
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+end_main();

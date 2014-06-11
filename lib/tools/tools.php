@@ -83,9 +83,9 @@ function auth_sign_out($next_page = "/")
 }
 
 
-function beg_form($action = "", $post = true)
+function beg_form($action = "", $method = "post")
 {
-	writeln('<form' . ($action == '' ? '' : ' action="' . $action . '"' ) . ($post ? ' method="post"' : '' ) . '>');
+	writeln('<form' . ($action == '' ? '' : ' action="' . $action . '"' ) . ($method == 'post' || $method == 'file' ? ' method="post"' : '' ) . ($method == 'file' ? ' enctype="multipart/form-data"' : '') . '>');
 }
 
 

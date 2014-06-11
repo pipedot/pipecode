@@ -62,14 +62,10 @@ if (http_post()) {
 
 print_header();
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("user", "feed");
-writeln('</td>');
-writeln('<td class="fill">');
-
+beg_main("cell");
 beg_form();
+
 writeln('<div class="dialog_title">Add Feed</div>');
 writeln('<div class="dialog_body">');
 
@@ -105,10 +101,7 @@ writeln('	</tr>');
 writeln('</table>');
 
 writeln('</div>');
+
 end_form();
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

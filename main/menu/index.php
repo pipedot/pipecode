@@ -24,6 +24,7 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 }
 
 print_header("Menu");
+beg_main();
 
 writeln('<table class="fill">');
 writeln('<tr>');
@@ -51,4 +52,5 @@ writeln('</td>');
 writeln('</tr>');
 writeln('</table>');
 
+end_main();
 print_footer();

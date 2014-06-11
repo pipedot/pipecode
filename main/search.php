@@ -21,7 +21,7 @@
 
 function search_box($needle = "", $haystack = "comments")
 {
-	beg_form("", false);
+	beg_form("", "get");
 	writeln('<table class="round">');
 	writeln('	<tr>');
 	writeln('		<td rowspan="2" style="width: 64px"><img alt="Search" src="/images/magnifier-64.png"/></td>');
@@ -99,22 +99,14 @@ if ($needle != "") {
 
 	print_header("$needle - Search");
 
-	writeln('<table class="fill">');
-	writeln('<tr>');
-	writeln('<td class="left_col">');
 	print_left_bar("main", "search");
-	writeln('</td>');
-	writeln('<td class="fill">');
 
+	beg_main("search");
 	search_box($needle, $haystack);
-
-	writeln('<main class="search">');
-
 	$row = run_sql($sql, array($needle, $needle));
 	if (count($row) == 0) {
 		writeln('(no results)');
 	}
-	//var_dump($row);
 	for ($i = 0; $i < count($row); $i++) {
 		if ($haystack == "comments") {
 			$title = $row[$i]["subject"];
@@ -141,30 +133,15 @@ if ($needle != "") {
 
 		search_result($title, $link, $zid, $row[$i]["time"], $body);
 	}
-
-	writeln('</main>');
-
-	writeln('</td>');
-	writeln('</tr>');
-	writeln('</table>');
+	end_main();
 
 	print_footer();
 	die();
 }
 
 print_header("Search");
-
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "search");
-writeln('</td>');
-writeln('<td class="fill">');
-
+beg_main("cell");
 search_box();
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

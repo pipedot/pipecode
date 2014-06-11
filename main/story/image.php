@@ -48,13 +48,8 @@ $images = build_preview_images($story["story"]);
 
 print_header();
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "stories");
-writeln('</td>');
-writeln('<td class="fill">');
-
+beg_main("cell");
 beg_form();
 writeln('<h1>Select Image</h1>');
 
@@ -94,10 +89,7 @@ for ($i = 0; $i < count($images); $i++) {
 }
 
 right_box("Continue");
+
 end_form();
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

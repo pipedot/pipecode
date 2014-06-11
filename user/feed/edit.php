@@ -24,13 +24,8 @@ if ($zid != $auth_zid) {
 }
 
 print_header();
-
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("user", "feed");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 writeln('<table class="fill">');
 writeln('	<tr>');
@@ -57,8 +52,5 @@ for ($c = 0; $c < 3; $c++) {
 writeln('	</tr>');
 writeln('</table>');
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

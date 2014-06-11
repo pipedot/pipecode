@@ -34,6 +34,15 @@ if (fs_is_file("$top_root/conf.php")) {
 	die();
 }
 
+$db_table["article"]["key"] = "article_id";
+$db_table["article"]["col"][] = "article_id";
+$db_table["article"]["col"][] = "archive";
+$db_table["article"]["col"][] = "body";
+$db_table["article"]["col"][] = "full_body";
+$db_table["article"]["col"][] = "subject";
+$db_table["article"]["col"][] = "time";
+$db_table["article"]["col"][] = "zid";
+
 $db_table["captcha"]["key"] = "captcha_id";
 $db_table["captcha"]["col"][] = "captcha_id";
 $db_table["captcha"]["col"][] = "question";
@@ -42,6 +51,23 @@ $db_table["captcha"]["col"][] = "answer";
 $db_table["captcha_challenge"]["key"] = "remote_ip";
 $db_table["captcha_challenge"]["col"][] = "remote_ip";
 $db_table["captcha_challenge"]["col"][] = "captcha_id";
+
+$db_table["card"]["key"] = "card_id";
+$db_table["card"]["col"][] = "card_id";
+$db_table["card"]["col"][] = "article_id";
+$db_table["card"]["col"][] = "image_id";
+$db_table["card"]["col"][] = "link_id";
+
+$db_table["card_tags"]["key"][] = "card_id";
+$db_table["card_tags"]["key"][] = "tag_id";
+$db_table["card_tags"]["col"][] = "card_id";
+$db_table["card_tags"]["col"][] = "tag_id";
+
+$db_table["card_vote"]["key"][] = "card_id";
+$db_table["card_vote"]["key"][] = "zid";
+$db_table["card_vote"]["col"][] = "card_id";
+$db_table["card_vote"]["col"][] = "zid";
+$db_table["card_vote"]["col"][] = "value";
 
 $db_table["comment"]["key"] = "cid";
 $db_table["comment"]["col"][] = "cid";
@@ -111,6 +137,8 @@ $db_table["image"]["col"][] = "aspect_height";
 //$db_table["image"]["col"][] = "has_640x480";
 //$db_table["image"]["col"][] = "has_640x640";
 $db_table["image"]["col"][] = "has_640";
+$db_table["image"]["col"][] = "has_1280";
+$db_table["image"]["col"][] = "hash";
 $db_table["image"]["col"][] = "original_width";
 $db_table["image"]["col"][] = "original_height";
 $db_table["image"]["col"][] = "original_url";
@@ -118,6 +146,14 @@ $db_table["image"]["col"][] = "parent_url";
 $db_table["image"]["col"][] = "server";
 $db_table["image"]["col"][] = "size";
 $db_table["image"]["col"][] = "time";
+$db_table["image"]["col"][] = "zid";
+
+$db_table["link"]["key"] = "link_id";
+$db_table["link"]["col"][] = "link_id";
+$db_table["link"]["col"][] = "image_id";
+$db_table["link"]["col"][] = "subject";
+$db_table["link"]["col"][] = "time";
+$db_table["link"]["col"][] = "url";
 
 $db_table["mail"]["key"] = "mail_id";
 $db_table["mail"]["col"][] = "mail_id";
@@ -217,6 +253,10 @@ $db_table["story_history"]["col"][] = "zid";
 $db_table["story_history"]["col"][] = "time";
 $db_table["story_history"]["col"][] = "last_time";
 
+$db_table["tag"]["key"] = "tag_id";
+$db_table["tag"]["col"][] = "tag_id";
+$db_table["tag"]["col"][] = "tag";
+
 $db_table["tmp_image"]["key"] = "tmp_image_id";
 $db_table["tmp_image"]["col"][] = "tmp_image_id";
 $db_table["tmp_image"]["col"][] = "original_url";
@@ -250,7 +290,6 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	global $request_script;
 	global $protocol;
 	global $request_script;
-	global $story_image_enabled;
 	global $doc_root;
 	global $server_conf;
 
@@ -288,7 +327,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	writeln('<table class="title">');
 	writeln('	<tr>');
 	if ($user_page == "") {
-		writeln('		<td><a href="/"><img alt="' . $server_title . '" src="/images/logo-top.png"/></a></td>');
+		writeln('		<td><a href="/"><img alt="' . $server_title . '" class="logo_large" src="/images/logo-top.png"/><img alt="' . $server_title . '" class="logo_small" src="/images/logo-64.png"/></a></td>');
 	} else {
 		writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><img alt="' . $server_title . '" src="/images/logo-top.png"/></a></td>');
 	}
@@ -357,9 +396,6 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</header>');
-	if ($story_image_enabled && $user_page == "") {
-		writeln('<img alt="Story" class="story_image" src="/images/logo-256.png"/>');
-	}
 }
 
 
@@ -372,21 +408,21 @@ function print_left_bar($type = "main", $selected = "stories")
 
 	if ($type == "main") {
 		if ($auth_zid == "") {
-			$section_name = array("stories", "pipe", "poll", "search", "topics", "feed");
-			$section_link = array("", "pipe/", "poll/", "search", "topic", "feed/");
+			$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
+			$section_link = array("", "pipe/", "poll/", "search", "topic", "feed/", "stream/");
 		} else {
-			$section_name = array("stories", "pipe", "poll", "search", "topics");
-			$section_link = array("", "pipe/", "poll/", "search", "topic");
+			$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
+			$section_link = array("", "pipe/", "poll/", "search", "topic", "stream/");
 		}
 	} elseif ($type == "user") {
 		if ($auth_zid == $zid) {
 			$section_name = array("comments", "feed", "karma", "settings");
-			$section_link = array("comments", "feed/edit", "karma/", "settings");
+			$section_link = array("comments", "", "karma/", "settings");
 		} else {
 			//$section_name = array("blog", "feed", "submissions", "comments", "achievements");
 			//$section_link = array("blog", "feed", "submissions", "comments", "achievements");
-			$section_name = array("overview", "comments", "karma");
-			$section_link = array("", "comments", "karma/");
+			$section_name = array("overview", "feed", "stream", "comments", "karma");
+			$section_link = array("", "feed/", "stream/", "comments", "karma/");
 		}
 	}
 
@@ -394,24 +430,26 @@ function print_left_bar($type = "main", $selected = "stories")
 	for ($i = 0; $i < count($section_name); $i++) {
 		$link = "/" . $section_link[$i];
 		if ($selected == $section_name[$i]) {
-			writeln('	<a href="' . $link . '"><div class="section_active">' . $section_name[$i] . '</div></a>');
+			writeln('	<a class="nav_active" href="' . $link . '">' . $section_name[$i] . '</a>');
 		} else {
-			writeln('	<a href="' . $link . '"><div>' . $section_name[$i] . '</div></a>');
+			writeln('	<a class="nav_inactive" href="' . $link . '">' . $section_name[$i] . '</a>');
 		}
 	}
 
 	if ($type == "main") {
+		writeln('	<div class="topics">');
 		writeln('	<hr/>');
 		$list = db_get_list("topic", "topic", array("promoted" => 1));
 		$keys = array_keys($list);
 		for ($i = 0; $i < count($keys); $i++) {
 			$topic = $list[$keys[$i]]["topic"];
 			if ($topic == $selected) {
-				writeln('	<a href="/topic/' . $topic . '"><div class="section_active">' . $topic . '</div></a>');
+				writeln('	<a class="nav_active" href="/topic/' . $topic . '">' . $topic . '</a>');
 			} else {
-				writeln('	<a href="/topic/' . $topic . '"><div>' . $topic . '</div></a>');
+				writeln('	<a class="nav_inactive" href="/topic/' . $topic . '">' . $topic . '</a>');
 			}
 		}
+		writeln('	</div>');
 	}
 	writeln('</nav>');
 }
@@ -437,8 +475,9 @@ function print_user_box()
 	writeln('<div class="dialog_body">');
 	writeln('<table class="fill">');
 	writeln('	<tr>');
-	writeln('		<td><a href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
-	writeln('		<td><a href="' . $link . '"><div class="user_box_icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
+//	writeln('		<td><a href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
+	writeln('		<td><a href="' . $link . 'feed/"><div class="user_box_icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
+	writeln('		<td><a href="' . $link . 'mail/"><div class="user_box_icon" style="background-image: url(/images/mail-32.png)">' . $mail . '</div></a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
 //	writeln('		<td><a href="' . $link . 'karma/"><div class="user_box_icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
@@ -449,8 +488,8 @@ function print_user_box()
 //	writeln('		<td><a href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
 //	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="' . $link . 'mail/"><div class="user_box_icon" style="background-image: url(/images/mail-32.png)">' . $mail . '</div></a></td>');
-	writeln('		<td><a href="' . $link . 'settings"><div class="user_box_icon" style="background-image: url(/images/tools-32.png)">Settings</div></a></td>');
+	writeln('		<td><a href="' . $link . 'stream/"><div class="user_box_icon" style="background-image: url(/images/internet-32.png)">Stream</div></a></td>');
+	writeln('		<td><a href="' . $link . 'profile/"><div class="user_box_icon" style="background-image: url(/images/tools-32.png)">Settings</div></a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
 //	writeln('		<td><a href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user_box_icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
@@ -458,6 +497,42 @@ function print_user_box()
 //	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
+}
+
+
+function beg_main($class = "")
+{
+	if ($class == "" || $class == "block") {
+		writeln('<main>');
+	} else if ($class == "stream") {
+		writeln('<main class="stream">');
+		writeln('<div id="container" style="margin: 0 auto">');
+	} else {
+		writeln("<main class=\"$class\">");
+	}
+}
+
+
+function end_main($class = "")
+{
+	global $doc_root;
+
+	if ($class == "stream") {
+		writeln('</div>');
+		writeln('</main>');
+
+		writeln('<script src="/lib/masonry/masonry.js?' . fs_time("$doc_root/lib/masonry/masonry.js") . '"></script>');
+		writeln('<script>');
+		writeln('var container = document.querySelector("#container");');
+		writeln('var msnry = new Masonry( container, {');
+		writeln('	columnWidth: 346,');
+		writeln('	"isFitWidth": true,');
+		writeln('	itemSelector: ".card"');
+		writeln('});');
+		writeln('</script>');
+	} else {
+		writeln('</main>');
+	}
 }
 
 
@@ -469,11 +544,12 @@ function print_footer()
 	global $server_slogan;
 
 	if ($user_page == "") {
-		writeln('<hr/>');
-		writeln('<footer>');
-		writeln('<table class="footer">');
-		writeln('	<tr>');
-		writeln('		<td>');
+//		writeln('<hr/>');
+		writeln('<footer class="footer">');
+		writeln('<div>');
+//		writeln('<table class="footer">');
+//		writeln('	<tr>');
+//		writeln('		<td>');
 		writeln('			<a href="/about">About</a>');
 		writeln('			<a href="http://bugs.' . $server_name . '/">Bugs</a>');
 		//writeln('			<a href="/archive">Archive</a>');
@@ -482,10 +558,12 @@ function print_footer()
 		//writeln('			<a href="mailto:feedback@' . $server_name . '">Feedback</a>');
 		writeln('			<a href="/privacy">Privacy</a>');
 		writeln('			<a href="/terms">Terms</a>');
-		writeln('		</td>');
-		writeln('		<td>' . $server_title . ': ' . $server_slogan . '</td>');
-		writeln('	</tr>');
-		writeln('</table>');
+//		writeln('		</td>');
+		writeln('</div>');
+		writeln('<div>' . $server_title . ': ' . $server_slogan . '</div>');
+//		writeln('		<td>' . $server_title . ': ' . $server_slogan . '</td>');
+//		writeln('	</tr>');
+//		writeln('</table>');
 		writeln('</footer>');
 	} else {
 		// user page footer
@@ -663,6 +741,33 @@ function user_page_link($zid)
 
 	return $protocol . "://" . str_replace("@", ".", $zid) . "/";
 }
+
+
+function profile_picture($zid, $size)
+{
+	global $protocol;
+	global $server_name;
+	global $doc_root;
+
+	list($user, $host) = explode("@", $zid);
+	$path = "/pub/profile/$host/$user-$size.jpg";
+	$time = fs_time("$doc_root$path");
+
+	return "$protocol://$server_name$path?$time";
+}
+
+
+/*function profile_picture($zid, $size = 128)
+{
+	global $protocol;
+	global $server_name;
+	global $doc_root;
+
+	list($user, $host) = explode("@", $zid);
+	$size2 = $size * 2;
+
+	return "<img style=\"width: {$size}px\" src=\"$protocol://$server_name/pub/profile/$host/$user-256.jpg?" . fs_time("$doc_root/pub/profile/$host/$user-$size2.jpg") . "\"/>";
+}*/
 
 
 function public_path($time) //$id, $type)

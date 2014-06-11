@@ -51,7 +51,7 @@ if ($mid > 0) {
 }
 
 print_header("Mail", array("Inbox"), array("inbox"), array("/mail/"));
-
+beg_main();
 beg_form();
 writeln('<input name="in_reply_to" type="hidden" value="' . $in_reply_to . '"/>');
 
@@ -64,5 +64,5 @@ end_tab();
 right_box("Send");
 
 end_form();
-
+end_main();
 print_footer();

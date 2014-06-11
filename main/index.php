@@ -26,12 +26,8 @@ $page = http_get_int("page", array("default" => 1, "required" => false));
 
 print_header();
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "stories");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 $stories_per_page = 10;
 $row = run_sql("select count(sid) as story_count from story");
@@ -52,10 +48,10 @@ for ($i = 1; $i <= $pages_count; $i++) {
 		$s .= "<a href=\"?page=$i\">$i</a> ";
 	}
 }
-writeln('<div style="text-align: center">' . trim($s) . '</div>');
+writeln('<div style="text-align: center; margin-bottom: 8px;">' . trim($s) . '</div>');
 
-writeln('</td>');
-writeln('<td class="right_col">');
+end_main();
+writeln('<aside>');
 
 if ($auth_zid != "") {
 	print_user_box();
@@ -65,9 +61,7 @@ $row = run_sql("select max(qid) as qid from poll_question");
 $qid = $row[0]["qid"];
 vote_box($qid, false, true);
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+writeln('</aside>');
 
 print_footer();
 

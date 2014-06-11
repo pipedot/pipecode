@@ -28,9 +28,6 @@ function vote_box($qid, $full, $vote)
 	}
 	$clean = clean_url($poll_question["question"]);
 	$type_id = $poll_question["type_id"];
-	if (!$full) {
-		writeln('<div class="right_bar">');
-	}
 	writeln('<div class="dialog_title">Poll</div>');
 	writeln('<div class="dialog_body">');
 
@@ -38,7 +35,8 @@ function vote_box($qid, $full, $vote)
 	$k = array_keys($poll_answer);
 
 	if ($vote) {
-		writeln('	<form action="/poll/' . $qid . '/vote" method="post">');
+		//writeln('	<form action="/poll/' . $qid . '/vote" method="post">');
+		beg_form("/poll/$qid/vote");
 		writeln('	<div class="poll_question">' . $poll_question["question"] . '</div>');
 
 		writeln('	<table class="poll_table">');
@@ -80,7 +78,8 @@ function vote_box($qid, $full, $vote)
 		writeln('		</tr>');
 		writeln('	</table>');
 
-		writeln('	</form>');
+		//writeln('	</form>');
+		end_form();
 	} else {
 		$total = 0;
 		$votes = array();
@@ -134,8 +133,5 @@ function vote_box($qid, $full, $vote)
 		writeln('	</table>');
 	}
 	writeln('</div>');
-	if (!$full) {
-		writeln('</div>');
-	}
 }
 

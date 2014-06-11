@@ -437,15 +437,6 @@ textarea {
 .right {
 	text-align: right;
 }
-.left_col {
-	font-weight: bolder;
-	padding-right: 8px;
-	vertical-align: top;
-}
-.left_col div {
-	padding: 4px;
-	width: 80px;
-}
 .section_active {
 	background-color: #d3d3d3;
 	border: 1px solid #888888;

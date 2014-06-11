@@ -23,19 +23,19 @@ include("story.php");
 
 $topic = $s2;
 
-print_header("Topics");
+if ($topic == "") {
+	print_header("Topics");
+} else {
+	print_header(ucwords($topic));
+}
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 if ($topic == "") {
 	print_left_bar("main", "topics");
 } else {
 	print_left_bar("main", $topic);
 }
-writeln('</td>');
-writeln('<td class="fill">');
 
+beg_main("cell");
 if ($topic == "") {
 	writeln('<h1>Topics</h1>');
 
@@ -53,9 +53,6 @@ if ($topic == "") {
 		print_story($row[$i]["sid"]);
 	}
 }
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+end_main();
 
 print_footer();

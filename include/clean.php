@@ -671,7 +671,7 @@ function clean_subject()
 }
 
 
-function clean_body()
+function clean_body($required = true)
 {
 	global $auth_user;
 
@@ -682,8 +682,11 @@ function clean_body()
 	} else if (array_key_exists("story", $_POST)) {
 		$dirty_body = $_POST["story"];
 	} else {
-		var_dump($_POST);
-		die("no body");
+		if ($required) {
+			die("no body");
+		} else {
+			return array("", "");
+		}
 	}
 
 	$clean_body = str_replace("\n", "<br>", $dirty_body);
@@ -697,8 +700,66 @@ function clean_body()
 		$clean_body = substr($clean_body, 0, 64000);
 	}
 	if (strlen($clean_body) == 0) {
-		die("no body");
+		if ($required) {
+			die("no body");
+		} else {
+			return array("", "");
+		}
 	}
 
 	return array($clean_body, $dirty_body);
+}
+
+
+function clean_link()
+{
+	if (!array_key_exists("link", $_POST)) {
+		return "";
+	}
+
+	$link = $_POST["link"];
+	$link = string_clean($link, "[a-z][A-Z][0-9]~#%&()-_+=[];:./?");
+
+	return $link;
+}
+
+
+function clean_tags()
+{
+	if (!array_key_exists("tags", $_POST)) {
+		return array();
+	}
+
+	$tags = $_POST["tags"];
+	$tags = strtolower($tags);
+	$tags = string_clean($tags, "[a-z][0-9] ");
+	$tags = explode(" ", $tags);
+
+	if (array_key_exists("body", $_POST)) {
+		$body = $_POST["body"];
+		$body = strip_tags($body);
+		$body = strtolower($body);
+		$body = string_clean($body, "[a-z][0-9]# ");
+		$a = explode(" ", $body);
+		for ($i = 0; $i < count($a); $i++) {
+			$tag = $a[$i];
+			if (substr($tag, 0, 1) == "#") {
+				$tags[] = substr($tag, 1);
+			}
+		}
+	}
+
+	$a = array_unique($tags);
+	$tags = array();
+	for ($i = 0; $i < count($a); $i++) {
+		$tag = $a[$i];
+		if (strlen($tag) <= 20 && string_uses(substr($tag, 0, 1), "[a-z]") && string_uses(substr($tag, 1), "[a-z][0-9]")) {
+			$tags[] = $tag;
+		}
+		if (count($tags) == 3) {
+			return $tags;
+		}
+	}
+
+	return $tags;
 }

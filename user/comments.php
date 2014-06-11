@@ -29,13 +29,8 @@ $pages_count = ceil($row_count / $rows_per_page);
 $row_start = ($page - 1) * $rows_per_page;
 
 print_header("Comments");
-
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("user", "comments");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 writeln('<h1>Comments</h1>');
 
@@ -57,8 +52,5 @@ for ($i = 1; $i <= $pages_count; $i++) {
 }
 writeln('<div style="text-align: center">' . trim($s) . '</div>');
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

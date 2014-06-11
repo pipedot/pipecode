@@ -55,19 +55,22 @@ if ($auth_zid != "") {
 
 print_header($pipe["title"]);
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col" rowspan="2">');
 print_left_bar("main", "pipe");
-writeln('</td>');
-writeln('<td class="fill">');
 
+beg_main("cell");
 print_pipe($pid);
 
-writeln('</td>');
-writeln('<td class="right_col">');
+if ($auth_user["javascript_enabled"]) {
+	render_sliders(0, $pid, 0);
+	print_noscript();
+} else {
+	render_page(0, $pid, 0, false);
+}
 
-writeln('<div class="right_bar">');
+end_main();
+
+writeln('<aside>');
+//writeln('<div class="right_bar">');
 writeln('<div class="dialog_title">Status</div>');
 writeln('<div class="dialog_body">');
 writeln('	<div class="pipe_status">' . $status . $reason . '</div>');
@@ -86,23 +89,7 @@ if ($pipe["editor"] === "") {
 	writeln('	<div class="pipe_editor"><a href="' . user_page_link($pipe["editor"]) . '"><b>' . $pipe["editor"] . '</b></a></div>');
 	writeln('</div>');
 }
-writeln('</div>');
-
-writeln('</td>');
-writeln('</tr>');
-writeln('<tr>');
-writeln('<td style="vertical-align: top" colspan="2">');
-
-if ($auth_user["javascript_enabled"]) {
-	render_sliders(0, $pid, 0);
-	print_noscript();
-} else {
-	render_page(0, $pid, 0, false);
-}
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+writeln('</aside>');
 
 if ($auth_user["javascript_enabled"]) {
 	if ($auth_zid == "") {

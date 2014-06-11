@@ -80,12 +80,8 @@ $topic = $topic["topic"];
 print_header("Publish Submission");
 
 beg_form();
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "pipe");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 $topic_list = array();
 $topic_keys = array();
@@ -130,10 +126,7 @@ writeln('		<td style="text-align: right"><input name="publish" type="submit" val
 writeln('	</tr>');
 writeln('</table>');
 //right_box("Publish,Preview");
+
 end_form();
-
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

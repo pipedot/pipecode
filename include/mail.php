@@ -166,6 +166,7 @@ function print_mail_dir($location)
 
 	print_header($location, array("Compose"), array("mail-compose"), array("/mail/compose"));
 
+	beg_main();
 	writeln('<table class="fill">');
 	writeln('<tr>');
 	writeln('<td style="vertical-align: top">');
@@ -233,6 +234,7 @@ function print_mail_dir($location)
 		end_form();
 	}
 
+	end_main();
 	print_footer();
 }
 

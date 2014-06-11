@@ -1,4 +1,23 @@
 <?
+//
+// Pipecode - distributed social network
+// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+//
+// This file is part of Pipecode.
+//
+// Pipecode is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Pipecode is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 function build_preview_images($body)
 {
@@ -231,6 +250,7 @@ function promote_image($tmp_image_id)
 	$file = "$doc_root$path/t$tmp_image_id.$ext";
 	//die("file [$file]");
 	$data = fs_slurp($file);
+	$hash = crypt_sha256($data);
 	//print "file name [$file] len [" . strlen($data) . "]\n";
 	$src_img = imagecreatefromstring($data);
 //	if ($ext == "jpg") {
@@ -241,12 +261,37 @@ function promote_image($tmp_image_id)
 	if ($src_img === false) {
 		die("unable to open [$file]");
 	}
+
+	return create_image($src_img, $tmp_image, $hash);
+}
+
+
+function create_image($src_img, $tmp_image, $hash)
+{
+	global $doc_root;
+	global $server_name;
+	global $auth_zid;
+
+	if (is_string($tmp_image)) {
+		$original_url = $tmp_image;
+		$parent_url = "";
+		$time = time();
+		$server = gethostname() . ".$server_name";
+	} else {
+		$original_url = $tmp_image["original_url"];
+		$parent_url = $tmp_image["parent_url"];
+		$time = $tmp_image["time"];
+		$server = $tmp_image["server"];
+	}
+	$path = public_path($time);
+
 	$original_width = imagesx($src_img);
 	$original_height = imagesy($src_img);
 
 	$res = array();
 	//$res[] = array(64, 64, 1, 1);
 	$res[] = array(128, 128, 1, 1);
+	$res[] = array(256, 256, 1, 1);
 	$res[] = array(160, 90, 16, 9);
 	$res[] = array(160, 120, 4, 3);
 	$res[] = array(160, 160, 1, 1);
@@ -256,6 +301,9 @@ function promote_image($tmp_image_id)
 	$res[] = array(640, 360, 16, 9);
 	$res[] = array(640, 480, 4, 3);
 	$res[] = array(640, 640, 1, 1);
+	$res[] = array(1280, 720, 16, 9);
+	$res[] = array(1280, 960, 4, 3);
+	$res[] = array(1280, 1280, 1, 1);
 
 	$aspect = $original_width / $original_height;
 	//print "aspect [$aspect]\n";
@@ -271,8 +319,8 @@ function promote_image($tmp_image_id)
 	}
 	//print "aspect class [$aspect_width:$aspect_height]\n";
 
-	if (db_has_rec("image", array("original_url" => $tmp_image["original_url"], "time" => $tmp_image["time"]))) {
-		$image = db_get_rec("image", array("original_url" => $tmp_image["original_url"], "time" => $tmp_image["time"]));
+	if (db_has_rec("image", array("original_url" => $original_url, "time" => $time))) {
+		$image = db_get_rec("image", array("original_url" => $original_url, "time" => $time));
 	} else {
 		$image = array();
 		$image["image_id"] = 0;
@@ -291,16 +339,19 @@ function promote_image($tmp_image_id)
 			//	}
 			//}
 		}
+		$image["hash"] = $hash;
 		$image["original_width"] = $original_width;
 		$image["original_height"] = $original_height;
-		$image["original_url"] = $tmp_image["original_url"];
-		$image["parent_url"] = $tmp_image["parent_url"];
-		$image["server"] = $tmp_image["server"];
+		$image["original_url"] = $original_url;
+		$image["parent_url"] = $parent_url;
+		$image["server"] = $server;
 		$image["size"] = 0;
-		$image["time"] = $tmp_image["time"];
+		$image["time"] = $time;
 		$image["has_640"] = 0;
+		$image["has_1280"] = 0;
+		$image["zid"] = $auth_zid;
 		db_set_rec("image", $image);
-		$image = db_get_rec("image", array("original_url" => $tmp_image["original_url"], "time" => $tmp_image["time"]));
+		$image = db_get_rec("image", array("original_url" => $original_url, "time" => $time));
 	}
 	$image_id = $image["image_id"];
 
@@ -310,12 +361,15 @@ function promote_image($tmp_image_id)
 		$h = $res[$i][1];
 		$aw = $res[$i][2];
 		$ah = $res[$i][3];
-		if ($original_width >= $w && $original_height >= $h && ($w <= 128 || ($aw == $aspect_width && $ah == $aspect_height))) {
+		if ($original_width >= $w && $original_height >= $h && ($w <= 256 || ($aw == $aspect_width && $ah == $aspect_height))) {
 			//if ($w > 128) {
 			//	$image["has_$w" . "x" . $h] = 1;
 			//}
 			if ($w == 640) {
 				$image["has_640"] = 1;
+			}
+			if ($w == 1280) {
+				$image["has_1280"] = 1;
 			}
 			$tmp_img = resize_image($src_img, $w, $h);
 			$file = "$doc_root/$path/i$image_id.$w" . "x" . "$h.jpg";

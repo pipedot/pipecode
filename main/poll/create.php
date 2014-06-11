@@ -62,12 +62,8 @@ if (http_post()) {
 
 print_header("Create Poll");
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "poll");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 writeln('<h1>Create Poll</h1>');
 
@@ -121,8 +117,5 @@ function remove_item(i)
 </script>
 <?
 
-writeln('		</td>');
-writeln('	</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

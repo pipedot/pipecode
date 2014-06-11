@@ -18,7 +18,7 @@ body {
 	background-color: #ffffff;
 	font-family: sans-serif;
 	font-size: 9pt;
-	margin: 8px;
+	margin: 0px;
 }
 div {
 	font-family: sans-serif;
@@ -80,7 +80,11 @@ textarea {
 	margin-bottom: 8px;
 }
 .title {
-	margin-bottom: 4px;
+	border-collapse: separate;
+	padding-bottom: 4px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 8px;
 	width: 100%;
 }
 .title_links {
@@ -94,10 +98,15 @@ textarea {
 	text-decoration: underline;
 }
 .footer {
+	border-top: 1px #d3d3d3 solid;
+	padding-bottom: 8px;
+	padding-top: 8px;
+	display: table;
 	width: 100%;
 }
-.footer td {
+.footer div {
 	color: #888888;
+	display: table-cell;
 	text-align: center;
 	width: 50%;
 }
@@ -169,11 +178,13 @@ textarea {
 	font-size: 10pt;
 	font-weight: bolder;
 	text-align: center;
+	white-space:nowrap;
 }
 .pipe_editor {
 	color: #666666;
 	font-size: 8pt;
 	text-align: center;
+	white-space: nowrap;
 }
 .story {
 }
@@ -440,24 +451,6 @@ textarea {
 .right {
 	text-align: right;
 }
-.left_col {
-	font-weight: bolder;
-	padding-right: 8px;
-	vertical-align: top;
-}
-.left_col div {
-	padding: 4px;
-	width: 80px;
-}
-.section_active {
-	background-color: #d3d3d3;
-	border: 1px solid #888888;
-	border-top-left-radius: 2px;
-	border-top-right-radius: 12px;
-	border-bottom-right-radius: 12px;
-	border-bottom-left-radius: 2px;
-	color: #000000;
-}
 .right_col {
 	vertical-align: top;
 	padding-left: 8px;
@@ -653,6 +646,9 @@ textarea {
 	padding: 8px;
 	margin-bottom: 8px;
 }
+.search {
+	display: table-cell;
+}
 .search a {
 	text-decoration: underline;
 }
@@ -717,6 +713,154 @@ textarea {
 .story_image {
 	display: none;
 }
+.block {
+	display: block;
+}
+.card {
+	background-color: #ffffff;
+	border: 1px solid #9f9f9f;
+	border-radius: 10px;
+	border-collapse: separate;
+	border-spacing: 0px;
+	margin: 4px;
+	width: 338px;
+}
+.card_row {
+	display: table;
+	padding-bottom: 0px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 8px;
+	width: 100%;
+}
+.card_row_link {
+	border-bottom: 1px solid #d3d3d3;
+	border-top: 1px solid #d3d3d3;
+	display: table;
+	margin-bottom: 3px;
+	margin-top: 8px;
+	padding-bottom: 8px;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 8px;
+}
+.card_profile {
+	display: table-cell;
+	border-radius: 4px;
+	height: 32px;
+	width: 32px;
+}
+.card_by_box {
+	display: table-cell;
+	padding-left: 8px;
+	vertical-align: top;
+	width: 100%;
+}
+.card_by {
+	display: block;
+	font-size: 10pt;
+	font-weight: bolder;
+	padding-top: 2px;
+}
+.card_time {
+	color: #666666;
+	font-size: 8pt;
+}
+.card_vote {
+	display: table-cell;
+	vertical-align: top;
+}
+.card_vote_box {
+	display: table;
+	float: right;
+}
+.card_button {
+	xbackground-color: #ffffff;
+	border: 1px #d3d3d3 solid;
+	border-radius: 4px;
+	cursor: pointer;
+	display: table-cell;
+	height: 24px;
+	padding: 3px;
+	width: 24px;
+}
+.card_button:hover {
+	background-color: #aebcd4;
+}
+.card_vote_count {
+	display: table-cell;
+	font-weight: bolder;
+	padding-bottom: 4px;
+	padding-left: 5px;
+	padding-right: 6px;
+	padding-top: 4px;
+	vertical-align: middle;
+}
+.card_story_box {
+	display: table-cell;
+	padding-bottom: 8px;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-top: 8px;
+	vertical-align: top;
+}
+.card_story_image {
+	display: table-cell;
+	margin-right: 8px;
+	width: 128px;
+}
+.card_story_link {
+	display: block;
+	font-size: 10pt;
+	font-weight: bolder;
+	padding-bottom: 8px;
+}
+.card_story_site {
+	display: block;
+	color: #666666 !important;
+	font-size: 8pt;
+}
+.card_image {
+	width: 320px;
+}
+.card_footer {
+	display: table;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	padding-right: 8px;
+	padding-top: 5px;
+}
+.card_comments {
+	display: table-cell;
+	font-weight: bolder;
+	padding-top: 5px;
+	white-space: nowrap;
+	vertical-align: top;
+}
+.card_tags {
+	display: table-cell;
+	font-size: 8pt;
+	padding-right: 8px;
+	padding-top: 6px;
+	text-align: right;
+	vertical-align: top;
+	width: 100%;
+}
+.card_tag {
+	color: #666666 !important;
+	padding-left: 4px;
+}
+.block {
+	display: block;
+}
+.cell {
+	display: table-cell;
+}
+.stream {
+	border-top: 1px #d3d3d3 solid;
+	display: block;
+	background-color: #eeeeee;
+}
 @media all and (max-width: 765px) {
 	.about aside {
 		xdisplay: block;
@@ -727,6 +871,57 @@ textarea {
 		xdisplay: block;
 		xmargin-left: 360px;
 		xwidth: 100%;
+	}
+	.logo_large {
+		display: none;
+	}
+	.logo_small {
+		display: inline-block;
+	}
+	nav {
+		border-top: 1px solid #d3d3d3;
+		border-bottom: 1px solid #d3d3d3;
+		font-weight: bolder;
+		margin-bottom: 8px;
+		padding-bottom: 8px;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 8px;
+		text-align: center;
+	}
+	.nav_inactive {
+		display: inline-block;
+		padding: 4px;
+		width: 60px;
+	}
+	.nav_active {
+		background-color: #d3d3d3;
+		border: 1px solid #888888;
+		border-top-left-radius: 12px;
+		border-top-right-radius: 12px;
+		border-bottom-right-radius: 12px;
+		border-bottom-left-radius: 12px;
+		color: #000000 !important;
+		text-decoration: none !important;
+		display: inline-block;
+		padding: 4px;
+		width: 60px;
+	}
+	.topics {
+		display: none;
+	}
+	aside {
+		padding-bottom: 8px;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 0px;
+	}
+	main {
+		display: block;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 0px;
+		padding-bottom: 0px;
 	}
 }
 @media all and (min-width: 766px) {
@@ -744,6 +939,61 @@ textarea {
 	}
 	.about main {
 		display: table-cell;
+		width: 100%;
+	}
+	.logo_large {
+		display: inline-block;
+	}
+	.logo_small {
+		display: none;
+	}
+	nav {
+		xborder: 1px #d3d3d3 solid;
+		display: table-cell;
+		font-weight: bolder;
+		padding-bottom: 8px;
+		padding-left: 8px;
+		padding-right: 0px;
+		padding-top: 0px;
+		width: 92px;
+		vertical-align: top;
+	}
+	.nav_inactive {
+		display: block;
+		padding: 4px;
+		width: 80px;
+	}
+	.nav_active {
+		background-color: #d3d3d3;
+		border: 1px solid #888888;
+		border-top-left-radius: 2px;
+		border-top-right-radius: 12px;
+		border-bottom-right-radius: 12px;
+		border-bottom-left-radius: 2px;
+		color: #000000 !important;
+		text-decoration: none !important;
+		display: block;
+		padding: 4px;
+		width: 80px;
+	}
+	aside {
+		xborder: 1px #d3d3d3 solid;
+		display: table-cell;
+		padding-bottom: 8px;
+		padding-left: 0px;
+		padding-right: 8px;
+		padding-top: 0px;
+		width: 300px;
+		vertical-align: top;
+	}
+	main {
+		xborder: 1px #d3d3d3 solid;
+		display: block;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+		vertical-align: top;
 		width: 100%;
 	}
 }

@@ -21,12 +21,8 @@
 
 print_header("Polls");
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "poll");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 writeln('<h1>Polls</h1>');
 
@@ -40,8 +36,5 @@ for ($i = 0; $i < count($row); $i++) {
 }
 writeln('</table>');
 
-writeln('		</td>');
-writeln('	</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

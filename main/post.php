@@ -137,12 +137,8 @@ if (http_post()) {
 
 		print_header("Post Comment");
 
-		writeln('<table class="fill">');
-		writeln('<tr>');
-		writeln('<td class="left_col">');
 		print_left_bar("main", "stories");
-		writeln('</td>');
-		writeln('<td class="fill">');
+		beg_main("cell");
 
 		writeln('<h1>Preview</h1>');
 		writeln('<p>Check your links before you post!</p>');
@@ -154,9 +150,7 @@ if (http_post()) {
 
 		print_post_box($sid, $cid, $pid, $qid, $subject, $dirty_body, $coward);
 
-		writeln('</td>');
-		writeln('</tr>');
-		writeln('</table>');
+		end_main();
 		print_footer();
 		die();
 	}
@@ -208,12 +202,8 @@ $qid = http_get_int("qid", array("required" => false));
 
 print_header("Post Comment");
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td class="left_col">');
 print_left_bar("main", "stories");
-writeln('</td>');
-writeln('<td class="fill">');
+beg_main("cell");
 
 if ($cid != 0) {
 	$comment = db_get_rec("comment", $cid);
@@ -242,8 +232,5 @@ if ($cid != 0) {
 
 print_post_box($sid, $cid, $pid, $qid, $subject, "", false);
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
-
+end_main();
 print_footer();

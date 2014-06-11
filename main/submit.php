@@ -31,12 +31,8 @@ function print_submit_box($title, $dirty_body, $story, $tid, $preview)
 
 	print_header("Submit Story");
 
-	writeln('<table class="fill">');
-	writeln('<tr>');
-	writeln('<td class="left_col">');
 	print_left_bar("main", "pipe");
-	writeln('</td>');
-	writeln('<td class="fill">');
+	beg_main("cell");
 
 	if ($preview) {
 		$a["zid"] = $auth_zid;
@@ -92,12 +88,9 @@ function print_submit_box($title, $dirty_body, $story, $tid, $preview)
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
+
 	end_form();
-
-	writeln('</td>');
-	writeln('</tr>');
-	writeln('</table>');
-
+	end_main();
 	print_footer();
 }
 
