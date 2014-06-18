@@ -24,21 +24,20 @@ if ($zid != $auth_zid) {
 }
 
 print_header("Menu");
-beg_main();
+beg_main("dual_table");
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td style="padding-right: 8px; vertical-align: text-top; width: 50%;">');
+//writeln('<div class="dual_table">');
+writeln('<div class="dual_left">');
 
 beg_tab();
 print_row(array("caption" => "Feed", "description" => "View news feeds", "icon" => "news", "link" => "/feed/"));
 print_row(array("caption" => "Stream", "description" => "View news stream", "icon" => "internet", "link" => "/stream/"));
 print_row(array("caption" => "Comments", "description" => "View your past comments", "icon" => "chat", "link" => "/comments"));
-print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "karma-good", "link" => "/karma/"));
+print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "karma_good", "link" => "/karma/"));
 end_tab();
 
-writeln('</td>');
-writeln('<td style="vertical-align: text-top; width: 50%;">');
+writeln('</div>');
+writeln('<div class="dual_right">');
 
 beg_tab();
 print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
@@ -46,9 +45,8 @@ print_row(array("caption" => "Profile Settings", "description" => "Configure you
 print_row(array("caption" => "Profile Picture", "description" => "Upload a new profile image", "icon" => "picture", "link" => "/profile/picture"));
 end_tab();
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+writeln('</div>');
+//writeln('</div>');
 
 end_main();
 print_footer();

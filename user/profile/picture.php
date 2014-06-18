@@ -29,7 +29,6 @@ if (http_post()) {
 	if (!isset($_FILES["upload"])) {
 		die("unknown error in upload");
 	}
-	//$name = basename($_FILES["upload"]["name"]);
 	$data = fs_slurp($_FILES["upload"]["tmp_name"]);
 	$src_img = @imagecreatefromstring($data);
 	if ($src_img === false) {
@@ -55,10 +54,7 @@ if (http_post()) {
 
 print_header("Profile");
 beg_main();
-
-//writeln('<form method="post" enctype="multipart/form-data">');
 beg_form("", "file");
-//writeln('<input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>');
 
 beg_tab("Profile Picture", array("colspan" => 2));
 writeln('	<tr>');

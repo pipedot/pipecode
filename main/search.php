@@ -141,7 +141,7 @@ if ($needle != "") {
 
 print_header("Search");
 print_left_bar("main", "search");
-beg_main("cell");
+beg_main("search");
 search_box();
 end_main();
 print_footer();

@@ -19,30 +19,11 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("stream.php");
-
-$tag_name = $s2;
-$tag = db_get_rec("tag", array("tag" => $tag_name));
-$tag_id = $tag["tag_id"];
-
-print_header("#$s2", array("Share"), array("notepad"), array(user_page_link($auth_zid) . "stream/share"));
-
-beg_main("stream");
-
-$row = run_sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id where tag_id = ? order by time desc", array($tag_id));
-//$row = run_sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id order by time desc");
-//var_dump($row);
-//print "tag_id [$tag_id]";
-
-for ($i = 0; $i < count($row); $i++) {
-	//print "card_id [" . $row[$i]["card_id"] . "]";
-	print_card($row[$i]["card_id"]);
+if ($auth_zid == "") {
+	print_header("Photos");
+} else {
+	print_header("Photos", array("Share"), array("notepad"), array(user_page_link($auth_zid) . "stream/share"));
 }
-
-//writeln('<h1>Tag</h1>');
-
-//print "s2 [$s2]";
-
-end_main("stream");
+beg_main();
+end_main();
 print_footer();
-

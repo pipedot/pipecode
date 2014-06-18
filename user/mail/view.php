@@ -112,7 +112,7 @@ if (http_post("expunge")) {
 if (string_has($message["mail_from"], "no-reply@")) {
 	print_header($message["subject"], array("Inbox"), array("inbox"), array("/mail/"));
 } else {
-	print_header($message["subject"], array("Reply", "Inbox"), array("mail-reply", "inbox"), array("/mail/compose?mid=$mail_id", "/mail/"));
+	print_header($message["subject"], array("Reply", "Inbox"), array("mail_reply", "inbox"), array("/mail/compose?mid=$mail_id", "/mail/"));
 }
 beg_main();
 

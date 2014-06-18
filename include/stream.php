@@ -27,16 +27,16 @@ function print_card($card_id)
 
 	$a = array();
 	$card = db_get_rec("card", $card_id);
-	$article = db_get_rec("article", $card["article_id"]);
-	if ($card["link_id"] > 0) {
-		$link = db_get_rec("link", $card["link_id"]);
-		$a["story_link"] = $link["url"];
-		$a["story_subject"] = $link["subject"];
-		$image_id = $link["image_id"];
+//	$article = db_get_rec("article", $card["article_id"]);
+	if ($card["link_url"] != "") {
+//		$link = db_get_rec("link", $card["link_id"]);
+		$a["link_url"] = $card["link_url"];
+		$a["link_subject"] = $card["link_subject"];
+		$image_id = $card["image_id"];
 		if ($image_id > 0) {
 			$image = db_get_rec("image", $image_id);
 			$path = public_path($image["time"]) . "/i$image_id.256x256.jpg";
-			$a["story_image"] = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
+			$a["image_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
 		}
 	}
 
@@ -47,29 +47,59 @@ function print_card($card_id)
 	}
 
 	$a["card_id"] = $card_id;
-	$a["zid"] = $article["zid"];
-	$a["time"] = $article["time"];
+	$a["zid"] = $card["zid"];
+	$a["time"] = $card["time"];
 	$a["votes"] = 0;
-	$a["body"] = $article["body"];
+	$a["body"] = $card["body"];
 
-	$image_id = $card["image_id"];
-	if ($image_id > 0) {
-		$a["image_id"] = $image_id;
-		$image = db_get_rec("image", $image_id);
+	$photo_id = $card["photo_id"];
+	if ($photo_id > 0) {
+		$a["photo_id"] = $photo_id;
+		$photo = db_get_rec("photo", $photo_id);
 		$width = 320;
-		if ($image["aspect_width"] == 1 && $image["aspect_height"] == 1) {
+		if ($photo["aspect_width"] == 9 && $photo["aspect_height"] == 16) {
+			$width = 320;
+			$height = 569;
+			if ($photo["has_medium"]) {
+				$width = 640;
+				$height = 1138;
+			}
+			$a["photo_class"] = "card_photo_9x16";
+		} else if ($photo["aspect_width"] == 3 && $photo["aspect_height"] == 4) {
+			$width = 320;
+			$height = 427;
+			if ($photo["has_medium"]) {
+				$width = 640;
+				$height = 853;
+			}
+			$a["photo_class"] = "card_photo_3x4";
+		} else if ($photo["aspect_width"] == 1 && $photo["aspect_height"] == 1) {
+			$width = 320;
 			$height = 320;
-		} else if ($image["aspect_width"] == 4 && $image["aspect_height"] == 3) {
+			if ($photo["has_medium"]) {
+				$width = 640;
+				$height = 640;
+			}
+			$a["photo_class"] = "card_photo_1x1";
+		} else if ($photo["aspect_width"] == 4 && $photo["aspect_height"] == 3) {
+			$width = 320;
 			$height = 240;
-		} else if ($image["aspect_width"] == 16 && $image["aspect_height"] == 9) {
+			if ($photo["has_medium"]) {
+				$width = 640;
+				$height = 480;
+			}
+			$a["photo_class"] = "card_photo_4x3";
+		} else if ($photo["aspect_width"] == 16 && $photo["aspect_height"] == 9) {
+			$width = 320;
 			$height = 180;
+			if ($photo["has_medium"]) {
+				$width = 640;
+				$height = 360;
+			}
+			$a["photo_class"] = "card_photo_16x9";
 		}
-		if ($image["has_640"]) {
-			$width *= 2;
-			$height *= 2;
-		}
-		$path = public_path($image["time"]) . "/i$image_id.{$width}x{$height}.jpg";
-		$a["image"] = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
+		$path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
+		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
 	}
 
 	$a["comments"] = 0;
@@ -93,25 +123,27 @@ function print_card_small($a)
 	$date = date("Y-m-d H:i", $time);
 	$votes = $a["votes"];
 	$body = $a["body"];
-	if (array_key_exists("story_link", $a)) {
-		$story_link = $a["story_link"];
-		$story_subject = $a["story_subject"];
-		if (array_key_exists("story_image", $a)) {
-			$story_image = $a["story_image"];
+	if (array_key_exists("link_url", $a)) {
+		$link_url = $a["link_url"];
+		$link_subject = $a["link_subject"];
+		if (array_key_exists("image_url", $a)) {
+			$image_url = $a["image_url"];
 		} else {
-			$story_image = "";
+			$image_url = "";
 		}
-		$u = parse_url($story_link);
-		$story_site = $u["host"];
+		$u = parse_url($link_url);
+		$link_site = $u["host"];
 	} else {
-		$story_link = "";
+		$link_url = "";
 	}
-	if (array_key_exists("image_id", $a)) {
-		$image_id = $a["image_id"];
-		$image = $a["image"];
+	if (array_key_exists("photo_id", $a)) {
+		$photo_id = $a["photo_id"];
+		$photo_url = $a["photo_url"];
+		$photo_class = $a["photo_class"];
 	} else {
-		$image_id = 0;
-		$image = "";
+		$photo_id = 0;
+		$photo_url = "";
+		$photo_class = "";
 	}
 	$comments = $a["comments"];
 	$tag_links = "";
@@ -145,22 +177,22 @@ function print_card_small($a)
 		writeln("		<td class=\"card_row\">$body</td>");
 		writeln("	</tr>");
 	}
-	if ($story_link != "") {
+	if ($photo_url != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row_link\">");
-		if ($story_image != "") {
-			writeln("			<a href=\"$story_link\"><img class=\"card_story_image\" src=\"$story_image\"/></a>");
-		}
-		writeln("			<div class=\"card_story_box\">");
-		writeln("				<a class=\"card_story_link\" href=\"$story_link\">$story_subject</a>");
-		writeln("				<a class=\"card_story_site\" href=\"$story_link\">$story_site</a>");
-		writeln("			</div>");
-		writeln("		</td>");
+		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/photo/$photo_id\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_url\"/></a></td>");
 		writeln("	</tr>");
 	}
-	if ($image != "") {
+	if ($link_url != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/image/$image_id\"><img alt=\"photo\" class=\"card_image\" src=\"$image\"/></a></td>");
+		writeln("		<td class=\"card_row_link\">");
+		if ($image_url != "") {
+			writeln("			<a href=\"$link_url\"><img class=\"card_story_image\" src=\"$image_url\"/></a>");
+		}
+		writeln("			<div class=\"card_story_box\">");
+		writeln("				<a class=\"card_story_link\" href=\"$link_url\">$link_subject</a>");
+		writeln("				<a class=\"card_story_site\" href=\"$link_url\">$link_site</a>");
+		writeln("			</div>");
+		writeln("		</td>");
 		writeln("	</tr>");
 	}
 	writeln("	<tr>");
@@ -234,12 +266,19 @@ function print_card_large($a)
 
 function slurp_title($url)
 {
+	$u = parse_url($url);
+	if (!array_key_exists("host", $u)) {
+		return false;
+	}
+
 	$data = http_slurp($url);
+	if ($data === false) {
+		return false;
+	}
 
 	$beg = stripos($data, "<title>");
 	$end = stripos($data, "</title>", $beg);
 	if ($beg === false || $end === false || $end < $beg) {
-		$u = parse_url($url);
 		return $u["host"];
 	}
 	$title = substr($data, $beg + 7, $end - $beg - 7);

@@ -50,6 +50,7 @@ if ($protocol != "https" && $https_enabled) {
 print_header("Sign In");
 
 writeln('<hr/>');
+beg_main();
 writeln('<h1>Sign In</h1>');
 
 if ($https_enabled) {
@@ -72,4 +73,5 @@ writeln('<input type="submit" value="Sign In"/>');
 writeln('<a href="/forgot">Forgot Password?</a>');
 end_form();
 
+end_main();
 print_footer();

@@ -73,8 +73,15 @@ DROP TABLE IF EXISTS `card`;
 CREATE TABLE `card` (
   `card_id` int(11) NOT NULL AUTO_INCREMENT,
   `article_id` int(11) NOT NULL,
-  `image_id` int(11) NOT NULL,
   `link_id` int(11) NOT NULL,
+  `archive` int(11) NOT NULL,
+  `body` text NOT NULL,
+  `image_id` int(11) NOT NULL,
+  `link_subject` varchar(200) NOT NULL,
+  `link_url` varchar(200) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`card_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -235,17 +242,12 @@ DROP TABLE IF EXISTS `image`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `image` (
   `image_id` int(11) NOT NULL AUTO_INCREMENT,
-  `aspect_width` int(11) NOT NULL,
-  `aspect_height` int(11) NOT NULL,
-  `has_640` int(11) NOT NULL,
-  `has_1280` int(11) NOT NULL,
   `hash` varchar(64) NOT NULL,
   `original_width` int(11) NOT NULL,
   `original_height` int(11) NOT NULL,
   `original_url` varchar(250) NOT NULL,
   `parent_url` varchar(250) NOT NULL,
   `server` varchar(50) NOT NULL,
-  `size` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`image_id`)
@@ -370,6 +372,31 @@ CREATE TABLE `page` (
   `title` varchar(100) NOT NULL,
   `body` text NOT NULL,
   PRIMARY KEY (`slug`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `photo`
+--
+
+DROP TABLE IF EXISTS `photo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `photo` (
+  `photo_id` int(11) NOT NULL AUTO_INCREMENT,
+  `aspect_width` int(11) NOT NULL,
+  `aspect_height` int(11) NOT NULL,
+  `has_medium` int(11) NOT NULL,
+  `has_large` int(11) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `original_name` varchar(250) NOT NULL,
+  `original_width` int(11) NOT NULL,
+  `original_height` int(11) NOT NULL,
+  `server` varchar(50) NOT NULL,
+  `size` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`photo_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -603,12 +630,14 @@ DROP TABLE IF EXISTS `tmp_image`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tmp_image` (
   `tmp_image_id` int(11) NOT NULL AUTO_INCREMENT,
-  `original_url` varchar(250) NOT NULL,
+  `hash` varchar(64) NOT NULL,
   `original_width` int(11) NOT NULL,
   `original_height` int(11) NOT NULL,
+  `original_url` varchar(250) NOT NULL,
   `parent_url` varchar(250) NOT NULL,
   `server` varchar(50) NOT NULL,
   `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`tmp_image_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -682,4 +711,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-11  4:22:38
+-- Dump completed on 2014-06-18  8:38:29

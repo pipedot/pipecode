@@ -24,11 +24,10 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 }
 
 print_header("Menu");
-beg_main();
+beg_main("dual_table");
 
-writeln('<table class="fill">');
-writeln('<tr>');
-writeln('<td style="padding-right: 8px; vertical-align: text-top; width: 50%;">');
+//writeln('<div class="dual_table">');
+writeln('<div class="dual_left">');
 
 beg_tab();
 print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
@@ -37,8 +36,8 @@ if ($auth_user["admin"]) {
 }
 end_tab();
 
-writeln('</td>');
-writeln('<td style="vertical-align: text-top; width: 50%;">');
+writeln('</div>');
+writeln('<div class="dual_right">');
 
 beg_tab();
 print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
@@ -48,9 +47,8 @@ if ($auth_user["admin"]) {
 }
 end_tab();
 
-writeln('</td>');
-writeln('</tr>');
-writeln('</table>');
+writeln('</div>');
+//writeln('</div>');
 
 end_main();
 print_footer();

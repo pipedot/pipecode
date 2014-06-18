@@ -26,29 +26,26 @@ include("image.php");
 clean_tmp_images();
 $card_id = (int) $s2;
 $card = db_get_rec("card", $card_id);
-$link_id = $card["link_id"];
-if ($link_id == 0) {
-	die("link not found");
-}
-$link = db_get_rec("link", $link_id);
-$image_id = $link["image_id"];
-$url = $link["url"];
+//$image_id = $card["image_id"];
+$link_url = $card["link_url"];
 
 if (http_post()) {
-	$tmp_image_id = http_post_int("tmp_image_id");
+	$tmp_image_id = http_post_int("tmp_image_id", array("required" => false));
 
 	if ($tmp_image_id > 0) {
 		$image_id = promote_image($tmp_image_id);
+	} else {
+		$image_id = 0;
 	}
-	$link["image_id"] = $image_id;
-	db_set_rec("link", $link);
+	$card["image_id"] = $image_id;
+	db_set_rec("card", $card);
 
 	//die("done");
 	header("Location: $protocol://$server_name/card/$card_id");
 	die();
 }
 
-$images = build_preview_images("<a href=\"$url\">link</a>");
+$images = build_preview_images("<a href=\"$link_url\">link</a>");
 
 print_header();
 

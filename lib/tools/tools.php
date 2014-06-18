@@ -1623,7 +1623,7 @@ function print_row($a)
 	} else if (array_key_exists("link", $a)) {
 		if (array_key_exists("description", $a)) {
 			writeln('			<a href="' . $a["link"] . '">');
-			writeln('			<dl style="background-image: url(/images/' . $a["icon"] . '-32.png)">');
+			writeln('			<dl class="icon_' . $a["icon"] . '_32">');
 			writeln('				<dt>' . $a["caption"] . '</dt>');
 			writeln('				<dd>' . $a["description"] . '</dd>');
 			writeln('			</dl>');
@@ -1633,7 +1633,7 @@ function print_row($a)
 		}
 	} else if (array_key_exists("icon_32", $a)) {
 		if (array_key_exists("description", $a)) {
-			writeln('			<dl style="background-image: url(/images/' . $a["icon_32"] . '-32.png)">');
+			writeln('			<dl class="icon_' . $a["icon"] . '_32">');
 			writeln('				<dt>' . $a["caption"] . '</dt>');
 			writeln('				<dd>' . $a["description"] . '</dd>');
 			writeln('			</dl>');

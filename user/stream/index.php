@@ -25,7 +25,8 @@ print_header("Stream", array("Share"), array("notepad"), array("/stream/share"))
 
 beg_main("stream");
 
-$row = run_sql("select card_id from card inner join article on card.article_id = article.article_id where zid = ? order by time desc", array($zid));
+//$row = run_sql("select card_id from card inner join article on card.article_id = article.article_id where zid = ? order by time desc", array($zid));
+$row = run_sql("select card_id from card where zid = ? order by time desc", array($zid));
 
 for ($i = 0; $i < count($row); $i++) {
 	//print "card_id [" . $row[$i]["card_id"] . "]";

@@ -163,11 +163,20 @@ function clean_feed_title($title)
 
 function print_feed_page($zid)
 {
-	writeln('<table style="width: 100%">');
-	writeln('	<tr>');
+	//writeln('<table style="width: 100%">');
+	//writeln('	<tr>');
+	beg_main("tri_table");
+	//writeln('<div class="tri_table">');
 
 	for ($c = 0; $c < 3; $c++) {
-		writeln('		<td class="feed_box">');
+		//writeln('		<td class="feed_box">');
+		if ($c == 0) {
+			writeln('<div class="tri_left">');
+		} else if ($c == 1) {
+			writeln('<div class="tri_center">');
+		} else {
+			writeln('<div class="tri_right">');
+		}
 
 		$row = run_sql("select fid from feed_user where zid = ? and col = ? order by pos", array($zid, $c));
 		for ($f = 0; $f < count($row); $f++) {
@@ -183,9 +192,12 @@ function print_feed_page($zid)
 			}
 			writeln('			</div>');
 		}
-		writeln('		</td>');
+		//writeln('		</td>');
+		writeln('</div>');
 	}
 
-	writeln('	</tr>');
-	writeln('</table>');
+	//writeln('	</tr>');
+	//writeln('</table>');
+	//writeln('</div>');
+	end_main();
 }

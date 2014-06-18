@@ -104,12 +104,6 @@ textarea {
 	display: table;
 	width: 100%;
 }
-.footer div {
-	color: #888888;
-	display: table-cell;
-	text-align: center;
-	width: 50%;
-}
 .footer a {
 	margin-left: 4px;
 	margin-right: 4px;
@@ -543,6 +537,23 @@ textarea {
 .row_button:hover {
 	background-color: #aebcd4;
 }
+.outline {
+	border: 1px #d3d3d3 solid;
+	border-spacing: 0px;
+	margin-bottom: 8px;
+	padding: 4px;
+	width: 100%;
+}
+.outline th {
+	border-right: 1px #d3d3d3 solid;
+	padding: 4px;
+}
+.outline td {
+	padding: 4px;
+	xvertical-align: middle;
+	border-top: 1px #d3d3d3 solid;
+	border-right: 1px #d3d3d3 solid;
+}
 .zebra {
 	border: 1px #d3d3d3 solid;
 	border-spacing: 0px;
@@ -556,12 +567,10 @@ textarea {
 .zebra tr:nth-child(odd) {
 	background-color: #eeeeee;
 }
-.zebra th
-{
+.zebra th {
 	padding: 4px;
 }
-.zebra td
-{
+.zebra td {
 	padding: 4px;
 	vertical-align: middle;
 }
@@ -646,9 +655,6 @@ textarea {
 	padding: 8px;
 	margin-bottom: 8px;
 }
-.search {
-	display: table-cell;
-}
 .search a {
 	text-decoration: underline;
 }
@@ -710,8 +716,19 @@ textarea {
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
-.story_image {
-	display: none;
+.story_image_128 {
+	float: right;
+	margin-left: 8px;
+	margin-bottom: 8px;
+	width: 128px;
+	height: 128px;
+}
+.story_image_256 {
+	float: right;
+	margin-left: 8px;
+	margin-bottom: 8px;
+	width: 256px;
+	height: 256px;
 }
 .block {
 	display: block;
@@ -743,6 +760,7 @@ textarea {
 	padding-left: 8px;
 	padding-right: 8px;
 	padding-top: 8px;
+	width: 100%;
 }
 .card_profile {
 	display: table-cell;
@@ -820,8 +838,25 @@ textarea {
 	color: #666666 !important;
 	font-size: 8pt;
 }
-.card_image {
+.card_photo_9x16 {
 	width: 320px;
+	height: 569px;
+}
+.card_photo_3x4 {
+	width: 320px;
+	height: 427px;
+}
+.card_photo_1x1 {
+	width: 320px;
+	height: 320px;
+}
+.card_photo_4x3 {
+	width: 320px;
+	height: 240px;
+}
+.card_photo_16x9 {
+	width: 320px;
+	height: 180px;
 }
 .card_footer {
 	display: table;
@@ -877,6 +912,8 @@ textarea {
 	}
 	.logo_small {
 		display: inline-block;
+		width: 32px;
+		height: 32px;
 	}
 	nav {
 		border-top: 1px solid #d3d3d3;
@@ -922,6 +959,27 @@ textarea {
 		padding-right: 8px;
 		padding-top: 0px;
 		padding-bottom: 0px;
+	}
+	.search {
+		display: block;
+	}
+	.footer div {
+		color: #888888;
+		text-align: center;
+	}
+	.dual_table {
+		display: block;
+	}
+	.dual_left, .dual_right {
+		display: block;
+		padding: 0px;
+	}
+	.tri_table {
+		display: block;
+	}
+	.tri_left, .tri_center, .tri_right {
+		display: block;
+		padding: 0px;
 	}
 }
 @media all and (min-width: 766px) {
@@ -995,5 +1053,315 @@ textarea {
 		padding-bottom: 0px;
 		vertical-align: top;
 		width: 100%;
+	}
+	.search {
+		display: table-cell;
+	}
+	.footer div {
+		color: #888888;
+		display: table-cell;
+		text-align: center;
+		width: 50%;
+	}
+	.dual_table {
+		display: table;
+		width: 100%;
+	}
+	.dual_left {
+		display: table-cell;
+		padding-bottom: 8px;
+		padding-left: 0px;
+		padding-right: 4px;
+		vertical-align: top;
+		width: 50%;
+	}
+	.dual_right {
+		display: table-cell;
+		padding-bottom: 8px;
+		padding-left: 4px;
+		padding-right: 0px;
+		vertical-align: top;
+		width: 50%;
+	}
+	.tri_table {
+		display: table;
+		width: 100%;
+	}
+	.tri_left, .tri_center, .tri_right {
+		display: table-cell;
+		padding-bottom: 8px;
+		padding-left: 4px;
+		padding-right: 4px;
+		width: 33%;
+	}
+	.tri_left {
+		padding-left: 0px;
+	}
+	.tri_right {
+		padding-right: 0px;
+	}
+}
+.icon_contact_new_16 {
+	background-position: left;
+	background-image: url(/images/contact-new-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_exit_16 {
+	background-position: left;
+	background-image: url(/images/exit-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_home_16 {
+	background-position: left;
+	background-image: url(/images/home-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_inbox_16 {
+	background-position: left;
+	background-image: url(/images/inbox-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_junk_16 {
+	background-position: left;
+	background-image: url(/images/junk-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_mail_compose_16 {
+	background-position: left;
+	background-image: url(/images/mail-compose-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_mail_forward_16 {
+	background-position: left;
+	background-image: url(/images/mail-forward-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_mail_reply_16 {
+	background-position: left;
+	background-image: url(/images/mail-reply-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_news_16 {
+	background-position: left;
+	background-image: url(/images/news-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_notepad_16 {
+	background-position: left;
+	background-image: url(/images/notepad-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_picture_16 {
+	background-position: left;
+	background-image: url(/images/picture-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_sent_16 {
+	background-position: left;
+	background-image: url(/images/sent-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_tools_16 {
+	background-position: left;
+	background-image: url(/images/tools-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_trash_16 {
+	background-position: left;
+	background-image: url(/images/trash-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_tweet_16 {
+	background-position: left;
+	background-image: url(/images/tweet-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_users_16 {
+	background-position: left;
+	background-image: url(/images/users-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_chat_32 {
+	background-image: url(/images/chat-32.png);
+}
+.icon_heart_32 {
+	background-image: url(/images/heart-32.png);
+}
+.icon_html_32 {
+	background-image: url(/images/html-32.png);
+}
+.icon_internet_32 {
+	background-image: url(/images/internet-32.png);
+}
+.icon_karma_good_32 {
+	background-image: url(/images/karma-good-32.png);
+}
+.icon_mail_32 {
+	background-image: url(/images/mail-32.png);
+}
+.icon_news_32 {
+	background-image: url(/images/users-32.png);
+}
+.icon_picture_32 {
+	background-image: url(/images/picture-32.png);
+}
+.icon_tools_32 {
+	background-image: url(/images/tools-32.png);
+}
+.icon_workgroup_32 {
+	background-image: url(/images/workgroup-32.png);
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+	.icon_contact_new_16 {
+		background-image: url(/images/contact-new-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_exit_16 {
+		background-image: url(/images/exit-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_home_16 {
+		background-image: url(/images/home-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_inbox_16 {
+		background-image: url(/images/inbox-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_junk_16 {
+		background-image: url(/images/junk-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_mail_compose_16 {
+		background-image: url(/images/mail-compose-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_mail_forward_16 {
+		background-image: url(/images/mail-forward-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_mail_reply_16 {
+		background-image: url(/images/mail-reply-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_news_16 {
+		background-image: url(/images/news-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_notepad_16 {
+		background-image: url(/images/notepad-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_picture_16 {
+		background-image: url(/images/picture-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_sent_16 {
+		background-image: url(/images/sent-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_tools_16 {
+		background-image: url(/images/tools-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_trash_16 {
+		background-image: url(/images/trash-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_tweet_16 {
+		background-image: url(/images/tweet-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_users_16 {
+		background-image: url(/images/users-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_chat_32 {
+		background-image: url(/images/chat-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_heart_32 {
+		background-image: url(/images/heart-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_html_32 {
+		background-image: url(/images/html-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_internet_32 {
+		background-image: url(/images/internet-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_karma_good_32 {
+		background-image: url(/images/karma-good-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_mail_32 {
+		background-image: url(/images/mail-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_news_32 {
+		background-image: url(/images/users-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_picture_32 {
+		background-image: url(/images/picture-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_tools_32 {
+		background-image: url(/images/tools-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_workgroup_32 {
+		background-image: url(/images/workgroup-64.png);
+		background-size: 32px 32px;
 	}
 }

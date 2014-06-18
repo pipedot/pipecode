@@ -31,7 +31,7 @@ $row = run_sql("select qid, question, time from poll_question order by qid desc"
 for ($i = 0; $i < count($row); $i++) {
 	writeln('	<tr>');
 	writeln('		<td><a href="' . $row[$i]["qid"] . '">' . $row[$i]["question"] . '</a></td>');
-	writeln('		<td style="text-align: right">' . date("Y-m-d", $row[$i]["time"]) . '</td>');
+	writeln('		<td style="text-align: right; white-space: nowrap;">' . date("Y-m-d", $row[$i]["time"]) . '</td>');
 	writeln('	</tr>');
 }
 writeln('</table>');

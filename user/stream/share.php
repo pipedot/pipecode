@@ -30,60 +30,48 @@ if ($auth_zid == "") {
 if (http_post()) {
 	list($clean_body, $dirty_body) = clean_body(false);
 	$tags = clean_tags();
-	$url = clean_link();
+	$link_url = clean_link();
 	$time = time();
 
 	if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
-		//die("[" . $_FILES["upload"]["tmp_name"] . "]");
 		$data = fs_slurp($_FILES["upload"]["tmp_name"]);
 		$hash = crypt_sha256($data);
 		$src_img = @imagecreatefromstring($data);
 		if ($src_img === false) {
 			die("unable to open uploaded file");
 		}
-		$image_id = create_image($src_img, $_FILES["upload"]["name"], $hash);
-		//die("image width [" . imagesx($src_img) . "]");
-		$link_id = 0;
+		$photo_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
 	} else {
-		if ($url == "") {
-			$link_id = 0;
-		} else {
-			$link = array();
-			$link["link_id"] = 0;
-			$link["image_id"] = 0;
-			$link["subject"] = slurp_title($url);
-			$link["time"] = $time;
-			$link["url"] = $url;
-			db_set_rec("link", $link);
-			$link = db_get_rec("link", array("time" => $time, "url" => $url));
-			$link_id = $link["link_id"];
-		}
-		$image_id = 0;
+		$photo_id = 0;
 	}
 
-	if ($clean_body == "" && $url == "" && $image_id == 0) {
+	if ($link_url == "") {
+		$link_subject = "";
+	} else {
+		$link_subject = slurp_title($link_url);
+		if ($link_subject === false) {
+			$link_url = "";
+		}
+	}
+	//die("link_url [$link_url] link_subject [$link_subject]");
+
+	if ($clean_body == "" && $link_url == "" && $photo_id == 0) {
 		die("nothing to share");
 	}
 
-	$article = array();
-	$article["article_id"] = 0;
-	$article["archive"] = $time + 86400 * 90;
-	$article["body"] = $clean_body;
-	$article["full_body"] = "";
-	$article["subject"] = "";
-	$article["time"] = $time;
-	$article["zid"] = $auth_zid;
-	db_set_rec("article", $article);
-	$article = db_get_rec("article", array("zid" => $auth_zid, "time" => $time));
-	$article_id = $article["article_id"];
-
 	$card = array();
 	$card["card_id"] = 0;
-	$card["article_id"] = $article_id;
-	$card["image_id"] = $image_id;
-	$card["link_id"] = $link_id;
+	$card["image_id"] = 0;
+	$card["archive"] = $time + 86400 * 90;
+	$card["body"] = $clean_body;
+	$card["link_subject"] = $link_subject;
+	$card["link_url"] = $link_url;
+	$card["photo_id"] = $photo_id;
+	$card["time"] = $time;
+	$card["zid"] = $auth_zid;
+
 	db_set_rec("card", $card);
-	$card = db_get_rec("card", array("article_id" => $article_id));
+	$card = db_get_rec("card", array("zid" => $zid, "time" => $time));
 	$card_id = $card["card_id"];
 
 	for ($i = 0; $i < count($tags); $i++) {
@@ -102,8 +90,7 @@ if (http_post()) {
 		db_set_rec("card_tags", $card_tags);
 	}
 
-	//die("article_id [$article_id] card_id [$card_id]");
-	if ($link_id == 0) {
+	if ($link_url == "") {
 		header("Location: " . user_page_link($auth_zid) . "stream/");
 	} else {
 		header("Location: $protocol://$server_name/card/$card_id/image");
@@ -113,9 +100,7 @@ if (http_post()) {
 
 print_header("Share");
 beg_main();
-//writeln('<form method="post" enctype="multipart/form-data">');
 beg_form("", "file");
-//writeln('<input type="hidden" name="MAX_FILE_SIZE" value="5000000"/>');
 
 writeln('<h1>Share</h1>');
 

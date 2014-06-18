@@ -34,14 +34,14 @@ if (fs_is_file("$top_root/conf.php")) {
 	die();
 }
 
-$db_table["article"]["key"] = "article_id";
-$db_table["article"]["col"][] = "article_id";
-$db_table["article"]["col"][] = "archive";
-$db_table["article"]["col"][] = "body";
-$db_table["article"]["col"][] = "full_body";
-$db_table["article"]["col"][] = "subject";
-$db_table["article"]["col"][] = "time";
-$db_table["article"]["col"][] = "zid";
+//$db_table["article"]["key"] = "article_id";
+//$db_table["article"]["col"][] = "article_id";
+//$db_table["article"]["col"][] = "archive";
+//$db_table["article"]["col"][] = "body";
+//$db_table["article"]["col"][] = "full_body";
+//$db_table["article"]["col"][] = "subject";
+//$db_table["article"]["col"][] = "time";
+//$db_table["article"]["col"][] = "zid";
 
 $db_table["captcha"]["key"] = "captcha_id";
 $db_table["captcha"]["col"][] = "captcha_id";
@@ -54,9 +54,14 @@ $db_table["captcha_challenge"]["col"][] = "captcha_id";
 
 $db_table["card"]["key"] = "card_id";
 $db_table["card"]["col"][] = "card_id";
-$db_table["card"]["col"][] = "article_id";
+$db_table["card"]["col"][] = "archive";
+$db_table["card"]["col"][] = "body";
 $db_table["card"]["col"][] = "image_id";
-$db_table["card"]["col"][] = "link_id";
+$db_table["card"]["col"][] = "link_subject";
+$db_table["card"]["col"][] = "link_url";
+$db_table["card"]["col"][] = "photo_id";
+$db_table["card"]["col"][] = "time";
+$db_table["card"]["col"][] = "zid";
 
 $db_table["card_tags"]["key"][] = "card_id";
 $db_table["card_tags"]["key"][] = "tag_id";
@@ -125,8 +130,8 @@ $db_table["feed_user"]["col"][] = "pos";
 
 $db_table["image"]["key"] = "image_id";
 $db_table["image"]["col"][] = "image_id";
-$db_table["image"]["col"][] = "aspect_width";
-$db_table["image"]["col"][] = "aspect_height";
+//$db_table["image"]["col"][] = "aspect_width";
+//$db_table["image"]["col"][] = "aspect_height";
 //$db_table["image"]["col"][] = "has_160x90";
 //$db_table["image"]["col"][] = "has_160x120";
 //$db_table["image"]["col"][] = "has_160x160";
@@ -136,24 +141,24 @@ $db_table["image"]["col"][] = "aspect_height";
 //$db_table["image"]["col"][] = "has_640x360";
 //$db_table["image"]["col"][] = "has_640x480";
 //$db_table["image"]["col"][] = "has_640x640";
-$db_table["image"]["col"][] = "has_640";
-$db_table["image"]["col"][] = "has_1280";
+//$db_table["image"]["col"][] = "has_640";
+//$db_table["image"]["col"][] = "has_1280";
 $db_table["image"]["col"][] = "hash";
 $db_table["image"]["col"][] = "original_width";
 $db_table["image"]["col"][] = "original_height";
 $db_table["image"]["col"][] = "original_url";
 $db_table["image"]["col"][] = "parent_url";
 $db_table["image"]["col"][] = "server";
-$db_table["image"]["col"][] = "size";
+//$db_table["image"]["col"][] = "size";
 $db_table["image"]["col"][] = "time";
 $db_table["image"]["col"][] = "zid";
 
-$db_table["link"]["key"] = "link_id";
-$db_table["link"]["col"][] = "link_id";
-$db_table["link"]["col"][] = "image_id";
-$db_table["link"]["col"][] = "subject";
-$db_table["link"]["col"][] = "time";
-$db_table["link"]["col"][] = "url";
+//$db_table["link"]["key"] = "link_id";
+//$db_table["link"]["col"][] = "link_id";
+//$db_table["link"]["col"][] = "image_id";
+//$db_table["link"]["col"][] = "subject";
+//$db_table["link"]["col"][] = "time";
+//$db_table["link"]["col"][] = "url";
 
 $db_table["mail"]["key"] = "mail_id";
 $db_table["mail"]["col"][] = "mail_id";
@@ -173,6 +178,21 @@ $db_table["page"]["key"] = "slug";
 $db_table["page"]["col"][] = "slug";
 $db_table["page"]["col"][] = "title";
 $db_table["page"]["col"][] = "body";
+
+$db_table["photo"]["key"] = "photo_id";
+$db_table["photo"]["col"][] = "photo_id";
+$db_table["photo"]["col"][] = "aspect_width";
+$db_table["photo"]["col"][] = "aspect_height";
+$db_table["photo"]["col"][] = "has_medium";
+$db_table["photo"]["col"][] = "has_large";
+$db_table["photo"]["col"][] = "hash";
+$db_table["photo"]["col"][] = "original_name";
+$db_table["photo"]["col"][] = "original_width";
+$db_table["photo"]["col"][] = "original_height";
+$db_table["photo"]["col"][] = "server";
+$db_table["photo"]["col"][] = "size";
+$db_table["photo"]["col"][] = "time";
+$db_table["photo"]["col"][] = "zid";
 
 $db_table["pipe"]["key"] = "pid";
 $db_table["pipe"]["col"][] = "pid";
@@ -259,12 +279,14 @@ $db_table["tag"]["col"][] = "tag";
 
 $db_table["tmp_image"]["key"] = "tmp_image_id";
 $db_table["tmp_image"]["col"][] = "tmp_image_id";
-$db_table["tmp_image"]["col"][] = "original_url";
+$db_table["tmp_image"]["col"][] = "hash";
 $db_table["tmp_image"]["col"][] = "original_width";
 $db_table["tmp_image"]["col"][] = "original_height";
+$db_table["tmp_image"]["col"][] = "original_url";
 $db_table["tmp_image"]["col"][] = "parent_url";
 $db_table["tmp_image"]["col"][] = "server";
 $db_table["tmp_image"]["col"][] = "time";
+$db_table["tmp_image"]["col"][] = "zid";
 
 $db_table["topic"]["key"] = "tid";
 $db_table["topic"]["col"][] = "tid";
@@ -310,6 +332,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	}
 	writeln('<title>' . $title . '</title>');
 	writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">');
+	writeln('<meta name="viewport" content="width=device-width, initial-scale=1">');
 	$theme = $server_conf["theme"];
 	writeln('<link rel="stylesheet" href="/theme/' . $theme . '/style.css?t=' . fs_time("$doc_root/theme/$theme/style.css") . '" type="text/css"/>');
 	if ($request_script == "/") {
@@ -326,11 +349,11 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	writeln('<header>');
 	writeln('<table class="title">');
 	writeln('	<tr>');
-	if ($user_page == "") {
-		writeln('		<td><a href="/"><img alt="' . $server_title . '" class="logo_large" src="/images/logo-top.png"/><img alt="' . $server_title . '" class="logo_small" src="/images/logo-64.png"/></a></td>');
-	} else {
-		writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><img alt="' . $server_title . '" src="/images/logo-top.png"/></a></td>');
-	}
+	//if ($user_page == "") {
+		writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><img alt="' . $server_title . '" class="logo_large" src="' . $protocol . '://' . $server_name . '/images/logo-top.png"/><img alt="' . $server_title . '" class="logo_small" src="' . $protocol . '://' . $server_name . '/images/logo-64.png"/></a></td>');
+	//} else {
+	//	writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><img alt="' . $server_title . '" src="/images/logo-top.png"/></a></td>');
+	//}
 
 	if ($user_page == "") {
 		if ($auth_zid == "") {
@@ -372,7 +395,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			$icon = "tools";
 			$link = "/menu/";
 		} else if ($name == "Sign Up") {
-			$icon = "contact-new";
+			$icon = "contact_new";
 			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/sign_up";
 		} else if ($name == "Sign In") {
 			$icon = "users";
@@ -389,7 +412,8 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			$link = $link_url[$i];
 		}
 
-		writeln("			<a href=\"$link\" class=\"icon_16\" style=\"background-image: url('/images/$icon-16.png')\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
+		//writeln("			<a href=\"$link\" class=\"icon_16\" style=\"background-image: url('/images/$icon-16.png')\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
+		writeln("			<a href=\"$link\" class=\"icon_{$icon}_16\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
 	}
 	writeln("		</td>");
 
@@ -757,33 +781,8 @@ function profile_picture($zid, $size)
 }
 
 
-/*function profile_picture($zid, $size = 128)
+function public_path($time)
 {
-	global $protocol;
-	global $server_name;
-	global $doc_root;
-
-	list($user, $host) = explode("@", $zid);
-	$size2 = $size * 2;
-
-	return "<img style=\"width: {$size}px\" src=\"$protocol://$server_name/pub/profile/$host/$user-256.jpg?" . fs_time("$doc_root/pub/profile/$host/$user-$size2.jpg") . "\"/>";
-}*/
-
-
-function public_path($time) //$id, $type)
-{
-//	$i = $id;
-//	$path = "/pub";
-//
-//	while ($i > 1000) {
-//		$m = string_pad($i % 1000, 3);
-//		$i = floor($i / 1000);
-//		$path .= "/$m";
-//	}
-//
-//	$path .= "/$type$i";
-//	return $path;
-
 	return "/pub/" . gmdate("Y", $time) . "/" . gmdate("m", $time) . "/" . gmdate("d", $time);
 }
 

@@ -29,7 +29,8 @@ if ($auth_zid == "") {
 
 beg_main("stream");
 
-$row = run_sql("select card_id from card inner join article on card.article_id = article.article_id order by time desc");
+//$row = run_sql("select card_id from card inner join article on card.article_id = article.article_id order by time desc");
+$row = run_sql("select card_id from card order by time desc");
 
 for ($i = 0; $i < count($row); $i++) {
 	print_card($row[$i]["card_id"]);

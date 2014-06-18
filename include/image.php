@@ -182,6 +182,7 @@ function download_image($doc_url, $img_url)
 {
 	global $server_name;
 	global $doc_root;
+	global $auth_zid;
 
 	//print "download image - img_url [$img_url]\n";
 	if (db_has_rec("tmp_image", array("original_url" => $img_url))) {
@@ -189,32 +190,36 @@ function download_image($doc_url, $img_url)
 		return $tmp_image["tmp_image_id"];
 	}
 
-	//print "before slurp\n";
 	$data = http_slurp($img_url);
-	//print "after slurp - len [" . strlen($data) . "]\n";
-	$src_img = @imagecreatefromstring($data);
-	//print "after gd\n";
-	if ($src_img === false) {
-		//print "bad image [$img_url]";
-		//die();
+	$orig_img = @imagecreatefromstring($data);
+	if ($orig_img === false) {
 		return 0;
 	}
-	$width = imagesx($src_img);
-	$height = imagesy($src_img);
-	//print "width [$width] height [$height]\n";
-	if ($width < 320 || $height < 180) {
+	$hash = crypt_sha256($data);
+	$data = "";
+	$width = imagesx($orig_img);
+	$height = imagesy($orig_img);
+	if ($width < 256 || $height < 256) {
 		return 0;
 	}
-	//print "here\n";
+
+	// set background of transparent images to white instead of black
+	$src_img = imagecreatetruecolor($width, $height);
+	$white = imagecolorallocate($src_img, 255, 255, 255);
+	imagefilledrectangle($src_img, 0, 0, $width, $height, $white);
+	imagecopy($src_img, $orig_img, 0, 0, 0, 0, $width, $height);
+	imagedestroy($orig_img);
 
 	$tmp_image = array();
 	$tmp_image["tmp_image_id"] = 0;
+	$tmp_image["hash"] = $hash;
 	$tmp_image["original_url"] = $img_url;
 	$tmp_image["original_width"] = $width;
 	$tmp_image["original_height"] = $height;
 	$tmp_image["parent_url"] = $doc_url;
 	$tmp_image["server"] = gethostname() . ".$server_name";
 	$tmp_image["time"] = time();
+	$tmp_image["zid"] = $auth_zid;
 	db_set_rec("tmp_image", $tmp_image);
 	$tmp_image = db_get_rec("tmp_image", array("original_url" => $img_url));
 
@@ -228,11 +233,15 @@ function download_image($doc_url, $img_url)
 	if (!is_dir($path)) {
 		mkdir($path, 0755, true);
 	}
-	$ext = fs_ext($img_url);
-	fs_slap("$path/t$id.$ext", $data);
+	//$ext = fs_ext($img_url);
+	//fs_slap("$path/t$id.$ext", $data);
 
 	$tmp_img = resize_image($src_img, 128, 128);
-	imagejpeg($tmp_img, "$path/t$id.128x128.jpg", 80);
+	imagejpeg($tmp_img, "$path/t$id.128x128.jpg");
+	imagedestroy($tmp_img);
+
+	$tmp_img = resize_image($src_img, 256, 256);
+	imagejpeg($tmp_img, "$path/t$id.256x256.jpg");
 	imagedestroy($tmp_img);
 
 	return $id;
@@ -245,115 +254,161 @@ function promote_image($tmp_image_id)
 
 	$tmp_image = db_get_rec("tmp_image", $tmp_image_id);
 	$path = public_path($tmp_image["time"]);
-	$ext = fs_ext($tmp_image["original_url"]);
+	//$ext = fs_ext($tmp_image["original_url"]);
 
-	$file = "$doc_root$path/t$tmp_image_id.$ext";
-	//die("file [$file]");
-	$data = fs_slurp($file);
-	$hash = crypt_sha256($data);
-	//print "file name [$file] len [" . strlen($data) . "]\n";
-	$src_img = imagecreatefromstring($data);
-//	if ($ext == "jpg") {
-//		$src_img = imagecreatefromjpeg($file);
-//	} else {
-//		$src_img = imagecreatefrompng($file);
-//	}
-	if ($src_img === false) {
-		die("unable to open [$file]");
-	}
+	//$file = "$doc_root$path/t$tmp_image_id.$ext";
+	//$data = fs_slurp($file);
+	//$hash = crypt_sha256($data);
+	//$src_img = imagecreatefromstring($data);
+	//if ($src_img === false) {
+	//	die("unable to open [$file]");
+	//}
 
-	return create_image($src_img, $tmp_image, $hash);
+	//return create_image($src_img, $tmp_image, $hash);
+
+	$image = array();
+	$image["image_id"] = 0;
+	$image["hash"] = $tmp_image["hash"];
+	$image["original_width"] = $tmp_image["original_width"];
+	$image["original_height"] = $tmp_image["original_height"];
+	$image["original_url"] = $tmp_image["original_url"];
+	$image["parent_url"] = $tmp_image["parent_url"];
+	$image["server"] = $tmp_image["server"];
+	$image["time"] = $tmp_image["time"];
+	$image["zid"] = $tmp_image["zid"];
+	db_set_rec("image", $image);
+
+	$image = db_get_rec("image", array("zid" => $tmp_image["zid"], "time" => $tmp_image["time"]));
+	$image_id = $image["image_id"];
+
+	fs_rename("$doc_root$path/t$tmp_image_id.128x128.jpg", "$doc_root$path/i$image_id.128x128.jpg");
+	fs_rename("$doc_root$path/t$tmp_image_id.256x256.jpg", "$doc_root$path/i$image_id.256x256.jpg");
+
+	db_del_rec("tmp_image", $tmp_image_id);
+
+	return $image_id;
 }
 
-
+/*
 function create_image($src_img, $tmp_image, $hash)
 {
 	global $doc_root;
 	global $server_name;
 	global $auth_zid;
 
-	if (is_string($tmp_image)) {
-		$original_url = $tmp_image;
-		$parent_url = "";
-		$time = time();
-		$server = gethostname() . ".$server_name";
-	} else {
-		$original_url = $tmp_image["original_url"];
-		$parent_url = $tmp_image["parent_url"];
-		$time = $tmp_image["time"];
-		$server = $tmp_image["server"];
-	}
+	$original_width = imagesx($src_img);
+	$original_height = imagesy($src_img);
+	$original_url = $tmp_image["original_url"];
+	$parent_url = $tmp_image["parent_url"];
+	$time = $tmp_image["time"];
+	$server = $tmp_image["server"];
 	$path = public_path($time);
 
+	if ($original_width < 256 || $original_height < 256) {
+		die("image must be at least 256 x 256");
+	}
+
+	$res = array();
+	$res[] = array(128, 128, 1, 1);
+	$res[] = array(256, 256, 1, 1);
+
+	$image = array();
+	$image["image_id"] = 0;
+	$image["hash"] = $hash;
+	$image["original_width"] = $original_width;
+	$image["original_height"] = $original_height;
+	$image["original_url"] = $original_url;
+	$image["parent_url"] = $parent_url;
+	$image["server"] = $server;
+	$image["time"] = $time;
+	$image["zid"] = $auth_zid;
+	db_set_rec("image", $image);
+	$image = db_get_rec("image", array("zid" => $zid, "time" => $time));
+	$image_id = $image["image_id"];
+
+	for ($i = 0; $i < count($res); $i++) {
+		$w = $res[$i][0];
+		$h = $res[$i][1];
+		$aw = $res[$i][2];
+		$ah = $res[$i][3];
+
+		$tmp_img = resize_image($src_img, $w, $h);
+		$file = "$doc_root$path/i$image_id.$w" . "x" . "$h.jpg";
+		if (fs_is_file($file)) {
+			fs_unlink($file);
+		}
+		imagejpeg($tmp_img, $file);
+		imagedestroy($tmp_img);
+	}
+
+	return $image_id;
+}
+*/
+
+function create_photo($src_img, $original_name, $hash)
+{
+	global $doc_root;
+	global $server_name;
+	global $auth_zid;
+
+	$time = time();
+	$path = public_path($time);
 	$original_width = imagesx($src_img);
 	$original_height = imagesy($src_img);
 
+	if ($original_width < 320 || $original_height < 180) {
+		die("photo must be at least 320 x 180");
+	}
+
 	$res = array();
-	//$res[] = array(64, 64, 1, 1);
 	$res[] = array(128, 128, 1, 1);
 	$res[] = array(256, 256, 1, 1);
-	$res[] = array(160, 90, 16, 9);
-	$res[] = array(160, 120, 4, 3);
-	$res[] = array(160, 160, 1, 1);
-	$res[] = array(320, 180, 16, 9);
-	$res[] = array(320, 240, 4, 3);
+
 	$res[] = array(320, 320, 1, 1);
-	$res[] = array(640, 360, 16, 9);
-	$res[] = array(640, 480, 4, 3);
 	$res[] = array(640, 640, 1, 1);
-	$res[] = array(1280, 720, 16, 9);
-	$res[] = array(1280, 960, 4, 3);
-	$res[] = array(1280, 1280, 1, 1);
+	$res[] = array(1080, 1080, 1, 1);
 
-	$aspect = $original_width / $original_height;
-	//print "aspect [$aspect]\n";
-	if ($aspect < 1.2) {
-		$aspect_width = 1;
-		$aspect_height = 1;
-	} else if ($aspect < 1.5) {
-		$aspect_width = 4;
-		$aspect_height = 3;
-	} else {
-		$aspect_width = 16;
-		$aspect_height = 9;
-	}
-	//print "aspect class [$aspect_width:$aspect_height]\n";
+	$res[] = array(320, 240, 4, 3);
+	$res[] = array(640, 480, 4, 3);
+	$res[] = array(1440, 1080, 4, 3);
 
-	if (db_has_rec("image", array("original_url" => $original_url, "time" => $time))) {
-		$image = db_get_rec("image", array("original_url" => $original_url, "time" => $time));
-	} else {
-		$image = array();
-		$image["image_id"] = 0;
-		$image["aspect_height"] = $aspect_height;
-		$image["aspect_width"] = $aspect_width;
-		for ($i = 0; $i < count($res); $i++) {
-			$w = $res[$i][0];
-			$h = $res[$i][1];
-			$aw = $res[$i][2];
-			$ah = $res[$i][3];
-			//if ($w > 128) {
-			//	if ($aw == $aspect_width && $ah == $aspect_height) {
-			//		$image["has_" . $w . "x" . $h] = 1;
-			//	} else {
-			//		$image["has_" . $w . "x" . $h] = 0;
-			//	}
-			//}
-		}
-		$image["hash"] = $hash;
-		$image["original_width"] = $original_width;
-		$image["original_height"] = $original_height;
-		$image["original_url"] = $original_url;
-		$image["parent_url"] = $parent_url;
-		$image["server"] = $server;
-		$image["size"] = 0;
-		$image["time"] = $time;
-		$image["has_640"] = 0;
-		$image["has_1280"] = 0;
-		$image["zid"] = $auth_zid;
-		db_set_rec("image", $image);
-		$image = db_get_rec("image", array("original_url" => $original_url, "time" => $time));
+	$res[] = array(320, 180, 16, 9);
+	$res[] = array(640, 360, 16, 9);
+	$res[] = array(1920, 1080, 16, 9);
+
+	$res[] = array(320, 427, 3, 4);
+	$res[] = array(640, 853, 3, 4);
+	$res[] = array(1080, 1440, 3, 4);
+
+	$res[] = array(320, 569, 9, 16);
+	$res[] = array(640, 1138, 9, 16);
+	$res[] = array(1080, 1920, 9, 16);
+
+	list($aspect_width, $aspect_height) = find_aspect($original_width, $original_height);
+
+	$photo = array();
+	$photo["photo_id"] = 0;
+	$photo["aspect_height"] = $aspect_height;
+	$photo["aspect_width"] = $aspect_width;
+	$photo["hash"] = $hash;
+	$photo["original_width"] = $original_width;
+	$photo["original_height"] = $original_height;
+	$photo["original_name"] = $original_name;
+	$photo["server"] = gethostname() . ".$server_name";
+	$photo["size"] = 0;
+	$photo["time"] = $time;
+	$photo["has_medium"] = 0;
+	$photo["has_large"] = 0;
+	$photo["zid"] = $auth_zid;
+	db_set_rec("photo", $photo);
+	$photo = db_get_rec("photo", array("zid" => $auth_zid, "time" => $time));
+	$photo_id = $photo["photo_id"];
+	//var_dump($photo);
+	//die();
+
+	if (!is_dir("$doc_root$path")) {
+		mkdir("$doc_root$path", 0755, true);
 	}
-	$image_id = $image["image_id"];
 
 	$size = 0;
 	for ($i = 0; $i < count($res); $i++) {
@@ -362,33 +417,53 @@ function create_image($src_img, $tmp_image, $hash)
 		$aw = $res[$i][2];
 		$ah = $res[$i][3];
 		if ($original_width >= $w && $original_height >= $h && ($w <= 256 || ($aw == $aspect_width && $ah == $aspect_height))) {
-			//if ($w > 128) {
-			//	$image["has_$w" . "x" . $h] = 1;
-			//}
 			if ($w == 640) {
-				$image["has_640"] = 1;
+				$photo["has_medium"] = 1;
 			}
-			if ($w == 1280) {
-				$image["has_1280"] = 1;
+			if ($w > 640) {
+				$photo["has_large"] = 1;
 			}
 			$tmp_img = resize_image($src_img, $w, $h);
-			$file = "$doc_root/$path/i$image_id.$w" . "x" . "$h.jpg";
-			if (is_file($file)) {
-				unlink($file);
+			$file = "$doc_root$path/p$photo_id.$w" . "x" . "$h.jpg";
+			if (fs_is_file($file)) {
+				fs_unlink($file);
 			}
-			//imagejpeg($tmp_img, $file, 80);
 			imagejpeg($tmp_img, $file);
-			//$file = "$doc_root/$path/i$image_id.$w" . "x" . "$h.png";
-			//imagepng($tmp_img, $file);
 			imagedestroy($tmp_img);
 			$size += fs_size($file);
 		}
 	}
 
-	$image["size"] = $size;
-	db_set_rec("image", $image);
+	$photo["size"] = $size;
+	db_set_rec("photo", $photo);
+	//die("here");
 
-	return $image_id;
+	return $photo_id;
+}
+
+
+function find_aspect($original_width, $original_height)
+{
+	$aspect = $original_width / $original_height;
+
+	if ($aspect < 0.65) {
+		$aspect_width = 9;
+		$aspect_height = 16;
+	} else if ($aspect < 0.85) {
+		$aspect_width = 3;
+		$aspect_height = 4;
+	} else if ($aspect < 1.15) {
+		$aspect_width = 1;
+		$aspect_height = 1;
+	} else if ($aspect < 1.55) {
+		$aspect_width = 4;
+		$aspect_height = 3;
+	} else {
+		$aspect_width = 16;
+		$aspect_height = 9;
+	}
+
+	return array($aspect_width, $aspect_height);
 }
 
 
@@ -401,14 +476,14 @@ function clean_tmp_images()
 		$tmp_image_id = $row[$i]["tmp_image_id"];
 		$time = $row[$i]["time"];
 		$path = public_path($time);
-		$ext = fs_ext($row[$i]["original_url"]);
+		//$ext = fs_ext($row[$i]["original_url"]);
 
 		//print "id [" . $row[$i]["tmp_image_id"] . "]\n";
 		//print "unlink [" . $path . "/t$tmp_image_id.128x128.jpg" . "]\n";
 		//print "unlink [" . $path . "/t$tmp_image_id.$ext" . "]\n";
 
-		fs_unlink("$doc_root/$path/t$tmp_image_id.128x128.jpg");
-		fs_unlink("$doc_root/$path/t$tmp_image_id.$ext");
+		fs_unlink("$doc_root$path/t$tmp_image_id.128x128.jpg");
+		fs_unlink("$doc_root$path/t$tmp_image_id.256x256.jpg");
 
 		db_del_rec("tmp_image", $tmp_image_id);
 	}

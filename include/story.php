@@ -19,11 +19,10 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_story($sid, $ipos = "right")
+function print_story($sid)
 {
 	global $server_name;
 	global $auth_user;
-	global $story_image_enabled;
 
 	$story = db_get_rec("story", $sid);
 	$pipe = db_get_rec("pipe", $story["pid"]);
@@ -32,14 +31,12 @@ function print_story($sid, $ipos = "right")
 	$a["story"] = $story["story"];
 	$a["time"] = $story["time"];
 	$a["sid"] = $sid;
-	$a["ipos"] = $ipos;
 	$a["topic"] = $topic["topic"];
 	$a["icon"] = $story["icon"];
 	$a["image_id"] = $story["image_id"];
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["title"] = $story["title"];
 	$a["pid"] = $story["pid"];
-	$a["ipos"] = $ipos;
 	$a["zid"] = $pipe["zid"];
 
 	if ($sid > 0) {
@@ -47,10 +44,6 @@ function print_story($sid, $ipos = "right")
 		$a["comments"] = $row[0]["comments"];
 	} else {
 		$a["comments"] = 0;
-	}
-
-	if ($story_image_enabled && $story["image_id"] == 0 && $ipos == "right") {
-		writeln('<img alt="Story" class="story_image" src="/images/logo-256.png"/>');
 	}
 
 	print_article($a);
@@ -68,11 +61,6 @@ function print_article($a)
 		$time = $a["time"];
 	} else {
 		$time = time();
-	}
-	if (array_key_exists("ipos", $a)) {
-		$ipos = $a["ipos"];
-	} else {
-		$ipos = "right";
 	}
 	$zid = $a["zid"];
 	if ($zid == "") {
@@ -137,65 +125,11 @@ function print_article($a)
 			$image_path = "";
 		} else {
 			$image = db_get_rec("image", $image_id);
-			if ($image["aspect_width"] == 1 && $image["aspect_height"] == 1) {
-				if ($image_style == 3) {
-					$size = "160x160";
-					$width = "160";
-				} else if ($image_style == 4) {
-					$size = "320x320";
-					$width = "160";
-				} else if ($image_style == 5) {
-					$size = "320x320";
-					$width = "320";
-				} else if ($image_style == 6) {
-					if ($image["has_640"]) {
-						$size = "640x640";
-						$width = "320";
-					} else {
-						$size = "320x320";
-						$width = "320";
-					}
-				}
-			} else if ($image["aspect_width"] == 4 && $image["aspect_height"] == 3) {
-				if ($image_style == 3) {
-					$size = "160x120";
-					$width = "160";
-				} else if ($image_style == 4) {
-					$size = "320x240";
-					$width = "160";
-				} else if ($image_style == 5) {
-					$size = "320x240";
-					$width = "320";
-				} else if ($image_style == 6) {
-					if ($image["has_640"]) {
-						$size = "640x480";
-						$width = "320";
-					} else {
-						$size = "320x240";
-						$width = "320";
-					}
-				}
-			} else if ($image["aspect_width"] == 16 && $image["aspect_height"] == 9) {
-				if ($image_style == 3) {
-					$size = "160x90";
-					$width = "160";
-				} else if ($image_style == 4) {
-					$size = "320x180";
-					$width = "160";
-				} else if ($image_style == 5) {
-					$size = "320x180";
-					$width = "320";
-				} else if ($image_style == 6) {
-					if ($image["has_640"]) {
-						$size = "640x360";
-						$width = "320";
-					} else {
-						$size = "320x180";
-						$width = "320";
-					}
-				}
+			// XXX: if (high res mode) {
+			if (true) {
+				$size = "256x256";
 			} else {
-				die("unknown aspect ratio");
+				$size = "128x128";
 			}
 			$image_url = $image["parent_url"];
 			$image_path = public_path($image["time"]) . "/i$image_id.$size.jpg";
@@ -203,15 +137,14 @@ function print_article($a)
 	}
 
 	writeln("<article class=\"story\">");
-	//writeln("	<h1><a href=\"/story/$day/$ctitle\">$title</a><img alt=\"$topic\" class=\"story_icon_$ipos\" src=\"/images/$icon-64.png\"/></h1>");
 	writeln("	<h1><a href=\"/story/$day/$ctitle\">$title</a></h1>");
 	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic\"><b>$topic</b></a> on $date (<a href=\"/pipe/$pid\">#$pid</a>)</h2>");
 
 	if ($image_path != "") {
 		if ($image_url != "") {
-			writeln("	<div><a href=\"$image_url\"><img alt=\"thumbnail\" style=\"float: right; margin-left: 8px; margin-bottom: 8px; width: $width" . "px\" src=\"$image_path\"/></a>$story</div>");
+			writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story_image_128\" src=\"$image_path\"/></a>$story</div>");
 		} else {
-			writeln("	<div><img alt=\"thumbnail\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;\" src=\"$image_path\"/>$story</div>");
+			writeln("	<div><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\"/>$story</div>");
 		}
 	} else {
 		writeln("	<div>$story</div>");
@@ -225,13 +158,13 @@ function print_article($a)
 			writeln("				<td class=\"right\">");
 			if ($tweet_id == 0) {
 				if (is_file("$doc_root/images/tweet-16.png")) {
-					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_16\" style=\"background-image: url('/images/tweet-16.png')\">Tweet</a> | ");
+					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_tweet_16\">Tweet</a> | ");
 				} else {
-					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_16\" style=\"background-image: url('/images/music-16.png')\">Tweet</a> | ");
+					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_music_16\">Tweet</a> | ");
 				}
 			}
-			writeln("					<a href=\"/story/$sid/image\" class=\"icon_16\" style=\"background-image: url('/images/picture-16.png')\">Image</a> | ");
-			writeln("					<a href=\"/story/$sid/edit\" class=\"icon_16\" style=\"background-image: url('/images/notepad-16.png')\">Edit</a>");
+			writeln("					<a href=\"/story/$sid/image\" class=\"icon_picture_16\">Image</a> | ");
+			writeln("					<a href=\"/story/$sid/edit\" class=\"icon_notepad_16\">Edit</a>");
 			writeln("				</td>");
 		}
 	} else if ($pid > 0) {
