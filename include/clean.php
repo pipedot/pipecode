@@ -20,11 +20,13 @@
 //
 
 function mb_ord($u) {
-	$k = mb_convert_encoding($u, 'UCS-2LE', 'UTF-8');
+	$k = mb_convert_encoding($u, 'UCS-4LE', 'UTF-8');
 	$k1 = ord(substr($k, 0, 1));
 	$k2 = ord(substr($k, 1, 1));
+	$k3 = ord(substr($k, 2, 1));
+	$k4 = ord(substr($k, 3, 1));
 
-	return $k2 * 256 + $k1;
+	return $k4 * 16777216 + $k3 * 65536 + $k2 * 256 + $k1;
 }
 
 
@@ -33,7 +35,7 @@ function clean_character($c)
 	$n = mb_ord($c);
 
 	// Basic Latin
-	if ($n >= 21 && $n <= 126) {
+	if ($n >= 33 && $n <= 126) {
 		return true;
 	}
 
@@ -347,7 +349,7 @@ function clean_newlines($tag, $text)
 
 function make_clickable($text)
 {
-	$text = preg_replace("/(?<!a href=\")(?<!src=\")((http|ftp)+(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\">\\0</a>", $text);
+	$text = preg_replace("/(?<!a href=\")(?<!src=\")((http|ftp)(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\">\\0</a>", $text);
 	$text = preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $text);
 
 	return $text;

@@ -248,8 +248,11 @@ function crypt_base64_encode($src)
 
 function crypt_binary_decode($binary)
 {
-	$s = "";
+	if (strlen($binary) % 8 != 0) {
+		return "";
+	}
 
+	$s = "";
 	for ($i = 0; $i < strlen($binary); $i += 8) {
 		$n = substr($binary, $i + 7, 1);
 		$n = $n + substr($binary, $i + 6, 1) * 2;
@@ -321,9 +324,9 @@ function crypt_crc32_file($path)
 
 function crypt_escape($src)
 {
-	$s = str_replace("\r", "\\r", $src);
+	$s = str_replace("\\", "\\\\", $src);
+	$s = str_replace("\r", "\\r", $s);
 	$s = str_replace("\n", "\\n", $s);
-	$s = str_replace("\\", "\\\\", $s);
 	$s = str_replace(":", "\\:", $s);
 
 	return $s;
