@@ -32,6 +32,8 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removePlugins = 'elementspath';
 	config.language = 'en';
 	config.entities = false;
+	config.coreStyles_bold = { element: 'b', overrides: 'strong' };
+	config.coreStyles_italic = { element: 'i', overrides: 'em' };
 };
 
 CKEDITOR.on('dialogDefinition', function(ev)

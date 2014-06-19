@@ -36,7 +36,7 @@ $zid = $pipe["zid"];
 
 if (http_post()) {
 	$title = clean_subject();
-	list($clean_body, $dirty_body) = clean_body();
+	list($clean_body, $dirty_body) = clean_body(true, "story");
 	$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
 	$tid = http_post_int("tid");
 	$time = time();
@@ -119,7 +119,7 @@ print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $
 print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 end_tab();
 
-writeln('<table class="fill">');
+writeln('<table class="fill" style="margin-bottom: 8px">');
 writeln('	<tr>');
 writeln('		<td><a href="/icons">Icons</a></td>');
 writeln('		<td style="text-align: right"><input name="publish" type="submit" value="Publish"/> <input name="preview" type="submit" value="Preview"/></td>');

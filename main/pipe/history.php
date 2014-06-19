@@ -20,7 +20,7 @@
 //
 
 print_header("Pipe History");
-
+beg_main();
 writeln("<h1>Pipe History</h1>");
 
 $row = run_sql("select pipe.pid, pipe.time, pipe.title, zid, editor, closed, reason, sid from pipe left join story on pipe.pid = story.pid order by pid desc");
@@ -61,4 +61,5 @@ for ($i = 0; $i < count($row); $i++) {
 }
 end_tab();
 
+end_main();
 print_footer();

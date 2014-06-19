@@ -19,6 +19,9 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+include("$top_root/lib/htmlpurifier/HTMLPurifier.standalone.php");
+
+
 function mb_ord($u) {
 	$k = mb_convert_encoding($u, 'UCS-4LE', 'UTF-8');
 	$k1 = ord(substr($k, 0, 1));
@@ -35,7 +38,7 @@ function clean_character($c)
 	$n = mb_ord($c);
 
 	// Basic Latin
-	if ($n >= 33 && $n <= 126) {
+	if ($n >= 32 && $n <= 126) {
 		return true;
 	}
 
@@ -185,6 +188,7 @@ function clean_unicode($dirty)
 }
 
 
+/*
 function clean_tag($tag)
 {
 	$clean = "";
@@ -316,18 +320,89 @@ function clean_html($html)
 }
 
 
+function make_clickable($text)
+{
+	$text = preg_replace("/(?<!a href=\")(?<!src=\")((http|ftp)(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\">\\0</a>", $text);
+	$text = preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $text);
+
+	return $text;
+}
+*/
+
+
+function clean_html($dirty, $definition = "comment")
+{
+	global $server_name;
+
+	$dirty = clean_unicode($dirty);
+	$dirty = str_replace("&nbsp;", " ", $dirty);
+
+	$config = HTMLPurifier_Config::createDefault();
+	$config->set('HTML.DefinitionID', $definition);
+	$config->set('HTML.DefinitionRev', 1);
+	$config->set('Cache.DefinitionImpl', null); // TODO: remove this later!
+	if ($definition == "page") {
+		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,q,blockquote,pre,ul,ol,li,p,table,tr,td,img');
+	} else {
+		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,q,blockquote,pre,ul,ol,li');
+	}
+	if ($definition != "story") {
+		$config->set('HTML.Nofollow', true);
+	}
+	$config->set('Output.SortAttr', true);
+	$config->set('AutoFormat.Linkify', true);
+
+	// FIXME: this should match subdomains, but doesn't seem to work
+	// Ideally, subdomains of $server_name wouldn't get nofollow links
+	$config->set('URI.Host', $server_name);
+	//$config->set('URI.Base', $server_name);
+	//$config->set('URI.MakeAbsolute', true);
+
+	$purifier = new HTMLPurifier($config);
+	$clean = $purifier->purify($dirty);
+
+	$clean = str_replace("<br />", "<br/>", $clean);
+	$clean = clean_newlines("pre", $clean);
+	$clean = clean_newlines("ol", $clean);
+	$clean = clean_newlines("ul", $clean);
+	$clean = clean_newlines("li", $clean);
+	$clean = clean_newlines("blockquote", $clean);
+
+	$clean = clean_spaces("b", $clean);
+	$clean = clean_spaces("i", $clean);
+	$clean = clean_spaces("u", $clean);
+	$clean = clean_spaces("s", $clean);
+	$clean = clean_spaces("q", $clean);
+	$clean = clean_spaces("p", $clean);
+	$clean = clean_spaces("li", $clean);
+	$clean = clean_spaces("td", $clean);
+	$clean = clean_spaces("blockquote", $clean);
+
+	$clean = str_replace("<li></li>", "", $clean);
+	$clean = clean_entities($clean);
+	$clean = string_replace_all("  ", " ", $clean);
+	$clean = trim($clean);
+
+	return $clean;
+}
+
+
 function dirty_html($clean)
 {
 	$dirty = str_replace("<br/>", "\n", $clean);
 	$dirty = str_replace("<blockquote>", "\n<blockquote>", $dirty);
 	$dirty = str_replace("</blockquote>", "</blockquote>\n", $dirty);
 	$dirty = str_replace("<ol>", "\n<ol>", $dirty);
-	$dirty = str_replace("</ol>", "\n</ol>", $dirty);
+	$dirty = str_replace("</ol>", "\n</ol>\n", $dirty);
 	$dirty = str_replace("<ul>", "\n<ul>", $dirty);
-	$dirty = str_replace("</ul>", "\n</ul>", $dirty);
+	$dirty = str_replace("</ul>", "\n</ul>\n", $dirty);
 	$dirty = str_replace("<li>", "\n<li>", $dirty);
 	$dirty = str_replace("&lt;", "&amp;lt;", $dirty);
 	$dirty = str_replace("&gt;", "&amp;gt;", $dirty);
+
+	$dirty = str_replace("</blockquote>\n\n", "</blockquote>\n", $dirty);
+	$dirty = str_replace("</ol>\n\n", "</ol>\n", $dirty);
+	$dirty = str_replace("</ul>\n\n", "</ul>\n", $dirty);
 
 	return $dirty;
 }
@@ -347,10 +422,13 @@ function clean_newlines($tag, $text)
 }
 
 
-function make_clickable($text)
+function clean_spaces($tag, $text)
 {
-	$text = preg_replace("/(?<!a href=\")(?<!src=\")((http|ftp)(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\">\\0</a>", $text);
-	$text = preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $text);
+	$beg_tag = "<$tag>";
+	$end_tag = "</$tag>";
+
+	$text = string_replace_all("$beg_tag ", $beg_tag, $text);
+	$text = string_replace_all(" $end_tag", $end_tag, $text);
 
 	return $text;
 }
@@ -673,7 +751,7 @@ function clean_subject()
 }
 
 
-function clean_body($required = true)
+function clean_body($required = true, $definition = "comment")
 {
 	global $auth_user;
 
@@ -691,11 +769,15 @@ function clean_body($required = true)
 		}
 	}
 
-	$clean_body = str_replace("\n", "<br>", $dirty_body);
-	$clean_body = clean_html($clean_body);
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && array_key_exists("comment", $_POST)) {
+		$clean_body = $dirty_body;
+	} else {
+		$clean_body = str_replace("\n", "<br>", $dirty_body);
+	}
+	$clean_body = clean_html($clean_body, $definition);
 	$dirty_body = dirty_html($clean_body);
 	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && array_key_exists("comment", $_POST)) {
-		$dirty_body = str_replace("\n", "<br/>", $dirty_body);
+		$dirty_body = $clean_body;
 	}
 
 	if (strlen($clean_body) > 64000) {

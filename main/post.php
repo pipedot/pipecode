@@ -29,6 +29,7 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $dirty_body, $coward)
 {
 	global $auth_zid;
 	global $auth_user;
+	global $doc_root;
 
 	beg_form();
 	if ($sid != 0) {
@@ -72,6 +73,7 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $dirty_body, $coward)
 		writeln('<script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>');
 		writeln('<script type="text/javascript">');
 		writeln();
+		writeln('CKEDITOR.timestamp = "' . fs_time("$doc_root/lib/ckeditor/config.js") . '";');
 		writeln('CKEDITOR.replace("comment",');
 		writeln('{');
 		writeln('	resize_enabled: false,');
