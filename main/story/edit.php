@@ -74,7 +74,7 @@ for ($i = 0; $i < count($topics); $i++) {
 }
 
 $icon_list = array();
-$a = fs_dir("$doc_root/images");
+$a = fs_dir("$doc_root/www/images");
 for ($i = 0; $i < count($a); $i++) {
 	if (substr($a[$i], -7) == "-64.png") {
 		$icon_list[] = substr($a[$i], 0, -7);

@@ -19,18 +19,15 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$top_root = substr(dirname(__FILE__), 0, -8);
-$doc_root = "$top_root/www";
-$main_root = "$top_root/main";
-$user_root = "$top_root/user";
+$doc_root = substr(dirname(__FILE__), 0, -8);
 
-set_include_path("$top_root/include");
+set_include_path("$doc_root/include");
 
-include("$top_root/lib/tools/tools.php");
-if (fs_is_file("$top_root/conf.php")) {
-	include("$top_root/conf.php");
+include("$doc_root/lib/tools/tools.php");
+if (fs_is_file("$doc_root/conf.php")) {
+	include("$doc_root/conf.php");
 } else {
-	include("$top_root/setup.php");
+	include("$doc_root/setup.php");
 	die();
 }
 
@@ -265,6 +262,7 @@ $db_table["story"]["col"][] = "time";
 $db_table["story"]["col"][] = "story";
 $db_table["story"]["col"][] = "image_id";
 $db_table["story"]["col"][] = "tweet_id";
+$db_table["story"]["col"][] = "zid";
 
 $db_table["story_history"]["key"][] = "sid";
 $db_table["story_history"]["key"][] = "zid";
@@ -334,13 +332,13 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">');
 	writeln('<meta name="viewport" content="width=device-width, initial-scale=1">');
 	$theme = $server_conf["theme"];
-	writeln('<link rel="stylesheet" href="/theme/' . $theme . '/style.css?t=' . fs_time("$doc_root/theme/$theme/style.css") . '" type="text/css"/>');
+	writeln('<link rel="stylesheet" href="/theme/' . $theme . '/style.css?t=' . fs_time("$doc_root/www/theme/$theme/style.css") . '" type="text/css"/>');
 	if ($request_script == "/") {
 		writeln('<link rel="alternate" href="/atom" type="application/atom+xml" title="Stories">');
 	}
 	if ($auth_user["javascript_enabled"]) {
-		writeln('<script type="text/javascript" src="/lib/jquery/jquery.js?t=' . fs_time("$doc_root/lib/jquery/jquery.js") . '"></script>');
-		writeln('<script type="text/javascript" src="/common.js?t=' . fs_time("$doc_root/common.js") . '"></script>');
+		writeln('<script type="text/javascript" src="/lib/jquery/jquery.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery.js") . '"></script>');
+		writeln('<script type="text/javascript" src="/common.js?t=' . fs_time("$doc_root/www/common.js") . '"></script>');
 	}
 
 	writeln('</head>');
@@ -545,7 +543,7 @@ function end_main($class = "")
 		writeln('</div>');
 		writeln('</main>');
 
-		writeln('<script src="/lib/masonry/masonry.js?' . fs_time("$doc_root/lib/masonry/masonry.js") . '"></script>');
+		writeln('<script src="/lib/masonry/masonry.js?' . fs_time("$doc_root/www/lib/masonry/masonry.js") . '"></script>');
 		writeln('<script>');
 		writeln('var container = document.querySelector("#container");');
 		writeln('var msnry = new Masonry( container, {');
@@ -775,7 +773,7 @@ function profile_picture($zid, $size)
 
 	list($user, $host) = explode("@", $zid);
 	$path = "/pub/profile/$host/$user-$size.jpg";
-	$time = fs_time("$doc_root$path");
+	$time = fs_time("$doc_root/www$path");
 
 	return "$protocol://$server_name$path?$time";
 }

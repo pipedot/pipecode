@@ -34,9 +34,9 @@ if (http_post()) {
 }
 
 $themes = array();
-$a = fs_dir("$doc_root/theme");
+$a = fs_dir("$doc_root/www/theme");
 for ($i = 0; $i < count($a); $i++) {
-	if (is_dir("$doc_root/theme/$a[$i]")) {
+	if (is_dir("$doc_root/www/theme/$a[$i]")) {
 		$themes[] = $a[$i];
 	}
 }

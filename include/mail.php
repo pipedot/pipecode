@@ -19,7 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("$top_root/lib/phpmailer/class.phpmailer.php");
+include("$doc_root/lib/phpmailer/class.phpmailer.php");
 
 
 function send_mail($email, $subject, $body)

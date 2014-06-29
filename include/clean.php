@@ -19,7 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("$top_root/lib/htmlpurifier/HTMLPurifier.standalone.php");
+include("$doc_root/lib/htmlpurifier/HTMLPurifier.standalone.php");
 
 
 function mb_ord($u) {
@@ -188,148 +188,6 @@ function clean_unicode($dirty)
 }
 
 
-/*
-function clean_tag($tag)
-{
-	$clean = "";
-	$tag = trim($tag);
-
-	if (substr($tag, 0, 1) == "/") {
-		$end = true;
-		$tag = substr($tag, 1);
-	} else {
-		$end = false;
-	}
-
-	$type = string_next($tag, " ");
-
-	if ($type == "br") {
-		return "<br/>";
-	}
-	if ($type == "b" || $type == "i" || $type == "u" || $type == "s" || $type == "q" || $type == "strong" || $type == "em") {
-		if ($type == "strong") {
-			$type = "b";
-		} else if ($type == "em") {
-			$type = "i";
-		}
-		if ($end) {
-			return "</$type>FORCEWHITESPACE";
-		} else {
-			return "FORCEWHITESPACE<$type>";
-		}
-	}
-	//if ($type == "p"  || $type == "ol" || $type == "ul" || $type == "li" || $type == "pre") {
-	//if ($type == "pre") {
-	if ($type == "ol" || $type == "ul" || $type == "li" || $type == "pre" || $type == "blockquote") {
-		if ($end) {
-			return "</$type>";
-		} else {
-			return "<$type>";
-		}
-	}
-	if ($type == "a") {
-		if ($end) {
-			if ($type == "a") {
-				return "</a>FORCEWHITESPACE";
-			} else {
-				return "</$type>";
-			}
-		}
-		$tag = str_replace(" ", "", $tag);
-		$tag = str_replace("\"", "\" ", $tag);
-		$tag = str_replace("=\" ", "=\"", $tag);
-		$tag = trim($tag);
-		$map_old = map_from_tag_string($tag);
-		$map_new = array();
-		if ($type == "a") {
-			$map_new["href"] = @$map_old["href"];
-		}
-		if (count($map_new) == 0) {
-			return "<$type>";
-		} else {
-			if ($type == "a") {
-				return "FORCEWHITESPACE<$type " . map_to_tag_string($map_new) . ">";
-			} else {
-				return "<$type " . map_to_tag_string($map_new) . ">";
-			}
-		}
-	}
-
-	return "";
-}
-
-
-function clean_html($html)
-{
-	$clean = "";
-	$pre = 0;
-
-	$html = clean_unicode($html);
-	$html = str_replace("<br />", "<br/>", $html);
-	$html = str_replace("&nbsp;", " ", $html);
-
-	for ($i = 0; $i < mb_strlen($html); $i++) {
-		$c = mb_substr($html, $i, 1);
-		if ($c == "<") {
-			$s = "";
-			for ($i = $i + 1; $i < mb_strlen($html); $i++) {
-				$c = mb_substr($html, $i, 1);
-				if ($c == ">") {
-					break;
-				}
-				$s .= $c;
-			}
-			$tag = clean_tag($s);
-			if ($tag == "<pre>") {
-				$pre++;
-			} else if ($tag == "</pre>") {
-				$pre--;
-			}
-			$clean .= $tag;
-		} else {
-			$clean .= $c;
-		}
-	}
-
-	$clean = str_replace("\t", " ", $clean);
-	$clean = str_replace("\n", " ", $clean);
-	$clean = str_replace("\r", " ", $clean);
-
-	while (string_has($clean, "  ")) {
-		$clean = str_replace("  ", " ", $clean);
-	}
-
-	$clean = str_replace("> ", ">", $clean);
-	$clean = str_replace(" <", "<", $clean);
-	$clean = str_replace("FORCEWHITESPACE", " ", $clean);
-	$clean = trim($clean);
-	$clean = string_replace_all("  ", " ", $clean);
-	$clean = string_replace_all("<br/><br/><br/>", "<br/><br/>", $clean);
-
-	$clean = clean_newlines("pre", $clean);
-	$clean = clean_newlines("ol", $clean);
-	$clean = clean_newlines("ul", $clean);
-	$clean = clean_newlines("li", $clean);
-	$clean = clean_newlines("blockquote", $clean);
-
-	$clean = clean_entities($clean);
-	$clean = make_clickable($clean);
-	$clean = trim($clean);
-
-	return $clean;
-}
-
-
-function make_clickable($text)
-{
-	$text = preg_replace("/(?<!a href=\")(?<!src=\")((http|ftp)(s)?:\/\/[^<>\s]+)/i", "<a href=\"\\0\">\\0</a>", $text);
-	$text = preg_replace( '#(<a([ \r\n\t]+[^>]+?>|>))<a [^>]+?>([^>]+?)</a></a>#i', "$1$3</a>", $text);
-
-	return $text;
-}
-*/
-
-
 function clean_html($dirty, $definition = "comment")
 {
 	global $server_name;
@@ -342,9 +200,9 @@ function clean_html($dirty, $definition = "comment")
 	$config->set('HTML.DefinitionRev', 1);
 	$config->set('Cache.DefinitionImpl', null); // TODO: remove this later!
 	if ($definition == "page") {
-		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,q,blockquote,pre,ul,ol,li,p,table,tr,td,img');
+		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,pre,ul,ol,li,p,table,tr,td,img');
 	} else {
-		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,q,blockquote,pre,ul,ol,li');
+		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,pre,ul,ol,li');
 	}
 	if ($definition != "story") {
 		$config->set('HTML.Nofollow', true);

@@ -896,6 +896,50 @@ textarea {
 	display: block;
 	background-color: #eeeeee;
 }
+.pages {
+	margin-bottom: 8px;
+	text-align: center;
+}
+.pages a {
+	background-color: #ffffff;
+	background-position: center center;
+	background-repeat: no-repeat;
+	border: 1px #d3d3d3 solid;
+	border-radius: 4px;
+	display: inline-block;
+	height: 24px !important;
+	width: 24px;
+	line-height: 22px;
+	padding: 0px;
+	margin: 2px;
+	vertical-align: middle;
+}
+.pages a:hover {
+	background-color: #aebcd4;
+}
+.pages span {
+	border: 1px #d3d3d3 solid;
+	border-radius: 4px;
+	display: inline-block;
+	height: 24px;
+	width: 24px;
+	line-height: 22px;
+	padding: 0px;
+	margin: 2px;
+	vertical-align: middle;
+}
+.pages_first {
+	background-image: url(/images/first-16.png);
+}
+.pages_last {
+	background-image: url(/images/last-16.png);
+}
+.pages_left {
+	background-image: url(/images/left-16.png);
+}
+.pages_right {
+	background-image: url(/images/right-16.png);
+}
 @media all and (max-width: 765px) {
 	.about aside {
 		xdisplay: block;
@@ -1363,5 +1407,21 @@ textarea {
 	.icon_workgroup_32 {
 		background-image: url(/images/workgroup-64.png);
 		background-size: 32px 32px;
+	}
+	.pages_first {
+		background-image: url(/images/first-32.png);
+		background-size: 16px 16px;
+	}
+	.pages_last {
+		background-image: url(/images/last-32.png);
+		background-size: 16px 16px;
+	}
+	.pages_left {
+		background-image: url(/images/left-32.png);
+		background-size: 16px 16px;
+	}
+	.pages_right {
+		background-image: url(/images/right-32.png);
+		background-size: 16px 16px;
 	}
 }

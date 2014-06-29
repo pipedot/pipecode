@@ -19,7 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_once("$top_root/lib/twitteroauth/twitteroauth.php");
+require_once("$doc_root/lib/twitteroauth/twitteroauth.php");
 
 if (!@$auth_user["editor"]) {
 	die("you are not an editor");

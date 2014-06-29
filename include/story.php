@@ -25,7 +25,7 @@ function print_story($sid)
 	global $auth_user;
 
 	$story = db_get_rec("story", $sid);
-	$pipe = db_get_rec("pipe", $story["pid"]);
+	//$pipe = db_get_rec("pipe", $story["pid"]);
 	$topic = db_get_rec("topic", $story["tid"]);
 
 	$a["story"] = $story["story"];
@@ -37,7 +37,7 @@ function print_story($sid)
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["title"] = $story["title"];
 	$a["pid"] = $story["pid"];
-	$a["zid"] = $pipe["zid"];
+	$a["zid"] = $story["zid"];
 
 	if ($sid > 0) {
 		$row = run_sql("select count(cid) as comments from comment where sid = ?", array($sid));
@@ -157,7 +157,7 @@ function print_article($a)
 		if (@$auth_user["editor"]) {
 			writeln("				<td class=\"right\">");
 			if ($tweet_id == 0) {
-				if (is_file("$doc_root/images/tweet-16.png")) {
+				if (is_file("$doc_root/www/images/tweet-16.png")) {
 					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_tweet_16\">Tweet</a> | ");
 				} else {
 					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_music_16\">Tweet</a> | ");

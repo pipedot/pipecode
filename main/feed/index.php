@@ -30,9 +30,9 @@ $zid = "bryan@$server_name";
 print_feed_page($zid);
 
 if ($auth_zid == "") {
-	writeln('<div style="text-align: center">This is a sample feed page. Login to create your own.</div>');
+	writeln('<div style="margin-bottom: 8px; text-align: center">This is a sample feed page. Login to create your own.</div>');
 } else {
-	writeln('<div style="text-align: center">This is a sample feed page. <a href="' . user_page_link($auth_zid) . 'feed/edit">Create</a> your own <a href="' . user_page_link($auth_zid) . '">homepage</a>.</div>');
+	writeln('<div style="margin-bottom: 8px; text-align: center">This is a sample feed page. <a href="' . user_page_link($auth_zid) . 'feed/edit">Create</a> your own <a href="' . user_page_link($auth_zid) . '">homepage</a>.</div>');
 }
 
 end_main();

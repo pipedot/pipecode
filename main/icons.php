@@ -25,7 +25,7 @@ writeln('<table class="fill">');
 writeln('<tr>');
 writeln('<td>');
 
-$a = fs_dir("$doc_root/images");
+$a = fs_dir("$doc_root/www/images");
 for ($i = 0; $i < count($a); $i++) {
 	if (fs_ext($a[$i]) == "png" && string_has($a[$i], "-64")) {
 		writeln('<div class="topic_box">');

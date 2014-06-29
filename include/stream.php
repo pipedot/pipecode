@@ -36,7 +36,7 @@ function print_card($card_id)
 		if ($image_id > 0) {
 			$image = db_get_rec("image", $image_id);
 			$path = public_path($image["time"]) . "/i$image_id.256x256.jpg";
-			$a["image_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
+			$a["image_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
 		}
 	}
 
@@ -99,7 +99,7 @@ function print_card($card_id)
 			$a["photo_class"] = "card_photo_16x9";
 		}
 		$path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
-		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
+		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
 	}
 
 	$a["comments"] = 0;

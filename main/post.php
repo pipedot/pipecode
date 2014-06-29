@@ -73,14 +73,14 @@ function print_post_box($sid, $cid, $pid, $qid, $subject, $dirty_body, $coward)
 		writeln('<script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>');
 		writeln('<script type="text/javascript">');
 		writeln();
-		writeln('CKEDITOR.timestamp = "' . fs_time("$doc_root/lib/ckeditor/config.js") . '";');
+		writeln('CKEDITOR.timestamp = "' . fs_time("$doc_root/www/lib/ckeditor/config.js") . '";');
 		writeln('CKEDITOR.replace("comment",');
 		writeln('{');
 		writeln('	resize_enabled: false,');
 		writeln('	enterMode: CKEDITOR.ENTER_BR,');
 		writeln('	toolbar :');
 		writeln('	[');
-		writeln('		["Bold","Italic","Underline","Strike"],');
+		writeln('		["Bold","Italic","Underline","Strike","Subscript","Superscript"],');
 		writeln('		["NumberedList","BulletedList","Blockquote"],');
 		writeln('		["Link","Unlink"]');
 		writeln('	]');

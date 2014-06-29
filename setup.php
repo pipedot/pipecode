@@ -19,7 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (is_file("$top_root/conf.php")) {
+if (is_file("$doc_root/conf.php")) {
 	die("already setup");
 }
 
@@ -73,13 +73,13 @@ if (http_post()) {
 	$sql_open = false;
 	open_database();
 
-	fs_slap("$top_root/conf.php", $s);
+	fs_slap("$doc_root/conf.php", $s);
 
 	if (!db_has_database($sql_database)) {
 		run_sql("create database $sql_database");
 		run_sql("use $sql_database");
-		run_sql_file("$top_root/schema.sql");
-		run_sql_file("$top_root/default.sql");
+		run_sql_file("$doc_root/schema.sql");
+		run_sql_file("$doc_root/default.sql");
 
 		$zid = "$admin_username@$server_name";
 		$salt = random_hash();

@@ -585,6 +585,7 @@ CREATE TABLE `story` (
   `story` text NOT NULL,
   `image_id` int(11) NOT NULL,
   `tweet_id` bigint(20) NOT NULL,
+  `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`sid`),
   FULLTEXT KEY `story_search` (`title`,`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -711,4 +712,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-18  8:38:29
+-- Dump completed on 2014-06-29  1:07:29

@@ -19,7 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("$top_root/lib/simplepie/simplepie.php");
+include("$doc_root/lib/simplepie/simplepie.php");
 
 
 function download_feed($uri)

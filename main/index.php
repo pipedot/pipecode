@@ -41,14 +41,23 @@ for ($i = 0; $i < count($row); $i++) {
 }
 
 $s = "";
+//$s .= "<a class=\"pages_first\" href=\"?page=1\"></a>";
+if ($page > 1) {
+	$s .= "<a class=\"pages_left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
+}
 for ($i = 1; $i <= $pages_count; $i++) {
 	if ($i == $page) {
-		$s .= "$i ";
+		//$s .= "$i ";
+		$s .= "<span>$i</span>";
 	} else {
-		$s .= "<a href=\"?page=$i\">$i</a> ";
+		$s .= "<a href=\"?page=$i\">$i</a>";
 	}
 }
-writeln('<div style="text-align: center; margin-bottom: 8px;">' . trim($s) . '</div>');
+if ($page < $pages_count) {
+	$s .= "<a class=\"pages_right\" href=\"?page=" . ($page + 1) . "\" title=\"Next\"></a>";
+}
+//$s .= "<a class=\"pages_last\" href=\"?page=1\"></a>";
+writeln('<div class="pages">' . trim($s) . '</div>');
 
 end_main();
 writeln('<aside>');

@@ -43,9 +43,9 @@ if (count($a) >= 4) {
 }
 
 if ($user_page == "") {
-	$root = $main_root;
+	$root = "$doc_root/main";
 } else {
-	$root = $user_root;
+	$root = "$doc_root/user";
 }
 
 if ($s1 == "") {

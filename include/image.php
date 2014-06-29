@@ -227,7 +227,7 @@ function download_image($doc_url, $img_url)
 	//print "size [" . strlen($data) . "]\n";
 
 	$id = $tmp_image["tmp_image_id"];
-	$path = $doc_root . public_path($tmp_image["time"]); //$id, "t");
+	$path = $doc_root . "/www" . public_path($tmp_image["time"]); //$id, "t");
 	//print "source path [$path]\n";
 	//die();
 	if (!is_dir($path)) {
@@ -256,7 +256,7 @@ function promote_image($tmp_image_id)
 	$path = public_path($tmp_image["time"]);
 	//$ext = fs_ext($tmp_image["original_url"]);
 
-	//$file = "$doc_root$path/t$tmp_image_id.$ext";
+	//$file = "$doc_root/www$path/t$tmp_image_id.$ext";
 	//$data = fs_slurp($file);
 	//$hash = crypt_sha256($data);
 	//$src_img = imagecreatefromstring($data);
@@ -281,8 +281,8 @@ function promote_image($tmp_image_id)
 	$image = db_get_rec("image", array("zid" => $tmp_image["zid"], "time" => $tmp_image["time"]));
 	$image_id = $image["image_id"];
 
-	fs_rename("$doc_root$path/t$tmp_image_id.128x128.jpg", "$doc_root$path/i$image_id.128x128.jpg");
-	fs_rename("$doc_root$path/t$tmp_image_id.256x256.jpg", "$doc_root$path/i$image_id.256x256.jpg");
+	fs_rename("$doc_root/www$path/t$tmp_image_id.128x128.jpg", "$doc_root/www$path/i$image_id.128x128.jpg");
+	fs_rename("$doc_root/www$path/t$tmp_image_id.256x256.jpg", "$doc_root/www$path/i$image_id.256x256.jpg");
 
 	db_del_rec("tmp_image", $tmp_image_id);
 
@@ -333,7 +333,7 @@ function create_image($src_img, $tmp_image, $hash)
 		$ah = $res[$i][3];
 
 		$tmp_img = resize_image($src_img, $w, $h);
-		$file = "$doc_root$path/i$image_id.$w" . "x" . "$h.jpg";
+		$file = "$doc_root/www$path/i$image_id.$w" . "x" . "$h.jpg";
 		if (fs_is_file($file)) {
 			fs_unlink($file);
 		}
@@ -406,8 +406,8 @@ function create_photo($src_img, $original_name, $hash)
 	//var_dump($photo);
 	//die();
 
-	if (!is_dir("$doc_root$path")) {
-		mkdir("$doc_root$path", 0755, true);
+	if (!is_dir("$doc_root/www$path")) {
+		mkdir("$doc_root/www$path", 0755, true);
 	}
 
 	$size = 0;
@@ -424,7 +424,7 @@ function create_photo($src_img, $original_name, $hash)
 				$photo["has_large"] = 1;
 			}
 			$tmp_img = resize_image($src_img, $w, $h);
-			$file = "$doc_root$path/p$photo_id.$w" . "x" . "$h.jpg";
+			$file = "$doc_root/www$path/p$photo_id.$w" . "x" . "$h.jpg";
 			if (fs_is_file($file)) {
 				fs_unlink($file);
 			}
@@ -482,8 +482,8 @@ function clean_tmp_images()
 		//print "unlink [" . $path . "/t$tmp_image_id.128x128.jpg" . "]\n";
 		//print "unlink [" . $path . "/t$tmp_image_id.$ext" . "]\n";
 
-		fs_unlink("$doc_root$path/t$tmp_image_id.128x128.jpg");
-		fs_unlink("$doc_root$path/t$tmp_image_id.256x256.jpg");
+		fs_unlink("$doc_root/www$path/t$tmp_image_id.128x128.jpg");
+		fs_unlink("$doc_root/www$path/t$tmp_image_id.256x256.jpg");
 
 		db_del_rec("tmp_image", $tmp_image_id);
 	}

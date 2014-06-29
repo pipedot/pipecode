@@ -61,6 +61,7 @@ if (http_post()) {
 		$story["story"] = $clean_body;
 		$story["image_id"] = 0;
 		$story["tweet_id"] = 0;
+		$story["zid"] = $pipe["zid"];
 		db_set_rec("story", $story);
 
 		header("Location: /pipe/$pid");
@@ -94,7 +95,7 @@ for ($i = 0; $i < count($topics); $i++) {
 
 $icon_list = array();
 //$icon_keys = array();
-$a = fs_dir("$doc_root/images");
+$a = fs_dir("$doc_root/www/images");
 for ($i = 0; $i < count($a); $i++) {
 	if (substr($a[$i], -7) == "-64.png") {
 		$icon_list[] = substr($a[$i], 0, -7);

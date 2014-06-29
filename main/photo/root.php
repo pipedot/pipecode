@@ -89,7 +89,7 @@ if ($photo["aspect_width"] == 9 && $photo["aspect_height"] == 16) {
 	}
 }
 $path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
-$photo_url = "$protocol://$server_name$path?" . fs_time("$doc_root$path");
+$photo_url = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
 
 writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
 writeln('	<tr>');

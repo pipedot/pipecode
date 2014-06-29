@@ -44,10 +44,10 @@ if (http_post()) {
 
 	for ($i = 0; $i < count($sizes); $i++) {
 		$tmp_img = resize_image($src_img, $sizes[$i], $sizes[$i]);
-		if (!is_dir("$doc_root/pub/profile/$server_name")) {
-			mkdir("$doc_root/pub/profile/$server_name", 0755, true);
+		if (!is_dir("$doc_root/www/pub/profile/$server_name")) {
+			mkdir("$doc_root/www/pub/profile/$server_name", 0755, true);
 		}
-		imagejpeg($tmp_img, "$doc_root/pub/profile/$server_name/$user_page-$sizes[$i].jpg");
+		imagejpeg($tmp_img, "$doc_root/www/pub/profile/$server_name/$user_page-$sizes[$i].jpg");
 		imagedestroy($tmp_img);
 	}
 }
@@ -58,7 +58,7 @@ beg_form("", "file");
 
 beg_tab("Profile Picture", array("colspan" => 2));
 writeln('	<tr>');
-writeln('		<td colspan="2"><img style="width: 128px" src="/pub/profile/' . $server_name . "/" . $user_page . '-256.jpg?' . fs_time("$doc_root/pub/profile/$server_name/$user_page-256.jpg") . '"/></td>');
+writeln('		<td colspan="2"><img style="width: 128px" src="/pub/profile/' . $server_name . "/" . $user_page . '-256.jpg?' . fs_time("$doc_root/www/pub/profile/$server_name/$user_page-256.jpg") . '"/></td>');
 writeln('	</tr>');
 writeln('	<tr>');
 writeln('		<td style="width: 100%"><input name="upload" type="file" style="width: 100%"/></td>');

@@ -26,14 +26,14 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'about' }
 	];
 
-	config.removeButtons = 'Subscript,Superscript';
 	config.format_tags = 'p;h1;h2;h3;pre';
 	config.removeDialogTabs = 'image:advanced;link:advanced;link:target';
-	config.removePlugins = 'elementspath';
+	config.removePlugins = 'elementspath,contextmenu,liststyle,tabletools';
 	config.language = 'en';
 	config.entities = false;
 	config.coreStyles_bold = { element: 'b', overrides: 'strong' };
 	config.coreStyles_italic = { element: 'i', overrides: 'em' };
+	config.disableNativeSpellChecker = false;
 };
 
 CKEDITOR.on('dialogDefinition', function(ev)
