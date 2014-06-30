@@ -29,20 +29,25 @@ if (!@$auth_user["editor"]) {
 $sid = (int) $s2;
 $story = db_get_rec("story", $sid);
 $pipe = db_get_rec("pipe", $story["pid"]);
-$zid = $pipe["zid"];
+$zid = $pipe["author_zid"];
 
 if (http_post()) {
 	$title = clean_subject();
 	list($clean_body, $dirty_body) = clean_body(true, "story");
 	$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
 	$tid = http_post_int("tid");
+	$time = time();
 
 	if (http_post("publish")) {
+		db_set_rec("story_edit", $story);
+
+		$story["body"] = $clean_body;
+		$story["edit_time"] = $time;
+		$story["edit_zid"] = $auth_zid;
+		$story["icon"] = $icon;
+		$story["slug"] = clean_url($title);
 		$story["tid"] = $tid;
 		$story["title"] = $title;
-		$story["ctitle"] = clean_url($title);
-		$story["icon"] = $icon;
-		$story["story"] = $clean_body;
 		db_set_rec("story", $story);
 
 		header("Location: /story/$sid");
@@ -52,7 +57,7 @@ if (http_post()) {
 	$title = $story["title"];
 	$tid = $story["tid"];
 	$icon = $story["icon"];
-	$clean_body = $story["story"];
+	$clean_body = $story["body"];
 	$dirty_body = dirty_html($clean_body);
 }
 
@@ -85,12 +90,12 @@ beg_form();
 writeln('<h1>Preview</h1>');
 $a = array();
 $a["title"] = $title;
-$a["time"] = $story["time"];
+$a["time"] = $story["publish_time"];
 $a["pid"] = $story["pid"];
 $a["zid"] = $zid;
 $a["topic"] = $topic;
 $a["icon"] = $icon;
-$a["story"] = $clean_body;
+$a["body"] = $clean_body;
 print_article($a);
 
 writeln('<h1>Edit</h1>');

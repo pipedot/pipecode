@@ -21,20 +21,16 @@
 
 include("render.php");
 
-$page = http_get_int("page", array("default" => 1, "required" => false));
-$rows_per_page = 10;
-$row = run_sql("select count(*) as row_count from comment where zid = ?", array($zid));
-$row_count = (int) $row[0]["row_count"];
-$pages_count = ceil($row_count / $rows_per_page);
-$row_start = ($page - 1) * $rows_per_page;
-
 print_header("Comments");
 print_left_bar("user", "comments");
 beg_main("cell");
 
 writeln('<h1>Comments</h1>');
 
-$row = run_sql("select cid, subject, time, comment from comment where zid = ? order by time desc limit $row_start, $rows_per_page", array($zid));
+$items_per_page = 50;
+list($item_start, $page_footer) = page_footer("comment", $items_per_page, array("zid" => $zid));
+
+$row = run_sql("select cid, subject, time, comment from comment where zid = ? order by time desc limit $item_start, $items_per_page", array($zid));
 for ($i = 0; $i < count($row); $i++) {
 	print render_comment($row[$i]["subject"], $zid, $row[$i]["time"], $row[$i]["cid"], $row[$i]["comment"]);
 	writeln('</div>');
@@ -42,15 +38,7 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln();
 }
 
-$s = "";
-for ($i = 1; $i <= $pages_count; $i++) {
-	if ($i == $page) {
-		$s .= "$i ";
-	} else {
-		$s .= "<a href=\"?page=$i\">$i</a> ";
-	}
-}
-writeln('<div style="text-align: center">' . trim($s) . '</div>');
+writeln($page_footer);
 
 end_main();
 print_footer();

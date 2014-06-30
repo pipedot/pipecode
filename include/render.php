@@ -157,57 +157,57 @@ function render_page($sid, $pid, $qid, $json)
 		if ($auth_zid == "") {
 			$last_seen = 0;
 		} else {
-			if (db_has_rec("story_history", array("sid" => $sid, "zid" => $auth_zid))) {
-				$history = db_get_rec("story_history", array("sid" => $sid, "zid" => $auth_zid));
-				$history["last_time"] = $history["time"];
-				$last_seen = $history["time"];
+			if (db_has_rec("story_view", array("sid" => $sid, "zid" => $auth_zid))) {
+				$view = db_get_rec("story_view", array("sid" => $sid, "zid" => $auth_zid));
+				$view["last_time"] = $view["time"];
+				$last_seen = $view["time"];
 			} else {
-				$history = array();
-				$history["sid"] = $sid;
-				$history["zid"] = $auth_zid;
-				$history["last_time"] = 0;
+				$view = array();
+				$view["sid"] = $sid;
+				$view["zid"] = $auth_zid;
+				$view["last_time"] = 0;
 				$last_seen = 0;
 			}
-			$history["time"] = time();
-			db_set_rec("story_history", $history);
+			$view["time"] = time();
+			db_set_rec("story_view", $view);
 		}
 	} elseif ($pid != 0) {
 		$comments = db_get_list("comment", "time", array("pid" => $pid));
 		if ($auth_zid == "") {
 			$last_seen = 0;
 		} else {
-			if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
-				$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
-				$history["last_time"] = $history["time"];
-				$last_seen = $history["time"];
+			if (db_has_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid))) {
+				$view = db_get_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid));
+				$view["last_time"] = $view["time"];
+				$last_seen = $view["time"];
 			} else {
-				$history = array();
-				$history["pid"] = $pid;
-				$history["zid"] = $auth_zid;
-				$history["last_time"] = 0;
+				$view = array();
+				$view["pid"] = $pid;
+				$view["zid"] = $auth_zid;
+				$view["last_time"] = 0;
 				$last_seen = 0;
 			}
-			$history["time"] = time();
-			db_set_rec("pipe_history", $history);
+			$view["time"] = time();
+			db_set_rec("pipe_view", $view);
 		}
 	} elseif ($qid != 0) {
 		$comments = db_get_list("comment", "time", array("qid" => $qid));
 		if ($auth_zid == "") {
 			$last_seen = 0;
 		} else {
-			if (db_has_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid))) {
-				$history = db_get_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid));
-				$history["last_time"] = $history["time"];
-				$last_seen = $history["time"];
+			if (db_has_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid))) {
+				$view = db_get_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid));
+				$view["last_time"] = $view["time"];
+				$last_seen = $view["time"];
 			} else {
-				$history = array();
-				$history["qid"] = $qid;
-				$history["zid"] = $auth_zid;
-				$history["last_time"] = 0;
+				$view = array();
+				$view["qid"] = $qid;
+				$view["zid"] = $auth_zid;
+				$view["last_time"] = 0;
 				$last_seen = 0;
 			}
-			$history["time"] = time();
-			db_set_rec("poll_history", $history);
+			$view["time"] = time();
+			db_set_rec("poll_view", $view);
 		}
 	}
 	$total = count($comments);

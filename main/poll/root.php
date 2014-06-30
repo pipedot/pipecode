@@ -62,19 +62,19 @@ if ($auth_user["javascript_enabled"]) {
 	if ($auth_zid == "") {
 		$last_seen = 0;
 	} else {
-		if (db_has_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid))) {
-			$history = db_get_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid));
-			$history["last_time"] = $history["time"];
-			$last_seen = $history["time"];
+		if (db_has_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid))) {
+			$view = db_get_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid));
+			$view["last_time"] = $view["time"];
+			$last_seen = $view["time"];
 		} else {
-			$history = array();
-			$history["qid"] = $qid;
-			$history["zid"] = $auth_zid;
-			$history["last_time"] = 0;
+			$view = array();
+			$view["qid"] = $qid;
+			$view["zid"] = $auth_zid;
+			$view["last_time"] = 0;
 			$last_seen = 0;
 		}
-		$history["time"] = time();
-		db_set_rec("poll_history", $history);
+		$view["time"] = time();
+		db_set_rec("poll_view", $view);
 	}
 
 	writeln('<script>');

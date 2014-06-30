@@ -28,8 +28,8 @@ function print_story($sid)
 	//$pipe = db_get_rec("pipe", $story["pid"]);
 	$topic = db_get_rec("topic", $story["tid"]);
 
-	$a["story"] = $story["story"];
-	$a["time"] = $story["time"];
+	$a["body"] = $story["body"];
+	$a["time"] = $story["publish_time"];
 	$a["sid"] = $sid;
 	$a["topic"] = $topic["topic"];
 	$a["icon"] = $story["icon"];
@@ -37,7 +37,7 @@ function print_story($sid)
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["title"] = $story["title"];
 	$a["pid"] = $story["pid"];
-	$a["zid"] = $story["zid"];
+	$a["zid"] = $story["author_zid"];
 
 	if ($sid > 0) {
 		$row = run_sql("select count(cid) as comments from comment where sid = ?", array($sid));
@@ -75,8 +75,10 @@ function print_article($a)
 	}
 	if (array_key_exists("pid", $a)) {
 		$pid = $a["pid"];
+		$pipe =  " (<a href=\"/pipe/$pid\">#$pid</a>)";
 	} else {
 		$pid = 0;
+		$pipe = "";
 	}
 	if (array_key_exists("comments", $a)) {
 		$comments = $a["comments"];
@@ -105,10 +107,10 @@ function print_article($a)
 	}
 	$image_style = $auth_user["story_image_style"];
 	$topic = $a["topic"];
-	$story = $a["story"];
+	$story = $a["body"];
 	$icon = $a["icon"];
 	$title = $a["title"];
-	$ctitle = clean_url($title);
+	$slug = clean_url($title);
 	$date = date("Y-m-d H:i", $time);
 	$day = gmdate("Y-m-d", $time);
 
@@ -137,8 +139,8 @@ function print_article($a)
 	}
 
 	writeln("<article class=\"story\">");
-	writeln("	<h1><a href=\"/story/$day/$ctitle\">$title</a></h1>");
-	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic\"><b>$topic</b></a> on $date (<a href=\"/pipe/$pid\">#$pid</a>)</h2>");
+	writeln("	<h1><a href=\"/story/$day/$slug\">$title</a></h1>");
+	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic\"><b>$topic</b></a> on $date$pipe</h2>");
 
 	if ($image_path != "") {
 		if ($image_url != "") {
@@ -153,7 +155,7 @@ function print_article($a)
 	writeln('		<table class="fill">');
 	writeln('			<tr>');
 	if ($sid > 0) {
-		writeln("				<td><a href=\"/story/$day/$ctitle\"><b>$comments</b> comments</a></td>");
+		writeln("				<td><a href=\"/story/$day/$slug\"><b>$comments</b> comments</a></td>");
 		if (@$auth_user["editor"]) {
 			writeln("				<td class=\"right\">");
 			if ($tweet_id == 0) {

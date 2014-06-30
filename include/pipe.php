@@ -19,6 +19,28 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function print_story_edit($sid, $edit_time = 0)
+{
+	global $server_name;
+
+	if ($edit_time == 0) {
+		$story = db_get_rec("story", $sid);
+	} else {
+		$story = db_get_rec("story_edit", array("sid" => $sid, "edit_time" => $edit_time));
+	}
+	$date = date("Y-m-d H:i", $story["edit_time"]);
+	$topic = db_get_rec("topic", $story["tid"]);
+	$a["body"] = $story["body"];
+	$a["icon"] = $story["icon"];
+	$a["time"] = $story["edit_time"];
+	$a["title"] = $story["title"];
+	$a["topic"] = $topic["topic"];
+	$a["zid"] = $story["edit_zid"];
+
+	print_article($a);
+}
+
+
 function print_pipe($pid)
 {
 	global $server_name;
@@ -26,13 +48,13 @@ function print_pipe($pid)
 	$pipe = db_get_rec("pipe", $pid);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$topic = db_get_rec("topic", $pipe["tid"]);
-	$a["zid"] = $pipe["zid"];
-	$a["title"] = $pipe["title"];
-	$a["icon"] = $pipe["icon"];
 	$a["pid"] = $pipe["pid"];
+	$a["body"] = $pipe["body"];
+	$a["icon"] = $pipe["icon"];
+	$a["time"] = $pipe["time"];
+	$a["title"] = $pipe["title"];
 	$a["topic"] = $topic["topic"];
-	$a["story"] = $pipe["story"];
-	$a["ipos"] = "middle";
+	$a["zid"] = $pipe["author_zid"];
 
 	$row = run_sql("select count(cid) as comments from comment where pid = ?", array($pid));
 	$a["comments"] = $row[0]["comments"];
@@ -57,7 +79,7 @@ function print_pipe_small($pid, $full)
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$score = 0;
 	$topic = db_get_rec("topic", $pipe["tid"]);
-	$zid = $pipe["zid"];
+	$zid = $pipe["author_zid"];
 	if ($zid == "") {
 		$by = "<b>Anonymous Coward</b>";
 	} else {
@@ -144,7 +166,7 @@ function print_pipe_small($pid, $full)
 		end_form();
 		writeln('<div class="pipe_body">');
 	}
-	writeln($pipe["story"]);
+	writeln($pipe["body"]);
 	writeln('</div>');
 }
 

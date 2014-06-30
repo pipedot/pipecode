@@ -26,7 +26,7 @@ function make_atom($topic)
 	global $server_slogan;
 	global $cache_enabled;
 
-	$row = run_sql("select sid, pipe.zid, story.time, story.title, story.ctitle, story.story from story inner join pipe on story.pid = pipe.pid order by sid desc limit 10");
+	$row = run_sql("select sid, pipe.zid, story.time, story.title, story.slug, story.story from story inner join pipe on story.pid = pipe.pid order by sid desc limit 10");
 	if (count($row) > 0) {
 		$updated = $row[0]["time"];
 	} else {
@@ -49,7 +49,7 @@ function make_atom($topic)
 		$body .= "		<id>http://$server_name/story/" . $row[$i]["sid"] . "</id>\n";
 		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["time"]) . "</updated>\n";
-		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"http://$server_name/story/" . gmdate("Y-m-d", $row[$i]["time"]) . "/" . $row[$i]["ctitle"] . "\"/>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"http://$server_name/story/" . gmdate("Y-m-d", $row[$i]["time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
 		$body .= "		<author>\n";
 		if ($row[$i]["zid"] == "") {
 			$body .= "			<name>Anonymous Coward</name>\n";

@@ -32,7 +32,7 @@ writeln('<p>These are stories waiting to be published to the main page. Remember
 $pipes = db_get_list("pipe", "time desc", array("closed" => 0));
 if (count($pipes) == 0) {
 	writeln('<h1>No stories in the pipe!</h1>');
-	writeln('<p><a href="/submit">Submit</a> one now or <a href="/pipe/history">view the history</a>.</p>');
+	writeln('<p><a href="/submit">Submit</a> one now or <a href="history">view the history</a>.</p>');
 }
 $k = array_keys($pipes);
 for ($i = 0; $i < count($pipes); $i++) {
@@ -42,7 +42,7 @@ for ($i = 0; $i < count($pipes); $i++) {
 }
 
 if (count($pipes) > 0) {
-	writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a href="/pipe/history">History</a></div>');
+	writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a href="history">History</a></div>');
 }
 end_main();
 

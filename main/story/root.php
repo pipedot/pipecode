@@ -26,16 +26,16 @@ if (string_uses($s2, "[0-9]")) {
 	$sid = (int) $s2;
 } else {
 	$date = $s2;
-	$ctitle = $s3;
+	$slug = $s3;
 	$time_beg = strtotime("$date GMT");
 	if ($time_beg === false) {
 		die("invalid date [$date]");
 	}
 	$time_end = $time_beg + 86400;
 
-	$row = run_sql("select sid from story where time > ? and time < ? and ctitle = ?", array($time_beg, $time_end, $ctitle));
+	$row = run_sql("select sid from story where publish_time > ? and publish_time < ? and slug = ?", array($time_beg, $time_end, $slug));
 	if (count($row) == 0) {
-		die("story not found - date [$date] title [$ctitle]");
+		die("story not found - date [$date] title [$slug]");
 	}
 	$sid = $row[0]["sid"];
 }
@@ -71,19 +71,19 @@ if ($auth_user["javascript_enabled"]) {
 	if ($auth_zid == "") {
 		$last_seen = 0;
 	} else {
-		if (db_has_rec("story_history", array("sid" => $sid, "zid" => $auth_zid))) {
-			$history = db_get_rec("story_history", array("sid" => $sid, "zid" => $auth_zid));
-			$history["last_time"] = $history["time"];
-			$last_seen = $history["time"];
+		if (db_has_rec("story_view", array("sid" => $sid, "zid" => $auth_zid))) {
+			$view = db_get_rec("story_view", array("sid" => $sid, "zid" => $auth_zid));
+			$view["last_time"] = $view["time"];
+			$last_seen = $view["time"];
 		} else {
-			$history = array();
-			$history["sid"] = $sid;
-			$history["zid"] = $auth_zid;
-			$history["last_time"] = 0;
+			$view = array();
+			$view["sid"] = $sid;
+			$view["zid"] = $auth_zid;
+			$view["last_time"] = 0;
 			$last_seen = 0;
 		}
-		$history["time"] = time();
-		db_set_rec("story_history", $history);
+		$view["time"] = time();
+		db_set_rec("story_view", $view);
 	}
 
 	writeln('<script>');

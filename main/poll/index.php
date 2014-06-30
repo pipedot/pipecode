@@ -26,8 +26,11 @@ beg_main("cell");
 
 writeln('<h1>Polls</h1>');
 
+$items_per_page = 50;
+list($item_start, $page_footer) = page_footer("poll_question", $items_per_page);
+
 writeln('<table class="zebra">');
-$row = run_sql("select qid, question, time from poll_question order by qid desc");
+$row = run_sql("select qid, question, time from poll_question order by qid desc limit $item_start, $items_per_page");
 for ($i = 0; $i < count($row); $i++) {
 	writeln('	<tr>');
 	writeln('		<td><a href="' . $row[$i]["qid"] . '">' . $row[$i]["question"] . '</a></td>');
@@ -35,6 +38,8 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('	</tr>');
 }
 writeln('</table>');
+
+writeln($page_footer);
 
 end_main();
 print_footer();

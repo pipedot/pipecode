@@ -22,42 +22,20 @@
 include("story.php");
 include("poll.php");
 
-$page = http_get_int("page", array("default" => 1, "required" => false));
-
 print_header();
 
 print_left_bar("main", "stories");
 beg_main("cell");
 
-$stories_per_page = 10;
-$row = run_sql("select count(sid) as story_count from story");
-$story_count = (int) $row[0]["story_count"];
-$pages_count = ceil($story_count / $stories_per_page);
-$story_start = ($page - 1) * $stories_per_page;
+$items_per_page = 10;
+list($item_start, $page_footer) = page_footer("story", $items_per_page);
 
-$row = run_sql("select sid from story order by sid desc limit $story_start, $stories_per_page");
+$row = run_sql("select sid from story order by sid desc limit $item_start, $items_per_page");
 for ($i = 0; $i < count($row); $i++) {
-	print_story($row[$i]["sid"], "middle");
+	print_story($row[$i]["sid"]);
 }
 
-$s = "";
-//$s .= "<a class=\"pages_first\" href=\"?page=1\"></a>";
-if ($page > 1) {
-	$s .= "<a class=\"pages_left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
-}
-for ($i = 1; $i <= $pages_count; $i++) {
-	if ($i == $page) {
-		//$s .= "$i ";
-		$s .= "<span>$i</span>";
-	} else {
-		$s .= "<a href=\"?page=$i\">$i</a>";
-	}
-}
-if ($page < $pages_count) {
-	$s .= "<a class=\"pages_right\" href=\"?page=" . ($page + 1) . "\" title=\"Next\"></a>";
-}
-//$s .= "<a class=\"pages_last\" href=\"?page=1\"></a>";
-writeln('<div class="pages">' . trim($s) . '</div>');
+writeln($page_footer);
 
 end_main();
 writeln('<aside>');

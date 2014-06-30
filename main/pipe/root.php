@@ -30,11 +30,13 @@ if (!string_uses($pid, "[0-9]")) {
 
 $pipe = db_get_rec("pipe", $pid);
 $status = "Voting";
+$sid = 0;
 if ($pipe["closed"]) {
 	$status = "Closed";
 	$row = run_sql("select sid from story where pid = ?", array($pid));
 	if (count($row) > 0) {
-		$status = '<a href="/story/' . $row[0]["sid"] . '">Published</a>';
+		$sid = $row[0]["sid"];
+		$status = "<a href=\"/story/$sid\">Published</a>";
 	}
 }
 if ($pipe["reason"] == "") {
@@ -60,6 +62,16 @@ print_left_bar("main", "pipe");
 beg_main("cell");
 print_pipe($pid);
 
+if ($sid > 0) {
+	$list = db_get_list("story_edit", "edit_time", array("sid" => $sid));
+	$keys = array_keys($list);
+	for ($i = 0; $i < count($list); $i++) {
+		$edit_time = $list[$keys[$i]]["edit_time"];
+		print_story_edit($sid, $edit_time);
+	}
+	print_story_edit($sid);
+}
+
 if ($auth_user["javascript_enabled"]) {
 	render_sliders(0, $pid, 0);
 	print_noscript();
@@ -76,18 +88,18 @@ writeln('<div class="dialog_body">');
 writeln('	<div class="pipe_status">' . $status . $reason . '</div>');
 writeln('</div>');
 
-if ($pipe["editor"] === "") {
+if (!$pipe["closed"]) {
 	if ($auth_user["editor"]) {
 		writeln('<div class="dialog_title">Editor</div>');
 		writeln('<div class="dialog_body">');
 		writeln('	<div class="pipe_editor"><a href="/pipe/' . $pid . '/publish">Publish</a> | <a href="/pipe/' . $pid . '/close">Close</a></div>');
 		writeln('</div>');
 	}
-} else {
-	writeln('<div class="dialog_title">Editor</div>');
-	writeln('<div class="dialog_body">');
-	writeln('	<div class="pipe_editor"><a href="' . user_page_link($pipe["editor"]) . '"><b>' . $pipe["editor"] . '</b></a></div>');
-	writeln('</div>');
+//} else {
+//	writeln('<div class="dialog_title">Editor</div>');
+//	writeln('<div class="dialog_body">');
+//	writeln('	<div class="pipe_editor"><a href="' . user_page_link($pipe["editor"]) . '"><b>' . $pipe["editor"] . '</b></a></div>');
+//	writeln('</div>');
 }
 writeln('</aside>');
 
@@ -95,19 +107,19 @@ if ($auth_user["javascript_enabled"]) {
 	if ($auth_zid == "") {
 		$last_seen = 0;
 	} else {
-		if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
-			$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
-			$history["last_time"] = $history["time"];
-			$last_seen = $history["time"];
+		if (db_has_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid))) {
+			$view = db_get_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid));
+			$view["last_time"] = $view["time"];
+			$last_seen = $view["time"];
 		} else {
-			$history = array();
-			$history["pid"] = $pid;
-			$history["zid"] = $auth_zid;
-			$history["last_time"] = 0;
+			$view = array();
+			$view["pid"] = $pid;
+			$view["zid"] = $auth_zid;
+			$view["last_time"] = 0;
 			$last_seen = 0;
 		}
-		$history["time"] = time();
-		db_set_rec("pipe_history", $history);
+		$view["time"] = time();
+		db_set_rec("pipe_view", $view);
 	}
 
 	writeln('<script>');

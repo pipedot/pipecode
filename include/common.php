@@ -31,15 +31,6 @@ if (fs_is_file("$doc_root/conf.php")) {
 	die();
 }
 
-//$db_table["article"]["key"] = "article_id";
-//$db_table["article"]["col"][] = "article_id";
-//$db_table["article"]["col"][] = "archive";
-//$db_table["article"]["col"][] = "body";
-//$db_table["article"]["col"][] = "full_body";
-//$db_table["article"]["col"][] = "subject";
-//$db_table["article"]["col"][] = "time";
-//$db_table["article"]["col"][] = "zid";
-
 $db_table["captcha"]["key"] = "captcha_id";
 $db_table["captcha"]["col"][] = "captcha_id";
 $db_table["captcha"]["col"][] = "question";
@@ -193,23 +184,23 @@ $db_table["photo"]["col"][] = "zid";
 
 $db_table["pipe"]["key"] = "pid";
 $db_table["pipe"]["col"][] = "pid";
-$db_table["pipe"]["col"][] = "tid";
-$db_table["pipe"]["col"][] = "zid";
-$db_table["pipe"]["col"][] = "editor";
-$db_table["pipe"]["col"][] = "title";
-$db_table["pipe"]["col"][] = "ctitle";
-$db_table["pipe"]["col"][] = "icon";
-$db_table["pipe"]["col"][] = "time";
+$db_table["pipe"]["col"][] = "author_zid";
+$db_table["pipe"]["col"][] = "body";
 $db_table["pipe"]["col"][] = "closed";
+$db_table["pipe"]["col"][] = "edit_zid";
+$db_table["pipe"]["col"][] = "icon";
 $db_table["pipe"]["col"][] = "reason";
-$db_table["pipe"]["col"][] = "story";
+$db_table["pipe"]["col"][] = "slug";
+$db_table["pipe"]["col"][] = "tid";
+$db_table["pipe"]["col"][] = "time";
+$db_table["pipe"]["col"][] = "title";
 
-$db_table["pipe_history"]["key"][] = "pid";
-$db_table["pipe_history"]["key"][] = "zid";
-$db_table["pipe_history"]["col"][] = "pid";
-$db_table["pipe_history"]["col"][] = "zid";
-$db_table["pipe_history"]["col"][] = "time";
-$db_table["pipe_history"]["col"][] = "last_time";
+$db_table["pipe_view"]["key"][] = "pid";
+$db_table["pipe_view"]["key"][] = "zid";
+$db_table["pipe_view"]["col"][] = "pid";
+$db_table["pipe_view"]["col"][] = "zid";
+$db_table["pipe_view"]["col"][] = "time";
+$db_table["pipe_view"]["col"][] = "last_time";
 
 $db_table["pipe_vote"]["key"][] = "pid";
 $db_table["pipe_vote"]["key"][] = "zid";
@@ -225,12 +216,12 @@ $db_table["poll_answer"]["col"][] = "answer";
 $db_table["poll_answer"]["col"][] = "position";
 //$db_table["poll_answer"]["col"][] = "votes";
 
-$db_table["poll_history"]["key"][] = "qid";
-$db_table["poll_history"]["key"][] = "zid";
-$db_table["poll_history"]["col"][] = "qid";
-$db_table["poll_history"]["col"][] = "zid";
-$db_table["poll_history"]["col"][] = "time";
-$db_table["poll_history"]["col"][] = "last_time";
+$db_table["poll_view"]["key"][] = "qid";
+$db_table["poll_view"]["key"][] = "zid";
+$db_table["poll_view"]["col"][] = "qid";
+$db_table["poll_view"]["col"][] = "zid";
+$db_table["poll_view"]["col"][] = "time";
+$db_table["poll_view"]["col"][] = "last_time";
 
 $db_table["poll_question"]["key"] = "qid";
 $db_table["poll_question"]["col"][] = "qid";
@@ -253,23 +244,37 @@ $db_table["server_conf"]["col"][] = "value";
 
 $db_table["story"]["key"] = "sid";
 $db_table["story"]["col"][] = "sid";
+$db_table["story"]["col"][] = "author_zid";
+$db_table["story"]["col"][] = "body";
+$db_table["story"]["col"][] = "edit_time";
+$db_table["story"]["col"][] = "edit_zid";
+$db_table["story"]["col"][] = "icon";
+$db_table["story"]["col"][] = "image_id";
 $db_table["story"]["col"][] = "pid";
+$db_table["story"]["col"][] = "publish_time";
+$db_table["story"]["col"][] = "slug";
 $db_table["story"]["col"][] = "tid";
 $db_table["story"]["col"][] = "title";
-$db_table["story"]["col"][] = "ctitle";
-$db_table["story"]["col"][] = "icon";
-$db_table["story"]["col"][] = "time";
-$db_table["story"]["col"][] = "story";
-$db_table["story"]["col"][] = "image_id";
 $db_table["story"]["col"][] = "tweet_id";
-$db_table["story"]["col"][] = "zid";
 
-$db_table["story_history"]["key"][] = "sid";
-$db_table["story_history"]["key"][] = "zid";
-$db_table["story_history"]["col"][] = "sid";
-$db_table["story_history"]["col"][] = "zid";
-$db_table["story_history"]["col"][] = "time";
-$db_table["story_history"]["col"][] = "last_time";
+$db_table["story_edit"]["key"][] = "sid";
+$db_table["story_edit"]["key"][] = "edit_time";
+$db_table["story_edit"]["col"][] = "sid";
+$db_table["story_edit"]["col"][] = "edit_time";
+$db_table["story_edit"]["col"][] = "body";
+$db_table["story_edit"]["col"][] = "edit_zid";
+$db_table["story_edit"]["col"][] = "icon";
+$db_table["story_edit"]["col"][] = "image_id";
+$db_table["story_edit"]["col"][] = "slug";
+$db_table["story_edit"]["col"][] = "tid";
+$db_table["story_edit"]["col"][] = "title";
+
+$db_table["story_view"]["key"][] = "sid";
+$db_table["story_view"]["key"][] = "zid";
+$db_table["story_view"]["col"][] = "sid";
+$db_table["story_view"]["col"][] = "zid";
+$db_table["story_view"]["col"][] = "time";
+$db_table["story_view"]["col"][] = "last_time";
 
 $db_table["tag"]["key"] = "tag_id";
 $db_table["tag"]["col"][] = "tag_id";
@@ -438,8 +443,8 @@ function print_left_bar($type = "main", $selected = "stories")
 		}
 	} elseif ($type == "user") {
 		if ($auth_zid == $zid) {
-			$section_name = array("comments", "feed", "karma", "settings");
-			$section_link = array("comments", "", "karma/", "settings");
+			$section_name = array("comments", "feed", "karma");
+			$section_link = array("comments", "", "karma/");
 		} else {
 			//$section_name = array("blog", "feed", "submissions", "comments", "achievements");
 			//$section_link = array("blog", "feed", "submissions", "comments", "achievements");
@@ -558,6 +563,46 @@ function end_main($class = "")
 }
 
 
+function page_footer($table, $items_per_page, $where = array())
+{
+	$page = http_get_int("page", array("default" => 1, "required" => false));
+	$sql = "select count(*) as item_count from $table";
+	if (count($where) > 0) {
+		$k = array_keys($where);
+		$sql .= " where ";
+		$a = array();
+		for ($i = 0; $i < count($where); $i++) {
+			$sql .= $k[$i] . " = ? and ";
+			$a[] = $where[$k[$i]];
+		}
+		$sql = substr($sql, 0, -5);
+		$row = run_sql($sql, $a);
+	} else {
+		$row = run_sql($sql);
+	}
+	$item_count = (int) $row[0]["item_count"];
+	$pages_count = ceil($item_count / $items_per_page);
+	$item_start = ($page - 1) * $items_per_page;
+
+	$s = "";
+	if ($page > 1) {
+		$s .= "<a class=\"pages_left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
+	}
+	for ($i = 1; $i <= $pages_count; $i++) {
+		if ($i == $page) {
+			$s .= "<span>$i</span>";
+		} else {
+			$s .= "<a href=\"?page=$i\">$i</a>";
+		}
+	}
+	if ($page < $pages_count) {
+		$s .= "<a class=\"pages_right\" href=\"?page=" . ($page + 1) . "\" title=\"Next\"></a>";
+	}
+
+	return array($item_start, "<div class=\"pages\">$s</div>");
+}
+
+
 function print_footer()
 {
 	global $user_page;
@@ -566,26 +611,16 @@ function print_footer()
 	global $server_slogan;
 
 	if ($user_page == "") {
-//		writeln('<hr/>');
 		writeln('<footer class="footer">');
 		writeln('<div>');
-//		writeln('<table class="footer">');
-//		writeln('	<tr>');
-//		writeln('		<td>');
-		writeln('			<a href="/about">About</a>');
-		writeln('			<a href="http://bugs.' . $server_name . '/">Bugs</a>');
-		//writeln('			<a href="/archive">Archive</a>');
-		writeln('			<a href="/faq">FAQ</a>');
-		writeln('			<a href="/atom" class="icon_16" style="background-image: url(\'/images/feed-16.png\')">Feed</a>');
-		//writeln('			<a href="mailto:feedback@' . $server_name . '">Feedback</a>');
-		writeln('			<a href="/privacy">Privacy</a>');
-		writeln('			<a href="/terms">Terms</a>');
-//		writeln('		</td>');
+		writeln('	<a href="/about">About</a>');
+		writeln('	<a href="http://bugs.' . $server_name . '/">Bugs</a>');
+		writeln('	<a href="/faq">FAQ</a>');
+		writeln('	<a href="/atom" class="icon_16" style="background-image: url(\'/images/feed-16.png\')">Feed</a>');
+		writeln('	<a href="/privacy">Privacy</a>');
+		writeln('	<a href="/terms">Terms</a>');
 		writeln('</div>');
 		writeln('<div>' . $server_title . ': ' . $server_slogan . '</div>');
-//		writeln('		<td>' . $server_title . ': ' . $server_slogan . '</td>');
-//		writeln('	</tr>');
-//		writeln('</table>');
 		writeln('</footer>');
 	} else {
 		// user page footer
@@ -688,7 +723,7 @@ function article_info($comment)
 		$a["type"] = "story";
 		$a["title"] = $story["title"];
 		$date = gmdate("Y-m-d", $story["time"]);
-		$a["link"] = "https://$server_name/story/$date/" . $story["ctitle"];
+		$a["link"] = "https://$server_name/story/$date/" . $story["slug"];
 	} else if ($comment["pid"] > 0) {
 		$pipe = db_get_rec("pipe", $comment["pid"]);
 		$a["type"] = "pipe";
@@ -757,11 +792,19 @@ function is_local_user($zid)
 }
 
 
-function user_page_link($zid)
+function user_page_link($zid, $link = false, $ac = true)
 {
 	global $protocol;
 
-	return $protocol . "://" . str_replace("@", ".", $zid) . "/";
+	$s = $protocol . "://" . str_replace("@", ".", $zid) . "/";
+	if ($link) {
+		$s = "<a href=\"$s\">$zid</a>";
+	}
+	if ($ac && $zid == "") {
+		$s = "Anonymous Coward";
+	}
+
+	return $s;
 }
 
 

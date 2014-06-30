@@ -42,16 +42,16 @@ for ($i = 0; $i < count($a); $i++) {
 }
 
 print_header("Settings");
-
-writeln('<h1>Settings</h1>');
-
+beg_main();
 beg_form();
+writeln('<h1>Settings</h1>');
 
 beg_tab("Appearance");
 print_row(array("caption" => "Theme", "option_key" => "theme", "option_list" => $themes, "option_value" => $server_conf["theme"]));
 end_tab();
 
 right_box("Save");
-end_form();
 
+end_form();
+end_main();
 print_footer();

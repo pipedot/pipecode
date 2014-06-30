@@ -16,25 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `article`
---
-
-DROP TABLE IF EXISTS `article`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `article` (
-  `article_id` int(11) NOT NULL AUTO_INCREMENT,
-  `archive` int(11) NOT NULL,
-  `body` text NOT NULL,
-  `full_body` text NOT NULL,
-  `subject` varchar(200) NOT NULL,
-  `time` int(11) NOT NULL,
-  `zid` varchar(50) NOT NULL,
-  PRIMARY KEY (`article_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `captcha`
 --
 
@@ -409,29 +390,29 @@ DROP TABLE IF EXISTS `pipe`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pipe` (
   `pid` int(11) NOT NULL AUTO_INCREMENT,
-  `tid` int(11) NOT NULL,
-  `zid` varchar(50) NOT NULL,
-  `editor` varchar(50) NOT NULL,
-  `title` varchar(100) NOT NULL,
-  `ctitle` varchar(100) NOT NULL,
-  `icon` varchar(20) NOT NULL,
-  `time` int(11) NOT NULL,
+  `author_zid` varchar(50) NOT NULL,
+  `body` text NOT NULL,
   `closed` tinyint(4) NOT NULL,
+  `edit_zid` varchar(50) NOT NULL,
+  `icon` varchar(20) NOT NULL,
   `reason` varchar(50) NOT NULL,
-  `story` text NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `tid` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
   PRIMARY KEY (`pid`),
-  FULLTEXT KEY `pipe_search` (`story`,`title`)
+  FULLTEXT KEY `pipe_search` (`body`,`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `pipe_history`
+-- Table structure for table `pipe_view`
 --
 
-DROP TABLE IF EXISTS `pipe_history`;
+DROP TABLE IF EXISTS `pipe_view`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `pipe_history` (
+CREATE TABLE `pipe_view` (
   `pid` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
   `time` int(11) NOT NULL,
@@ -473,22 +454,6 @@ CREATE TABLE `poll_answer` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `poll_history`
---
-
-DROP TABLE IF EXISTS `poll_history`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `poll_history` (
-  `qid` int(11) NOT NULL,
-  `zid` varchar(50) NOT NULL,
-  `time` int(11) NOT NULL,
-  `last_time` int(11) NOT NULL,
-  PRIMARY KEY (`qid`,`zid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `poll_question`
 --
 
@@ -517,6 +482,22 @@ CREATE TABLE `poll_type` (
   `type_id` int(11) NOT NULL AUTO_INCREMENT,
   `poll_type` varchar(50) NOT NULL,
   PRIMARY KEY (`type_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `poll_view`
+--
+
+DROP TABLE IF EXISTS `poll_view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `poll_view` (
+  `qid` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`qid`,`zid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -576,29 +557,52 @@ DROP TABLE IF EXISTS `story`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `story` (
   `sid` int(11) NOT NULL AUTO_INCREMENT,
+  `author_zid` varchar(50) NOT NULL,
+  `body` text NOT NULL,
+  `edit_time` int(11) NOT NULL,
+  `edit_zid` varchar(50) NOT NULL,
+  `icon` varchar(20) NOT NULL,
+  `image_id` int(11) NOT NULL,
   `pid` int(11) NOT NULL,
+  `publish_time` int(11) NOT NULL,
+  `slug` varchar(100) NOT NULL,
   `tid` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
-  `ctitle` varchar(100) NOT NULL,
-  `icon` varchar(20) NOT NULL,
-  `time` int(11) NOT NULL,
-  `story` text NOT NULL,
-  `image_id` int(11) NOT NULL,
   `tweet_id` bigint(20) NOT NULL,
-  `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`sid`),
-  FULLTEXT KEY `story_search` (`title`,`story`)
+  FULLTEXT KEY `story_search` (`title`,`body`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `story_history`
+-- Table structure for table `story_edit`
 --
 
-DROP TABLE IF EXISTS `story_history`;
+DROP TABLE IF EXISTS `story_edit`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `story_history` (
+CREATE TABLE `story_edit` (
+  `sid` int(11) NOT NULL,
+  `body` text NOT NULL,
+  `edit_time` int(11) NOT NULL,
+  `edit_zid` varchar(50) NOT NULL,
+  `icon` varchar(20) NOT NULL,
+  `image_id` int(11) NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `tid` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  UNIQUE KEY `story_edit_index` (`sid`,`edit_time`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `story_view`
+--
+
+DROP TABLE IF EXISTS `story_view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `story_view` (
   `sid` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
   `time` int(11) NOT NULL,
@@ -712,4 +716,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-06-29  1:07:29
+-- Dump completed on 2014-06-30  1:44:10

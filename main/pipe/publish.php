@@ -32,7 +32,7 @@ if (!$auth_user["editor"]) {
 }
 
 $pipe = db_get_rec("pipe", $pid);
-$zid = $pipe["zid"];
+$zid = $pipe["author_zid"];
 
 if (http_post()) {
 	$title = clean_subject();
@@ -46,22 +46,24 @@ if (http_post()) {
 		if ($pipe["closed"] == 1) {
 			die("pipe [$pid] is already closed");
 		}
-		$pipe["editor"] = $auth_zid;
 		$pipe["closed"] = 1;
+		$pipe["edit_zid"] = $auth_zid;
 		db_set_rec("pipe", $pipe);
 
 		$story = array();
 		$story["sid"] = 0;
+		$story["author_zid"] = $pipe["author_zid"];
+		$story["body"] = $clean_body;
+		$story["edit_time"] = $time;
+		$story["edit_zid"] = $auth_zid;
+		$story["icon"] = $icon;
+		$story["image_id"] = 0;
 		$story["pid"] = $pid;
+		$story["publish_time"] = $time;
+		$story["slug"] = clean_url($title);
 		$story["tid"] = $tid;
 		$story["title"] = $title;
-		$story["ctitle"] = clean_url($title);
-		$story["icon"] = $icon;
-		$story["time"] = time();
-		$story["story"] = $clean_body;
-		$story["image_id"] = 0;
 		$story["tweet_id"] = 0;
-		$story["zid"] = $pipe["zid"];
 		db_set_rec("story", $story);
 
 		header("Location: /pipe/$pid");
@@ -71,7 +73,7 @@ if (http_post()) {
 	$title = $pipe["title"];
 	$tid = $pipe["tid"];
 	$icon = $pipe["icon"];
-	$clean_body = $pipe["story"];
+	$clean_body = $pipe["body"];
 	$dirty_body = dirty_html($clean_body);
 }
 
@@ -109,7 +111,7 @@ $a["pid"] = $pid;
 $a["zid"] = $zid;
 $a["topic"] = $topic;
 $a["icon"] = $icon;
-$a["story"] = $clean_body;
+$a["body"] = $clean_body;
 print_article($a);
 
 writeln('<h1>Publish</h1>');

@@ -173,24 +173,24 @@ if (http_post()) {
 	send_notifications($cid, $comment);
 
 	if ($sid != 0) {
-		if (db_has_rec("story_history", array("sid" => $sid, "zid" => $auth_zid))) {
-			$history = db_get_rec("story_history", array("sid" => $sid, "zid" => $auth_zid));
-			$history["time"] = $history["last_time"];
-			db_set_rec("story_history", $history);
+		if (db_has_rec("story_view", array("sid" => $sid, "zid" => $auth_zid))) {
+			$view = db_get_rec("story_view", array("sid" => $sid, "zid" => $auth_zid));
+			$view["time"] = $view["last_time"];
+			db_set_rec("story_view", $view);
 		}
-		header("Location: /story/$day/" . $story["ctitle"]);
+		header("Location: /story/$day/" . $story["slug"]);
 	} elseif ($pid != 0) {
-		if (db_has_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid))) {
-			$history = db_get_rec("pipe_history", array("pid" => $pid, "zid" => $auth_zid));
-			$history["time"] = $history["last_time"];
-			db_set_rec("pipe_history", $history);
+		if (db_has_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid))) {
+			$view = db_get_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid));
+			$view["time"] = $view["last_time"];
+			db_set_rec("pipe_view", $view);
 		}
 		header("Location: /pipe/$pid");
 	} elseif ($qid != 0) {
-		if (db_has_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid))) {
-			$history = db_get_rec("poll_history", array("qid" => $qid, "zid" => $auth_zid));
-			$history["time"] = $history["last_time"];
-			db_set_rec("poll_history", $history);
+		if (db_has_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid))) {
+			$view = db_get_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid));
+			$view["time"] = $view["last_time"];
+			db_set_rec("poll_view", $view);
 		}
 		header("Location: /poll/$qid");
 	}

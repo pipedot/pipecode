@@ -23,7 +23,10 @@ print_header("Pipe History");
 beg_main();
 writeln("<h1>Pipe History</h1>");
 
-$row = run_sql("select pipe.pid, pipe.time, pipe.title, zid, editor, closed, reason, sid from pipe left join story on pipe.pid = story.pid order by pid desc");
+$items_per_page = 50;
+list($item_start, $page_footer) = page_footer("pipe", $items_per_page);
+
+$row = run_sql("select pipe.pid, pipe.time, pipe.title, pipe.author_zid, pipe.edit_zid, closed, reason, sid from pipe left join story on pipe.pid = story.pid order by pid desc limit $item_start, $items_per_page");
 beg_tab();
 writeln('	<tr>');
 writeln('		<th>Date</th>');
@@ -33,16 +36,18 @@ writeln('		<th>Editor</th>');
 writeln('		<th>Status</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
-	if ($row[$i]["zid"] == "") {
-		$author = 'Anonymous Coward';
-	} else {
-		$author = '<a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a>';
-	}
-	if ($row[$i]["editor"] == "") {
-		$editor = '';
-	} else {
-		$editor = '<a href="' . user_page_link($row[$i]["editor"]) . '">' . $row[$i]["editor"] . '</a>';
-	}
+	$author = user_page_link($row[$i]["author_zid"], true);
+	//if ($row[$i]["author_zid"] == "") {
+	//	$author = 'Anonymous Coward';
+	//} else {
+	//	$author = '<a href="' . user_page_link($row[$i]["author_zid"]) . '">' . $row[$i]["author_zid"] . '</a>';
+	//}
+	$editor = user_page_link($row[$i]["edit_zid"], true, false);
+	//if ($row[$i]["edit_zid"] == "") {
+	//	$editor = '';
+	//} else {
+	//	$editor = '<a href="' . user_page_link($row[$i]["edit_zid"]) . '">' . $row[$i]["edit_zid"] . '</a>';
+	//}
 	if ($row[$i]["sid"] > 0) {
 		$status = '<a href="/story/' . $row[$i]["sid"] . '">Published</a>';
 	} else if ($row[$i]["closed"] == 1) {
@@ -60,6 +65,8 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('	</tr>');
 }
 end_tab();
+
+writeln($page_footer);
 
 end_main();
 print_footer();

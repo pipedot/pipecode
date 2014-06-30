@@ -48,10 +48,15 @@ if ($topic == "") {
 } else {
 	$topic = db_get_rec("topic", array("topic" => $topic));
 
-	$row = run_sql("select sid from story where tid = ? order by sid desc", array($topic["tid"]));
+	$items_per_page = 10;
+	list($item_start, $page_footer) = page_footer("story", $items_per_page, array("tid" => $topic["tid"]));
+
+	$row = run_sql("select sid from story where tid = ? order by sid desc limit $item_start, $items_per_page", array($topic["tid"]));
 	for ($i = 0; $i < count($row); $i++) {
 		print_story($row[$i]["sid"]);
 	}
+
+	writeln($page_footer);
 }
 end_main();
 

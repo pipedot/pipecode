@@ -44,7 +44,7 @@ if (http_post()) {
 	die();
 }
 
-$images = build_preview_images($story["story"]);
+$images = build_preview_images($story["body"]);
 
 print_header();
 

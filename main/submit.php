@@ -24,7 +24,7 @@ include("story.php");
 include("captcha.php");
 
 
-function print_submit_box($title, $dirty_body, $story, $tid, $preview)
+function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 {
 	global $auth_zid;
 	global $auth_user;
@@ -40,7 +40,7 @@ function print_submit_box($title, $dirty_body, $story, $tid, $preview)
 		$a["title"] = $title;
 		$a["topic"] = $topic["topic"];
 		$a["icon"] = $topic["icon"];
-		$a["story"] = $story;
+		$a["body"] = $body;
 		writeln('<h1>Preview</h1>');
 		writeln('<p>Check your links before you post!</p>');
 		print_article($a);
@@ -115,20 +115,20 @@ if (http_post()) {
 
 	$pipe = array();
 	$pipe["pid"] = 0;
-	$pipe["tid"] = $tid;
-	$pipe["zid"] = $auth_zid;
-	$pipe["editor"] = "";
-	$pipe["title"] = $title;
-	$pipe["ctitle"] = clean_url($title);
-	$pipe["icon"] = $topic["icon"];
-	$pipe["time"] = $time;
+	$pipe["author_zid"] = $auth_zid;
+	$pipe["body"] = $clean_body;
 	$pipe["closed"] = 0;
+	$pipe["edit_zid"] = "";
+	$pipe["icon"] = $topic["icon"];
 	$pipe["reason"] = "";
-	$pipe["story"] = $clean_body;
+	$pipe["slug"] = clean_url($title);
+	$pipe["tid"] = $tid;
+	$pipe["title"] = $title;
+	$pipe["time"] = $time;
 
 	db_set_rec("pipe", $pipe);
 
-	$pipe = db_get_rec("pipe", array("zid" => $auth_zid, "time" => $time));
+	$pipe = db_get_rec("pipe", array("author_zid" => $auth_zid, "time" => $time));
 	$pid = $pipe["pid"];
 
 	header("Location: /pipe/$pid");
