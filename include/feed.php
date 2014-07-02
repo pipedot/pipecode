@@ -163,13 +163,9 @@ function clean_feed_title($title)
 
 function print_feed_page($zid)
 {
-	//writeln('<table style="width: 100%">');
-	//writeln('	<tr>');
 	beg_main("tri_table");
-	//writeln('<div class="tri_table">');
 
 	for ($c = 0; $c < 3; $c++) {
-		//writeln('		<td class="feed_box">');
 		if ($c == 0) {
 			writeln('<div class="tri_left">');
 		} else if ($c == 1) {
@@ -182,22 +178,18 @@ function print_feed_page($zid)
 		for ($f = 0; $f < count($row); $f++) {
 			$feed = db_get_rec("feed", $row[$f]["fid"]);
 
-			writeln('			<div class="feed_title"><a href="' . $feed["link"] . '">' . $feed["title"] . '</a></div>');
-			writeln('			<div class="feed_body">');
+			writeln('	<div class="feed_title"><a href="' . $feed["link"] . '">' . $feed["title"] . '</a></div>');
+			writeln('	<ul class="feed_body">');
 			$items = db_get_list("feed_item", "time desc", array("fid" => $feed["fid"]));
 			$item_keys = array_keys($items);
 			for ($j = 0; $j < count($items); $j++) {
 				$item = $items[$item_keys[$j]];
-				writeln('				<div><a href="' . $item["link"] . '">' . clean_feed_title($item["title"]) . '</a></div>');
+				writeln('		<li><a href="' . $item["link"] . '">' . clean_feed_title($item["title"]) . '</a></li>');
 			}
-			writeln('			</div>');
+			writeln('	</ul>');
 		}
-		//writeln('		</td>');
 		writeln('</div>');
 	}
 
-	//writeln('	</tr>');
-	//writeln('</table>');
-	//writeln('</div>');
 	end_main();
 }

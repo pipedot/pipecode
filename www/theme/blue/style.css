@@ -483,10 +483,13 @@ textarea {
 	padding: 4px;
 	spacing: 8px;
 	margin-bottom: 8px;
+	margin-top: 0px;
 	width: 100%;
 }
-.feed_body div {
+.feed_body li {
 	padding: 2px;
+	padding-left: 4px;
+	list-style-position: inside;
 }
 .feed_body a:visited {
 	color: #888888;

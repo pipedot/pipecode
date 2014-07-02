@@ -722,7 +722,7 @@ function article_info($comment)
 		$story = db_get_rec("story", $comment["sid"]);
 		$a["type"] = "story";
 		$a["title"] = $story["title"];
-		$date = gmdate("Y-m-d", $story["time"]);
+		$date = gmdate("Y-m-d", $story["publish_time"]);
 		$a["link"] = "https://$server_name/story/$date/" . $story["slug"];
 	} else if ($comment["pid"] > 0) {
 		$pipe = db_get_rec("pipe", $comment["pid"]);

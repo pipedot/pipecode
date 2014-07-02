@@ -131,7 +131,7 @@ if (http_post()) {
 	}
 	if ($sid != 0) {
 		$story = db_get_rec("story", $sid);
-		$day = gmdate("Y-m-d", $story["time"]);
+		$day = gmdate("Y-m-d", $story["publish_time"]);
 	}
 
 	if (http_post("preview")) {

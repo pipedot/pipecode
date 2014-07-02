@@ -23,7 +23,7 @@ print_header("Pipe History");
 beg_main();
 writeln("<h1>Pipe History</h1>");
 
-$items_per_page = 50;
+$items_per_page = 100;
 list($item_start, $page_footer) = page_footer("pipe", $items_per_page);
 
 $row = run_sql("select pipe.pid, pipe.time, pipe.title, pipe.author_zid, pipe.edit_zid, closed, reason, sid from pipe left join story on pipe.pid = story.pid order by pid desc limit $item_start, $items_per_page");
@@ -37,17 +37,7 @@ writeln('		<th>Status</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
 	$author = user_page_link($row[$i]["author_zid"], true);
-	//if ($row[$i]["author_zid"] == "") {
-	//	$author = 'Anonymous Coward';
-	//} else {
-	//	$author = '<a href="' . user_page_link($row[$i]["author_zid"]) . '">' . $row[$i]["author_zid"] . '</a>';
-	//}
 	$editor = user_page_link($row[$i]["edit_zid"], true, false);
-	//if ($row[$i]["edit_zid"] == "") {
-	//	$editor = '';
-	//} else {
-	//	$editor = '<a href="' . user_page_link($row[$i]["edit_zid"]) . '">' . $row[$i]["edit_zid"] . '</a>';
-	//}
 	if ($row[$i]["sid"] > 0) {
 		$status = '<a href="/story/' . $row[$i]["sid"] . '">Published</a>';
 	} else if ($row[$i]["closed"] == 1) {

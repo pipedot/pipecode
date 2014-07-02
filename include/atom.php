@@ -26,9 +26,9 @@ function make_atom($topic)
 	global $server_slogan;
 	global $cache_enabled;
 
-	$row = run_sql("select sid, pipe.zid, story.time, story.title, story.slug, story.story from story inner join pipe on story.pid = pipe.pid order by sid desc limit 10");
+	$row = run_sql("select sid, pipe.author_zid, story.publish_time, story.title, story.slug, story.body from story inner join pipe on story.pid = pipe.pid order by sid desc limit 10");
 	if (count($row) > 0) {
-		$updated = $row[0]["time"];
+		$updated = $row[0]["publish_time"];
 	} else {
 		$updated = time();
 	}
@@ -48,17 +48,17 @@ function make_atom($topic)
 		$body .= "	<entry>\n";
 		$body .= "		<id>http://$server_name/story/" . $row[$i]["sid"] . "</id>\n";
 		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
-		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["time"]) . "</updated>\n";
-		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"http://$server_name/story/" . gmdate("Y-m-d", $row[$i]["time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
+		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"http://$server_name/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
 		$body .= "		<author>\n";
-		if ($row[$i]["zid"] == "") {
+		if ($row[$i]["author_zid"] == "") {
 			$body .= "			<name>Anonymous Coward</name>\n";
 		} else {
-			$body .= "			<name>" . $row[$i]["zid"] . "</name>\n";
-			$body .= "			<uri>" . user_page_link($row[$i]["zid"]) . "</uri>\n";
+			$body .= "			<name>" . $row[$i]["author_zid"] . "</name>\n";
+			$body .= "			<uri>" . user_page_link($row[$i]["author_zid"]) . "</uri>\n";
 		}
 		$body .= "		</author>\n";
-		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["story"]) . "</content>\n";
+		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
 		$body .= "	</entry>\n";
 	}
 

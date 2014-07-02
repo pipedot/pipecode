@@ -19,64 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function search_box($needle = "", $haystack = "comments")
-{
-	beg_form("", "get");
-	writeln('<table class="round">');
-	writeln('	<tr>');
-	writeln('		<td rowspan="2" style="width: 64px"><img alt="Search" src="/images/magnifier-64.png"/></td>');
-	writeln('		<td style="width: 100%; vertical-align: bottom"><input type="search" name="needle" value="' . $needle . '" required="required"/></td>');
-	writeln('		<td style="width: 64px; vertical-align: bottom"><input type="submit" value="Search"/></td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td colspan="2" style="vertical-align: top">');
-	if ($haystack == "comments") {
-		writeln('			<label><input type="radio" name="haystack" value="comments" checked="checked"/>Comments</label>');
-	} else {
-		writeln('			<label><input type="radio" name="haystack" value="comments"/>Comments</label>');
-	}
-	if ($haystack == "stories") {
-		writeln('			<label><input type="radio" name="haystack" value="stories" checked="checked"/>Stories</label>');
-	} else {
-		writeln('			<label><input type="radio" name="haystack" value="stories"/>Stories</label>');
-	}
-	if ($haystack == "pipe") {
-		writeln('			<label><input type="radio" name="haystack" value="pipe" checked="checked"/>Pipe</label>');
-	} else {
-		writeln('			<label><input type="radio" name="haystack" value="pipe"/>Pipe</label>');
-	}
-	if ($haystack == "polls") {
-		writeln('			<label><input type="radio" name="haystack" value="polls" checked="checked"/>Polls</label>');
-	} else {
-		writeln('			<label><input type="radio" name="haystack" value="polls"/>Polls</label>');
-	}
-	writeln('		</td>');
-	writeln('	</tr>');
-	writeln('</table>');
-	end_form();
-}
-
-
-function search_result($title, $link, $zid, $time, $body)
-{
-	global $server_name;
-	global $protocol;
-
-	$date = date("Y-m-d H:i", $time);
-	if ($zid == "") {
-		$by = "Anonymous Coward";
-	} else {
-		$by = "<a href=\"" . user_page_link($zid) . "\">$zid</a>";
-	}
-
-	writeln("<article>");
-	writeln("	<h1><a href=\"$link\">$title</a></h1>");
-	writeln("	<h2>$protocol://$server_name$link</h2>");
-	writeln("	<h3>by $by on $date</h3>");
-	writeln("	<p>$body</p>");
-	writeln("</article>");
-}
-
+include("search.php");
 
 $needle = http_get_string("needle", array("required" => false, "valid" => "[a-z][A-Z][0-9]_+-=%|./? "));
 $haystack = http_get_string("haystack", array("required" => false, "len" => 20, "valid" => "[a-z]"));
@@ -88,9 +31,9 @@ if ($needle != "") {
 	if ($haystack == "comments") {
 		$sql = "select * , match (subject, comment) against (? in boolean mode) as relevance from comment where match (subject, comment) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "stories") {
-		$sql = "select * , match (title, story) against (? in boolean mode) as relevance from story where match (title, story) against (? in boolean mode) order by relevance";
+		$sql = "select * , match (title, body) against (? in boolean mode) as relevance from story where match (title, body) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "pipe") {
-		$sql = "select * , match (title, story) against (? in boolean mode) as relevance from pipe where match (title, story) against (? in boolean mode) order by relevance";
+		$sql = "select * , match (title, body) against (? in boolean mode) as relevance from pipe where match (title, body) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "polls") {
 		$sql = "select * , match (question) against (? in boolean mode) as relevance from poll_question where match (question) against (? in boolean mode) order by relevance";
 	} else {
@@ -112,26 +55,29 @@ if ($needle != "") {
 			$title = $row[$i]["subject"];
 			$link = "/comment/" . $row[$i]["cid"];
 			$body = $row[$i]["comment"];
+			$time = $row[$i]["time"];
 			$zid = $row[$i]["zid"];
 		} else if ($haystack == "stories") {
 			$title = $row[$i]["title"];
 			$link = "/story/" . $row[$i]["sid"];
-			$body = $row[$i]["story"];
-			$pipe = db_get_rec("pipe", $row[$i]["pid"]);
-			$zid = $pipe["zid"];
+			$body = $row[$i]["body"];
+			$time = $row[$i]["publish_time"];
+			$zid = $row[$i]["author_zid"];
 		} else if ($haystack == "pipe") {
 			$title = $row[$i]["title"];
 			$link = "/pipe/" . $row[$i]["pid"];
-			$body = $row[$i]["story"];
-			$zid = $row[$i]["zid"];
+			$body = $row[$i]["body"];
+			$time = $row[$i]["time"];
+			$zid = $row[$i]["author_zid"];
 		} else if ($haystack == "polls") {
 			$title = $row[$i]["question"];
 			$link = "/poll/" . $row[$i]["qid"];
 			$body = "";
+			$time = $row[$i]["time"];
 			$zid = $row[$i]["zid"];
 		}
 
-		search_result($title, $link, $zid, $row[$i]["time"], $body);
+		search_result($title, $link, $zid, $time, $body);
 	}
 	end_main();
 

@@ -34,13 +34,7 @@ function render_comment($subject, $zid, $time, $cid, $body, $last_seen = 0)
 	} else {
 		$s .= "<h2>$subject (Score: $score)</h2>\n";
 	}
-	$s .= "<h3>";
-	if ($zid == "") {
-		$s .= "by Anonymous Coward ";
-	} else {
-		$s .= "by <a href=\"" . user_page_link($zid) . "\">$zid</a> ";
-	}
-	$s .= "on " . date("Y-m-d H:i", $time) . " (<a href=\"$protocol://$server_name/comment/" . $cid . "\">#" . $cid . "</a>)</h3>\n";
+	$s .= "<h3>by " . user_page_link($zid, true) . " on " . date("Y-m-d H:i", $time) . " (<a href=\"$protocol://$server_name/comment/" . $cid . "\">#" . $cid . "</a>)</h3>\n";
 	$s .= "<div>\n";
 	$s .= "<div>";
 	$s .= "$body\n";
