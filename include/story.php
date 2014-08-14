@@ -19,28 +19,92 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_story($sid)
+function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_body, $zid)
+{
+	global $doc_root;
+
+	$story = db_get_rec("story", $story_id);
+	$topic = db_get_rec("topic", $tid);
+	$topic = $topic["topic"];
+
+	print_header();
+
+	print_left_bar("main", "stories");
+	beg_main("cell");
+
+	$topic_list = array();
+	$topic_keys = array();
+	$topics = db_get_list("topic", "topic");
+	$k = array_keys($topics);
+	for ($i = 0; $i < count($topics); $i++) {
+		$topic_list[] = $topics[$k[$i]]["topic"];
+		$topic_keys[] = $k[$i];
+	}
+
+	$icon_list = array();
+	$a = fs_dir("$doc_root/www/images");
+	for ($i = 0; $i < count($a); $i++) {
+		if (substr($a[$i], -7) == "-64.png") {
+			$icon_list[] = substr($a[$i], 0, -7);
+		}
+	}
+
+	beg_form();
+	writeln('<h1>Preview</h1>');
+	$a = array();
+	$a["title"] = $title;
+	$a["time"] = $story["publish_time"];
+	$a["pipe_id"] = $story["pipe_id"];
+	$a["zid"] = $zid;
+	$a["topic"] = $topic;
+	$a["icon"] = $icon;
+	$a["body"] = $clean_body;
+	print_article($a);
+
+	writeln('<h1>Edit</h1>');
+	beg_tab();
+	print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
+	print_row(array("caption" => "Topic", "option_key" => "tid", "option_value" => $tid, "option_list" => $topic_list, "option_keys" => $topic_keys));
+	print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $icon, "option_list" => $icon_list));
+	print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
+	end_tab();
+
+	writeln('<table class="fill" style="margin-bottom: 8px">');
+	writeln('	<tr>');
+	writeln('		<td><a href="/icons">Icons</a></td>');
+	writeln('		<td style="text-align: right"><input name="publish" type="submit" value="Publish"/> <input name="preview" type="submit" value="Preview"/></td>');
+	writeln('	</tr>');
+	writeln('</table>');
+	//right_box("Publish,Preview");
+
+	end_form();
+	end_main();
+	print_footer();
+}
+
+
+function print_story($story_id)
 {
 	global $server_name;
 	global $auth_user;
 
-	$story = db_get_rec("story", $sid);
-	//$pipe = db_get_rec("pipe", $story["pid"]);
+	$story = db_get_rec("story", $story_id);
 	$topic = db_get_rec("topic", $story["tid"]);
 
 	$a["body"] = $story["body"];
-	$a["time"] = $story["publish_time"];
-	$a["sid"] = $sid;
-	$a["topic"] = $topic["topic"];
 	$a["icon"] = $story["icon"];
 	$a["image_id"] = $story["image_id"];
-	$a["tweet_id"] = $story["tweet_id"];
+	$a["pipe_id"] = $story["pipe_id"];
+	$a["short_id"] = $story["short_id"];
+	$a["story_id"] = $story_id;
+	$a["time"] = $story["publish_time"];
 	$a["title"] = $story["title"];
-	$a["pid"] = $story["pid"];
+	$a["topic"] = $topic["topic"];
+	$a["tweet_id"] = $story["tweet_id"];
 	$a["zid"] = $story["author_zid"];
 
-	if ($sid > 0) {
-		$row = run_sql("select count(cid) as comments from comment where sid = ?", array($sid));
+	if ($story_id > 0) {
+		$row = sql("select count(*) as comments from comment where type = 'story' and root_id = ?", $story_id);
 		$a["comments"] = $row[0]["comments"];
 	} else {
 		$a["comments"] = 0;
@@ -64,27 +128,27 @@ function print_article($a)
 	}
 	$zid = $a["zid"];
 	$by = "<b>" . user_page_link($zid, true) . "</b>";
-	if (array_key_exists("sid", $a)) {
-		$sid = $a["sid"];
+	if (array_key_exists("story_id", $a)) {
+		$story_id = $a["story_id"];
 	} else {
-		$sid = 0;
+		$story_id = 0;
 	}
-	if (array_key_exists("pid", $a)) {
-		$pid = $a["pid"];
-		$pipe =  " (<a href=\"/pipe/$pid\">#$pid</a>)";
+	if (array_key_exists("pipe_id", $a)) {
+		$pipe_id = $a["pipe_id"];
+		//$pipe =  " (<a href=\"/pipe/$pipe_id\">#$pipe_id</a>)";
 	} else {
-		$pid = 0;
-		$pipe = "";
+		$pipe_id = "";
+		//$pipe = "";
 	}
 	if (array_key_exists("comments", $a)) {
 		$comments = $a["comments"];
 	} else {
 		$comments = 0;
 	}
-	if (array_key_exists("pid", $a)) {
-		$pid = $a["pid"];
+	if (array_key_exists("pipe_id", $a)) {
+		$pipe_id = $a["pipe_id"];
 	} else {
-		$pid = 0;
+		$pipe_id = 0;
 	}
 	if (array_key_exists("score", $a)) {
 		$score = $a["score"];
@@ -101,6 +165,12 @@ function print_article($a)
 	} else {
 		$tweet_id = 0;
 	}
+	if (array_key_exists("short_id", $a)) {
+		$short_code = crypt_crockford_encode($a["short_id"]);
+		$short = " (<a href=\"/$short_code\">#$short_code</a>)";
+	} else {
+		$short = "";
+	}
 	$image_style = $auth_user["story_image_style"];
 	$topic = $a["topic"];
 	$story = $a["body"];
@@ -109,6 +179,9 @@ function print_article($a)
 	$slug = clean_url($title);
 	$date = date("Y-m-d H:i", $time);
 	$day = gmdate("Y-m-d", $time);
+	if ($pipe_id != "") {
+		$date = "<a href=\"/pipe/$pipe_id\">$date</a>";
+	}
 
 	if ($image_style == 1) {
 		// no image
@@ -136,7 +209,7 @@ function print_article($a)
 
 	writeln("<article class=\"story\">");
 	writeln("	<h1><a href=\"/story/$day/$slug\">$title</a></h1>");
-	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic\"><b>$topic</b></a> on $date$pipe</h2>");
+	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic\"><b>$topic</b></a> on $date$short</h2>");
 
 	if ($image_path != "") {
 		if ($image_url != "") {
@@ -150,22 +223,22 @@ function print_article($a)
 	writeln("	<footer>");
 	writeln('		<table class="fill">');
 	writeln('			<tr>');
-	if ($sid > 0) {
+	if ($story_id > 0) {
 		writeln("				<td><a href=\"/story/$day/$slug\"><b>$comments</b> comments</a></td>");
 		if (@$auth_user["editor"]) {
 			writeln("				<td class=\"right\">");
 			if ($tweet_id == 0) {
 				if (is_file("$doc_root/www/images/tweet-16.png")) {
-					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_tweet_16\">Tweet</a> | ");
+					writeln("					<a href=\"/story/$story_id/tweet\" class=\"icon_tweet_16\">Tweet</a> | ");
 				} else {
-					writeln("					<a href=\"/story/$sid/tweet\" class=\"icon_music_16\">Tweet</a> | ");
+					writeln("					<a href=\"/story/$story_id/tweet\" class=\"icon_music_16\">Tweet</a> | ");
 				}
 			}
-			writeln("					<a href=\"/story/$sid/image\" class=\"icon_picture_16\">Image</a> | ");
-			writeln("					<a href=\"/story/$sid/edit\" class=\"icon_notepad_16\">Edit</a>");
+			writeln("					<a href=\"/story/$story_id/image\" class=\"icon_picture_16\">Image</a> | ");
+			writeln("					<a href=\"/story/$story_id/edit\" class=\"icon_notepad_16\">Edit</a>");
 			writeln("				</td>");
 		}
-	} else if ($pid > 0) {
+	} else if ($pipe_id > 0) {
 		writeln("				<td><b>$comments</b> comments</td>");
 		writeln("				<td class=\"right\">score <b>$score</b></td>");
 	}

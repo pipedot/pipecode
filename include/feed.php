@@ -69,7 +69,7 @@ function save_feed($fid, $data)
 
 	//writeln("link [" . $link . "]<br/>");
 	//writeln("title [" . $title . "]<br/>");
-	run_sql("delete from feed_item where fid = ?", array($fid));
+	sql("delete from feed_item where fid = ?", $fid);
 	$count = 0;
 
 	foreach ($sp->get_items(0, 8) as $item) {
@@ -174,7 +174,7 @@ function print_feed_page($zid)
 			writeln('<div class="tri_right">');
 		}
 
-		$row = run_sql("select fid from feed_user where zid = ? and col = ? order by pos", array($zid, $c));
+		$row = sql("select fid from feed_user where zid = ? and col = ? order by pos", $zid, $c);
 		for ($f = 0; $f < count($row); $f++) {
 			$feed = db_get_rec("feed", $row[$f]["fid"]);
 

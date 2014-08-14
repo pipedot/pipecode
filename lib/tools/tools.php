@@ -58,7 +58,7 @@ function auth_sign_in($next_page = "/")
 	if (!string_uses(substr($username, 0, 1), "[a-z]")) {
 		die("invalid username [$username]");
 	}
-	$row = run_sql("select user_id, password, salt from auth.user_list where username = ?", array($username));
+	$row = sql("select user_id, password, salt from auth.user_list where username = ?", $username);
 	if (count($row) == 0) {
 		die("no such user [$username]");
 	}
@@ -322,6 +322,17 @@ function crypt_crc32_file($path)
 }
 
 
+function crypt_crockford_decode($base32) {
+	$base32 = strtr(strtoupper($base32), "ABCDEFGHJKMNPQRSTVWXYZILO", "abcdefghijklmnopqrstuv110");
+	return base_convert($base32, 32, 10);
+}
+
+
+function crypt_crockford_encode($base10) {
+	return strtr(base_convert($base10, 10, 32), "abcdefghijklmnopqrstuv", "ABCDEFGHJKMNPQRSTVWXYZ");
+}
+
+
 function crypt_escape($src)
 {
 	$s = str_replace("\\", "\\\\", $src);
@@ -478,9 +489,9 @@ function db_del_rec($table, $id)
 			$a[] = $id[$key[$i]];
 		}
 		$sql = substr($sql, 0, -5);
-		run_sql($sql, $a);
+		sql($sql, $a);
 	} else {
-		run_sql("delete from $table where $key = ?", array($id));
+		sql("delete from $table where $key = ?", $id);
 	}
 }
 
@@ -507,15 +518,15 @@ function db_get_conf($table, $id = false)
 	}
 
 	$map = array();
-	$row = run_sql("select name, value from default_conf where conf = ?", array($table));
+	$row = sql("select name, value from default_conf where conf = ?", $table);
 	for ($i = 0; $i < count($row); $i++) {
 		$map[$row[$i]["name"]] = $row[$i]["value"];
 	}
 
 	if ($id === false) {
-		$row = run_sql("select name, value from $table");
+		$row = sql("select name, value from $table");
 	} else {
-		$row = run_sql("select name, value from $table where $key = ?", array($id));
+		$row = sql("select name, value from $table where $key = ?", $id);
 	}
 	for ($i = 0; $i < count($row); $i++) {
 		$map[$row[$i]["name"]] = $row[$i]["value"];
@@ -559,7 +570,7 @@ function db_get_list($table, $order = "", $where = array())
 		$o = "";
 	}
 
-	$row = run_sql("select * from $table$w$o", $a);
+	$row = sql("select * from $table$w$o", $a);
 	$a = array();
 	for ($i = 0; $i < count($row); $i++) {
 		if (is_array($key)) {
@@ -610,9 +621,9 @@ function db_get_rec($table, $id)
 			$a[] = $id[$k[$i]];
 		}
 		$sql = substr($sql, 0, -5);
-		$row = run_sql($sql, $a);
+		$row = sql($sql, $a);
 	} else {
-		$row = run_sql("select * from $table where $key = ?", array($id));
+		$row = sql("select * from $table where $key = ?", $id);
 	}
 	if (count($row) == 0) {
 		if (is_array($id)) {
@@ -636,7 +647,7 @@ function db_get_rec($table, $id)
 
 function db_has_database($database)
 {
-	$row = run_sql("show databases like '$database'");
+	$row = sql("show databases like '$database'");
 	if (count($row) == 0) {
 		return false;
 	}
@@ -659,7 +670,6 @@ function db_has_rec($table, $id)
 	if (!array_key_exists($table, $db_table)) {
 		die("unknown table [$table]");
 	}
-	$key = $db_table[$table]["key"];
 	if (is_array($id)) {
 		$k = array_keys($id);
 		$a = array();
@@ -669,9 +679,10 @@ function db_has_rec($table, $id)
 			$a[] = $id[$k[$i]];
 		}
 		$sql = substr($sql, 0, -5);
-		$row = run_sql($sql, $a);
+		$row = sql($sql, $a);
 	} else {
-		$row = run_sql("select * from $table where $key = ?", array($id));
+		$key = $db_table[$table]["key"];
+		$row = sql("select * from $table where $key = ?", $id);
 	}
 	if (count($row) == 0) {
 		return false;
@@ -692,15 +703,15 @@ function db_set_conf($table, $map, $id = false)
 	$default = array();
 
 	if ($id === false) {
-		$row = run_sql("select name, value from $table");
+		$row = sql("select name, value from $table");
 	} else {
-		$row = run_sql("select name, value from $table where $key = ?", array($id));
+		$row = sql("select name, value from $table where $key = ?", $id);
 	}
 	for ($i = 0; $i < count($row); $i++) {
 		$current[$row[$i]["name"]] = $row[$i]["value"];
 	}
 
-	$row = run_sql("select name, value from default_conf where conf = ?", array($table));
+	$row = sql("select name, value from default_conf where conf = ?", $table);
 	for ($i = 0; $i < count($row); $i++) {
 		$default[$row[$i]["name"]] = $row[$i]["value"];
 	}
@@ -713,15 +724,15 @@ function db_set_conf($table, $map, $id = false)
 		if (array_key_exists($new_name, $current)) {
 			if (array_key_exists($new_name, $default) && $new_value == $default[$new_name]) {
 				if ($id === false) {
-					run_sql("delete from $table where name = ?", array($new_name));
+					sql("delete from $table where name = ?", $new_name);
 				} else {
-					run_sql("delete from $table where $key = ? and name = ?", array($id, $new_name));
+					sql("delete from $table where $key = ? and name = ?", $id, $new_name);
 				}
 			} else if ($current[$new_name] != $new_value) {
 				if ($id === false) {
-					run_sql("update $table set value = ? where name = ?", array($new_value, $new_name));
+					sql("update $table set value = ? where name = ?", $new_value, $new_name);
 				} else {
-					run_sql("update $table set value = ? where $key = ? and name = ?", array($new_value, $id, $new_name));
+					sql("update $table set value = ? where $key = ? and name = ?", $new_value, $id, $new_name);
 				}
 			}
 		} else {
@@ -733,9 +744,9 @@ function db_set_conf($table, $map, $id = false)
 			}
 			if ($insert) {
 				if ($id === false) {
-					run_sql("insert into $table (name, value) values (?, ?)", array($new_name, $new_value));
+					sql("insert into $table (name, value) values (?, ?)", $new_name, $new_value);
 				} else {
-					run_sql("insert into $table ($key, name, value) values (?, ?, ?)", array($id, $new_name, $new_value));
+					sql("insert into $table ($key, name, value) values (?, ?, ?)", $id, $new_name, $new_value);
 				}
 			}
 		}
@@ -794,7 +805,7 @@ function db_set_rec($table, $rec)
 			$count = count($col) - 1;
 		}
 		$sql = substr($sql, 0, -2) . ") values (" . str_repeat("?, ", $count) . "?)";
-		run_sql($sql, $a);
+		sql($sql, $a);
 	} else {
 		$sql = "update $table set ";
 		for ($i = 0; $i < count($col); $i++) {
@@ -824,7 +835,7 @@ function db_set_rec($table, $rec)
 			$sql .= "$key = ?";
 			$a[] = $id;
 		}
-		run_sql($sql, $a);
+		sql($sql, $a);
 	}
 
 	if ($cache_enabled) {
@@ -1682,13 +1693,8 @@ function random_hash()
 }
 
 
-function right_box($buttons, $style = "")
+function left_right_buttons($buttons)
 {
-	if ($style == "") {
-		writeln('<div class="right_box">');
-	} else {
-		writeln('<div class="right_box" style="' . $style . '">');
-	}
 	if (string_has($buttons, "<")) {
 		writeln($buttons);
 	} else {
@@ -1700,6 +1706,42 @@ function right_box($buttons, $style = "")
 			writeln('<input type="submit" name="' . $name . '" value="' . $value .'"/>');
 		}
 	}
+}
+
+
+function left_right_box($left, $right)
+{
+	writeln('<div class="left_right_box">');
+	writeln('<div class="left_box">');
+	left_right_buttons($left);
+	writeln('</div>');
+	writeln('<div class="right_box">');
+	left_right_buttons($right);
+	writeln('</div>');
+	writeln('</div>');
+}
+
+
+function right_box($buttons, $style = "")
+{
+	if ($style == "") {
+		writeln('<div class="right_box">');
+	} else {
+		writeln('<div class="right_box" style="' . $style . '">');
+	}
+	left_right_buttons($buttons);
+	writeln('</div>');
+}
+
+
+function left_box($buttons, $style = "")
+{
+	if ($style == "") {
+		writeln('<div class="left_box">');
+	} else {
+		writeln('<div class="left_box" style="' . $style . '">');
+	}
+	left_right_buttons($buttons);
 	writeln('</div>');
 }
 
@@ -1743,11 +1785,45 @@ function run_sql_file($path)
 		if ($lines[$i] != "" && substr($lines[$i], 0, 2) != "--") {
 			$sql .= $lines[$i];
 			if (substr(trim($lines[$i]), -1, 1) == ';') {
-				run_sql($sql);
+				sql($sql);
 				$sql = "";
 			}
 		}
 	}
+}
+
+
+function sql($sql)
+{
+	global $sql_open;
+	global $sql_dbh;
+	global $sql_server;
+	global $sql_error;
+
+	if (!$sql_open) {
+		open_database();
+	}
+	$sth = $sql_dbh->prepare($sql);
+
+	try {
+		$arg = func_get_args();
+		$arg = array_slice($arg, 1);
+		if (count($arg) == 1 && is_array($arg[0])) {
+			$arg = $arg[0];
+		}
+		$sth->execute($arg);
+		if ($sth->columnCount() == 0) {
+			return;
+		}
+		$row = $sth->fetchAll();
+	} catch (PDOException $exception) {
+		$msg = $exception->getMessage();
+		$sql_error = "sql [$sql] arg [" . implode(", ", $arg) . "] msg [$msg]";
+		default_error($sql_error);
+		return false;
+	}
+
+	return $row;
 }
 
 

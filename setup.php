@@ -76,18 +76,18 @@ if (http_post()) {
 	fs_slap("$doc_root/conf.php", $s);
 
 	if (!db_has_database($sql_database)) {
-		run_sql("create database $sql_database");
-		run_sql("use $sql_database");
+		sql("create database $sql_database");
+		sql("use $sql_database");
 		run_sql_file("$doc_root/schema.sql");
 		run_sql_file("$doc_root/default.sql");
 
 		$zid = "$admin_username@$server_name";
 		$salt = random_hash();
 		$pass = crypt_sha256("$admin_password$salt");
-		run_sql("insert into user_conf (zid, name, value) values (?, ?, ?)", array($zid, "admin", "1"));
-		run_sql("insert into user_conf (zid, name, value) values (?, ?, ?)", array($zid, "editor", "1"));
-		run_sql("insert into user_conf (zid, name, value) values (?, ?, ?)", array($zid, "password", $pass));
-		run_sql("insert into user_conf (zid, name, value) values (?, ?, ?)", array($zid, "salt", $salt));
+		sql("insert into user_conf (zid, name, value) values (?, ?, ?)", $zid, "admin", "1");
+		sql("insert into user_conf (zid, name, value) values (?, ?, ?)", $zid, "editor", "1");
+		sql("insert into user_conf (zid, name, value) values (?, ?, ?)", $zid, "password", $pass);
+		sql("insert into user_conf (zid, name, value) values (?, ?, ?)", $zid, "salt", $salt);
 	}
 
 	header("Location: /");

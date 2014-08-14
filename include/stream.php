@@ -41,7 +41,7 @@ function print_card($card_id)
 	}
 
 	$tags = array();
-	$row = run_sql("select tag from card_tags inner join tag on card_tags.tag_id = tag.tag_id where card_id = ?", array($card_id));
+	$row = sql("select tag from card_tags inner join tag on card_tags.tag_id = tag.tag_id where card_id = ?", $card_id);
 	for ($i = 0; $i < count($row); $i++) {
 		$tags[] = $row[$i]["tag"];
 	}
@@ -165,9 +165,9 @@ function print_card_small($a)
 	writeln("			</div>");
 	writeln("			<div class=\"card_vote\">");
 	writeln("				<div class=\"card_vote_box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card_button\" src=\"/images/add-16.png\" title=\"Vote Up\"/>");
+	writeln("					<img alt=\"Vote Up\" class=\"card_button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
 	writeln("					<div class=\"card_vote_count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card_button\" src=\"/images/remove-16.png\" title=\"Vote Down\"/>");
+	writeln("					<img alt=\"Vote Down\" class=\"card_button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
 	writeln("				</div>");
 	writeln("			</div>");
 	writeln("		</td>");
@@ -215,7 +215,7 @@ function print_card_medium($a)
 	writeln('				<tr>');
 	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"/></td>');
 	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px"><a href="https://bryan.pipedot.org/">Bryan Beicker</a></div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
-	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/add-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/remove-16.png)" title="Reset"></div></td></tr></table></td>');
+	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');
@@ -242,7 +242,7 @@ function print_card_large($a)
 	writeln('				<tr>');
 	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"/></td>');
 	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px">Bryan Beicker</div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
-	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/add-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/remove-16.png)" title="Reset"></div></td></tr></table></td>');
+	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');

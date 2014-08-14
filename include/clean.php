@@ -202,7 +202,7 @@ function clean_html($dirty, $definition = "comment")
 	if ($definition == "page") {
 		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,pre,ul,ol,li,p,table,tr,td,img');
 	} else {
-		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,pre,ul,ol,li');
+		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,ul,ol,li');
 	}
 	if ($definition != "story") {
 		$config->set('HTML.Nofollow', true);
@@ -240,6 +240,14 @@ function clean_html($dirty, $definition = "comment")
 	$clean = clean_entities($clean);
 	$clean = string_replace_all("  ", " ", $clean);
 	$clean = trim($clean);
+
+	while (substr($clean, 0, 5) == "<br/>") {
+		$clean = trim(substr($clean, 5));
+	}
+	while (substr($clean, -5, 5) == "<br/>") {
+		$clean = trim(substr($clean, 0, -5));
+	}
+	$clean = string_replace_all("<br/><br/><br/>", "<br/><br/>", $clean);
 
 	return $clean;
 }
@@ -606,6 +614,18 @@ function clean_subject()
 	}
 
 	return $subject;
+}
+
+
+function clean_slug()
+{
+	$slug = http_get_string("slug", array("required" => false, "len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+
+	if ($slug == "") {
+		$slug = clean_url(clean_subject());
+	}
+
+	return $slug;
 }
 
 

@@ -19,46 +19,59 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function render_comment($subject, $zid, $time, $cid, $body, $last_seen = 0)
+function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $short_id)
 {
 	global $server_name;
 	global $can_moderate;
 	global $auth_zid;
 	global $protocol;
+	global $reasons;
 
-	$score = get_comment_score($cid);
+	list($score, $reason) = get_comment_score($comment_id);
+	$score_reason = $score;
+	if ($reason != "") {
+		$score_reason .= ", $reason";
+	}
 
 	$s = "<article class=\"comment\">\n";
 	if ($time > $last_seen) {
-		$s .= "<h1>$subject (Score: $score)</h1>\n";
+		$s .= "<h1>$subject (Score: $score_reason)</h1>\n";
 	} else {
-		$s .= "<h2>$subject (Score: $score)</h2>\n";
+		$s .= "<h2>$subject (Score: $score_reason)</h2>\n";
 	}
-	$s .= "<h3>by " . user_page_link($zid, true) . " on " . date("Y-m-d H:i", $time) . " (<a href=\"$protocol://$server_name/comment/" . $cid . "\">#" . $cid . "</a>)</h3>\n";
+	$date = date("Y-m-d H:i", $time);
+	if ($comment_id != "") {
+		$date = "<a href=\"$protocol://$server_name/comment/$comment_id\">$date</a>";
+	}
+	$short_code = crypt_crockford_encode($short_id);
+	$s .= "<h3>by " . user_page_link($zid, true) . " on $date (<a href=\"/$short_code\">#$short_code</a>)</h3>\n";
 	$s .= "<div>\n";
 	$s .= "<div>";
 	$s .= "$body\n";
 
-	$reason = array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
-	if ($can_moderate && $zid != $auth_zid) {
-		$row = run_sql("select rid from comment_vote where cid = ? and zid = ?", array($cid, $auth_zid));
+	//$reason = array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
+	if ($can_moderate && $auth_zid != "" && $zid != $auth_zid) {
+		$row = sql("select reason from comment_vote where comment_id = ? and zid = ?", $comment_id, $auth_zid);
 		if (count($row) == 0) {
-			$selected = 0;
+			$selected = "Normal";
 		} else {
-			$selected = $row[0]["rid"];
+			$selected = $row[0]["reason"];
 		}
 
-		$s .= "<footer><a href=\"/post?cid=$cid\">Reply</a><select name=\"cid_$cid\">";
-		for ($i = 0; $i < count($reason); $i++) {
-			if ($i == $selected) {
-				$s .= "<option value=\"$i\" selected=\"selected\">" . $reason[$i] . "</option>";
+		$s .= "<footer><a href=\"/post?comment_id=$comment_id\">Reply</a><select name=\"comment_" . $comment_id . "\">";
+		$k = array_keys($reasons);
+		for ($i = 0; $i < count($reasons); $i++) {
+			if ($k[$i] == $selected) {
+				//$s .= "<option value=\"$i\" selected=\"selected\">" . $reason[$i] . "</option>";
+				$s .= "<option selected=\"selected\">" . $k[$i] . "</option>";
 			} else {
-				$s .= "<option value=\"$i\">" . $reason[$i] . "</option>";
+				//$s .= "<option value=\"$i\">" . $reason[$i] . "</option>";
+				$s .= "<option>" . $k[$i] . "</option>";
 			}
 		}
 		$s .= "</select> <input type=\"submit\" value=\"Moderate\"/></footer>\n";
 	} else {
-		$s .= "<footer><a href=\"$protocol://$server_name/post?cid=$cid\">Reply</a></footer>\n";
+		$s .= "<footer><a href=\"$protocol://$server_name/post?comment_id=$comment_id\">Reply</a></footer>\n";
 	}
 	$s .= "</div>\n";
 
@@ -66,43 +79,45 @@ function render_comment($subject, $zid, $time, $cid, $body, $last_seen = 0)
 }
 
 
-function render_comment_json($subject, $zid, $time, $cid, $body)
+function render_comment_json($subject, $zid, $time, $comment_id, $body, $short_id)
 {
 	global $can_moderate;
 	global $auth_zid;
 
-	$score = get_comment_score($cid);
+	list($score, $reason) = get_comment_score($comment_id);
 	$rid = -1;
 	if ($can_moderate) {
-		$row = run_sql("select rid from comment_vote where cid = ? and zid = ?", array($cid, $auth_zid));
+		$row = sql("select reason from comment_vote where comment_id = ? and zid = ?", $comment_id, $auth_zid);
 		if (count($row) == 0) {
-			$rid = 0;
+			$vote = "";
 		} else {
-			$rid = $row[0]["rid"];
+			$vote = $row[0]["reason"];
 		}
 	}
 
 	$s = "\$level{\n";
-	$s .= "\$level	\"cid\": $cid,\n";
-	$s .= "\$level	\"zid\": \"$zid\",\n";
-	$s .= "\$level	\"time\": $time,\n";
-	$s .= "\$level	\"score\": \"$score\",\n";
-	$s .= "\$level	\"rid\": $rid,\n";
+	$s .= "\$level	\"comment_id\": \"$comment_id\",\n";
+	$s .= "\$level	\"body\": \"" . addcslashes($body, "\\\"") . "\",\n";
+	$s .= "\$level	\"score\": $score,\n";
+	$s .= "\$level	\"reason\": \"$reason\",\n";
+	$s .= "\$level	\"short\": \"" . crypt_crockford_encode($short_id) . "\",\n";
 	$s .= "\$level	\"subject\": \"" . addcslashes($subject, "\\\"") . "\",\n";
-	$s .= "\$level	\"comment\": \"" . addcslashes($body, "\\\"") . "\",\n";
+	$s .= "\$level	\"time\": $time,\n";
+	$s .= "\$level	\"vote\": \"$vote\",\n";
+	$s .= "\$level	\"zid\": \"$zid\",\n";
 	$s .= "\$level	\"reply\": [\n";
 
 	return $s;
 }
 
 
-function recursive_render($render, $parent, $keys, $cid)
+function recursive_render($render, $parent, $keys, $comment_id)
 {
-	$s = $render[$cid];
+	$s = $render[$comment_id];
 
 	for ($i = 0; $i < count($keys); $i++) {
 		$child = $keys[$i];
-		if ($parent[$child] == $cid) {
+		if ($parent[$child] == $comment_id) {
 			$s .= recursive_render($render, $parent, $keys, $child);
 		}
 	}
@@ -113,14 +128,14 @@ function recursive_render($render, $parent, $keys, $cid)
 }
 
 
-function recursive_render_json($render, $parent, $keys, $cid, $level)
+function recursive_render_json($render, $parent, $keys, $comment_id, $level)
 {
-	$s = str_replace("\$level", str_repeat("		", $level), $render[$cid]);
+	$s = str_replace("\$level", str_repeat("		", $level), $render[$comment_id]);
 
 	$count = 0;
 	for ($i = 0; $i < count($keys); $i++) {
 		$child = $keys[$i];
-		if ($parent[$child] == $cid) {
+		if ($parent[$child] == $comment_id) {
 			$s .= recursive_render_json($render, $parent, $keys, $child, $level + 1) . "\n";
 			$count++;
 		}
@@ -135,7 +150,7 @@ function recursive_render_json($render, $parent, $keys, $cid, $level)
 }
 
 
-function render_page($sid, $pid, $qid, $json)
+function render_page($type, $root_id, $json)
 {
 	global $auth_zid;
 	global $can_moderate;
@@ -146,64 +161,25 @@ function render_page($sid, $pid, $qid, $json)
 	$username = array();
 	$parent = array();
 
-	if ($sid != 0) {
-		$comments = db_get_list("comment", "time", array("sid" => $sid));
-		if ($auth_zid == "") {
-			$last_seen = 0;
+	if ($auth_zid == "") {
+		$last_seen = 0;
+	} else {
+		if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
+			$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
+			$view["last_time"] = $view["time"];
+			$last_seen = $view["time"];
 		} else {
-			if (db_has_rec("story_view", array("sid" => $sid, "zid" => $auth_zid))) {
-				$view = db_get_rec("story_view", array("sid" => $sid, "zid" => $auth_zid));
-				$view["last_time"] = $view["time"];
-				$last_seen = $view["time"];
-			} else {
-				$view = array();
-				$view["sid"] = $sid;
-				$view["zid"] = $auth_zid;
-				$view["last_time"] = 0;
-				$last_seen = 0;
-			}
-			$view["time"] = time();
-			db_set_rec("story_view", $view);
-		}
-	} elseif ($pid != 0) {
-		$comments = db_get_list("comment", "time", array("pid" => $pid));
-		if ($auth_zid == "") {
+			$view = array();
+			$view["{$type}_id"] = $root_id;
+			$view["zid"] = $auth_zid;
+			$view["last_time"] = 0;
 			$last_seen = 0;
-		} else {
-			if (db_has_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid))) {
-				$view = db_get_rec("pipe_view", array("pid" => $pid, "zid" => $auth_zid));
-				$view["last_time"] = $view["time"];
-				$last_seen = $view["time"];
-			} else {
-				$view = array();
-				$view["pid"] = $pid;
-				$view["zid"] = $auth_zid;
-				$view["last_time"] = 0;
-				$last_seen = 0;
-			}
-			$view["time"] = time();
-			db_set_rec("pipe_view", $view);
 		}
-	} elseif ($qid != 0) {
-		$comments = db_get_list("comment", "time", array("qid" => $qid));
-		if ($auth_zid == "") {
-			$last_seen = 0;
-		} else {
-			if (db_has_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid))) {
-				$view = db_get_rec("poll_view", array("qid" => $qid, "zid" => $auth_zid));
-				$view["last_time"] = $view["time"];
-				$last_seen = $view["time"];
-			} else {
-				$view = array();
-				$view["qid"] = $qid;
-				$view["zid"] = $auth_zid;
-				$view["last_time"] = 0;
-				$last_seen = 0;
-			}
-			$view["time"] = time();
-			db_set_rec("poll_view", $view);
-		}
+		$view["time"] = time();
+		db_set_rec("{$type}_view", $view);
 	}
+
+	$comments = db_get_list("comment", "time", array("root_id" => $root_id));
 	$total = count($comments);
 	$k = array_keys($comments);
 
@@ -217,13 +193,7 @@ function render_page($sid, $pid, $qid, $json)
 		writeln('<div class="comment_header">');
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
-		if ($sid != 0) {
-			writeln('			<td style="width: 30%"><a href="/post?sid=' . $sid . '" class="icon_16" style="background-image: url(\'/images/chat-16.png\')">Reply</a></td>');
-		} elseif ($pid != 0) {
-			writeln('			<td style="width: 30%"><a href="/post?pid=' . $pid . '" class="icon_16" style="background-image: url(\'/images/chat-16.png\')">Reply</a></td>');
-		} elseif ($qid != 0) {
-			writeln('			<td style="width: 30%"><a href="/post?qid=' . $qid . '" class="icon_16" style="background-image: url(\'/images/chat-16.png\')">Reply</a></td>');
-		}
+		writeln('			<td style="width: 30%"><a rel="nofollow" href="/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
 		if ($can_moderate && false) {
 			writeln('			<td style="width: 30%">');
 			writeln('				<table>');
@@ -275,11 +245,11 @@ function render_page($sid, $pid, $qid, $json)
 		$comment = $comments[$k[$i]];
 		$zid = $comment["zid"];
 		if ($json) {
-			$render[$comment["cid"]] = render_comment_json($comment["subject"], $zid, $comment["time"], $comment["cid"], $comment["comment"]);
+			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $zid, $comment["time"], $comment["comment_id"], $comment["body"], $comment["short_id"]);
 		} else {
-			$render[$comment["cid"]] = render_comment($comment["subject"], $zid, $comment["time"], $comment["cid"], $comment["comment"], $last_seen);
+			$render[$comment["comment_id"]] = render_comment($comment["subject"], $zid, $comment["time"], $comment["comment_id"], $comment["body"], $last_seen, $comment["short_id"]);
 		}
-		$parent[$comment["cid"]] = $comment["parent"];
+		$parent[$comment["comment_id"]] = $comment["parent_id"];
 	}
 
 	$keys = array_keys($render);
@@ -287,22 +257,17 @@ function render_page($sid, $pid, $qid, $json)
 
 	if (!$json && $can_moderate) {
 		beg_form("/moderate_noscript");
-		if ($sid != 0) {
-			writeln('<input type="hidden" name="sid" value="' . $sid . '"/>');
-		} elseif ($pid != 0) {
-			writeln('<input type="hidden" name="pid" value="' . $pid . '"/>');
-		} elseif ($qid != 0) {
-			writeln('<input type="hidden" name="qid" value="' . $qid . '"/>');
-		}
+		writeln('<input type="hidden" name="type" value="' . $type . '"/>');
+		writeln('<input type="hidden" name="root_id" value="' . $root_id . '"/>');
 	}
 	for ($i = 0; $i < $total; $i++) {
 		$comment = $comments[$keys[$i]];
 
-		if ($comment["parent"] == 0) {
+		if ($comment["parent_id"] == "") {
 			if ($json) {
-				$s .= recursive_render_json($render, $parent, $keys, $comment["cid"], 1) . "\n";
+				$s .= recursive_render_json($render, $parent, $keys, $comment["comment_id"], 1) . "\n";
 			} else {
-				writeln(recursive_render($render, $parent, $keys, $comment["cid"]));
+				writeln(recursive_render($render, $parent, $keys, $comment["comment_id"]));
 			}
 		}
 	}
@@ -321,30 +286,18 @@ function render_page($sid, $pid, $qid, $json)
 }
 
 
-function render_sliders($sid, $pid, $qid)
+function render_sliders($type, $root_id)
 {
 	global $hide_value;
 	global $expand_value;
 
-	if ($sid != 0) {
-		$row = run_sql("select count(cid) as comments from comment where sid = ?", array($sid));
-	} elseif ($pid != 0) {
-		$row = run_sql("select count(cid) as comments from comment where pid = ?", array($pid));
-	} elseif ($qid != 0) {
-		$row = run_sql("select count(cid) as comments from comment where qid = ?", array($qid));
-	}
+	$row = sql("select count(*) as comments from comment where root_id = ?", $root_id);
 	$total = (int) $row[0]["comments"];
 
 	writeln('<div class="comment_header">');
 	writeln('	<table class="fill">');
 	writeln('		<tr>');
-	if ($sid != 0) {
-		writeln('			<td style="width: 20%"><a href="/post?sid=' . $sid . '" class="icon_16" style="background-image: url(\'/images/chat-16.png\')">Reply</a></td>');
-	} elseif ($pid != 0) {
-		writeln('			<td style="width: 20%"><a href="/post?pid=' . $pid . '" class="icon_16" style="background-image: url(\'/images/chat-16.png\')">Reply</a></td>');
-	} elseif ($qid != 0) {
-		writeln('			<td style="width: 20%"><a href="/post?qid=' . $qid . '" class="icon_16" style="background-image: url(\'/images/chat-16.png\')">Reply</a></td>');
-	}
+	writeln('			<td style="width: 20%"><a href="/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
 	writeln('					<tr>');
@@ -372,26 +325,33 @@ function render_sliders($sid, $pid, $qid)
 }
 
 
-function get_comment_score($cid) {
+function get_comment_score($comment_id)
+{
 	global $cache_enabled;
+	global $auth_zid;
 
 //	if ($cache_enabled) {
-//		$cache_key = "comment_score.$cid";
+//		$cache_key = "comment_score.$comment_id";
 //		$s = cache_get($cache_key);
 //		if ($s !== false) {
 //			return $s;
 //		}
 //	}
 
-	$row = run_sql("select sum(value) as score from comment_vote inner join reason on comment_vote.rid = reason.rid where cid = ?", array($cid));
+	if ($comment_id == "") {
+		return array(($auth_zid == "" ? 0 : 1), "");
+	}
+
+	//$row = sql("select sum(value) as score from comment_vote inner join reason on comment_vote.rid = reason.rid where comment_id = ?", $comment_id);
+	$row = sql("select sum(value) as score from comment_vote where comment_id = ?", $comment_id);
 	$score = (int) $row[0]["score"];
 
-	if (db_has_rec("comment", $cid)) {
-		$comment = db_get_rec("comment", $cid);
+	//if (db_has_rec("comment", $comment_id)) {
+		$comment = db_get_rec("comment", $comment_id);
 		if ($comment["zid"] != "") {
 			$score++;
 		}
-	}
+	//}
 
 	if ($score < -1) {
 		$score = -1;
@@ -402,14 +362,15 @@ function get_comment_score($cid) {
 	//$up = array("Insightful", "Interesting", "Informative", "Funny", "Underrated");
 	//$down = array("Offtopic", "Flamebait", "Troll", "Redundant", "Overrated");
 	$reason = "";
-	$row = run_sql("select reason, count(reason) as reason_count, value from comment_vote inner join reason on comment_vote.rid = reason.rid where cid = ? group by reason order by value desc, reason_count desc", array($cid));
+	//$row = sql("select reason, count(reason) as reason_count, value from comment_vote inner join reason on comment_vote.rid = reason.rid where comment_id = ? group by reason order by value desc, reason_count desc", $comment_id);
+	$row = sql("select reason, count(reason) as reason_count, value from comment_vote where comment_id = ? group by reason order by value desc, reason_count desc", $comment_id);
 	for ($i = 0; $i < count($row); $i++) {
 		if ($score < 0 && $row[$i]["value"] < 0 && $row[$i]["reason_count"] > 1 && $row[$i]["reason"] != "Overrated") {
-			$reason = ", " . $row[$i]["reason"];
+			$reason = $row[$i]["reason"];
 			break;
 		}
 		if ($score > 1 && $row[$i]["value"] > 0 && $row[$i]["reason_count"] > 1 && $row[$i]["reason"] != "Underrated") {
-			$reason = ", " . $row[$i]["reason"];
+			$reason = $row[$i]["reason"];
 			break;
 		}
 	}
@@ -418,5 +379,5 @@ function get_comment_score($cid) {
 //		cache_set($cache_key, "$score$reason");
 //	}
 
-	return "$score$reason";
+	return array($score, $reason);
 }

@@ -471,7 +471,7 @@ function clean_tmp_images()
 {
 	global $doc_root;
 
-	$row = run_sql("select tmp_image_id, time, original_url from tmp_image where time < ?", array(time() - 60 * 60));
+	$row = sql("select tmp_image_id, time, original_url from tmp_image where time < ?", time() - 60 * 60);
 	for ($i = 0; $i < count($row); $i++) {
 		$tmp_image_id = $row[$i]["tmp_image_id"];
 		$time = $row[$i]["time"];

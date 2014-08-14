@@ -254,22 +254,22 @@ function format_text_mail($body)
 }
 
 
-function send_notifications($parent, $comment)
+function send_notifications($comment)
 {
 	global $server_name;
 	global $auth_zid;
 
 	$new_subject = $comment["subject"];
-	$new_cid = $comment["cid"];
+	$new_comment_id = $comment["comment_id"];
 	$new_zid = $comment["zid"];
 	if ($new_zid == "") {
 		$new_zid = "Anonymous Coward";
 	}
-	$parent = $comment["parent"];
+	$parent_id = $comment["parent_id"];
 	$sent_list = array();
 
-	while ($parent > 0) {
-		$comment = db_get_rec("comment", $parent);
+	while ($parent_id != "") {
+		$comment = db_get_rec("comment", $parent_id);
 		$zid = $comment["zid"];
 		if ($zid != "" && $zid != $auth_zid && !in_array($zid, $sent_list)) {
 			$a = article_info($comment);
@@ -282,17 +282,17 @@ function send_notifications($parent, $comment)
 			$body .= "\n";
 			$body .= "Your original comment:\n";
 			$body .= $comment["subject"] . "\n";
-			$body .= "https://$server_name/comment/$parent\n";
+			$body .= "https://$server_name/comment/$parent_id\n";
 			$body .= "\n";
 			$body .= "The new reply:\n";
 			$body .= "$new_subject\n";
-			$body .= "https://$server_name/comment/$new_cid\n";
+			$body .= "https://$server_name/comment/$new_comment_id\n";
 			$body .= "\n";
 
 			send_web_mail($zid, $subject, $body, "", false);
 			$sent_list[] = $zid;
 		}
 
-		$parent = $comment["parent"];
+		$parent_id = $comment["parent_id"];
 	}
 }

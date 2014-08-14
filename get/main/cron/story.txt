@@ -1,0 +1,1251 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+            "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<script id="before-content" type="text/javascript">
+var pageload = {
+	pagemark: '887285236880552654',
+	before_content: (new Date).getTime()
+};
+function pageload_done( $, console, maybe ){
+	pageload.after_readycode	= (new Date).getTime();
+	pageload.content_ready_time	= pageload.content_ready - pageload.before_content;
+	pageload.script_ready_time	= pageload.after_readycode - pageload.content_ready;
+	pageload.ready_time		= pageload.after_readycode - pageload.before_content;
+	// Only report 1% of cases.
+	maybe || (Math.random()>0.01) || $.ajax({ data: {
+		op: 'page_profile',
+		pagemark: pageload.pagemark,
+		dom: pageload.content_ready_time,
+		js: pageload.script_ready_time
+	} });
+}
+</script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+<link type="text/plain" rel="author" href="//soylentnews.org/humans.txt" />
+<link rel="icon" type="image/png" href="//soylentnews.org/favicon-soylentnews.png">
+<title>Search SoylentNews</title>
+
+
+<link rel="stylesheet" type="text/css" media="screen, projection" href="//soylentnews.org/base.css?slashcode_06_14">
+<link rel="stylesheet" type="text/css" media="screen, projection" href="//soylentnews.org/comments.css?slashcode_06_14">
+<link rel="stylesheet" type="text/css" media="screen, projection" href="//soylentnews.org/soylentnews.css?slashcode_06_14">
+<link rel="stylesheet" type="text/css" media="print" href="//soylentnews.org/print.css?slashcode_06_14">
+
+<!-- start template: ID 333, header;misc;default -->
+
+<link rel="top"       title="SoylentNews is people" href="//soylentnews.org/" >
+<link rel="search"    title="Search SoylentNews" href="//soylentnews.org/search.pl">
+<link rel="alternate" title="SoylentNews RSS" href="//soylentnews.org/index.rss" type="application/rss+xml">
+</head>
+<body>
+<div id="top_parent"></div>
+
+<div id="jump">
+	<a href="#main-articles">Stories</a>
+	<br>
+	<a href="#blocks">Slash Boxes</a>
+	<br>
+	<a href="#acomments">Comments</a>
+</div>
+
+<div id="frame">
+	<div id="topnav">
+		<div id="logo">
+			<h1>
+				<a href="//soylentnews.org">SoylentNews</a>
+			</h1>
+		</div>
+		
+		<ul>
+			<!-- start template: ID 214, setrectop_img;misc;default -->
+
+<li>
+	<a href="//soylentnews.org/search.pl?tid=14"><img src="//soylentnews.org/images/topics/topicscience.png" width="40" height="40" alt="Science" title="Science" ></a>
+</li>
+
+<!-- end template: ID 214, setrectop_img;misc;default -->
+
+
+
+<!-- start template: ID 214, setrectop_img;misc;default -->
+
+<li>
+	<a href="//soylentnews.org/search.pl?tid=15"><img src="//soylentnews.org/images/topics/topicsecurity.png" width="40" height="40" alt="Security" title="Security" ></a>
+</li>
+
+<!-- end template: ID 214, setrectop_img;misc;default -->
+
+
+
+<!-- start template: ID 214, setrectop_img;misc;default -->
+
+<li>
+	<a href="//soylentnews.org/search.pl?tid=2"><img src="//soylentnews.org/images/topics/topicqa.png" width="40" height="40" alt="Answers" title="Answers" ></a>
+</li>
+
+<!-- end template: ID 214, setrectop_img;misc;default -->
+
+
+
+<!-- start template: ID 214, setrectop_img;misc;default -->
+
+<li>
+	<a href="//soylentnews.org/search.pl?tid=18"><img src="//soylentnews.org/images/topics/topictechonimics.png" width="40" height="40" alt="Techonomics" title="Techonomics" ></a>
+</li>
+
+<!-- end template: ID 214, setrectop_img;misc;default -->
+
+
+
+<!-- start template: ID 214, setrectop_img;misc;default -->
+
+<li>
+	<a href="//soylentnews.org/search.pl?tid=10"><img src="//soylentnews.org/images/topics/topicdevrandom.png" width="40" height="40" alt="/dev/random" title="/dev/random" ></a>
+</li>
+
+<!-- end template: ID 214, setrectop_img;misc;default -->
+		</ul>
+		
+		</div>
+		<div id="slogan">
+		<h2>
+			SoylentNews is people
+		</h2>
+		<div id="head_message">SoylentNews is powered by your submissions, so <a href="//soylentnews.org/submit.pl">send in your scoop</a>. <a href="//soylentnews.org/submit.pl?op=list"> Only <b>14</b> submissions in the queue.</a></div>
+		<div class="clear"></div>
+		</div>
+		<div id="links">
+			
+				
+
+<!-- start template: ID 236, sidebox;misc;default -->
+
+<div class="block" id="navigation-block">
+	<div class="title" id="navigation-title">
+		<h4>
+			Navigation
+		</h4>
+	</div>
+	<div class="content" id="navigation-content">
+		<ul>
+	<li>
+		<a href="//soylentnews.org/about.pl">About</a>
+	</li>
+	<li>
+		<a href="//soylentnews.org/faq.pl">FAQ</a>
+	</li>
+	<li>
+		<a href="//soylentnews.org/journal.pl">Journals</a>
+	</li>
+	<li>
+		<a href="//soylentnews.org/topics.pl">Topics</a>
+	</li>
+	<li>
+		<a href="//soylentnews.org/authors.pl">Authors</a>
+	</li>	
+	<li>
+		<a href="//soylentnews.org/search.pl">Search</a>
+	</li>
+	<li>
+		<a href="//soylentnews.org/pollBooth.pl">Polls</a>
+	</li>
+	<li>
+		<a href="//soylentnews.org/submit.pl">Submit Story</a>
+	</li>
+		
+		<li>
+			<a href="//soylentnews.org/my/newuser">Create Account</a>
+		</li>
+		<li>
+			<a href="//soylentnews.org/my/">Log In</a>
+		</li>
+		
+	</ul>
+	</div>
+</div>
+
+<!-- end template: ID 236, sidebox;misc;default -->
+
+
+				
+
+<!-- start template: ID 236, sidebox;misc;default -->
+
+<div class="block" id="sitebox-block">
+	<div class="title" id="sitebox-title">
+		<h4>
+			SoylentNews
+		</h4>
+	</div>
+	<div class="content" id="sitebox-content">
+		<ul>
+		<li><a href="https://twitter.com/soylentnews/" rel="nofollow">Twitter</a></li>
+		<li><a href="http://chat.soylentnews.org" rel="nofollow">IRC</a></li>
+		<li><a href="http://wiki.soylentnews.org/wiki/SoylentNews" rel="nofollow">Wiki</a></li>
+		<li><a href="http://wiki.soylentnews.org/wiki/WhosWho" rel="nofollow">Who's Who?</a></li>
+		<li><a href="//github.com/SoylentNews/slashcode/issues?" rel="nofollow">Bug List</a></li>
+</ul>
+	</div>
+</div>
+
+<!-- end template: ID 236, sidebox;misc;default -->
+
+
+			
+		</div>
+		<div id="contents">
+			
+			
+			<div id="search">
+
+<!-- end template: ID 333, header;misc;default -->
+
+
+
+<!-- start template: ID 124, titlebar;misc;default -->
+
+<div class="generaltitle" >
+	<div class="title">
+		<h3 >
+			Search SoylentNews
+			
+		</h3>
+	</div>
+</div>
+
+<!-- end template: ID 124, titlebar;misc;default -->
+
+
+
+<!-- start template: ID 127, searchform;search;default -->
+
+<div class="generalbody">
+
+
+<form action="//soylentnews.org/search.pl" method="get">
+<fieldset>
+	<legend>Search </legend>
+	<input type="hidden" name="tid" value="">
+	<input type="text" size="40" name="query" value="">
+	
+		
+
+<!-- start template: ID 154, select;misc;default -->
+
+<select id="author" name="author">
+	<option value="" selected>All Authors</option>
+	<option value="2855">azrael</option>
+	<option value="32">Cactus</option>
+	<option value="12">Dopefish</option>
+	<option value="1223">girlwhowaspluggedout</option>
+	<option value="1671">GungnirSniper</option>
+	<option value="52">janrinok</option>
+	<option value="14">LaminatorX</option>
+	<option value="76">martyb</option>
+	<option value="13">mattie_p</option>
+	<option value="49">mrbluze</option>
+	<option value="68">mrcoolbp</option>
+	<option value="993">n1</option>
+	<option value="2">NCommander</option>
+	<option value="58">paulej72</option>
+	<option value="3">robind</option>
+	<option value="2726">Woods</option>
+	<option value="3765">zizban</option>
+</select>
+
+<!-- end template: ID 154, select;misc;default -->
+
+
+	
+	
+
+<!-- start template: ID 154, select;misc;default -->
+
+<select id="sort" name="sort">
+	<option value="1" selected>Order By Date</option>
+	<option value="2">Order By Score</option>
+</select>
+
+<!-- end template: ID 154, select;misc;default -->
+
+
+
+	<input type="submit" value="Search"><BR>
+
+	<input type="radio" name="op" value="stories" CHECKED> Stories
+	<input type="radio" name="op" value="comments"> Comments
+	<input type="radio" name="op" value="users"> Users
+	<input type="radio" name="op" value="polls"> Polls
+	
+		<input type="radio" name="op" value="journals"> Journals
+	
+	
+	
+		<input type="radio" name="op" value="submissions"> Submissions
+	
+	<div class="options">
+	
+
+	
+
+	
+	</div>
+	</fieldset>
+</form>
+
+
+
+<div class="sectiontitle">
+<a href="//soylentnews.org/search.pl">SoylentNews</a>
+
+
+
+</div>
+
+<!-- end template: ID 127, searchform;search;default -->
+
+
+
+<!-- start template: ID 79, storysearch;search;default -->
+
+<div class="storysearch">
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/2225244">
+					Scientists Who Continually Publish Get More Citations
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 11th, 2014 with 3 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:Research into the frequency of scientists publishing papers over...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/2214203">
+					YouTube Challenge to Pseudoscience Pays Off
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 11th, 2014 with 9 comments
+			</div>
+			<div class="intro">
+				 frojack writes:Earlier this year, the Engineering Authority of Egypt's...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1922238">
+					Smart Lightbulbs reveal WiFi Passwords
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 12 comments
+			</div>
+			<div class="intro">
+				 broggyr writes:Have an LED light that you can control with your phone? Show me...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=15">Security</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1532226">
+					Ask Soylent: Suggestions for Remote Backup?
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 23 comments
+			</div>
+			<div class="intro">
+				 crutchy writes:This is probably one of those topics that gets regurgitated...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=2">Answers</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1514238">
+					Re-Examination of Birdlike Fossil Challenges Common Belief that Birds Evolved from Dinosaurs
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 4 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:Abstract:...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/150217">
+					New Report Calls for "Deep Decarbonization" to Stay Within 2 Degs Centigrade Limit
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 21 comments
+			</div>
+			<div class="intro">
+				 Blackmoore writes:
+Ars Technica brings us another report on  Climate change.
+
+G
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1451201">
+					Fujitsu Lettuce Prices - Today Only One Dollar More Than the Market
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 19 comments
+			</div>
+			<div class="intro">
+				 c0lo writes:Wall Street Journal runs a story on Japanese electronics factories...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=18">Techonomics</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1358258">
+					A Jehovah's Witness Suing Google for 10 Billion Dollars
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 23 comments
+			</div>
+			<div class="intro">
+				 AnonTechie writes:A suit, filed below by Seungjin Kim in Washington, DC,...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=10">/dev/random</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1331255">
+					UK Parliament Set to Railroad New Snooping Laws
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 20 comments
+			</div>
+			<div class="intro">
+				 dublet writes:The BBC is reporting the European Court of Human Rights (ECHR)...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=15">Security</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1248204">
+					The Man Who Saw Time Stand Still
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 47 comments
+			</div>
+			<div class="intro">
+				 Randolph Carter writes:"It started as a headache, but soon became much...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1243259">
+					What's the Best Current Bittorrent Client?
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 56 comments
+			</div>
+			<div class="intro">
+				 Appalbarry writes:I'm running a fresh install of Mint 17 Cinnamon, and have...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=2">Answers</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1125255">
+					British Start Up Allows Google Glass to Take Photos Using Brainwaves
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 23 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:A London-based start-up, The Place, has configured Google Glass to...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=9">Hardware</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/1123256">
+					Goodbye Siri in China?
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 14 comments
+			</div>
+			<div class="intro">
+				 gizmobeast writes:Apple's Siri may no longer be available in China as the U.S....
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=6">News</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/0351215">
+					Curve41417: New ECC Curve Bumps Speed/Security Baseline
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 5 comments
+			</div>
+			<div class="intro">
+				 dbot writes:A new ECC curve has been introduced in a recent paper by Daniel J....
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=15">Security</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/0348204">
+					Google and Net Neutrality: Do No Good
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 23 comments
+			</div>
+			<div class="intro">
+				Erogenous Coward writes:Google, once boastful that it was the leading defender...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=12">Business</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/10/0016256">
+					Bad Social Policy, Not Ideology, is to Blame for the Arab World's Downward Spiral
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July 10th, 2014 with 36 comments
+			</div>
+			<div class="intro">
+				 AnonTechie writes: Do you agree with this assessment from Rana Jawad via The...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=6">News</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/2148239">
+					Same Genes Drive Maths and Reading Ability
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 5 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:  A study into the genetic basis of cognitive traits has found...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/2124232">
+					Do Doctors Understand Test Results?
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 61 comments
+			</div>
+			<div class="intro">
+				 cafebabe writes:The BBC reports that doctors and dentists fail at basic...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1921200">
+					MIT Finger Device Reads to the Blind in Real Time
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 11 comments
+			</div>
+			<div class="intro">
+				 lhsi writes: A new device has been created that attaches to a finger and will...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1825209">
+					Study: Children with Same-Sex Parents Happier and Healthier than those from Traditional Families
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 53 comments
+			</div>
+			<div class="intro">
+				 cafebabe writes: WP reports that researchers from the University of Melbourne...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1653215">
+					Online Payment Method CashU Bans VPN Services
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 19 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:The online payment method CashU, popular in the middle east and...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=15">Security</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1645207">
+					Basic Internet Should Be as Universal as Emergency Services
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 41 comments
+			</div>
+			<div class="intro">
+				 AnonTechie writes:Mark Zuckerberg sees the Internet as a vital service that...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=10">/dev/random</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1522222">
+					Certain Brain Activity Patterns Sensitive To Market Bubbles
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 5 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:Abstract: http://www.pnas.org/content/early/2014/07/02/1318416111 ...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=12">Business</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1420212">
+					Dwarf Fortress 0.40.01 Released
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 22 comments
+			</div>
+			<div class="intro">
+				 MrNemesis writes:More than two years after the last release, Bay12 Games have...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=16">Software</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/1334212">
+					'Deep learning' Makes Search for Exotic Particles Easier
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 2 comments
+			</div>
+			<div class="intro">
+				 AnonTechie links to a story at esciencenews.com:Fully automated "deep...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/0919238">
+					Time of Day Crucial to Accurately Test for Diseases
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 4 comments
+			</div>
+			<div class="intro">
+				 lhsi writes:Abstract: http://www.pnas.org/content/early/2014/07/02/1402663111 ...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/0914257">
+					Earth's Magnetic Field Is Weakening 10 Times Faster Than Previously Estimated
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 35 comments
+			</div>
+			<div class="intro">
+				 AnonTechie writes: The earth's magnetic field, which protects the planet from...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/094251">
+					Why Does Everyone Look Hotter in Sunglasses?
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 24 comments
+			</div>
+			<div class="intro">
+				 cafebabe writes:From Science of Us:You know you're at least a little curious....
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=14">Science</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/0858226">
+					If You Love Science, This Will Make You Lose Your Cool
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 51 comments
+			</div>
+			<div class="intro">
+				 AnonTechie writes:Rise-Of-Clueless-Dept.Over the past few years, social...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=10">/dev/random</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	
+	<div class="search-results">
+			<h4>
+				<a href="//soylentnews.org/article.pl?sid=14/07/09/049233">
+					Music Industry's Anti-Piracy Site Hacked, Turned Into Pirate Bay Proxy
+				</a>
+				
+			</h4>
+			<div class="data">
+				On July  9th, 2014 with 8 comments
+			</div>
+			<div class="intro">
+				gewg_ writes:Ars reports: The website of Argentina's equivalent of the...
+			</div>
+			<div class="details">
+				<a href="//soylentnews.org/">Main</a> &raquo;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=6">News</a>,&nbsp;
+				
+					
+					<a href="//soylentnews.org/search.pl?tid=1">The Main Page</a>
+				
+			</div>
+			 
+		</div>
+	
+	<div class="pagination">
+	
+				
+				
+				
+					<a href="//soylentnews.org/search.pl?threshold=-1&amp;op=stories&amp;sort=1&amp;start=30">Next 30 matches &raquo;</a>
+				
+	
+	</div>
+	</div>
+</div>
+<script type="text/javascript">
+(function() {
+// coremetrics
+if( window.location.hostname.indexOf('slashdot.org') >= 0 ) {
+	cmSetProduction();
+}
+cmCreatePageviewTag && cmCreatePageviewTag('OLD STORIES') && (cmCreatePageviewTag = null);
+})();
+</script>
+
+<!-- end template: ID 79, storysearch;search;default -->
+
+
+
+<!-- start template: ID 86, footer;misc;default -->
+
+</div>	
+		</div>
+		<div id="footer">
+			
+			<em>Q:	What's the difference between Bell Labs and the Boy Scouts of America?
+A:	The Boy Scouts have adult supervision.</em>
+			
+			<div class="search">
+				<form method="get" action="//soylentnews.org/search.pl">
+					<fieldset>
+						<legend></legend>
+						<input type="text" name="query" value="" size="20">
+						<input type="submit" value="Search" class="button">
+					</fieldset>
+				</form>
+			</div>
+			<div class="copyright">
+				
+			</div>
+			<div class="btmnav">
+				<ul>
+					<li class="begin">
+						<a href="//soylentnews.org/">Home</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/about.pl">About</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/faq.pl">FAQ</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/journal.pl">Journals</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/topics.pl">Topics</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/authors.pl">Authors</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/search.pl">Search</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/pollBooth.pl">Polls</a>
+					</li>
+					<li>
+						<a href="//soylentnews.org/submit.pl">Submit Story</a>
+					</li>					
+						<li>
+							<a href="//soylentnews.org/my/newuser">Create Account</a>
+						</li>
+						<li>
+							<a href="//soylentnews.org/my/">Log In</a>
+						</li>
+					
+					<li>
+						<a href="//soylentnews.org/index.rss"><img src="//soylentnews.org/images/rssicon.gif" width="36" height="14" alt="RSS feed"></a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+	</div>
+<div id="modal_cover" style="display:none"></div>
+<div id="modal_box" style="display:none">
+        <div class="generaltitle" >
+                <div class="title"><h3><span id="preference_title"></span> <a href="#" onclick="hide_modal_box(); return false">Close</a></h3></div>
+        </div>
+        <div id="modal_box_content"></div>
+</div>
+<script id="after-content" type="text/javascript">
+(function( $, fn, console ){
+	$ && fn && $(function(){ fn($, console); });
+})(window.jQuery, window.pageload_done, window.console);
+</script>
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="http://stats.soylentnews.org/piwik/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 1]);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0]; g.type='text/javascript';
+    g.defer=true; g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<noscript><p><img src="http://stats.soylentnews.org/piwik/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
+<!-- End Piwik Code -->
+
+
+</body>
+</html>
+
+<!-- end template: ID 86, footer;misc;default -->
+

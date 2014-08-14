@@ -26,7 +26,7 @@ function make_atom($topic)
 	global $server_slogan;
 	global $cache_enabled;
 
-	$row = run_sql("select sid, pipe.author_zid, story.publish_time, story.title, story.slug, story.body from story inner join pipe on story.pid = pipe.pid order by sid desc limit 10");
+	$row = sql("select story_id, pipe.author_zid, story.publish_time, story.title, story.slug, story.body from story inner join pipe on story.pipe_id = pipe.pipe_id order by publish_time desc limit 10");
 	if (count($row) > 0) {
 		$updated = $row[0]["publish_time"];
 	} else {
@@ -46,7 +46,7 @@ function make_atom($topic)
 
 	for ($i = 0; $i < count($row); $i++) {
 		$body .= "	<entry>\n";
-		$body .= "		<id>http://$server_name/story/" . $row[$i]["sid"] . "</id>\n";
+		$body .= "		<id>http://$server_name/story/" . $row[$i]["story_id"] . "</id>\n";
 		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
 		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"http://$server_name/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
