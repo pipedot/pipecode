@@ -126,10 +126,11 @@ function vote_box($poll_id, $vote)
 
 		$row = sql("select count(*) as comments from comment where type = 'poll' and root_id = ?", $poll_id);
 		$comments = $row[0]["comments"];
+		$short_code = crypt_crockford_encode($poll["short_id"]);
 
 		writeln('	<div class="poll_footer">');
 		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> comments</a></div>');
-		//writeln('		<div><a href="/poll/' . $poll_id . '/vote"><b>Vote</b></a></div>');
+		writeln('		<div class="poll_short">(<a href="/' . $short_code . '">#' . $short_code . '</a>)</div>');
 		if ($auth_zid == "") {
 			writeln('		<div class="right"><b>' . $total . '</b> ' . $units . '</div>');
 		} else {

@@ -219,6 +219,7 @@ $db_table["poll_answer"]["col"][] = "position";
 $db_table["poll"]["key"] = "poll_id";
 $db_table["poll"]["col"][] = "poll_id";
 $db_table["poll"]["col"][] = "question";
+$db_table["poll"]["col"][] = "short_id";
 $db_table["poll"]["col"][] = "slug";
 $db_table["poll"]["col"][] = "time";
 $db_table["poll"]["col"][] = "type_id";

@@ -37,11 +37,12 @@ for ($i = 0; $i <= $last_row; $i++) {
 $time = time();
 $poll = array();
 $poll["poll_id"] = create_id($auth_zid, $time);
+$poll["question"] = $question;
+$poll["short_id"] = create_short("poll", $poll["poll_id"]);
+$poll["slug"] = clean_url($question);
+$poll["time"] = $time;
 $poll["type_id"] = $type_id;
 $poll["zid"] = $auth_zid;
-$poll["time"] = $time;
-$poll["question"] = $question;
-$poll["slug"] = clean_url($question);
 db_set_rec("poll", $poll);
 
 for ($i = 0; $i < count($a); $i++) {

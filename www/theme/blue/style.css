@@ -194,6 +194,13 @@ textarea {
 .poll_footer div {
 	display: table-cell;
 }
+.poll_short {
+	color: #666666;
+	font-size: 8pt;
+}
+.poll_short a {
+	color: #666666;
+}
 .pipe_status {
 	font-size: 10pt;
 	font-weight: bolder;
