@@ -24,7 +24,7 @@ include("stream.php");
 if ($auth_zid == "") {
 	print_header("Stream");
 } else {
-	print_header("Stream", array("Share"), array("notepad"), array(user_page_link($auth_zid) . "stream/share"));
+	print_header("Stream", array("Share"), array("share"), array(user_page_link($auth_zid) . "stream/share"));
 }
 
 beg_main("stream");

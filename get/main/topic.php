@@ -43,10 +43,32 @@ if ($topic == "") {
 	$k = array_keys($list);
 	for ($i = 0; $i < count($list); $i++) {
 		$topic = $list[$k[$i]];
-		writeln('<a href="/topic/' . $topic["topic"] . '"><div class="topic_box"><img alt="' . $topic["icon"] . '" src="/images/' . $topic["icon"] . '-64.png"/>' . $topic["topic"] . '</div></a>');
+		$name = $topic["topic"];
+		// XXX: ugly workaround for long SN topic
+		if ($name == "career & education") {
+			$name = "education";
+		}
+		writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic_box"><img alt="' . $topic["icon"] . '" src="/images/' . $topic["icon"] . '-64.png"/>' . $name . '</div></a>');
 	}
+} else if ($topic == "list") {
+	if (!$auth_user["admin"]) {
+		die("not an admin");
+	}
+	writeln('<h1>Topics</h1>');
+
+	$list = db_get_list("topic", "topic");
+	$k = array_keys($list);
+	beg_tab();
+	for ($i = 0; $i < count($list); $i++) {
+		$topic = $list[$k[$i]];
+		writeln('	<tr>');
+		writeln('		<td>' . $topic["topic"] . '</td><td class="right"><a class="icon_minus_16" href="">Remove</a></td>');
+		writeln('	</tr>');
+	}
+	end_tab();
+	right_box('<a class="icon_plus_16" href="">Add</a>');
 } else {
-	$topic = db_get_rec("topic", array("topic" => $topic));
+	$topic = db_get_rec("topic", array("slug" => $topic));
 
 	$items_per_page = 10;
 	list($item_start, $page_footer) = page_footer("story", $items_per_page, array("tid" => $topic["tid"]));

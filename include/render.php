@@ -44,7 +44,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$date = "<a href=\"$protocol://$server_name/comment/$comment_id\">$date</a>";
 	}
 	$short_code = crypt_crockford_encode($short_id);
-	$s .= "<h3>by " . user_page_link($zid, true) . " on $date (<a href=\"/$short_code\">#$short_code</a>)</h3>\n";
+	$s .= "<h3>by " . user_page_link($zid, true) . " on $date (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)</h3>\n";
 	$s .= "<div>\n";
 	$s .= "<div>";
 	$s .= "$body\n";
@@ -363,13 +363,16 @@ function get_comment_score($comment_id)
 	//$down = array("Offtopic", "Flamebait", "Troll", "Redundant", "Overrated");
 	$reason = "";
 	//$row = sql("select reason, count(reason) as reason_count, value from comment_vote inner join reason on comment_vote.rid = reason.rid where comment_id = ? group by reason order by value desc, reason_count desc", $comment_id);
-	$row = sql("select reason, count(reason) as reason_count, value from comment_vote where comment_id = ? group by reason order by value desc, reason_count desc", $comment_id);
+	//$row = sql("select reason, count(reason) as reason_count, value from comment_vote where comment_id = ? group by reason order by value desc, reason_count desc", $comment_id);
+	$row = sql("select reason, count(reason) as reason_count, value from comment_vote where comment_id = ? group by reason order by reason_count desc", $comment_id);
 	for ($i = 0; $i < count($row); $i++) {
-		if ($score < 0 && $row[$i]["value"] < 0 && $row[$i]["reason_count"] > 1 && $row[$i]["reason"] != "Overrated") {
+		//if ($score < 0 && $row[$i]["value"] < 0 && $row[$i]["reason_count"] > 1 && $row[$i]["reason"] != "Overrated") {
+		if ($score < 0 && $row[$i]["value"] < 0 && $row[$i]["reason"] != "Overrated") {
 			$reason = $row[$i]["reason"];
 			break;
 		}
-		if ($score > 1 && $row[$i]["value"] > 0 && $row[$i]["reason_count"] > 1 && $row[$i]["reason"] != "Underrated") {
+		//if ($score > 1 && $row[$i]["value"] > 0 && $row[$i]["reason_count"] > 1 && $row[$i]["reason"] != "Underrated") {
+		if ($score > 0 && $row[$i]["value"] > 0 && $row[$i]["reason"] != "Underrated") {
 			$reason = $row[$i]["reason"];
 			break;
 		}

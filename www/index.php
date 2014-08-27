@@ -20,8 +20,10 @@
 //
 
 include("../include/common.php");
+include("short.php");
+include("geoip.php");
 
-if (!string_uses($request_script, "[A-Z][a-z][0-9]_-./")) {
+if (!string_uses($request_script, "[A-Z][a-z][0-9]_-./+")) {
 	die("invalid request [$request_script]");
 }
 
@@ -126,37 +128,13 @@ if (string_uses($slug, "[A-Z][a-z][0-9]-_.")) {
 }
 
 if (string_uses($slug, "[A-Z][a-z][0-9]")) {
-	$short_id = crypt_crockford_decode($slug);
-	//die("short_id [$short_id]");
-	if (db_has_rec("short", $short_id)) {
-		$short = db_get_rec("short", $short_id);
-		//die("type [" . $short["type"] . "] item_id [" . $short["item_id"] . "]");
+	short_redirect($slug);
+}
 
-		$short_view = array();
-		$short_view["short_id"] = $short_id;
-		if (empty($_SERVER["HTTP_USER_AGENT"])) {
-			$short_view["agent"] = "";
-		} else {
-			$short_view["agent"] = $_SERVER["HTTP_USER_AGENT"];
-		}
-		if (empty($_SERVER["HTTP_REFERER"])) {
-			$short_view["referer"] = "";
-		} else {
-			$short_view["referer"] = $_SERVER["HTTP_REFERER"];
-		}
-		if (empty($_SERVER["REMOTE_ADDR"])) {
-			$short_view["remote_ip"] = "";
-		} else {
-			$short_view["remote_ip"] = $_SERVER["REMOTE_ADDR"];
-		}
-		$short_view["zid"] = $auth_zid;
-		$short_view["time"] = time();
-		//var_dump($short_view);
-		//die();
-		db_set_rec("short_view", $short_view);
-
-		header("Location: " . item_link($short["type"], $short["item_id"]));
-		die();
+if (substr($slug, -1) == "+") {
+	$slug = substr($slug, 0, -1);
+	if (string_uses($slug, "[A-Z][a-z][0-9]")) {
+		short_info($slug);
 	}
 }
 

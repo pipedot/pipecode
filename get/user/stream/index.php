@@ -21,7 +21,7 @@
 
 include("stream.php");
 
-print_header("Stream", array("Share"), array("notepad"), array("/stream/share"));
+print_header("Stream", array("Share"), array("share"), array("/stream/share"));
 
 beg_main("stream");
 

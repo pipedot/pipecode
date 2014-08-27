@@ -1071,6 +1071,10 @@ textarea {
 	width: 32px;
 	height: 32px;
 }
+.map {
+	width: 1280px;
+	height: 640px;
+}
 @media all and (max-width: 765px) {
 	.logo_big {
 		display: none;
@@ -1373,6 +1377,14 @@ textarea {
 	height: 16px;
 	padding-left: 20px;
 }
+.icon_share_16 {
+	background-position: left;
+	background-image: url(/images/share-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
 .icon_tools_16 {
 	background-position: left;
 	background-image: url(/images/tools-16.png);
@@ -1424,7 +1436,10 @@ textarea {
 	background-image: url(/images/mail-32.png);
 }
 .icon_news_32 {
-	background-image: url(/images/users-32.png);
+	background-image: url(/images/news-32.png);
+}
+.icon_notepad_32 {
+	background-image: url(/images/notepad-32.png);
 }
 .icon_picture_32 {
 	background-image: url(/images/picture-32.png);
@@ -1438,8 +1453,14 @@ textarea {
 .icon_tools_32 {
 	background-image: url(/images/tools-32.png);
 }
+.icon_update_32 {
+	background-image: url(/images/update-32.png);
+}
 .icon_usb_32 {
 	background-image: url(/images/usb-32.png);
+}
+.icon_users_32 {
+	background-image: url(/images/users-32.png);
 }
 .icon_workgroup_32 {
 	background-image: url(/images/workgroup-32.png);
@@ -1513,6 +1534,10 @@ textarea {
 		background-image: url(/images/sent-32.png);
 		background-size: 16px 16px;
 	}
+	.icon_share_16 {
+		background-image: url(/images/share-32.png);
+		background-size: 16px 16px;
+	}
 	.icon_tools_16 {
 		background-image: url(/images/tools-32.png);
 		background-size: 16px 16px;
@@ -1554,7 +1579,11 @@ textarea {
 		background-size: 32px 32px;
 	}
 	.icon_news_32 {
-		background-image: url(/images/users-64.png);
+		background-image: url(/images/news-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_notepad_32 {
+		background-image: url(/images/notepad-64.png);
 		background-size: 32px 32px;
 	}
 	.icon_picture_32 {
@@ -1573,8 +1602,16 @@ textarea {
 		background-image: url(/images/tools-64.png);
 		background-size: 32px 32px;
 	}
+	.icon_update_32 {
+		background-image: url(/images/update-64.png);
+		background-size: 32px 32px;
+	}
 	.icon_usb_32 {
 		background-image: url(/images/usb-64.png);
+		background-size: 32px 32px;
+	}
+	.icon_users_32 {
+		background-image: url(/images/users-64.png);
 		background-size: 32px 32px;
 	}
 	.icon_workgroup_32 {
@@ -1640,6 +1677,10 @@ textarea {
 	.user_box_tools {
 		background-image: url(/images/tools-64.png);
 		background-size: 32px 32px;
+	}
+	.map {
+		width: 640px;
+		height: 320px;
 	}
 }
 .store_item_title {

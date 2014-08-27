@@ -26,13 +26,13 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 print_header("Menu");
 beg_main("dual_table");
 
-//writeln('<div class="dual_table">');
 writeln('<div class="dual_left">');
 
 beg_tab();
 print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Topics", "description" => "Add and remove topics", "icon" => "chat", "link" => "/topic/list"));
+	print_row(array("caption" => "SoylentNews", "description" => "Manage imported data", "icon" => "news", "link" => "/soylentnews/"));
 }
 end_tab();
 
@@ -48,7 +48,6 @@ if ($auth_user["admin"]) {
 end_tab();
 
 writeln('</div>');
-//writeln('</div>');
 
 end_main();
 print_footer();

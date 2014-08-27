@@ -66,9 +66,9 @@ $db_table["comment"]["key"] = "comment_id";
 $db_table["comment"]["col"][] = "comment_id";
 $db_table["comment"]["col"][] = "body";
 $db_table["comment"]["col"][] = "parent_id";
-$db_table["comment"]["col"][] = "rating";
+//$db_table["comment"]["col"][] = "rating";
 $db_table["comment"]["col"][] = "root_id";
-$db_table["comment"]["col"][] = "score";
+//$db_table["comment"]["col"][] = "score";
 $db_table["comment"]["col"][] = "short_id";
 $db_table["comment"]["col"][] = "subject";
 $db_table["comment"]["col"][] = "time";
@@ -270,12 +270,18 @@ $db_table["soylentnews_comment"]["col"][] = "subject";
 $db_table["soylentnews_comment"]["col"][] = "time";
 $db_table["soylentnews_comment"]["col"][] = "uid";
 
+$db_table["soylentnews_log"]["key"][] = "time";
+$db_table["soylentnews_log"]["key"][] = "type";
+$db_table["soylentnews_log"]["key"][] = "item_id";
+$db_table["soylentnews_log"]["col"][] = "time";
+$db_table["soylentnews_log"]["col"][] = "type";
+$db_table["soylentnews_log"]["col"][] = "item_id";
+
 $db_table["soylentnews_story"]["key"] = "sid";
 $db_table["soylentnews_story"]["col"][] = "sid";
 $db_table["soylentnews_story"]["col"][] = "sid_date";
 $db_table["soylentnews_story"]["col"][] = "story_id";
 $db_table["soylentnews_story"]["col"][] = "body";
-$db_table["soylentnews_story"]["col"][] = "icon";
 $db_table["soylentnews_story"]["col"][] = "last_sync";
 $db_table["soylentnews_story"]["col"][] = "slug";
 $db_table["soylentnews_story"]["col"][] = "tid";
@@ -285,7 +291,6 @@ $db_table["soylentnews_story"]["col"][] = "uid";
 
 $db_table["soylentnews_topic"]["key"] = "tid";
 $db_table["soylentnews_topic"]["col"][] = "tid";
-$db_table["soylentnews_topic"]["col"][] = "icon";
 $db_table["soylentnews_topic"]["col"][] = "slug";
 $db_table["soylentnews_topic"]["col"][] = "topic";
 
@@ -373,9 +378,10 @@ $db_table["tmp_image"]["col"][] = "zid";
 
 $db_table["topic"]["key"] = "tid";
 $db_table["topic"]["col"][] = "tid";
-$db_table["topic"]["col"][] = "topic";
 $db_table["topic"]["col"][] = "icon";
 $db_table["topic"]["col"][] = "promoted";
+$db_table["topic"]["col"][] = "slug";
+$db_table["topic"]["col"][] = "topic";
 
 $db_table["user_conf"]["key"] = "zid";
 $db_table["user_conf"]["col"][] = "zid";
@@ -664,19 +670,23 @@ function end_main($class = "")
 function page_footer($table, $items_per_page, $where = array())
 {
 	$page = http_get_int("page", array("default" => 1, "required" => false));
-	$sql = "select count(*) as item_count from $table";
-	if (count($where) > 0) {
-		$k = array_keys($where);
-		$sql .= " where ";
-		$a = array();
-		for ($i = 0; $i < count($where); $i++) {
-			$sql .= $k[$i] . " = ? and ";
-			$a[] = $where[$k[$i]];
-		}
-		$sql = substr($sql, 0, -5);
-		$row = sql($sql, $a);
+	if (string_has($table, " ")) {
+		$row = sql($table, $where);
 	} else {
-		$row = sql($sql);
+		$sql = "select count(*) as item_count from $table";
+		if (count($where) > 0) {
+			$k = array_keys($where);
+			$sql .= " where ";
+			$a = array();
+			for ($i = 0; $i < count($where); $i++) {
+				$sql .= $k[$i] . " = ? and ";
+				$a[] = $where[$k[$i]];
+			}
+			$sql = substr($sql, 0, -5);
+			$row = sql($sql, $a);
+		} else {
+			$row = sql($sql);
+		}
 	}
 	$item_count = (int) $row[0]["item_count"];
 	$pages_count = ceil($item_count / $items_per_page);
@@ -686,11 +696,35 @@ function page_footer($table, $items_per_page, $where = array())
 	if ($page > 1) {
 		$s .= "<a class=\"pages_left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
 	}
-	for ($i = 1; $i <= $pages_count; $i++) {
-		if ($i == $page) {
-			$s .= "<span>$i</span>";
-		} else {
-			$s .= "<a href=\"?page=$i\">$i</a>";
+	if ($pages_count > 10) {
+		if ($page > 5) {
+			$s .= "...";
+		}
+		$start = $page - 4;
+		if ($start < 1) {
+			$start = 1;
+		}
+		$end = $start + 9;
+		if ($end > $pages_count) {
+			$end = $pages_count;
+		}
+		for ($i = $start; $i <= $end; $i++) {
+			if ($i == $page) {
+				$s .= "<span>$i</span>";
+			} else {
+				$s .= "<a href=\"?page=$i\">$i</a>";
+			}
+		}
+		if ($end < $pages_count) {
+			$s .= "...";
+		}
+	} else {
+		for ($i = 1; $i <= $pages_count; $i++) {
+			if ($i == $page) {
+				$s .= "<span>$i</span>";
+			} else {
+				$s .= "<a href=\"?page=$i\">$i</a>";
+			}
 		}
 	}
 	if ($page < $pages_count) {
@@ -800,14 +834,11 @@ function clean_url($dirty)
 	$dirty = str_replace("&lt;", "", $dirty);
 	$dirty = str_replace("&gt;", "", $dirty);
 	$dirty = str_replace("&quot;", "", $dirty);
-	$clean = "";
-	for ($i = 0; $i < strlen($dirty); $i++) {
-		$c = substr($dirty, $i, 1);
-		if (string_uses($c, "[a-z][A-Z][0-9] ")) {
-			$clean .= $c;
-		}
-	}
-	$clean = str_replace(" ", "-", strtolower(trim($clean)));
+
+	$clean = string_clean($dirty, "[a-z][A-Z][0-9]/ ");
+	$clean = str_replace("/", " ", $clean);
+	$clean = strtolower(trim($clean));
+	$clean = str_replace(" ", "-", $clean);
 	$clean = string_replace_all("--", "-", $clean);
 
 	return $clean;
@@ -862,6 +893,10 @@ function item_link($type, $item_id)
 		return "/$type/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
 	} else if ($type == "comment") {
 		return "/$type/" . $item_id;
+	} else if ($type == "user") {
+		return user_page_link($item_id);
+	} else if ($type == "topic") {
+		return "/topic/" . clean_url($item_id);
 	}
 
 	die("unknown link - type [$type] item_id [$item_id]");

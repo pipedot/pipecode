@@ -173,6 +173,7 @@ function print_article($a)
 	}
 	$image_style = $auth_user["story_image_style"];
 	$topic = $a["topic"];
+	$topic_slug = clean_url($a["topic"]);
 	$story = $a["body"];
 	$icon = $a["icon"];
 	$title = $a["title"];
@@ -209,7 +210,7 @@ function print_article($a)
 
 	writeln("<article class=\"story\">");
 	writeln("	<h1><a href=\"/story/$day/$slug\">$title</a></h1>");
-	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic\"><b>$topic</b></a> on $date$short</h2>");
+	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic_slug\"><b>$topic</b></a> on $date$short</h2>");
 
 	if ($image_path != "") {
 		if ($image_url != "") {
