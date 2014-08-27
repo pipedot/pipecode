@@ -27,26 +27,8 @@ header_expires();
 date_default_timezone_set("UTC");
 set_time_limit(14 * 60);
 
-
-//$zid = "bryan-1@pipedot.net";
-//$time = time();
-//		$comment_id = str_replace("-", "_", $import_server_name);
-//		$comment_id = str_replace(".", "_", $comment_id);
-//		$comment_id = substr(create_id($zid, $time), 0, -1 * strlen($server_name)) . $comment_id;
-//die($comment_id);
-
-//import_comment(64779, 2744);
-//import_comment(66440, 2744);
 import_stories(0, -1, 50, false);
 import_comments(0, -1, 50, false);
-//import_stories();
-//import_story("14/07/10/1451201");
-//import_story("14/07/11/0241252");
-//import_story("14/07/05/1811259");
-//print "uid [" . import_user("janrinok") . "]";
-//add_user(29, "bryan");
-//import_user("bryan");
-//import_user("Jesus_666");
 fix_comments();
 
 writeln("done");

@@ -739,6 +739,16 @@ textarea {
 	padding: 8px;
 	margin-bottom: 8px;
 }
+.mirror_balloon {
+	background-color: #ffffcc;
+	border: 1px solid #ffcc66;
+	border-radius: 4px;
+	display: block;
+	padding-top: 12px;
+	padding-left: 12px;
+	padding-right: 12px;
+	margin-bottom: 8px;
+}
 .search a {
 	text-decoration: underline;
 }

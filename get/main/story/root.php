@@ -61,6 +61,17 @@ beg_main("cell");
 
 print_story($story_id);
 
+if (string_has($story["author_zid"], $import_server_name)) {
+	$soylentnews_story = db_get_rec("soylentnews_story", array("story_id" => $story_id));
+	$canonical_uri = $protocol . "://soylentnews.org/article.pl?sid=" . $soylentnews_story["sid_date"];
+
+	writeln('<a class="mirror_balloon" href="' . $canonical_uri . '">');
+	writeln('<h1>SoylentNews Post</h1>');
+	writeln('<p>This post originated on SoylentNews, a very active and friendly group of volunteers attempting to make the best "News for Nerds" site on the Internet.</p>');
+	writeln('<p>Please click anywhere on this message to go to the canonical URI for this article. This page is merely a mirror; more information on this gateway can be found on the Pipedot about page.</p>');
+	writeln('</a>');
+}
+
 if ($auth_user["javascript_enabled"]) {
 	render_sliders("story", $story_id);
 	print_noscript();
