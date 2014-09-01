@@ -30,7 +30,11 @@ beg_main("cell");
 $items_per_page = 10;
 list($item_start, $page_footer) = page_footer("story", $items_per_page);
 
-$row = sql("select story_id from story order by publish_time desc limit $item_start, $items_per_page");
+if ($auth_user["soylentnews_enabled"]) {
+	$row = sql("select story_id from story order by publish_time desc limit $item_start, $items_per_page");
+} else {
+	$row = sql("select story_id from story where author_zid not like '%$import_server_name' order by publish_time desc limit $item_start, $items_per_page");
+}
 for ($i = 0; $i < count($row); $i++) {
 	print_story($row[$i]["story_id"]);
 }
@@ -58,7 +62,11 @@ vote_box($poll_id, $vote);
 
 writeln('<div class="dialog_title">Most Discussed</div>');
 writeln('<div class="dialog_body">');
-$row = sql("select * from (select * from (select story_id, title, slug, publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.root_id where type = 'story' group by story_id order by publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
+if ($auth_user["soylentnews_enabled"]) {
+	$row = sql("select * from (select * from (select story_id, title, slug, publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.root_id where type = 'story' group by story_id order by publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
+} else {
+	$row = sql("select * from (select * from (select story_id, title, slug, publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.root_id where type = 'story' and author_zid not like '%$import_server_name' group by story_id order by publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
+}
 writeln('	<ul class="popular">');
 for ($i = 0; $i < count($row); $i++) {
 	writeln('		<li>');

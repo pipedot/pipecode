@@ -27,8 +27,8 @@ header_expires();
 date_default_timezone_set("UTC");
 set_time_limit(14 * 60);
 
-import_stories(0, -1, 50, false);
-import_comments(0, -1, 50, false);
+import_stories(0, -1, 5, false);
+import_comments(0, -1, 5, false);
 fix_comments();
 
 writeln("done");

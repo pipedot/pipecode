@@ -98,6 +98,10 @@ function import_story($sid_date)
 
 	$title = get_tag($data, "div", "generaltitle", "class");
 	$title = get_tag($title, "a", "//soylentnews.org/article.pl?sid=$sid_date", "href");
+	$title = htmlspecialchars($title);
+	$title = clean_unicode($title);
+	$title = clean_entities($title);
+	$title = string_replace_all("  ", " ", trim($title));
 
 	$details = get_tag($data, "div", "details", "class");
 	$beg = strpos($details, '<a href="');
@@ -109,6 +113,7 @@ function import_story($sid_date)
 			$username = substr($username, $beg + 2);
 		}
 		$username = trim($username);
+		$username = string_clean($username, "[a-z][A-Z][0-9]\$_.+!*'(),- ");
 
 		$s = substr($details, $end + 4);
 		$s = trim($s);
@@ -139,6 +144,7 @@ function import_story($sid_date)
 		$end = strpos($s, '"', $beg + 7);
 		if ($end !== false) {
 			$topic = substr($s, $beg + 7, $end - $beg - 7);
+			$topic = string_clean($topic, "[a-z][A-Z][0-9]/& ");
 		}
 	}
 
@@ -464,6 +470,10 @@ function import_comment($cid, $sid)
 	$now = time();
 
 	$subject = get_tag($data, "a", $cid, "name");
+	$subject = htmlspecialchars($subject);
+	$subject = clean_unicode($subject);
+	$subject = clean_entities($subject);
+	$subject = string_replace_all("  ", " ", trim($subject));
 
 	$score = get_tag($data, "span", "comment_score_$cid");
 	$score = str_replace("(Score:", "", $score);
@@ -472,6 +482,8 @@ function import_comment($cid, $sid)
 	if (string_has($score, ",")) {
 		list($score, $rating) = explode(",", $score);
 	}
+	$score = string_clean($score, "[0-9]");
+	$rating = string_clean($rating, "[a-z][A-Z]");
 
 	$details = get_tag($data, "div", "details", "class");
 	if (string_has($details, "Anonymous Coward")) {
@@ -489,6 +501,7 @@ function import_comment($cid, $sid)
 			$uid = str_replace("(", "", $uid);
 			$uid = str_replace(")", "", $uid);
 			$username = substr($details, 0, $beg);
+			$username = string_clean($username, "[a-z][A-Z][0-9]\$_.+!*'(),- ");
 		}
 	}
 
@@ -516,6 +529,9 @@ function import_comment($cid, $sid)
 	if (substr($body, -10) == "<br/><br/>") {
 		$body = substr($body, 0, -10);
 	}
+	if (strlen($body) > 64000) {
+		$body = substr($body, 0, 64000);
+	}
 
 	$end = strpos($data, '<div class="comment_footer">');
 	if ($end !== false) {
@@ -533,6 +549,7 @@ function import_comment($cid, $sid)
 			$map = map_from_url_string($s);
 			if (array_key_exists("cid", $map)) {
 				$parent = $map["cid"];
+				$parent = string_clean($parent, "[0-9]");
 			}
 		}
 	}

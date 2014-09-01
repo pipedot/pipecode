@@ -29,6 +29,16 @@ $comment = db_get_rec("comment", $comment_id);
 $can_moderate = false;
 $a = article_info($comment);
 
+if ($a["type"] == "story") {
+	$story = db_get_rec("story", $comment["root_id"]);
+	if (string_has($story["author_zid"], $import_server_name) && !$auth_user["soylentnews_enabled"]) {
+		$soylentnews_comment = db_get_rec("soylentnews_comment", array("comment_id" => $comment_id));
+		$canonical_uri = $protocol . "://soylentnews.org/comments.pl?sid=" . $soylentnews_comment["sid"] . "&cid=" . $soylentnews_comment["cid"];
+		header("Location: $canonical_uri");
+		die();
+	}
+}
+
 print_header($comment["subject"]);
 
 print_left_bar("main", "stories");

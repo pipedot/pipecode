@@ -17969,7 +17969,7 @@ class HTMLPurifier_Injector_Linkify extends HTMLPurifier_Injector
 
         // there is/are URL(s). Let's split the string:
         // Note: this regex is extremely permissive
-        $bits = preg_split('#((?:https?|ftp)://[^\s\'",<>()]+)#Su', $token->data, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $bits = preg_split('#((?:https?|ftp)://[^\s",<>()]+)#Su', $token->data, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 
         $token = array();
