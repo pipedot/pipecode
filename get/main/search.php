@@ -29,17 +29,9 @@ if ($needle != "") {
 	$needle = str_replace("%2B", "+", $needle);
 
 	if ($haystack == "comments") {
-		if ($auth_user["soylentnews_enabled"]) {
-			$sql = "select * , match (subject, body) against (? in boolean mode) as relevance from comment where match (subject, body) against (? in boolean mode) order by relevance";
-		} else {
-			$sql = "select * from (select * , match (subject, body) against (? in boolean mode) as relevance from comment where match (subject, body) against (? in boolean mode)) as search where search.zid not like '%$import_server_name' order by relevance";
-		}
+		$sql = "select * , match (subject, body) against (? in boolean mode) as relevance from comment where match (subject, body) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "stories") {
-		if ($auth_user["soylentnews_enabled"]) {
-			$sql = "select * , match (title, body) against (? in boolean mode) as relevance from story where match (title, body) against (? in boolean mode) order by relevance";
-		} else {
-			$sql = "select * from (select * , match (title, body) against (? in boolean mode) as relevance from story where match (title, body) against (? in boolean mode)) as search where search.author_zid not like '%$import_server_name' order by relevance;";
-		}
+		$sql = "select * , match (title, body) against (? in boolean mode) as relevance from story where match (title, body) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "pipe") {
 		$sql = "select * , match (title, body) against (? in boolean mode) as relevance from pipe where match (title, body) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "polls") {

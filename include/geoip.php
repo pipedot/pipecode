@@ -22,8 +22,6 @@
 include("$doc_root/lib/geoip/geoipcity.inc");
 include("$doc_root/lib/geoip/timezone.php");
 
-header("Content-type: text/plain");
-
 
 function geo_ip($ip)
 {
@@ -127,9 +125,3 @@ function geo_plot()
 	imagepng($geo_im);
 	imagedestroy($geo_im);
 }
-
-//$a = geoip("2600:3c00::f03c:91ff:fe96:6e21");
-//$a = geoip("69.164.201.49");
-//$a = geoip("66.160.141.180");
-
-//var_dump($a);

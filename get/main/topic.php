@@ -43,12 +43,7 @@ if ($topic == "") {
 	$k = array_keys($list);
 	for ($i = 0; $i < count($list); $i++) {
 		$topic = $list[$k[$i]];
-		$name = $topic["topic"];
-		// XXX: ugly workaround for long SN topic
-		if ($name == "career & education") {
-			$name = "education";
-		}
-		writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic_box"><img alt="' . $topic["icon"] . '" src="/images/' . $topic["icon"] . '-64.png"/>' . $name . '</div></a>');
+		writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic_box"><img alt="' . $topic["icon"] . '" src="/images/' . $topic["icon"] . '-64.png"/>' . $topic["topic"] . '</div></a>');
 	}
 } else if ($topic == "list") {
 	if (!$auth_user["admin"]) {

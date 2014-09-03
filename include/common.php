@@ -257,48 +257,6 @@ $db_table["short_view"]["col"][] = "remote_ip";
 $db_table["short_view"]["col"][] = "time";
 $db_table["short_view"]["col"][] = "zid";
 
-$db_table["soylentnews_comment"]["key"] = "cid";
-$db_table["soylentnews_comment"]["col"][] = "cid";
-$db_table["soylentnews_comment"]["col"][] = "sid";
-$db_table["soylentnews_comment"]["col"][] = "comment_id";
-$db_table["soylentnews_comment"]["col"][] = "body";
-$db_table["soylentnews_comment"]["col"][] = "last_sync";
-$db_table["soylentnews_comment"]["col"][] = "parent";
-$db_table["soylentnews_comment"]["col"][] = "rating";
-$db_table["soylentnews_comment"]["col"][] = "score";
-$db_table["soylentnews_comment"]["col"][] = "subject";
-$db_table["soylentnews_comment"]["col"][] = "time";
-$db_table["soylentnews_comment"]["col"][] = "uid";
-
-$db_table["soylentnews_log"]["key"][] = "time";
-$db_table["soylentnews_log"]["key"][] = "type";
-$db_table["soylentnews_log"]["key"][] = "item_id";
-$db_table["soylentnews_log"]["col"][] = "time";
-$db_table["soylentnews_log"]["col"][] = "type";
-$db_table["soylentnews_log"]["col"][] = "item_id";
-
-$db_table["soylentnews_story"]["key"] = "sid";
-$db_table["soylentnews_story"]["col"][] = "sid";
-$db_table["soylentnews_story"]["col"][] = "sid_date";
-$db_table["soylentnews_story"]["col"][] = "story_id";
-$db_table["soylentnews_story"]["col"][] = "body";
-$db_table["soylentnews_story"]["col"][] = "last_sync";
-$db_table["soylentnews_story"]["col"][] = "slug";
-$db_table["soylentnews_story"]["col"][] = "tid";
-$db_table["soylentnews_story"]["col"][] = "time";
-$db_table["soylentnews_story"]["col"][] = "title";
-$db_table["soylentnews_story"]["col"][] = "uid";
-
-$db_table["soylentnews_topic"]["key"] = "tid";
-$db_table["soylentnews_topic"]["col"][] = "tid";
-$db_table["soylentnews_topic"]["col"][] = "slug";
-$db_table["soylentnews_topic"]["col"][] = "topic";
-
-$db_table["soylentnews_user"]["key"] = "uid";
-$db_table["soylentnews_user"]["col"][] = "uid";
-$db_table["soylentnews_user"]["col"][] = "username";
-$db_table["soylentnews_user"]["col"][] = "zid";
-
 $db_table["store_category"]["key"] = "category_id";
 $db_table["store_category"]["col"][] = "category_id";
 $db_table["store_category"]["col"][] = "category_description";

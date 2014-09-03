@@ -33,7 +33,6 @@ $expand_threshold = http_post_string("expand_threshold", array("valid" => "[0-9]
 $real_name = http_post_string("real_name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z]- "));
 $email = http_post_string("email", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
 $list_enabled = http_post_bool("list_enabled", array("numeric" => true));
-//$soylentnews_enabled = http_post_bool("soylentnews_enabled", array("numeric" => true));
 $story_image_style = http_post_int("story_image_style");
 
 if (!in_array($time_zone, $zones)) {
@@ -44,7 +43,6 @@ $user_conf["javascript_enabled"] = $javascript_enabled;
 $user_conf["wysiwyg_enabled"] = $wysiwyg_enabled;
 $user_conf["time_zone"] = $time_zone;
 $user_conf["story_image_style"] = $story_image_style;
-//$user_conf["soylentnews_enabled"] = $soylentnews_enabled;
 $user_conf["hide_threshold"] = $hide_threshold;
 $user_conf["expand_threshold"] = $expand_threshold;
 $user_conf["real_name"] = $real_name;

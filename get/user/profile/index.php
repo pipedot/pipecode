@@ -45,7 +45,6 @@ for ($i = 0; $i < count($row); $i++) {
 }
 print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $user_conf["time_zone"]));
-//print_row(array("caption" => "Show posts from SoylentNews", "check_key" => "soylentnews_enabled", "checked" => $user_conf["soylentnews_enabled"]));
 end_tab();
 
 beg_tab("Comments");

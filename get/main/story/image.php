@@ -45,7 +45,7 @@ writeln('<h1>Select Image</h1>');
 writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
 writeln('	<table>');
 writeln('		<tr>');
-writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="0" type="radio"/></td>');
+writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="0" type="radio" checked="checked"/></td>');
 writeln('			<td><img alt="thumbnail" src="/images/missing-128.png"/></td>');
 writeln('		</tr>');
 writeln('		<tr>');
