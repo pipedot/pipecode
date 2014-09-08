@@ -115,6 +115,8 @@ CREATE TABLE `comment` (
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`comment_id`),
   KEY `comment_zid` (`zid`),
+  KEY `comment_root_id` (`root_id`),
+  KEY `comment_short_id` (`short_id`),
   FULLTEXT KEY `comment_search` (`subject`,`body`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -216,6 +218,21 @@ CREATE TABLE `feed_user` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `gravatar`
+--
+
+DROP TABLE IF EXISTS `gravatar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gravatar` (
+  `zid` varchar(50) NOT NULL,
+  `last_view` int(11) NOT NULL,
+  `last_sync` int(11) NOT NULL,
+  PRIMARY KEY (`zid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `image`
 --
 
@@ -247,6 +264,59 @@ CREATE TABLE `image_style` (
   `image_style_id` int(11) NOT NULL AUTO_INCREMENT,
   `description` varchar(50) NOT NULL,
   PRIMARY KEY (`image_style_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `journal`
+--
+
+DROP TABLE IF EXISTS `journal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `journal` (
+  `journal_id` varchar(64) NOT NULL,
+  `body` text NOT NULL,
+  `edit_time` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  `publish_time` int(11) NOT NULL,
+  `published` int(11) NOT NULL,
+  `short_id` int(11) NOT NULL,
+  `slug` varchar(100) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `topic` varchar(20) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`journal_id`),
+  UNIQUE KEY `journal_id_UNIQUE` (`journal_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `journal_photo`
+--
+
+DROP TABLE IF EXISTS `journal_photo`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `journal_photo` (
+  `journal_id` varchar(64) NOT NULL,
+  `photo_id` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `journal_view`
+--
+
+DROP TABLE IF EXISTS `journal_view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `journal_view` (
+  `journal_id` varchar(64) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`journal_id`,`zid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -701,6 +771,8 @@ CREATE TABLE `story` (
   `title` varchar(100) NOT NULL,
   `tweet_id` bigint(20) NOT NULL,
   PRIMARY KEY (`story_id`),
+  KEY `story_short_id` (`short_id`),
+  KEY `story_publish_time` (`publish_time`),
   FULLTEXT KEY `story_search` (`title`,`body`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -819,4 +891,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-08-31 21:13:08
+-- Dump completed on 2014-09-08  4:03:29

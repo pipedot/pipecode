@@ -20,6 +20,8 @@
 
 var comments;
 var reasons = new Array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
+var protocol = get_protocol();
+var server_name = get_server_name();
 
 
 // jquery checkbox toggle on table row click
@@ -30,6 +32,31 @@ $(document).ready(function() {
 		}
 	});
 });
+
+
+function get_protocol()
+{
+	var a;
+
+	a = document.URL.split(":");
+
+	return a[0];
+}
+
+
+function get_server_name()
+{
+	var a;
+
+	a = document.URL.split("/");
+	a = a[2].split(".");
+
+	if (a.length == 2) {
+		return a[0] + "." + a[1];
+	} else {
+		return a[1] + "." + a[2];
+	}
+}
 
 
 function moderate(e, comment_id)
@@ -144,11 +171,11 @@ function render(c)
 			}
 		}
 		//console.log("comment_id [" + c.comment_id + "] score [" + c.score + "] hide [" + hide + "] collapse [" + collapse + "] hide_value [" + hide_value + "] expand_value [" + expand_value + "]");
-		user_page = "http://" + c.zid.replace("@", ".") + "/";
+		user_page = protocol + "://" + c.zid.replace("@", ".") + "/";
 		if (c.zid == "") {
 			by = "Anonymous Coward";
 		} else {
-			by = "<a href=\"http://" + c.zid.replace("@", ".") + "/\">" + c.zid + "</a>";
+			by = "<a href=\"" + protocol + "://" + c.zid.replace("@", ".") + "/\">" + c.zid + "</a>";
 		}
 
 		if (hide) {
@@ -164,17 +191,17 @@ function render(c)
 				s += "<h4 id=\"collapse_" + c.comment_id + "\" onclick=\"show_comment('" + c.comment_id + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
 
 				s += "<" + seen + " id=\"subject_" + c.comment_id + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h3 id=\"subtitle_" + c.comment_id + "\" class=\"comment_subtitle\" style=\"display: none\">by " + by + " on <a href=\"/comment/" + c.comment_id + "\">" + t + "</a> (<a href=\"/" + c.short + "\">#" + c.short + "</a>)</h3>";
+				s += "<h3 id=\"subtitle_" + c.comment_id + "\" class=\"comment_subtitle\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
 				s += "<div class=\"comment_body\">";
 				s += "<div id=\"body_" + c.comment_id + "\" class=\"comment_content\" style=\"display: none\">";
 			} else {
 				s += "<" + seen + " id=\"subject_" + c.comment_id + "\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h3 id=\"subtitle_" + c.comment_id + "\">by " + by + " on <a href=\"/comment/" + c.comment_id + "\">" + t + "</a> (<a href=\"/" + c.short + "\">#" + c.short + "</a>)</h3>";
+				s += "<h3 id=\"subtitle_" + c.comment_id + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
 				s += "<div class=\"comment_body\">";
 				s += "<div id=\"body_" + c.comment_id + "\" class=\"comment_content\">";
 			}
 			s += c.body;
-			s += "<footer><a rel=\"nofollow\" href=\"/post?comment_id=" + c.comment_id + "\">Reply</a>";
+			s += "<footer><a rel=\"nofollow\" href=\"" + protocol + "://" + server_name + "/post?comment_id=" + c.comment_id + "\">Reply</a>";
 			if (c.zid != auth_zid) {
 				s += "<select name=\"s_" + c.comment_id + "\" onchange=\"moderate(this, '" + c.comment_id + "')\">";
 

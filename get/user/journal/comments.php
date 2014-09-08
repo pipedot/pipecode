@@ -19,28 +19,15 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//include("feed.php");
-include("gravatar.php");
+include("render.php");
 
-//if ($zid == $auth_zid) {
-//	print_header("", array("Edit"), array("news"), array("/feed/edit"));
-//	print_feed_page($zid);
-//} else {
-	print_header();
-	print_left_bar("user", "overview");
-	beg_main("cell");
+header("Content-Type: text/plain");
 
-	writeln('<h1>' . $zid . '</h1>');
+$journal_id = $s2;
+if (!string_uses($journal_id, "[a-z][0-9]_")) {
+	die("invalid journal_id [$journal_id]");
+}
 
-	writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
-	writeln('	<tr>');
-	writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="width: 128px" src="' . profile_picture($zid, 256) . '"/></td>');
-	writeln('	</tr>');
-	writeln('</table>');
-	seen_gravatar($zid);
-
-	end_main();
-//}
-
-print_footer();
+$can_moderate = true;
+render_page("journal", $journal_id, true);
 

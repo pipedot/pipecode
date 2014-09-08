@@ -50,7 +50,7 @@ function short_redirect($short_code)
 		$short_view["time"] = time();
 		db_set_rec("short_view", $short_view);
 
-		header("Location: " . item_link($short["type"], $short["item_id"]));
+		header("Location: " . item_link($short["type"], $short["item_id"], $short_code));
 		die();
 	}
 }

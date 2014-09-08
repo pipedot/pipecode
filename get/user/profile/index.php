@@ -53,6 +53,10 @@ print_row(array("caption" => "Hide Threshold", "option_key" => "hide_threshold",
 print_row(array("caption" => "Expand Threshold", "option_key" => "expand_threshold", "option_list" => $scores, "option_value" => $user_conf["expand_threshold"]));
 end_tab();
 
+beg_tab("Gravatar");
+print_row(array("caption" => "Use Gravatar for profile picture", "check_key" => "gravatar_enabled", "checked" => $user_conf["gravatar_enabled"]));
+end_tab();
+
 beg_tab("Profile");
 print_row(array("caption" => "Real Name", "text_key" => "real_name", "text_value" => $user_conf["real_name"]));
 print_row(array("caption" => "External Email", "text_key" => "email", "text_value" => $user_conf["email"]));

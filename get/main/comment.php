@@ -21,21 +21,38 @@
 
 include("render.php");
 
-$comment_id = $s2;
-if (!string_uses($comment_id, "[a-z][0-9]_")) {
-	die("invalid comment_id [$comment_id]");
+if (string_uses($s2, "[A-Z][a-z][0-9]")) {
+	$short_id = crypt_crockford_decode($s2);
+	$short = db_get_rec("short", $short_id);
+	if ($short["type"] != "comment") {
+		die("invalid short code [$s2]");
+	}
+	$comment_id = $short["item_id"];
+} else if (string_uses($s2, "[a-z][0-9]_")) {
+	$comment_id = $s2;
+} else {
+	die("invalid request");
 }
+
 $comment = db_get_rec("comment", $comment_id);
 $can_moderate = false;
 $a = article_info($comment);
+$type = $a["type"];
 
 print_header($comment["subject"]);
 
 print_left_bar("main", "stories");
 beg_main("cell");
 
-writeln('<h1>' . ucwords($a["type"]) . '</h1>');
-writeln('<a href="' . $a["link"] . '">' . $a["title"] . '</a>');
+writeln('<h1>' . ucwords($type) . '</h1>');
+if ($type == "poll") {
+	$icon = "heart";
+} else if ($type == "journal") {
+	$icon = "notepad";
+} else {
+	$icon = "news";
+}
+writeln('<a class="icon_' . $icon . '_16" href="' . $a["link"] . '">' . $a["title"] . '</a>');
 
 writeln('<h2>Preview</h2>');
 

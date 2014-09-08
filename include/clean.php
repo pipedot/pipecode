@@ -200,9 +200,12 @@ function clean_html($dirty, $definition = "comment")
 	$config->set('HTML.DefinitionRev', 1);
 	$config->set('Cache.DefinitionImpl', null); // TODO: remove this later!
 	if ($definition == "page") {
-		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,pre,ul,ol,li,p,table,tr,td,img');
+		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,img[src],li,ol,pre,q,s,sub,sup,u,ul,p,table,tr,td');
+	} else if ($definition == "journal") {
+		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,img[src],li,ol,pre,q,s,sub,sup,u,ul');
 	} else {
-		$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,ul,ol,li');
+		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,li,ol,q,s,sub,sup,u,ul');
+		//$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,ul,ol,li');
 	}
 	if ($definition != "story") {
 		$config->set('HTML.Nofollow', true);
@@ -647,14 +650,16 @@ function clean_body($required = true, $definition = "comment")
 		}
 	}
 
-	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && array_key_exists("comment", $_POST)) {
+	// XXX: ugly hack while submit/publish story is not wysiwyg
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && !array_key_exists("tid", $_POST)) {
 		$clean_body = $dirty_body;
 	} else {
 		$clean_body = str_replace("\n", "<br>", $dirty_body);
 	}
 	$clean_body = clean_html($clean_body, $definition);
 	$dirty_body = dirty_html($clean_body);
-	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && array_key_exists("comment", $_POST)) {
+	// XXX: ugly hack while submit/publish story is not wysiwyg
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && !array_key_exists("tid", $_POST)) {
 		$dirty_body = $clean_body;
 	}
 

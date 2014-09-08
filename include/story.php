@@ -87,14 +87,17 @@ function print_story($story_id)
 {
 	global $server_name;
 	global $auth_user;
+	global $auth_zid;
 
 	$story = db_get_rec("story", $story_id);
 	$topic = db_get_rec("topic", $story["tid"]);
+	$pipe = db_get_rec("pipe", $story["pipe_id"]);
 
 	$a["body"] = $story["body"];
 	$a["icon"] = $story["icon"];
 	$a["image_id"] = $story["image_id"];
 	$a["pipe_id"] = $story["pipe_id"];
+	$a["pipe_short_id"] = $pipe["short_id"];
 	$a["short_id"] = $story["short_id"];
 	$a["story_id"] = $story_id;
 	$a["time"] = $story["publish_time"];
@@ -103,11 +106,37 @@ function print_story($story_id)
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["zid"] = $story["author_zid"];
 
-	if ($story_id > 0) {
-		$row = sql("select count(*) as comments from comment where type = 'story' and root_id = ?", $story_id);
-		$a["comments"] = $row[0]["comments"];
-	} else {
-		$a["comments"] = 0;
+	$row = sql("select count(*) as comments from comment where type = 'story' and root_id = ?", $story_id);
+	$a["comments"] = $row[0]["comments"];
+	if ($auth_zid != "") {
+		$a["new"] = new_comments("story", $story_id);
+	}
+
+	print_article($a);
+}
+
+
+function print_journal($journal_id)
+{
+	global $server_name;
+	global $auth_user;
+	global $auth_zid;
+
+	$journal = db_get_rec("journal", $journal_id);
+
+	$a["body"] = $journal["body"];
+	$a["photo_id"] = $journal["photo_id"];
+	$a["short_id"] = $journal["short_id"];
+	$a["journal_id"] = $journal_id;
+	$a["time"] = $journal["publish_time"];
+	$a["title"] = $journal["title"];
+	$a["topic"] = $journal["topic"];
+	$a["zid"] = $journal["zid"];
+
+	$row = sql("select count(*) as comments from comment where type = 'journal' and root_id = ?", $journal_id);
+	$a["comments"] = $row[0]["comments"];
+	if ($auth_zid != "") {
+		$a["new"] = new_comments("journal", $journal_id);
 	}
 
 	print_article($a);
@@ -118,6 +147,7 @@ function print_article($a)
 {
 	global $server_name;
 	global $auth_user;
+	global $auth_zid;
 	global $protocol;
 	global $doc_root;
 
@@ -131,19 +161,45 @@ function print_article($a)
 	if (array_key_exists("story_id", $a)) {
 		$story_id = $a["story_id"];
 	} else {
-		$story_id = 0;
+		$story_id = "";
 	}
 	if (array_key_exists("pipe_id", $a)) {
 		$pipe_id = $a["pipe_id"];
-		//$pipe =  " (<a href=\"/pipe/$pipe_id\">#$pipe_id</a>)";
 	} else {
 		$pipe_id = "";
-		//$pipe = "";
+	}
+	if (array_key_exists("pipe_short_id", $a)) {
+		$pipe_short_id = $a["pipe_short_id"];
+	} else {
+		$pipe_short_id = 0;
+	}
+	if (array_key_exists("journal_id", $a)) {
+		$journal_id = $a["journal_id"];
+	} else {
+		$journal_id = "";
 	}
 	if (array_key_exists("comments", $a)) {
-		$comments = $a["comments"];
+		$comments = (int) $a["comments"];
+		if ($comments == 1) {
+			$comments_label = "comment";
+		} else {
+			$comments_label = "comments";
+		}
 	} else {
 		$comments = 0;
+		$comments_label = "comments";
+	}
+	if (array_key_exists("new", $a)) {
+		$new = (int) $a["new"];
+		if ($new > 0) {
+			//$comments_new = " <span class=\"new_comments\">($new new)</span>";
+			$comments_new = ", <b>$new</b> new";
+		} else {
+			$comments_new = "";
+		}
+	} else {
+		$new = 0;
+		$comments_new = "";
 	}
 	if (array_key_exists("pipe_id", $a)) {
 		$pipe_id = $a["pipe_id"];
@@ -167,21 +223,36 @@ function print_article($a)
 	}
 	if (array_key_exists("short_id", $a)) {
 		$short_code = crypt_crockford_encode($a["short_id"]);
-		$short = " (<a href=\"/$short_code\">#$short_code</a>)";
+		$short = " (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)";
 	} else {
+		$short_code = "";
 		$short = "";
 	}
 	$image_style = $auth_user["story_image_style"];
-	$topic = $a["topic"];
-	$topic_slug = clean_url($a["topic"]);
+	if (array_key_exists("topic", $a)) {
+		$topic = $a["topic"];
+		$topic_slug = clean_url($a["topic"]);
+	} else {
+		$topic = "";
+		$topic_slug = "";
+	}
 	$story = $a["body"];
-	$icon = $a["icon"];
+	if (array_key_exists("icon", $a)) {
+		$icon = $a["icon"];
+	} else {
+		$icon = "";
+	}
 	$title = $a["title"];
 	$slug = clean_url($title);
-	$date = date("Y-m-d H:i", $time);
-	$day = gmdate("Y-m-d", $time);
-	if ($pipe_id != "") {
-		$date = "<a href=\"/pipe/$pipe_id\">$date</a>";
+	if ($time == 0) {
+		$date = "as draft";
+		$day = "";
+	} else {
+		$date = "on " . date("Y-m-d H:i", $time);
+		$day = gmdate("Y-m-d", $time);
+	}
+	if ($pipe_short_id > 0) {
+		$date = "<a href=\"/pipe/" . crypt_crockford_encode($pipe_short_id) . "\">$date</a>";
 	}
 
 	if ($image_style == 1) {
@@ -189,9 +260,14 @@ function print_article($a)
 		$image_path = "";
 	} else if ($image_style == 2) {
 		// icon
-		$image_path = "/images/$icon-64.png";
-		$image_url = "";
-		$width = "64";
+		if ($icon == "") {
+			$image_path = "";
+			$image_url = "";
+		} else {
+			$image_path = "/images/$icon-64.png";
+			$image_url = "";
+			$width = "64";
+		}
 	} else {
 		if ($image_id == 0) {
 			$image_path = "";
@@ -209,8 +285,24 @@ function print_article($a)
 	}
 
 	writeln("<article class=\"story\">");
-	writeln("	<h1><a href=\"/story/$day/$slug\">$title</a></h1>");
-	writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic_slug\"><b>$topic</b></a> on $date$short</h2>");
+	if ($story_id != "") {
+		writeln("	<h1><a href=\"/story/$day/$slug\">$title</a></h1>");
+	} else if ($pipe_id != "") {
+		writeln("	<h1><a href=\"/pipe/$short_code\">$title</a></h1>");
+	} else if ($journal_id != "" && $time > 0) {
+		writeln("	<h1><a href=\"/journal/$day/$slug\">$title</a></h1>");
+	} else {
+		writeln("	<h1>$title</h1>");
+	}
+	if ($topic == "") {
+		writeln("	<h2>by $by $date$short</h2>");
+	} else {
+		if ($journal_id == "") {
+			writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic_slug\"><b>$topic</b></a> $date$short</h2>");
+		} else {
+			writeln("	<h2>by $by in <a href=\"" . user_page_link($zid) . "topic/$topic_slug\"><b>$topic</b></a> $date$short</h2>");
+		}
+	}
 
 	if ($image_path != "") {
 		if ($image_url != "") {
@@ -224,8 +316,8 @@ function print_article($a)
 	writeln("	<footer>");
 	writeln('		<table class="fill">');
 	writeln('			<tr>');
-	if ($story_id > 0) {
-		writeln("				<td><a href=\"/story/$day/$slug\"><b>$comments</b> comments</a></td>");
+	if ($story_id != "") {
+		writeln("				<td><a href=\"/story/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></td>");
 		if (@$auth_user["editor"]) {
 			writeln("				<td class=\"right\">");
 			if ($tweet_id == 0) {
@@ -239,9 +331,25 @@ function print_article($a)
 			writeln("					<a href=\"/story/$story_id/edit\" class=\"icon_notepad_16\">Edit</a>");
 			writeln("				</td>");
 		}
-	} else if ($pipe_id > 0) {
+	} else if ($pipe_id != "") {
 		writeln("				<td><b>$comments</b> comments</td>");
 		writeln("				<td class=\"right\">score <b>$score</b></td>");
+	} else if ($journal_id != "") {
+		if ($time > 0) {
+			writeln("				<td><a href=\"/journal/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></td>");
+		} else {
+			writeln("				<td><a href=\"/journal/$short_code\"><b>$comments</b> $comments_label$comments_new</a></td>");
+		}
+		if ($zid == $auth_zid) {
+			writeln("				<td class=\"right\">");
+			//writeln("					<a href=\"/journal/$short_code/image\" class=\"icon_picture_16\">Image</a> | ");
+			writeln("					<a href=\"/journal/$short_code/edit\" class=\"icon_notepad_16\">Edit</a>");
+			writeln("					<a href=\"/journal/$short_code/media\" class=\"icon_clip_16\">Media</a>");
+			if ($time == 0) {
+				writeln("					<a href=\"/journal/$short_code/publish\" class=\"icon_certificate_16\">Publish</a>");
+			}
+			writeln("				</td>");
+		}
 	}
 	writeln('			</tr>');
 	writeln('		</table>');

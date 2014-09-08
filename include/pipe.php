@@ -30,6 +30,7 @@ function print_story_edit($story_id, $edit_time = 0)
 	}
 	$date = date("Y-m-d H:i", $story["edit_time"]);
 	$topic = db_get_rec("topic", $story["tid"]);
+	//$a["story_id"] = $story["story_id"];
 	$a["body"] = $story["body"];
 	$a["icon"] = $story["icon"];
 	$a["time"] = $story["edit_time"];
@@ -48,6 +49,7 @@ function print_pipe($pipe_id)
 	$pipe = db_get_rec("pipe", $pipe_id);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$topic = db_get_rec("topic", $pipe["tid"]);
+	$a["pipe_id"] = $pipe["pipe_id"];
 	$a["body"] = $pipe["body"];
 	$a["icon"] = $pipe["icon"];
 	$a["short_id"] = $pipe["short_id"];

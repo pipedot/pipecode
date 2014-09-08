@@ -34,6 +34,21 @@ function vote_box($poll_id, $vote)
 	$poll_answer = db_get_list("poll_answer", "position", array("poll_id" => $poll["poll_id"]));
 	$k = array_keys($poll_answer);
 
+	$row = sql("select count(*) as comments from comment where type = 'poll' and root_id = ?", $poll_id);
+	$comments = (int) $row[0]["comments"];
+	if ($comments == 1) {
+		$comments_label = "comment";
+	} else {
+		$comments_label = "comments";
+	}
+	$new = new_comments("poll", $poll_id);
+	if ($new > 0) {
+		//$comments_new = " <span class=\"new_comments\">($new new)</a>";
+		$comments_new = ", <b>$new</b> new</a>";
+	} else {
+		$comments_new = "";
+	}
+
 	if ($vote) {
 		beg_form("/poll/$poll_id/vote");
 		writeln('	<div class="poll_question">' . $poll["question"] . '</div>');
@@ -68,13 +83,11 @@ function vote_box($poll_id, $vote)
 			$row = sql("select sum(points) as votes from poll_vote where poll_id = ?", $poll_id);
 			$votes = (int) $row[0]["votes"];
 		}
-		$row = sql("select count(*) as comments from comment where type = 'poll' and root_id = ?", $poll_id);
-		$comments = $row[0]["comments"];
 
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
 		writeln('			<td style="width: 40px"><input type="submit" value="Vote"/></td>');
-		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> comments</a></td>');
+		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> ' . $comments_label . $comments_new . '</a></td>');
 		writeln('			<td class="right" style="white-space: nowrap;"><b>' . $votes . '</b> ' . $units . '</td>');
 		writeln('		</tr>');
 		writeln('	</table>');
@@ -88,7 +101,6 @@ function vote_box($poll_id, $vote)
 		writeln('			<td class="poll_question">' . $poll["question"] . '</td>');
 		writeln('		</tr>');
 		if ($type_id == 1 || $type_id == 2) {
-			$units = "votes";
 			for ($i = 0; $i < count($poll_answer); $i++) {
 				$answer = $poll_answer[$k[$i]];
 
@@ -96,8 +108,12 @@ function vote_box($poll_id, $vote)
 				$votes[] = $row[0]["votes"];
 				$total += $row[0]["votes"];
 			}
+			//if ($total == 1) {
+				$units = "votes";
+			//} else {
+			//	$units = "votes";
+			//}
 		} else if ($type_id == 3) {
-			$units = "points";
 			for ($i = 0; $i < count($poll_answer); $i++) {
 				$answer = $poll_answer[$k[$i]];
 
@@ -105,6 +121,11 @@ function vote_box($poll_id, $vote)
 				$votes[] = $row[0]["votes"];
 				$total += $row[0]["votes"];
 			}
+			//if ($total == 1) {
+				$units = "points";
+			//} else {
+			//	$units = "points";
+			//}
 		}
 
 		for ($i = 0; $i < count($poll_answer); $i++) {
@@ -124,12 +145,10 @@ function vote_box($poll_id, $vote)
 		}
 		writeln('	</table>');
 
-		$row = sql("select count(*) as comments from comment where type = 'poll' and root_id = ?", $poll_id);
-		$comments = $row[0]["comments"];
 		$short_code = crypt_crockford_encode($poll["short_id"]);
 
 		writeln('	<div class="poll_footer">');
-		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> comments</a></div>');
+		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> ' . $comments_label . $comments_new . '</a></div>');
 		writeln('		<div class="poll_short">(<a href="/' . $short_code . '">#' . $short_code . '</a>)</div>');
 		if ($auth_zid == "") {
 			writeln('		<div class="right"><b>' . $total . '</b> ' . $units . '</div>');

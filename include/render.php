@@ -40,9 +40,9 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$s .= "<h2>$subject (Score: $score_reason)</h2>\n";
 	}
 	$date = date("Y-m-d H:i", $time);
-	if ($comment_id != "") {
-		$date = "<a href=\"$protocol://$server_name/comment/$comment_id\">$date</a>";
-	}
+	//if ($comment_id != "") {
+	//	$date = "<a href=\"$protocol://$server_name/comment/$short_code\">$date</a>";
+	//}
 	$short_code = crypt_crockford_encode($short_id);
 	$s .= "<h3>by " . user_page_link($zid, true) . " on $date (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)</h3>\n";
 	$s .= "<div>\n";
@@ -152,6 +152,8 @@ function recursive_render_json($render, $parent, $keys, $comment_id, $level)
 
 function render_page($type, $root_id, $json)
 {
+	global $protocol;
+	global $server_name;
 	global $auth_zid;
 	global $can_moderate;
 	global $hide_value;
@@ -193,7 +195,7 @@ function render_page($type, $root_id, $json)
 		writeln('<div class="comment_header">');
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
-		writeln('			<td style="width: 30%"><a rel="nofollow" href="/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
+		writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
 		if ($can_moderate && false) {
 			writeln('			<td style="width: 30%">');
 			writeln('				<table>');
@@ -288,6 +290,8 @@ function render_page($type, $root_id, $json)
 
 function render_sliders($type, $root_id)
 {
+	global $protocol;
+	global $server_name;
 	global $hide_value;
 	global $expand_value;
 
@@ -297,7 +301,7 @@ function render_sliders($type, $root_id)
 	writeln('<div class="comment_header">');
 	writeln('	<table class="fill">');
 	writeln('		<tr>');
-	writeln('			<td style="width: 20%"><a href="/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
+	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
 	writeln('					<tr>');

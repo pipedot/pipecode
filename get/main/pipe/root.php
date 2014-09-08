@@ -23,9 +23,17 @@ include("render.php");
 include("pipe.php");
 include("story.php");
 
-$pipe_id = $s2;
-if (!string_uses($pipe_id, "[a-z][0-9]_")) {
-	die("invalid pipe_id [$pipe_id]");
+if (string_uses($s2, "[a-z][0-9]_")) {
+	$pipe_id = $s2;
+} else if (string_uses($s2, "[A-Z][a-z][0-9]")) {
+	$short_id = crypt_crockford_decode($s2);
+	$short = db_get_rec("short", $short_id);
+	if ($short["type"] != "pipe") {
+		die("invalid short code [$s2]");
+	}
+	$pipe_id = $short["item_id"];
+} else {
+	die("invalid request");
 }
 
 $pipe = db_get_rec("pipe", $pipe_id);

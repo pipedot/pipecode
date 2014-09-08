@@ -27,6 +27,7 @@ CKEDITOR.editorConfig = function( config ) {
 	];
 
 	config.format_tags = 'p;h1;h2;h3;pre';
+	//config.removeDialogTabs = 'image:advanced;image:Link;link:advanced;link:target';
 	config.removeDialogTabs = 'image:advanced;link:advanced;link:target';
 	config.removePlugins = 'elementspath,contextmenu,liststyle,tabletools';
 	config.language = 'en';
@@ -43,5 +44,25 @@ CKEDITOR.on('dialogDefinition', function(ev)
 
 	if (dialogName == 'link') {
 		dialogDefinition.minHeight = 30;
+	}
+
+	if (dialogName == 'image') {
+		//dialogDefinition.minHeight = 30;
+		// Remove the 'Link' and 'Advanced' tabs from the 'Image' dialog.
+		//dialogDefinition.removeContents( 'Link' );
+
+		// Get a reference to the 'Image Info' tab.
+		var infoTab = dialogDefinition.getContents( 'info' );
+
+		// Remove unnecessary widgets/elements from the 'Image Info' tab.         
+		infoTab.remove('txtAlt');
+		infoTab.remove('txtWidth');
+		infoTab.remove('txtHeight');
+		infoTab.remove('ratioLock');
+		infoTab.remove('txtBorder');
+		infoTab.remove('cmbAlign');
+		infoTab.remove('txtHSpace');
+		infoTab.remove('txtVSpace');
+		//infoTab.remove('htmlPreview');
 	}
 });

@@ -508,6 +508,9 @@ textarea {
 .user_box_news {
 	background-image: url(/images/news-32.png);
 }
+.user_box_notepad {
+	background-image: url(/images/notepad-32.png);
+}
 .user_box_mail {
 	background-image: url(/images/mail-32.png);
 }
@@ -1259,9 +1262,25 @@ textarea {
 		padding-right: 0px;
 	}
 }
+.icon_certificate_16 {
+	background-position: left;
+	background-image: url(/images/certificate-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
 .icon_chat_16 {
 	background-position: left;
 	background-image: url(/images/chat-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_clip_16 {
+	background-position: left;
+	background-image: url(/images/clip-16.png);
 	background-repeat: no-repeat;
 	display: inline-block;
 	height: 16px;
@@ -1286,6 +1305,14 @@ textarea {
 .icon_feed_16 {
 	background-position: left;
 	background-image: url(/images/feed-16.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.icon_heart_16 {
+	background-position: left;
+	background-image: url(/images/heart-16.png);
 	background-repeat: no-repeat;
 	display: inline-block;
 	height: 16px;
@@ -1476,8 +1503,16 @@ textarea {
 	background-image: url(/images/workgroup-32.png);
 }
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+	.icon_certificate_16 {
+		background-image: url(/images/certificate-32.png);
+		background-size: 16px 16px;
+	}
 	.icon_chat_16 {
 		background-image: url(/images/chat-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_clip_16 {
+		background-image: url(/images/clip-32.png);
 		background-size: 16px 16px;
 	}
 	.icon_contact_new_16 {
@@ -1494,6 +1529,10 @@ textarea {
 	}
 	.icon_feed_16 {
 		background-image: url(/images/feed-32.png);
+		background-size: 16px 16px;
+	}
+	.icon_heart_16 {
+		background-image: url(/images/heart-32.png);
 		background-size: 16px 16px;
 	}
 	.icon_home_16 {
@@ -1674,6 +1713,10 @@ textarea {
 	}
 	.user_box_news {
 		background-image: url(/images/news-64.png);
+		background-size: 32px 32px;
+	}
+	.user_box_notepad {
+		background-image: url(/images/notepad-64.png);
 		background-size: 32px 32px;
 	}
 	.user_box_mail {

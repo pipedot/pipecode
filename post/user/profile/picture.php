@@ -50,4 +50,9 @@ for ($i = 0; $i < count($sizes); $i++) {
 	imagedestroy($tmp_img);
 }
 
+$auth_user["gravatar_enabled"] = 0;
+$auth_user["gravatar_seen"] = 0;
+$auth_user["gravatar_sync"] = 0;
+db_set_conf("user_conf", $auth_user, $auth_zid);
+
 header("Location: /menu/");

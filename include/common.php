@@ -141,12 +141,30 @@ $db_table["image"]["col"][] = "server";
 $db_table["image"]["col"][] = "time";
 $db_table["image"]["col"][] = "zid";
 
-//$db_table["link"]["key"] = "link_id";
-//$db_table["link"]["col"][] = "link_id";
-//$db_table["link"]["col"][] = "image_id";
-//$db_table["link"]["col"][] = "subject";
-//$db_table["link"]["col"][] = "time";
-//$db_table["link"]["col"][] = "url";
+$db_table["journal"]["key"] = "journal_id";
+$db_table["journal"]["col"][] = "journal_id";
+$db_table["journal"]["col"][] = "body";
+$db_table["journal"]["col"][] = "edit_time";
+$db_table["journal"]["col"][] = "photo_id";
+$db_table["journal"]["col"][] = "publish_time";
+$db_table["journal"]["col"][] = "published";
+$db_table["journal"]["col"][] = "short_id";
+$db_table["journal"]["col"][] = "slug";
+$db_table["journal"]["col"][] = "title";
+$db_table["journal"]["col"][] = "topic";
+$db_table["journal"]["col"][] = "zid";
+
+$db_table["journal_photo"]["key"][] = "journal_id";
+$db_table["journal_photo"]["key"][] = "photo_id";
+$db_table["journal_photo"]["col"][] = "journal_id";
+$db_table["journal_photo"]["col"][] = "photo_id";
+
+$db_table["journal_view"]["key"][] = "journal_id";
+$db_table["journal_view"]["key"][] = "zid";
+$db_table["journal_view"]["col"][] = "journal_id";
+$db_table["journal_view"]["col"][] = "zid";
+$db_table["journal_view"]["col"][] = "time";
+$db_table["journal_view"]["col"][] = "last_time";
 
 $db_table["mail"]["key"] = "mail_id";
 $db_table["mail"]["col"][] = "mail_id";
@@ -503,15 +521,15 @@ function print_left_bar($type = "main", $selected = "stories")
 			$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
 			$section_link = array("", "pipe/", "poll/", "search", "topic", "stream/");
 		}
-	} elseif ($type == "user") {
+	} else if ($type == "user") {
 		if ($auth_zid == $zid) {
-			$section_name = array("comments", "feed", "karma");
-			$section_link = array("comments", "", "karma/");
+			$section_name = array("overview", "journal", "topics", "stream", "comments", "feed", "karma");
+			$section_link = array("", "journal/", "topic", "stream/", "comments", "feed/", "karma/");
 		} else {
 			//$section_name = array("blog", "feed", "submissions", "comments", "achievements");
 			//$section_link = array("blog", "feed", "submissions", "comments", "achievements");
-			$section_name = array("overview", "feed", "stream", "comments", "karma");
-			$section_link = array("", "feed/", "stream/", "comments", "karma/");
+			$section_name = array("overview", "journal", "stream", "comments", "feed", "karma");
+			$section_link = array("", "journal/", "stream/", "comments", "feed/", "karma/");
 		}
 	}
 
@@ -539,6 +557,21 @@ function print_left_bar($type = "main", $selected = "stories")
 			}
 		}
 		writeln('	</div>');
+	} else if ($type == "user") {
+		$row = sql("select distinct topic from journal where zid = ? order by topic", $zid);
+		if (count($row) > 0) {
+			writeln('	<div class="topics">');
+			writeln('	<hr/>');
+			for ($i = 0; $i < count($row); $i++) {
+				$topic = $row[$i]["topic"];
+				if ($topic == $selected) {
+					writeln('	<a class="nav_active" href="/topic/' . $topic . '">' . $topic . '</a>');
+				} else {
+					writeln('	<a class="nav_inactive" href="/topic/' . $topic . '">' . $topic . '</a>');
+				}
+			}
+			writeln('	</div>');
+		}
 	}
 	writeln('</nav>');
 }
@@ -566,7 +599,7 @@ function print_user_box()
 	writeln('	<tr>');
 //	writeln('		<td><a href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
 	writeln('		<td><a href="' . $link . 'feed/"><div class="user_box_news">Feed</div></a></td>');
-	writeln('		<td><a href="' . $link . 'mail/"><div class="user_box_mail">' . $mail . '</div></a></td>');
+	writeln('		<td><a href="' . $link . 'journal/"><div class="user_box_notepad">Journal</div></a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
 //	writeln('		<td><a href="' . $link . 'karma/"><div class="user_box_icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
@@ -577,7 +610,8 @@ function print_user_box()
 //	writeln('		<td><a href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
 //	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="' . $link . 'stream/"><div class="user_box_internet">Stream</div></a></td>');
+//	writeln('		<td><a href="' . $link . 'stream/"><div class="user_box_internet">Stream</div></a></td>');
+	writeln('		<td><a href="' . $link . 'mail/"><div class="user_box_mail">' . $mail . '</div></a></td>');
 	writeln('		<td><a href="' . $link . 'profile/"><div class="user_box_tools">Settings</div></a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
@@ -824,6 +858,15 @@ function article_info($comment)
 		$a["type"] = "poll";
 		$a["title"] = $poll["question"];
 		$a["link"] = "https://$server_name/poll/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
+	} else if ($comment["type"] == "journal") {
+		$journal = db_get_rec("journal", $comment["root_id"]);
+		$a["type"] = "journal";
+		$a["title"] = $journal["title"];
+		if ($journal["published"]) {
+			$a["link"] = user_page_link($journal["zid"]) . "journal/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
+		} else {
+			$a["link"] = user_page_link($journal["zid"]) . "journal/" . crypt_crockford_encode($journal["short_id"]);
+		}
 	}
 
 	return $a;
@@ -832,29 +875,43 @@ function article_info($comment)
 
 function check_article_type($type)
 {
-	$a = array("story", "pipe", "poll");
+	$a = array("story", "pipe", "poll", "journal");
 	if (!in_array($type, $a)) {
 		die("unknown article type [$type]");
 	}
 }
 
 
-function item_link($type, $item_id)
+function item_link($type, $item_id, $short_code = "")
 {
+	global $protocol;
+	global $server_name;
+
+	if (($type == "pipe" || $type == "comment" || $type == "journal") && $short_code == "") {
+		$short = db_get_rec("short", array("item_id" => $item_id));
+		$short_code = crypt_crockford_encode($short["short_id"]);
+	}
 	if ($type == "story") {
 		$story = db_get_rec("story", $item_id);
-		return "/$type/" . gmdate("Y-m-d", $story["publish_time"]) . "/" . $story["slug"];
+		return "$protocol://$server_name/$type/" . gmdate("Y-m-d", $story["publish_time"]) . "/" . $story["slug"];
 	} else if ($type == "pipe") {
-		return "/$type/$item_id";
+		return "$protocol://$server_name/$type/$short_code";
 	} else if ($type == "poll") {
 		$poll = db_get_rec("poll", $item_id);
-		return "/$type/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
+		return "$protocol://$server_name/$type/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
+	} else if ($type == "journal") {
+		$journal = db_get_rec("journal", $item_id);
+		if ($journal["publish_time"] > 0) {
+			return user_page_link($journal["zid"]) . "$type/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
+		} else {
+			return user_page_link($journal["zid"]) . "$type/$short_code";
+		}
 	} else if ($type == "comment") {
-		return "/$type/" . $item_id;
+		return "$protocol://$server_name/$type/$short_code";
 	} else if ($type == "user") {
 		return user_page_link($item_id);
 	} else if ($type == "topic") {
-		return "/topic/" . clean_url($item_id);
+		return "$protocol://$server_name/topic/" . clean_url($item_id);
 	}
 
 	die("unknown link - type [$type] item_id [$item_id]");
@@ -981,6 +1038,21 @@ function revert_view_time($type, $root_id)
 		$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
 		$view["time"] = $view["last_time"];
 		db_set_rec("{$type}_view", $view);
+	}
+}
+
+
+function new_comments($type, $root_id)
+{
+	global $auth_zid;
+
+	if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
+		$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
+		$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and time > ?", $type, $root_id, $view["time"]);
+		return $row[0]["comments"];
+	} else {
+		$row = sql("select count(*) as comments from comment where type = ? and root_id = ?", $type, $root_id);
+		return $row[0]["comments"];
 	}
 }
 

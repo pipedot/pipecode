@@ -19,28 +19,24 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//include("feed.php");
-include("gravatar.php");
+if ($zid != $auth_zid) {
+	die("not your journal");
+}
 
-//if ($zid == $auth_zid) {
-//	print_header("", array("Edit"), array("news"), array("/feed/edit"));
-//	print_feed_page($zid);
-//} else {
-	print_header();
-	print_left_bar("user", "overview");
-	beg_main("cell");
+if (string_uses($s2, "[A-Z][a-z][0-9]")) {
+	$short_id = crypt_crockford_decode($s2);
+	$short = db_get_rec("short", $short_id);
+	if ($short["type"] != "journal") {
+		die("invalid short code [$s2]");
+	}
+	$journal_id = $short["item_id"];
+} else {
+	die("invalid request");
+}
 
-	writeln('<h1>' . $zid . '</h1>');
+$journal = db_get_rec("journal", $journal_id);
+$journal["publish_time"] = time();
+$journal["published"] = 1;
+db_set_rec("journal", $journal);
 
-	writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
-	writeln('	<tr>');
-	writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="width: 128px" src="' . profile_picture($zid, 256) . '"/></td>');
-	writeln('	</tr>');
-	writeln('</table>');
-	seen_gravatar($zid);
-
-	end_main();
-//}
-
-print_footer();
-
+header("Location: /journal/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"]);
