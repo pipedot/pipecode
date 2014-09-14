@@ -22,6 +22,9 @@
 if ($auth_zid == "") {
 	die("sign in to write");
 }
+if ($zid != $auth_zid) {
+	die("not your journal");
+}
 
 print_header("Write");
 beg_main();

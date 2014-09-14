@@ -1,0 +1,7 @@
+designer: Gnome
+icon-pack: Gnome Icon Theme
+website: http://ftp.gnome.org/pub/GNOME/sources/gnome-icon-theme/
+license: GPL
+free: 1
+commercial: 1
+trademark: 0

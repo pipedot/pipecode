@@ -39,7 +39,7 @@ if (string_uses($s2, "[A-Z][a-z][0-9]")) {
 $journal = db_get_rec("journal", $journal_id);
 $short_code = crypt_crockford_encode($journal["short_id"]);
 $title = clean_subject();
-$topic = http_post_string("topic", array("len" => 20, "valid" => "[a-z][0-9]-"));
+$topic = clean_topic();
 //header("Content-type: text/plain");
 list($clean_body, $dirty_body) = clean_body(false, "journal");
 //die("clean_body [$clean_body]");

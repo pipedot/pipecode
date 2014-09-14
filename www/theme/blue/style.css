@@ -464,6 +464,24 @@ textarea {
 	color: #506890;
 }
 .topic_box {
+	background-position: 50% 16%;
+	background-repeat: no-repeat;
+	border: 1px solid #888888;
+	border-radius: 4px;
+	float: left;
+	font-weight: bolder;
+	text-align: center;
+	margin-right: 8px;
+	margin-bottom: 8px;
+	width: 128px;
+	height: 90px;
+	padding: 4px;
+	padding-top: 68px;
+}
+.topic_box:hover {
+	background-color: #d3d3d3;
+}
+.tbox {
 	border: 1px solid #888888;
 	border-radius: 4px;
 	float: left;
@@ -475,16 +493,85 @@ textarea {
 	height: 90px;
 	padding: 4px;
 }
-.topic_box:hover {
+.tbox:hover {
 	background-color: #d3d3d3;
 }
-.topic_box img {
+.tbox img {
     	display: block;
 	margin-left: auto;
 	margin-right: auto;
 }
-.topic_box a {
-	font-weight: bolder;
+.icon_aphone_64 {
+	background-image: url(/images/aphone-64.png);
+}
+.icon_apple_64 {
+	background-image: url(/images/apple-64.png);
+}
+.icon_beakers_64 {
+	background-image: url(/images/beakers-64.png);
+}
+.icon_binder_64 {
+	background-image: url(/images/binder-64.png);
+}
+.icon_chrome_64 {
+	background-image: url(/images/chrome-64.png);
+}
+.icon_computers_64 {
+	background-image: url(/images/computers-64.png);
+}
+.icon_devil_64 {
+	background-image: url(/images/devil-64.png);
+}
+.icon_drive_64 {
+	background-image: url(/images/drive-64.png);
+}
+.icon_gavel_64 {
+	background-image: url(/images/gavel-64.png);
+}
+.icon_globe_64 {
+	background-image: url(/images/globe-64.png);
+}
+.icon_hardhat_64 {
+	background-image: url(/images/hardhat-64.png);
+}
+.icon_internet_64 {
+	background-image: url(/images/internet-64.png);
+}
+.icon_joystick_64 {
+	background-image: url(/images/joystick-64.png);
+}
+.icon_lock_64 {
+	background-image: url(/images/lock-64.png);
+}
+.icon_microphone_64 {
+	background-image: url(/images/microphone-64.png);
+}
+.icon_microsoft_64 {
+	background-image: url(/images/microsoft-64.png);
+}
+.icon_moon_64 {
+	background-image: url(/images/moon-64.png);
+}
+.icon_movies_64 {
+	background-image: url(/images/movies-64.png);
+}
+.icon_news_64 {
+	background-image: url(/images/news-64.png);
+}
+.icon_pipedot_64 {
+	background-image: url(/images/pipedot-64.png);
+}
+.icon_robot_desktop_64 {
+	background-image: url(/images/robot-desktop-64.png);
+}
+.icon_soccer_64 {
+	background-image: url(/images/soccer-64.png);
+}
+.icon_tux_64 {
+	background-image: url(/images/tux-64.png);
+}
+.icon_ubunchu_64 {
+	background-image: url(/images/ubunchu-64.png);
 }
 .user_box {
 	width: 100%;
@@ -1666,6 +1753,102 @@ textarea {
 	.icon_workgroup_32 {
 		background-image: url(/images/workgroup-64.png);
 		background-size: 32px 32px;
+	}
+	.icon_aphone_64 {
+		background-image: url(/images/aphone-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_apple_64 {
+		background-image: url(/images/apple-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_beakers_64 {
+		background-image: url(/images/beakers-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_binder_64 {
+		background-image: url(/images/binder-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_chrome_64 {
+		background-image: url(/images/chrome-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_computers_64 {
+		background-image: url(/images/computers-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_devil_64 {
+		background-image: url(/images/devil-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_drive_64 {
+		background-image: url(/images/drive-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_gavel_64 {
+		background-image: url(/images/gavel-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_globe_64 {
+		background-image: url(/images/globe-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_hardhat_64 {
+		background-image: url(/images/hardhat-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_internet_64 {
+		background-image: url(/images/internet-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_joystick_64 {
+		background-image: url(/images/joystick-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_lock_64 {
+		background-image: url(/images/lock-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_microphone_64 {
+		background-image: url(/images/microphone-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_microsoft_64 {
+		background-image: url(/images/microsoft-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_moon_64 {
+		background-image: url(/images/moon-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_movies_64 {
+		background-image: url(/images/movies-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_news_64 {
+		background-image: url(/images/news-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_pipedot_64 {
+		background-image: url(/images/pipedot-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_robot_desktop_64 {
+		background-image: url(/images/robot-desktop-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_soccer_64 {
+		background-image: url(/images/soccer-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_tux_64 {
+		background-image: url(/images/tux-128.png);
+		background-size: 64px 64px;
+	}
+	.icon_ubunchu_64 {
+		background-image: url(/images/ubunchu-128.png);
+		background-size: 64px 64px;
 	}
 	.pages_first {
 		background-image: url(/images/first-32.png);

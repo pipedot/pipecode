@@ -24,9 +24,12 @@ include("clean.php");
 if ($auth_zid == "") {
 	die("sign in to write");
 }
+if ($zid != $auth_zid) {
+	die("not your journal");
+}
 
 $title = clean_subject();
-$topic = http_post_string("topic", array("len" => 20, "valid" => "[a-z][0-9]-"));
+$topic = clean_topic();
 list($clean_body, $dirty_body) = clean_body(false, "journal");
 $time = time();
 

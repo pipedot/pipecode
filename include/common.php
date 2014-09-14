@@ -827,7 +827,7 @@ function clean_url($dirty)
 	$dirty = str_replace("&gt;", "", $dirty);
 	$dirty = str_replace("&quot;", "", $dirty);
 
-	$clean = string_clean($dirty, "[a-z][A-Z][0-9]/ ");
+	$clean = string_clean($dirty, "[a-z][A-Z][0-9]/- ");
 	$clean = str_replace("/", " ", $clean);
 	$clean = strtolower(trim($clean));
 	$clean = str_replace(" ", "-", $clean);

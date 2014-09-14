@@ -620,6 +620,25 @@ function clean_subject()
 }
 
 
+function clean_topic()
+{
+	if (array_key_exists("topic", $_POST)) {
+		$topic = strtolower($_POST["topic"]);
+	} else {
+		$topic = "general";
+	}
+
+	$topic = string_clean($topic, "[a-z][0-9]/- ");
+	$topic = clean_url($topic);
+
+	if (strlen($topic) > 20) {
+		$topic = substr($topic, 0, 20);
+	}
+
+	return $topic;
+}
+
+
 function clean_slug()
 {
 	$slug = http_get_string("slug", array("required" => false, "len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));

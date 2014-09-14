@@ -45,12 +45,13 @@ if ($topic == "") {
 	$row = sql("select distinct topic from journal where zid = ? order by topic", $zid);
 	for ($i = 0; $i < count($row); $i++) {
 		$topic = $row[$i]["topic"];
-		if (fs_is_file("$doc_root/www/images/$topic-64.png")) {
+		if (fs_is_file("$doc_root/www/images/$topic-64.png") && fs_is_file("$doc_root/www/images/$topic-128.png")) {
 			$icon = $topic;
 		} else {
 			$icon = "news";
 		}
-		writeln('<a href="/topic/' . $topic . '"><div class="topic_box"><img alt="' . $icon . '" src="/images/' . $icon . '-64.png"/>' . $topic . '</div></a>');
+		//writeln('<a href="/topic/' . $topic . '"><div class="topic_box"><img alt="' . $icon . '" src="/images/' . $icon . '-64.png"/>' . $topic . '</div></a>');
+		writeln('<a href="/topic/' . $topic . '"><div class="topic_box icon_' . $icon . '_64">' . $topic . '</div></a>');
 	}
 } else {
 	$items_per_page = 10;
