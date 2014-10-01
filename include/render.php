@@ -19,7 +19,7 @@
 // along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $short_id)
+function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $short_id, $article_link = "", $article_title = "")
 {
 	global $server_name;
 	global $can_moderate;
@@ -43,11 +43,17 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	//if ($comment_id != "") {
 	//	$date = "<a href=\"$protocol://$server_name/comment/$short_code\">$date</a>";
 	//}
+	if ($article_link != "") {
+		//print "new link [$article_link] new title [$article_title]";
+		$in = " in <a href=\"$article_link\"><b>$article_title</b></a>";
+	} else {
+		$in = "";
+	}
 	$short_code = crypt_crockford_encode($short_id);
-	$s .= "<h3>by " . user_page_link($zid, true) . " on $date (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)</h3>\n";
-	$s .= "<div>\n";
+	$s .= "<h3>by " . user_page_link($zid, true) . "$in on $date (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)</h3>\n";
+	$s .= "<div class=\"comment_outline\">\n";
 	$s .= "<div>";
-	$s .= "$body\n";
+	$s .= "<div class=\"comment_body\">$body</div>\n";
 
 	//$reason = array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
 	if ($can_moderate && $auth_zid != "" && $zid != $auth_zid) {
@@ -58,7 +64,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 			$selected = $row[0]["reason"];
 		}
 
-		$s .= "<footer><a href=\"/post?comment_id=$comment_id\">Reply</a><select name=\"comment_" . $comment_id . "\">";
+		$s .= "<footer><a href=\"$protocol://$server_name/post?comment_id=$comment_id\">Reply</a><select name=\"comment_" . $comment_id . "\">";
 		$k = array_keys($reasons);
 		for ($i = 0; $i < count($reasons); $i++) {
 			if ($k[$i] == $selected) {
@@ -71,7 +77,14 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		}
 		$s .= "</select> <input type=\"submit\" value=\"Moderate\"/></footer>\n";
 	} else {
-		$s .= "<footer><a href=\"$protocol://$server_name/post?comment_id=$comment_id\">Reply</a></footer>\n";
+		$s .= "<footer>\n";
+		$s .= "	<div><a href=\"$protocol://$server_name/post?comment_id=$comment_id\">Reply</a></div>\n";
+		$s .= "	<div class=\"right\">";
+		if ($auth_zid !== "" && $auth_zid === $zid) {
+			$s .= "		<a class=\"icon_16 notepad_16\" style=\"xcolor: #666666\" href=\"$protocol://$server_name/comment/$short_code/edit\">Edit</a>";
+		}
+		$s .= "	</div>\n";
+		$s .= "</footer>\n";
 	}
 	$s .= "</div>\n";
 
@@ -181,7 +194,7 @@ function render_page($type, $root_id, $json)
 		db_set_rec("{$type}_view", $view);
 	}
 
-	$comments = db_get_list("comment", "time", array("root_id" => $root_id));
+	$comments = db_get_list("comment", "publish_time", array("root_id" => $root_id));
 	$total = count($comments);
 	$k = array_keys($comments);
 
@@ -195,7 +208,7 @@ function render_page($type, $root_id, $json)
 		writeln('<div class="comment_header">');
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
-		writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
+		writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_16 chat_16">Reply</a></td>');
 		if ($can_moderate && false) {
 			writeln('			<td style="width: 30%">');
 			writeln('				<table>');
@@ -247,9 +260,9 @@ function render_page($type, $root_id, $json)
 		$comment = $comments[$k[$i]];
 		$zid = $comment["zid"];
 		if ($json) {
-			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $zid, $comment["time"], $comment["comment_id"], $comment["body"], $comment["short_id"]);
+			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $zid, $comment["edit_time"], $comment["comment_id"], $comment["body"], $comment["short_id"]);
 		} else {
-			$render[$comment["comment_id"]] = render_comment($comment["subject"], $zid, $comment["time"], $comment["comment_id"], $comment["body"], $last_seen, $comment["short_id"]);
+			$render[$comment["comment_id"]] = render_comment($comment["subject"], $zid, $comment["edit_time"], $comment["comment_id"], $comment["body"], $last_seen, $comment["short_id"]);
 		}
 		$parent[$comment["comment_id"]] = $comment["parent_id"];
 	}
@@ -258,7 +271,7 @@ function render_page($type, $root_id, $json)
 	$s = "";
 
 	if (!$json && $can_moderate) {
-		beg_form("/moderate_noscript");
+		beg_form("$protocol://$server_name/moderate_noscript");
 		writeln('<input type="hidden" name="type" value="' . $type . '"/>');
 		writeln('<input type="hidden" name="root_id" value="' . $root_id . '"/>');
 	}
@@ -301,7 +314,7 @@ function render_sliders($type, $root_id)
 	writeln('<div class="comment_header">');
 	writeln('	<table class="fill">');
 	writeln('		<tr>');
-	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_chat_16">Reply</a></td>');
+	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon_16 chat_16">Reply</a></td>');
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
 	writeln('					<tr>');

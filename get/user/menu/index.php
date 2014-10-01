@@ -43,7 +43,7 @@ beg_tab();
 print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
 print_row(array("caption" => "Profile Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/"));
 print_row(array("caption" => "Profile Picture", "description" => "Upload a new profile image", "icon" => "picture", "link" => "/profile/picture"));
-print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "karma_good", "link" => "/karma/"));
+print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "face_smile", "link" => "/karma/"));
 end_tab();
 
 writeln('</div>');

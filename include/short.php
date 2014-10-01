@@ -28,7 +28,7 @@ function short_redirect($short_code)
 	if (db_has_rec("short", $short_id)) {
 		$short = db_get_rec("short", $short_id);
 
-		$short_view = array();
+		$short_view = db_new_rec("short_view");
 		$short_view["short_id"] = $short_id;
 		if (empty($_SERVER["HTTP_USER_AGENT"])) {
 			$short_view["agent"] = "";
@@ -40,11 +40,6 @@ function short_redirect($short_code)
 		} else {
 			$short_view["referer"] = $_SERVER["HTTP_REFERER"];
 		}
-		//if (empty($_SERVER["REMOTE_ADDR"])) {
-		//	$short_view["remote_ip"] = "";
-		//} else {
-		//	$short_view["remote_ip"] = $_SERVER["REMOTE_ADDR"];
-		//}
 		$short_view["remote_ip"] = $remote_ip;
 		$short_view["zid"] = $auth_zid;
 		$short_view["time"] = time();

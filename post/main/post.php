@@ -85,18 +85,19 @@ if (http_post("preview")) {
 $comment = array();
 $comment["comment_id"] = create_id($zid);
 $comment["body"] = $clean_body;
+$comment["edit_time"] = $time;
 $comment["parent_id"] = $comment_id;
+$comment["publish_time"] = $time;
 $comment["rating"] = "";
 $comment["root_id"] = $root_id;
 $comment["score"] = 0;
 $comment["short_id"] = create_short("comment", $comment["comment_id"]);
 $comment["subject"] = $subject;
-$comment["time"] = $time;
 $comment["type"] = $type;
 $comment["zid"] = $zid;
 db_set_rec("comment", $comment);
 
-$comment = db_get_rec("comment", array("zid" => $zid, "time" => $time));
+$comment = db_get_rec("comment", $comment["comment_id"]);
 send_notifications($comment);
 
 revert_view_time($type, $root_id);

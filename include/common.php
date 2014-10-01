@@ -31,249 +31,505 @@ if (fs_is_file("$doc_root/conf.php")) {
 	die();
 }
 
-$db_table["captcha"]["key"] = "captcha_id";
-$db_table["captcha"]["col"][] = "captcha_id";
-$db_table["captcha"]["col"][] = "question";
-$db_table["captcha"]["col"][] = "answer";
+$now = time();
+$year = gmdate("Y");
 
-$db_table["captcha_challenge"]["key"] = "remote_ip";
-$db_table["captcha_challenge"]["col"][] = "remote_ip";
-$db_table["captcha_challenge"]["col"][] = "captcha_id";
+$db_table["accounting.journal"] = array(
+	array("name" => "journal_id", "auto" => true, "key" => true),
+	array("name" => "item_id"),
+	array("name" => "period", "default" => $year),
+	array("name" => "time", "default" => $now),
+	array("name" => "type"),
+	array("name" => "zid")
+);
 
-$db_table["card"]["key"] = "card_id";
-$db_table["card"]["col"][] = "card_id";
-$db_table["card"]["col"][] = "archive";
-$db_table["card"]["col"][] = "body";
-$db_table["card"]["col"][] = "image_id";
-$db_table["card"]["col"][] = "link_subject";
-$db_table["card"]["col"][] = "link_url";
-$db_table["card"]["col"][] = "photo_id";
-$db_table["card"]["col"][] = "time";
-$db_table["card"]["col"][] = "zid";
+$db_table["accounting.posting"] = array(
+	array("name" => "posting_id", "auto" => true, "key" => true),
+	array("name" => "amount", "default" => 0),
+	array("name" => "journal_id", "default" => 0),
+	array("name" => "zid")
+);
 
-$db_table["card_tags"]["key"][] = "card_id";
-$db_table["card_tags"]["key"][] = "tag_id";
-$db_table["card_tags"]["col"][] = "card_id";
-$db_table["card_tags"]["col"][] = "tag_id";
+$db_table["captcha"] = array(
+	array("name" => "captcha_id", "auto" => true, "key" => true),
+	array("name" => "question"),
+	array("name" => "answer")
+);
 
-$db_table["card_vote"]["key"][] = "card_id";
-$db_table["card_vote"]["key"][] = "zid";
-$db_table["card_vote"]["col"][] = "card_id";
-$db_table["card_vote"]["col"][] = "zid";
-$db_table["card_vote"]["col"][] = "value";
+//$db_table["captcha"]["key"] = "captcha_id";
+//$db_table["captcha"]["col"][] = "captcha_id";
+//$db_table["captcha"]["col"][] = "question";
+//$db_table["captcha"]["col"][] = "answer";
 
-$db_table["comment"]["key"] = "comment_id";
-$db_table["comment"]["col"][] = "comment_id";
-$db_table["comment"]["col"][] = "body";
-$db_table["comment"]["col"][] = "parent_id";
-//$db_table["comment"]["col"][] = "rating";
-$db_table["comment"]["col"][] = "root_id";
-//$db_table["comment"]["col"][] = "score";
-$db_table["comment"]["col"][] = "short_id";
-$db_table["comment"]["col"][] = "subject";
-$db_table["comment"]["col"][] = "time";
-$db_table["comment"]["col"][] = "type";
-$db_table["comment"]["col"][] = "zid";
+$db_table["captcha_challenge"] = array(
+	array("name" => "remote_ip", "key" => true),
+	array("name" => "captcha_id", "default" => 0)
+);
 
-$db_table["comment_vote"]["key"][] = "comment_id";
-$db_table["comment_vote"]["key"][] = "zid";
-$db_table["comment_vote"]["col"][] = "comment_id";
-$db_table["comment_vote"]["col"][] = "zid";
-$db_table["comment_vote"]["col"][] = "reason";
-$db_table["comment_vote"]["col"][] = "time";
-$db_table["comment_vote"]["col"][] = "value";
+//$db_table["captcha_challenge"]["key"] = "remote_ip";
+//$db_table["captcha_challenge"]["col"][] = "remote_ip";
+//$db_table["captcha_challenge"]["col"][] = "captcha_id";
 
-$db_table["default_conf"]["key"][] = "conf";
-$db_table["default_conf"]["key"][] = "name";
-$db_table["default_conf"]["col"][] = "conf";
-$db_table["default_conf"]["col"][] = "name";
-$db_table["default_conf"]["col"][] = "value";
+$db_table["card"] = array(
+	array("name" => "card_id", "auto" => true, "key" => true),
+	array("name" => "archive", "default" => 0),
+	array("name" => "body"),
+	array("name" => "image_id", "default" => 0),
+	array("name" => "link_subject"),
+	array("name" => "link_url"),
+	array("name" => "photo_id", "default" => 0),
+	array("name" => "time", "default" => $now),
+	array("name" => "zid"),
+);
 
-$db_table["email_challenge"]["key"] = "challenge";
-$db_table["email_challenge"]["col"][] = "challenge";
-$db_table["email_challenge"]["col"][] = "username";
-$db_table["email_challenge"]["col"][] = "email";
-$db_table["email_challenge"]["col"][] = "expires";
+//$db_table["card"]["key"] = "card_id";
+//$db_table["card"]["col"][] = "card_id";
+//$db_table["card"]["col"][] = "archive";
+//$db_table["card"]["col"][] = "body";
+//$db_table["card"]["col"][] = "image_id";
+//$db_table["card"]["col"][] = "link_subject";
+//$db_table["card"]["col"][] = "link_url";
+//$db_table["card"]["col"][] = "photo_id";
+//$db_table["card"]["col"][] = "time";
+//$db_table["card"]["col"][] = "zid";
 
-$db_table["feed"]["key"] = "fid";
-$db_table["feed"]["col"][] = "fid";
-$db_table["feed"]["col"][] = "time";
-$db_table["feed"]["col"][] = "uri";
-$db_table["feed"]["col"][] = "title";
-$db_table["feed"]["col"][] = "link";
+$db_table["card_tags"] = array(
+	array("name" => "card_id", "key" => true),
+	array("name" => "tag_id", "key" => true)
+);
 
-$db_table["feed_item"]["key"][] = "fid";
-$db_table["feed_item"]["key"][] = "time";
-$db_table["feed_item"]["col"][] = "fid";
-$db_table["feed_item"]["col"][] = "time";
-$db_table["feed_item"]["col"][] = "title";
-$db_table["feed_item"]["col"][] = "link";
+//$db_table["card_tags"]["key"][] = "card_id";
+//$db_table["card_tags"]["key"][] = "tag_id";
+//$db_table["card_tags"]["col"][] = "card_id";
+//$db_table["card_tags"]["col"][] = "tag_id";
 
-$db_table["feed_user"]["key"][] = "zid";
-$db_table["feed_user"]["key"][] = "fid";
-$db_table["feed_user"]["col"][] = "zid";
-$db_table["feed_user"]["col"][] = "fid";
-$db_table["feed_user"]["col"][] = "col";
-$db_table["feed_user"]["col"][] = "pos";
+$db_table["card_vote"] = array(
+	array("name" => "card_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "value", "default" => 0)
+);
 
-$db_table["image"]["key"] = "image_id";
-$db_table["image"]["col"][] = "image_id";
-//$db_table["image"]["col"][] = "aspect_width";
-//$db_table["image"]["col"][] = "aspect_height";
-//$db_table["image"]["col"][] = "has_160x90";
-//$db_table["image"]["col"][] = "has_160x120";
-//$db_table["image"]["col"][] = "has_160x160";
-//$db_table["image"]["col"][] = "has_320x180";
-//$db_table["image"]["col"][] = "has_320x240";
-//$db_table["image"]["col"][] = "has_320x320";
-//$db_table["image"]["col"][] = "has_640x360";
-//$db_table["image"]["col"][] = "has_640x480";
-//$db_table["image"]["col"][] = "has_640x640";
-//$db_table["image"]["col"][] = "has_640";
-//$db_table["image"]["col"][] = "has_1280";
-$db_table["image"]["col"][] = "hash";
-$db_table["image"]["col"][] = "original_width";
-$db_table["image"]["col"][] = "original_height";
-$db_table["image"]["col"][] = "original_url";
-$db_table["image"]["col"][] = "parent_url";
-$db_table["image"]["col"][] = "server";
-//$db_table["image"]["col"][] = "size";
-$db_table["image"]["col"][] = "time";
-$db_table["image"]["col"][] = "zid";
+//$db_table["card_vote"]["key"][] = "card_id";
+//$db_table["card_vote"]["key"][] = "zid";
+//$db_table["card_vote"]["col"][] = "card_id";
+//$db_table["card_vote"]["col"][] = "zid";
+//$db_table["card_vote"]["col"][] = "value";
 
-$db_table["journal"]["key"] = "journal_id";
-$db_table["journal"]["col"][] = "journal_id";
-$db_table["journal"]["col"][] = "body";
-$db_table["journal"]["col"][] = "edit_time";
-$db_table["journal"]["col"][] = "photo_id";
-$db_table["journal"]["col"][] = "publish_time";
-$db_table["journal"]["col"][] = "published";
-$db_table["journal"]["col"][] = "short_id";
-$db_table["journal"]["col"][] = "slug";
-$db_table["journal"]["col"][] = "title";
-$db_table["journal"]["col"][] = "topic";
-$db_table["journal"]["col"][] = "zid";
+$db_table["comment"] = array(
+	array("name" => "comment_id", "key" => true),
+	array("name" => "body"),
+	array("name" => "edit_time", "default" => $now),
+	array("name" => "parent_id"),
+	array("name" => "publish_time", "default" => $now),
+	array("name" => "root_id"),
+	array("name" => "short_id", "default" => 0),
+	array("name" => "subject"),
+	array("name" => "type"),
+	array("name" => "zid")
+);
 
-$db_table["journal_photo"]["key"][] = "journal_id";
-$db_table["journal_photo"]["key"][] = "photo_id";
-$db_table["journal_photo"]["col"][] = "journal_id";
-$db_table["journal_photo"]["col"][] = "photo_id";
+$db_table["comment_edit"] = array(
+	array("name" => "comment_id", "key" => true),
+	array("name" => "edit_time", "key" => true, "default" => $now),
+	array("name" => "body"),
+	array("name" => "subject")
+);
 
-$db_table["journal_view"]["key"][] = "journal_id";
-$db_table["journal_view"]["key"][] = "zid";
-$db_table["journal_view"]["col"][] = "journal_id";
-$db_table["journal_view"]["col"][] = "zid";
-$db_table["journal_view"]["col"][] = "time";
-$db_table["journal_view"]["col"][] = "last_time";
+//$db_table["comment"]["key"] = "comment_id";
+//$db_table["comment"]["col"][] = "comment_id";
+//$db_table["comment"]["col"][] = "body";
+//$db_table["comment"]["col"][] = "parent_id";
+//$db_table["comment"]["col"][] = "root_id";
+//$db_table["comment"]["col"][] = "short_id";
+//$db_table["comment"]["col"][] = "subject";
+//$db_table["comment"]["col"][] = "time";
+//$db_table["comment"]["col"][] = "type";
+//$db_table["comment"]["col"][] = "zid";
 
-$db_table["mail"]["key"] = "mail_id";
-$db_table["mail"]["col"][] = "mail_id";
-$db_table["mail"]["col"][] = "body";
-$db_table["mail"]["col"][] = "in_reply_to";
-$db_table["mail"]["col"][] = "location";
-$db_table["mail"]["col"][] = "mail_from";
-$db_table["mail"]["col"][] = "message_id";
-$db_table["mail"]["col"][] = "rcpt_to";
-$db_table["mail"]["col"][] = "received_time";
-$db_table["mail"]["col"][] = "reply_to";
-$db_table["mail"]["col"][] = "size";
-$db_table["mail"]["col"][] = "subject";
-$db_table["mail"]["col"][] = "zid";
+$db_table["comment_vote"] = array(
+	array("name" => "comment_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "reason"),
+	array("name" => "time", "default" => $now),
+	array("name" => "value", "default" => 0)
+);
 
-$db_table["page"]["key"] = "slug";
-$db_table["page"]["col"][] = "slug";
-$db_table["page"]["col"][] = "title";
-$db_table["page"]["col"][] = "body";
+//$db_table["comment_vote"]["key"][] = "comment_id";
+//$db_table["comment_vote"]["key"][] = "zid";
+//$db_table["comment_vote"]["col"][] = "comment_id";
+//$db_table["comment_vote"]["col"][] = "zid";
+//$db_table["comment_vote"]["col"][] = "reason";
+//$db_table["comment_vote"]["col"][] = "time";
+//$db_table["comment_vote"]["col"][] = "value";
 
-$db_table["photo"]["key"] = "photo_id";
-$db_table["photo"]["col"][] = "photo_id";
-$db_table["photo"]["col"][] = "aspect_width";
-$db_table["photo"]["col"][] = "aspect_height";
-$db_table["photo"]["col"][] = "has_medium";
-$db_table["photo"]["col"][] = "has_large";
-$db_table["photo"]["col"][] = "hash";
-$db_table["photo"]["col"][] = "original_name";
-$db_table["photo"]["col"][] = "original_width";
-$db_table["photo"]["col"][] = "original_height";
-$db_table["photo"]["col"][] = "server";
-$db_table["photo"]["col"][] = "size";
-$db_table["photo"]["col"][] = "time";
-$db_table["photo"]["col"][] = "zid";
+$db_table["default_conf"] = array(
+	array("name" => "conf", "key" => true),
+	array("name" => "name", "key" => true),
+	array("name" => "value")
+);
 
-$db_table["pipe"]["key"] = "pipe_id";
-$db_table["pipe"]["col"][] = "pipe_id";
-$db_table["pipe"]["col"][] = "author_zid";
-$db_table["pipe"]["col"][] = "body";
-$db_table["pipe"]["col"][] = "closed";
-$db_table["pipe"]["col"][] = "edit_zid";
-$db_table["pipe"]["col"][] = "icon";
-$db_table["pipe"]["col"][] = "reason";
-$db_table["pipe"]["col"][] = "short_id";
-$db_table["pipe"]["col"][] = "slug";
-$db_table["pipe"]["col"][] = "tid";
-$db_table["pipe"]["col"][] = "time";
-$db_table["pipe"]["col"][] = "title";
+//$db_table["default_conf"]["key"][] = "conf";
+//$db_table["default_conf"]["key"][] = "name";
+//$db_table["default_conf"]["col"][] = "conf";
+//$db_table["default_conf"]["col"][] = "name";
+//$db_table["default_conf"]["col"][] = "value";
 
-$db_table["pipe_view"]["key"][] = "pipe_id";
-$db_table["pipe_view"]["key"][] = "zid";
-$db_table["pipe_view"]["col"][] = "pipe_id";
-$db_table["pipe_view"]["col"][] = "zid";
-$db_table["pipe_view"]["col"][] = "time";
-$db_table["pipe_view"]["col"][] = "last_time";
+$db_table["email_challenge"] = array(
+	array("name" => "challenge", "key" => true),
+	array("name" => "username"),
+	array("name" => "email"),
+	array("name" => "expires", "default" => $now + 86400 * 3)
+);
 
-$db_table["pipe_vote"]["key"][] = "pipe_id";
-$db_table["pipe_vote"]["key"][] = "zid";
-$db_table["pipe_vote"]["col"][] = "pipe_id";
-$db_table["pipe_vote"]["col"][] = "zid";
-$db_table["pipe_vote"]["col"][] = "time";
-$db_table["pipe_vote"]["col"][] = "value";
+//$db_table["email_challenge"]["key"] = "challenge";
+//$db_table["email_challenge"]["col"][] = "challenge";
+//$db_table["email_challenge"]["col"][] = "username";
+//$db_table["email_challenge"]["col"][] = "email";
+//$db_table["email_challenge"]["col"][] = "expires";
 
-$db_table["poll_answer"]["key"] = "answer_id";
-$db_table["poll_answer"]["col"][] = "answer_id";
-$db_table["poll_answer"]["col"][] = "poll_id";
-$db_table["poll_answer"]["col"][] = "answer";
-$db_table["poll_answer"]["col"][] = "position";
+$db_table["feed"] = array(
+	array("name" => "fid", "auto" => true, "key" => true),
+	array("name" => "time", "default" => $now),
+	array("name" => "uri"),
+	array("name" => "title"),
+	array("name" => "link")
+);
 
-$db_table["poll"]["key"] = "poll_id";
-$db_table["poll"]["col"][] = "poll_id";
-$db_table["poll"]["col"][] = "question";
-$db_table["poll"]["col"][] = "short_id";
-$db_table["poll"]["col"][] = "slug";
-$db_table["poll"]["col"][] = "time";
-$db_table["poll"]["col"][] = "type_id";
-$db_table["poll"]["col"][] = "zid";
+//$db_table["feed"]["key"] = "fid";
+//$db_table["feed"]["col"][] = "fid";
+//$db_table["feed"]["col"][] = "time";
+//$db_table["feed"]["col"][] = "uri";
+//$db_table["feed"]["col"][] = "title";
+//$db_table["feed"]["col"][] = "link";
 
-$db_table["poll_view"]["key"][] = "poll_id";
-$db_table["poll_view"]["key"][] = "zid";
-$db_table["poll_view"]["col"][] = "poll_id";
-$db_table["poll_view"]["col"][] = "zid";
-$db_table["poll_view"]["col"][] = "time";
-$db_table["poll_view"]["col"][] = "last_time";
+$db_table["feed_item"] = array(
+	array("name" => "fid", "key" => true),
+	array("name" => "time", "key" => true, "default" => $now),
+	array("name" => "title"),
+	array("name" => "link")
+);
 
-$db_table["poll_vote"]["col"][] = "poll_id";
-$db_table["poll_vote"]["col"][] = "zid";
-$db_table["poll_vote"]["col"][] = "aid";
-$db_table["poll_vote"]["col"][] = "answer_id";
-$db_table["poll_vote"]["col"][] = "time";
-$db_table["poll_vote"]["col"][] = "points";
+//$db_table["feed_item"]["key"][] = "fid";
+//$db_table["feed_item"]["key"][] = "time";
+//$db_table["feed_item"]["col"][] = "fid";
+//$db_table["feed_item"]["col"][] = "time";
+//$db_table["feed_item"]["col"][] = "title";
+//$db_table["feed_item"]["col"][] = "link";
 
-$db_table["server_conf"]["col"][] = "name";
-$db_table["server_conf"]["col"][] = "value";
+$db_table["feed_user"] = array(
+	array("name" => "zid", "key" => true),
+	array("name" => "fid", "key" => true),
+	array("name" => "col", "default" => 0),
+	array("name" => "pos", "default" => 0)
+);
 
-$db_table["short"]["key"] = "short_id";
-$db_table["short"]["col"][] = "short_id";
-$db_table["short"]["col"][] = "type";
-$db_table["short"]["col"][] = "item_id";
+//$db_table["feed_user"]["key"][] = "zid";
+//$db_table["feed_user"]["key"][] = "fid";
+//$db_table["feed_user"]["col"][] = "zid";
+//$db_table["feed_user"]["col"][] = "fid";
+//$db_table["feed_user"]["col"][] = "col";
+//$db_table["feed_user"]["col"][] = "pos";
 
-$db_table["short_view"]["key"][] = "short_id";
-$db_table["short_view"]["key"][] = "remote_ip";
-$db_table["short_view"]["key"][] = "time";
-$db_table["short_view"]["col"][] = "short_id";
-$db_table["short_view"]["col"][] = "agent";
-$db_table["short_view"]["col"][] = "referer";
-$db_table["short_view"]["col"][] = "remote_ip";
-$db_table["short_view"]["col"][] = "time";
-$db_table["short_view"]["col"][] = "zid";
+$db_table["image"] = array(
+	array("name" => "image_id", "key" => true),
+	array("name" => "hash"),
+	array("name" => "original_width", "default" => 0),
+	array("name" => "original_height", "default" => 0),
+	array("name" => "original_url"),
+	array("name" => "parent_url"),
+	array("name" => "server"),
+	array("name" => "time", "default" => $now),
+	array("name" => "zid")
+);
+
+//$db_table["image"]["key"] = "image_id";
+//$db_table["image"]["col"][] = "image_id";
+//$db_table["image"]["col"][] = "hash";
+//$db_table["image"]["col"][] = "original_width";
+//$db_table["image"]["col"][] = "original_height";
+//$db_table["image"]["col"][] = "original_url";
+//$db_table["image"]["col"][] = "parent_url";
+//$db_table["image"]["col"][] = "server";
+//$db_table["image"]["col"][] = "time";
+//$db_table["image"]["col"][] = "zid";
+
+$db_table["journal"] = array(
+	array("name" => "journal_id", "key" => true),
+	array("name" => "body"),
+	array("name" => "edit_time", "default" => $now),
+	array("name" => "photo_id", "default" => 0),
+	array("name" => "publish_time", "default" => 0),
+	array("name" => "published", "default" => 0),
+	array("name" => "short_id", "default" => 0),
+	array("name" => "slug"),
+	array("name" => "title"),
+	array("name" => "topic"),
+	array("name" => "zid")
+);
+
+//$db_table["journal"]["key"] = "journal_id";
+//$db_table["journal"]["col"][] = "journal_id";
+//$db_table["journal"]["col"][] = "body";
+//$db_table["journal"]["col"][] = "edit_time";
+//$db_table["journal"]["col"][] = "photo_id";
+//$db_table["journal"]["col"][] = "publish_time";
+//$db_table["journal"]["col"][] = "published";
+//$db_table["journal"]["col"][] = "short_id";
+//$db_table["journal"]["col"][] = "slug";
+//$db_table["journal"]["col"][] = "title";
+//$db_table["journal"]["col"][] = "topic";
+//$db_table["journal"]["col"][] = "zid";
+
+$db_table["journal_photo"] = array(
+	array("name" => "journal_id", "key" => true),
+	array("name" => "photo_id", "key" => true)
+);
+
+//$db_table["journal_photo"]["key"][] = "journal_id";
+//$db_table["journal_photo"]["key"][] = "photo_id";
+//$db_table["journal_photo"]["col"][] = "journal_id";
+//$db_table["journal_photo"]["col"][] = "photo_id";
+
+$db_table["journal_view"] = array(
+	array("name" => "journal_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "time", "default" => 0),
+	array("name" => "last_time", "default" => 0)
+);
+
+//$db_table["journal_view"]["key"][] = "journal_id";
+//$db_table["journal_view"]["key"][] = "zid";
+//$db_table["journal_view"]["col"][] = "journal_id";
+//$db_table["journal_view"]["col"][] = "zid";
+//$db_table["journal_view"]["col"][] = "time";
+//$db_table["journal_view"]["col"][] = "last_time";
+
+$db_table["mail"] = array(
+	array("name" => "mail_id", "auto" => true, "key" => true),
+	array("name" => "body"),
+	array("name" => "in_reply_to"),
+	array("name" => "location"),
+	array("name" => "mail_from"),
+	array("name" => "message_id"),
+	array("name" => "rcpt_to"),
+	array("name" => "received_time", "default" => $now),
+	array("name" => "reply_to"),
+	array("name" => "size", "default" => 0),
+	array("name" => "subject"),
+	array("name" => "zid")
+);
+
+//$db_table["mail"]["key"] = "mail_id";
+//$db_table["mail"]["col"][] = "mail_id";
+//$db_table["mail"]["col"][] = "body";
+//$db_table["mail"]["col"][] = "in_reply_to";
+//$db_table["mail"]["col"][] = "location";
+//$db_table["mail"]["col"][] = "mail_from";
+//$db_table["mail"]["col"][] = "message_id";
+//$db_table["mail"]["col"][] = "rcpt_to";
+//$db_table["mail"]["col"][] = "received_time";
+//$db_table["mail"]["col"][] = "reply_to";
+//$db_table["mail"]["col"][] = "size";
+//$db_table["mail"]["col"][] = "subject";
+//$db_table["mail"]["col"][] = "zid";
+
+$db_table["page"] = array(
+	array("name" => "slug", "key" => true),
+	array("name" => "title"),
+	array("name" => "body")
+);
+
+//$db_table["page"]["key"] = "slug";
+//$db_table["page"]["col"][] = "slug";
+//$db_table["page"]["col"][] = "title";
+//$db_table["page"]["col"][] = "body";
+
+$db_table["photo"] = array(
+	array("name" => "photo_id", "auto" => true, "key" => true),
+	array("name" => "aspect_width", "default" => 0),
+	array("name" => "aspect_height", "default" => 0),
+	array("name" => "has_medium", "default" => 0),
+	array("name" => "has_large", "default" => 0),
+	array("name" => "hash"),
+	array("name" => "original_name", "default" => 0),
+	array("name" => "original_width", "default" => 0),
+	array("name" => "original_height", "default" => 0),
+	array("name" => "server"),
+	array("name" => "size", "default" => 0),
+	array("name" => "time", "default" => $now),
+	array("name" => "zid")
+);
+
+//$db_table["photo"]["key"] = "photo_id";
+//$db_table["photo"]["col"][] = "photo_id";
+//$db_table["photo"]["col"][] = "aspect_width";
+//$db_table["photo"]["col"][] = "aspect_height";
+//$db_table["photo"]["col"][] = "has_medium";
+//$db_table["photo"]["col"][] = "has_large";
+//$db_table["photo"]["col"][] = "hash";
+//$db_table["photo"]["col"][] = "original_name";
+//$db_table["photo"]["col"][] = "original_width";
+//$db_table["photo"]["col"][] = "original_height";
+//$db_table["photo"]["col"][] = "server";
+//$db_table["photo"]["col"][] = "size";
+//$db_table["photo"]["col"][] = "time";
+//$db_table["photo"]["col"][] = "zid";
+
+$db_table["pipe"] = array(
+	array("name" => "pipe_id", "key" => true),
+	array("name" => "author_zid"),
+	array("name" => "body"),
+	array("name" => "closed", "default" => 0),
+	array("name" => "edit_zid"),
+	array("name" => "icon"),
+	array("name" => "reason"),
+	array("name" => "short_id", "default" => 0),
+	array("name" => "slug"),
+	array("name" => "tid", "default" => 0),
+	array("name" => "time", "default" => $now),
+	array("name" => "title")
+);
+
+//$db_table["pipe"]["key"] = "pipe_id";
+//$db_table["pipe"]["col"][] = "pipe_id";
+//$db_table["pipe"]["col"][] = "author_zid";
+//$db_table["pipe"]["col"][] = "body";
+//$db_table["pipe"]["col"][] = "closed";
+//$db_table["pipe"]["col"][] = "edit_zid";
+//$db_table["pipe"]["col"][] = "icon";
+//$db_table["pipe"]["col"][] = "reason";
+//$db_table["pipe"]["col"][] = "short_id";
+//$db_table["pipe"]["col"][] = "slug";
+//$db_table["pipe"]["col"][] = "tid";
+//$db_table["pipe"]["col"][] = "time";
+//$db_table["pipe"]["col"][] = "title";
+
+$db_table["pipe_view"] = array(
+	array("name" => "pipe_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "time", "default" => 0),
+	array("name" => "last_time", "default" => 0)
+);
+
+//$db_table["pipe_view"]["key"][] = "pipe_id";
+//$db_table["pipe_view"]["key"][] = "zid";
+//$db_table["pipe_view"]["col"][] = "pipe_id";
+//$db_table["pipe_view"]["col"][] = "zid";
+//$db_table["pipe_view"]["col"][] = "time";
+//$db_table["pipe_view"]["col"][] = "last_time";
+
+$db_table["pipe_vote"] = array(
+	array("name" => "pipe_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "time", "default" => $now),
+	array("name" => "value", "default" => 0)
+);
+
+//$db_table["pipe_vote"]["key"][] = "pipe_id";
+//$db_table["pipe_vote"]["key"][] = "zid";
+//$db_table["pipe_vote"]["col"][] = "pipe_id";
+//$db_table["pipe_vote"]["col"][] = "zid";
+//$db_table["pipe_vote"]["col"][] = "time";
+//$db_table["pipe_vote"]["col"][] = "value";
+
+$db_table["poll_answer"] = array(
+	array("name" => "answer_id", "key" => true),
+	array("name" => "poll_id"),
+	array("name" => "answer"),
+	array("name" => "position", "default" => 0)
+);
+
+//$db_table["poll_answer"]["key"] = "answer_id";
+//$db_table["poll_answer"]["col"][] = "answer_id";
+//$db_table["poll_answer"]["col"][] = "poll_id";
+//$db_table["poll_answer"]["col"][] = "answer";
+//$db_table["poll_answer"]["col"][] = "position";
+
+$db_table["poll"] = array(
+	array("name" => "poll_id", "key" => true),
+	array("name" => "question"),
+	array("name" => "short_id", "default" => 0),
+	array("name" => "slug"),
+	array("name" => "time", "default" => $now),
+	array("name" => "type_id", "default" => 0),
+	array("name" => "zid")
+);
+
+//$db_table["poll"]["key"] = "poll_id";
+//$db_table["poll"]["col"][] = "poll_id";
+//$db_table["poll"]["col"][] = "question";
+//$db_table["poll"]["col"][] = "short_id";
+//$db_table["poll"]["col"][] = "slug";
+//$db_table["poll"]["col"][] = "time";
+//$db_table["poll"]["col"][] = "type_id";
+//$db_table["poll"]["col"][] = "zid";
+
+$db_table["poll_view"] = array(
+	array("name" => "poll_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "time", "default" => 0),
+	array("name" => "last_time", "default" => 0)
+);
+
+//$db_table["poll_view"]["key"][] = "poll_id";
+//$db_table["poll_view"]["key"][] = "zid";
+//$db_table["poll_view"]["col"][] = "poll_id";
+//$db_table["poll_view"]["col"][] = "zid";
+//$db_table["poll_view"]["col"][] = "time";
+//$db_table["poll_view"]["col"][] = "last_time";
+
+$db_table["poll_vote"] = array(
+	array("name" => "poll_id"),
+	array("name" => "zid"),
+	array("name" => "answer_id"),
+	array("name" => "time", "default" => $now),
+	array("name" => "points", "default" => 0)
+);
+
+//$db_table["poll_vote"]["col"][] = "poll_id";
+//$db_table["poll_vote"]["col"][] = "zid";
+//$db_table["poll_vote"]["col"][] = "answer_id";
+//$db_table["poll_vote"]["col"][] = "time";
+//$db_table["poll_vote"]["col"][] = "points";
+
+$db_table["server_conf"] = array(
+	array("name" => "name"),
+	array("name" => "value")
+);
+
+//$db_table["server_conf"]["col"][] = "name";
+//$db_table["server_conf"]["col"][] = "value";
+
+$db_table["short"] = array(
+	array("name" => "short_id", "auto" => true, "key" => true),
+	array("name" => "type"),
+	array("name" => "item_id")
+);
+
+//$db_table["short"]["key"] = "short_id";
+//$db_table["short"]["col"][] = "short_id";
+//$db_table["short"]["col"][] = "type";
+//$db_table["short"]["col"][] = "item_id";
+
+$db_table["short_view"] = array(
+	array("name" => "view_id", "auto" => true, "key" => true),
+	array("name" => "short_id"),
+	array("name" => "remote_ip"),
+	array("name" => "time", "default" => $now),
+	array("name" => "agent"),
+	array("name" => "referer"),
+	array("name" => "zid")
+);
+
+//$db_table["short_view"]["key"][] = "short_id";
+//$db_table["short_view"]["key"][] = "remote_ip";
+//$db_table["short_view"]["key"][] = "time";
+//$db_table["short_view"]["col"][] = "short_id";
+//$db_table["short_view"]["col"][] = "agent";
+//$db_table["short_view"]["col"][] = "referer";
+//$db_table["short_view"]["col"][] = "remote_ip";
+//$db_table["short_view"]["col"][] = "time";
+//$db_table["short_view"]["col"][] = "zid";
 
 $db_table["store_category"]["key"] = "category_id";
 $db_table["store_category"]["col"][] = "category_id";
@@ -302,67 +558,134 @@ $db_table["store_item"]["col"][] = "price";
 $db_table["store_item"]["col"][] = "shipping";
 $db_table["store_item"]["col"][] = "title";
 
-$db_table["story"]["key"] = "story_id";
-$db_table["story"]["col"][] = "story_id";
-$db_table["story"]["col"][] = "author_zid";
-$db_table["story"]["col"][] = "body";
-$db_table["story"]["col"][] = "edit_time";
-$db_table["story"]["col"][] = "edit_zid";
-$db_table["story"]["col"][] = "icon";
-$db_table["story"]["col"][] = "image_id";
-$db_table["story"]["col"][] = "pipe_id";
-$db_table["story"]["col"][] = "publish_time";
-$db_table["story"]["col"][] = "short_id";
-$db_table["story"]["col"][] = "slug";
-$db_table["story"]["col"][] = "tid";
-$db_table["story"]["col"][] = "title";
-$db_table["story"]["col"][] = "tweet_id";
+$db_table["story"] = array(
+	array("name" => "story_id", "key" => true),
+	array("name" => "author_zid"),
+	array("name" => "body"),
+	array("name" => "edit_time", "default" => $now),
+	array("name" => "edit_zid"),
+	array("name" => "icon"),
+	array("name" => "image_id", "default" => 0),
+	array("name" => "pipe_id"),
+	array("name" => "publish_time", "default" => $now),
+	array("name" => "short_id", "default" => 0),
+	array("name" => "slug"),
+	array("name" => "tid", "default" => 0),
+	array("name" => "title"),
+	array("name" => "tweet_id", "default" => 0)
+);
 
-$db_table["story_edit"]["key"][] = "story_id";
-$db_table["story_edit"]["key"][] = "edit_time";
-$db_table["story_edit"]["col"][] = "story_id";
-$db_table["story_edit"]["col"][] = "edit_time";
-$db_table["story_edit"]["col"][] = "body";
-$db_table["story_edit"]["col"][] = "edit_zid";
-$db_table["story_edit"]["col"][] = "icon";
-$db_table["story_edit"]["col"][] = "image_id";
-$db_table["story_edit"]["col"][] = "slug";
-$db_table["story_edit"]["col"][] = "tid";
-$db_table["story_edit"]["col"][] = "title";
+//$db_table["story"]["key"] = "story_id";
+//$db_table["story"]["col"][] = "story_id";
+//$db_table["story"]["col"][] = "author_zid";
+//$db_table["story"]["col"][] = "body";
+//$db_table["story"]["col"][] = "edit_time";
+//$db_table["story"]["col"][] = "edit_zid";
+//$db_table["story"]["col"][] = "icon";
+//$db_table["story"]["col"][] = "image_id";
+//$db_table["story"]["col"][] = "pipe_id";
+//$db_table["story"]["col"][] = "publish_time";
+//$db_table["story"]["col"][] = "short_id";
+//$db_table["story"]["col"][] = "slug";
+//$db_table["story"]["col"][] = "tid";
+//$db_table["story"]["col"][] = "title";
+//$db_table["story"]["col"][] = "tweet_id";
 
-$db_table["story_view"]["key"][] = "story_id";
-$db_table["story_view"]["key"][] = "zid";
-$db_table["story_view"]["col"][] = "story_id";
-$db_table["story_view"]["col"][] = "zid";
-$db_table["story_view"]["col"][] = "time";
-$db_table["story_view"]["col"][] = "last_time";
+$db_table["story_edit"] = array(
+	array("name" => "story_id", "key" => true),
+	array("name" => "edit_time", "key" => true, "default" => $now),
+	array("name" => "body"),
+	array("name" => "edit_zid"),
+	array("name" => "icon"),
+	array("name" => "image_id", "default" => 0),
+	array("name" => "slug"),
+	array("name" => "tid", "default" => 0),
+	array("name" => "title")
+);
 
-$db_table["tag"]["key"] = "tag_id";
-$db_table["tag"]["col"][] = "tag_id";
-$db_table["tag"]["col"][] = "tag";
+//$db_table["story_edit"]["key"][] = "story_id";
+//$db_table["story_edit"]["key"][] = "edit_time";
+//$db_table["story_edit"]["col"][] = "story_id";
+//$db_table["story_edit"]["col"][] = "edit_time";
+//$db_table["story_edit"]["col"][] = "body";
+//$db_table["story_edit"]["col"][] = "edit_zid";
+//$db_table["story_edit"]["col"][] = "icon";
+//$db_table["story_edit"]["col"][] = "image_id";
+//$db_table["story_edit"]["col"][] = "slug";
+//$db_table["story_edit"]["col"][] = "tid";
+//$db_table["story_edit"]["col"][] = "title";
 
-$db_table["tmp_image"]["key"] = "tmp_image_id";
-$db_table["tmp_image"]["col"][] = "tmp_image_id";
-$db_table["tmp_image"]["col"][] = "hash";
-$db_table["tmp_image"]["col"][] = "original_width";
-$db_table["tmp_image"]["col"][] = "original_height";
-$db_table["tmp_image"]["col"][] = "original_url";
-$db_table["tmp_image"]["col"][] = "parent_url";
-$db_table["tmp_image"]["col"][] = "server";
-$db_table["tmp_image"]["col"][] = "time";
-$db_table["tmp_image"]["col"][] = "zid";
+$db_table["story_view"] = array(
+	array("name" => "story_id", "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "time", "default" => $now),
+	array("name" => "last_time", "default" => 0)
+);
 
-$db_table["topic"]["key"] = "tid";
-$db_table["topic"]["col"][] = "tid";
-$db_table["topic"]["col"][] = "icon";
-$db_table["topic"]["col"][] = "promoted";
-$db_table["topic"]["col"][] = "slug";
-$db_table["topic"]["col"][] = "topic";
+//$db_table["story_view"]["key"][] = "story_id";
+//$db_table["story_view"]["key"][] = "zid";
+//$db_table["story_view"]["col"][] = "story_id";
+//$db_table["story_view"]["col"][] = "zid";
+//$db_table["story_view"]["col"][] = "time";
+//$db_table["story_view"]["col"][] = "last_time";
 
-$db_table["user_conf"]["key"] = "zid";
-$db_table["user_conf"]["col"][] = "zid";
-$db_table["user_conf"]["col"][] = "name";
-$db_table["user_conf"]["col"][] = "value";
+$db_table["tag"] = array(
+	array("name" => "tag_id", "auto" => true, "key" => true),
+	array("name" => "tag")
+);
+
+//$db_table["tag"]["key"] = "tag_id";
+//$db_table["tag"]["col"][] = "tag_id";
+//$db_table["tag"]["col"][] = "tag";
+
+$db_table["tmp_image"] = array(
+	array("name" => "tmp_image_id", "auto" => true, "key" => true),
+	array("name" => "hash"),
+	array("name" => "original_width", "default" => 0),
+	array("name" => "original_height", "default" => 0),
+	array("name" => "original_url"),
+	array("name" => "parent_url"),
+	array("name" => "server"),
+	array("name" => "time", "default" => $now),
+	array("name" => "zid")
+);
+
+//$db_table["tmp_image"]["key"] = "tmp_image_id";
+//$db_table["tmp_image"]["col"][] = "tmp_image_id";
+//$db_table["tmp_image"]["col"][] = "hash";
+//$db_table["tmp_image"]["col"][] = "original_width";
+//$db_table["tmp_image"]["col"][] = "original_height";
+//$db_table["tmp_image"]["col"][] = "original_url";
+//$db_table["tmp_image"]["col"][] = "parent_url";
+//$db_table["tmp_image"]["col"][] = "server";
+//$db_table["tmp_image"]["col"][] = "time";
+//$db_table["tmp_image"]["col"][] = "zid";
+
+$db_table["topic"] = array(
+	array("name" => "tid", "auto" => true, "key" => true),
+	array("name" => "icon"),
+	array("name" => "promoted", "default" => 0),
+	array("name" => "slug"),
+	array("name" => "topic")
+);
+
+//$db_table["topic"]["key"] = "tid";
+//$db_table["topic"]["col"][] = "tid";
+//$db_table["topic"]["col"][] = "icon";
+//$db_table["topic"]["col"][] = "promoted";
+//$db_table["topic"]["col"][] = "slug";
+//$db_table["topic"]["col"][] = "topic";
+
+$db_table["user_conf"] = array(
+	array("name" => "zid", "key" => true),
+	array("name" => "name"),
+	array("name" => "value")
+);
+
+//$db_table["user_conf"]["key"] = "zid";
+//$db_table["user_conf"]["col"][] = "zid";
+//$db_table["user_conf"]["col"][] = "name";
+//$db_table["user_conf"]["col"][] = "value";
 
 $reasons["Normal"] = 0;
 $reasons["Offtopic"] = -1;
@@ -393,7 +716,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	global $server_conf;
 
 	header_expires();
-	header("Content-Type: text/html; charset=utf-8");
+	header_html();
 
 	writeln('<!DOCTYPE html>');
 	writeln('<html>');
@@ -496,7 +819,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			$link = $link_url[$i];
 		}
 
-		writeln("			<a href=\"$link\" class=\"icon_{$icon}_16\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
+		writeln("			<a href=\"$link\" class=\"icon_16 {$icon}_16\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
 	}
 	writeln("		</td>");
 
@@ -740,7 +1063,7 @@ function print_footer()
 		writeln('	<a href="/about">About</a>');
 		writeln('	<a href="http://bugs.' . $server_name . '/">Bugs</a>');
 		writeln('	<a href="/faq">FAQ</a>');
-		writeln('	<a href="/atom" class="icon_feed_16">Feed</a>');
+		writeln('	<a href="/atom" class="icon_16 feed_16">Feed</a>');
 		writeln('	<a href="/privacy">Privacy</a>');
 		writeln('	<a href="/terms">Terms</a>');
 		writeln('</div>');
@@ -837,27 +1160,33 @@ function clean_url($dirty)
 }
 
 
-function article_info($comment)
+function article_info($comment, $force_https = true)
 {
 	global $server_name;
+	global $protocol;
 
+	if ($force_https) {
+		$p = "https";
+	} else {
+		$p = $protocol;
+	}
 	$a = array();
 	if ($comment["type"] == "story") {
 		$story = db_get_rec("story", $comment["root_id"]);
 		$a["type"] = "story";
 		$a["title"] = $story["title"];
 		$date = gmdate("Y-m-d", $story["publish_time"]);
-		$a["link"] = "https://$server_name/story/$date/" . $story["slug"];
+		$a["link"] = "$p://$server_name/story/$date/" . $story["slug"];
 	} else if ($comment["type"] == "pipe") {
 		$pipe = db_get_rec("pipe", $comment["root_id"]);
 		$a["type"] = "pipe";
 		$a["title"] = $pipe["title"];
-		$a["link"] = "https://$server_name/pipe/" . $comment["root_id"];
+		$a["link"] = "$p://$server_name/pipe/" . $comment["root_id"];
 	} else if ($comment["type"] == "poll") {
 		$poll = db_get_rec("poll", $comment["root_id"]);
 		$a["type"] = "poll";
 		$a["title"] = $poll["question"];
-		$a["link"] = "https://$server_name/poll/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
+		$a["link"] = "$p://$server_name/poll/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
 	} else if ($comment["type"] == "journal") {
 		$journal = db_get_rec("journal", $comment["root_id"]);
 		$a["type"] = "journal";
@@ -933,9 +1262,9 @@ function print_noscript()
 	writeln('	<li>Enable scripts from <b>' . $server_name . '</b></li>');
 	if ($auth_zid == "") {
 		writeln('	<li>Sign in and uncheck the "Use JavaScript" option on your account settings page.</li>');
-		writeln('	<li>Click <a href="">this link</a> to get a cookie that disables JavaScript. (not working yet)</li>');
+		//writeln('	<li>Click <a href="">this link</a> to get a cookie that disables JavaScript. (not working yet)</li>');
 	} else {
-		writeln('	<li>Uncheck the "Use JavaScript" option on your <a href="' . user_page_link($auth_zid) . 'settings">account settings page</a>.</li>');
+		writeln('	<li>Uncheck the "Use JavaScript" option on your <a href="' . user_page_link($auth_zid) . 'profile/">account settings page</a>.</li>');
 	}
 	writeln('</ul>');
 	writeln('</div>');
@@ -1048,7 +1377,7 @@ function new_comments($type, $root_id)
 
 	if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
 		$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
-		$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and time > ?", $type, $root_id, $view["time"]);
+		$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and edit_time > ?", $type, $root_id, $view["time"]);
 		return $row[0]["comments"];
 	} else {
 		$row = sql("select count(*) as comments from comment where type = ? and root_id = ?", $type, $root_id);
@@ -1090,6 +1419,12 @@ function profile_picture($zid, $size)
 function public_path($time)
 {
 	return "/pub/" . gmdate("Y", $time) . "/" . gmdate("m", $time) . "/" . gmdate("d", $time);
+}
+
+
+function format_money($cents)
+{
+	return number_format((int) $cents / 100, 2);
 }
 
 

@@ -158,7 +158,7 @@ function print_pipe_small($pipe_id, $full)
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');
-	writeln('		<td style="text-align: right; white-space: nowrap;"><a href="/pipe/' . $pipe_id . '" class="icon_chat_16"><b>' . $total . '</b> comments</a></td>');
+	writeln('		<td style="text-align: right; white-space: nowrap;"><a href="/pipe/' . $pipe_id . '" class="icon_16 chat_16"><b>' . $total . '</b> comments</a></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');

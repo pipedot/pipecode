@@ -44,13 +44,13 @@ if (count($keys) == 0) {
 for ($i = 0; $i < count($keys); $i++) {
 	$page = $list[$keys[$i]];
 	writeln('	<tr>');
-	writeln('		<td><a href="edit?slug=' . $page["slug"] . '" class="icon_notepad_16">' . $page["title"] . '</a></td>');
-	writeln('		<td class="right"><a href="remove?slug=' . $page["slug"] . '" class="icon_minus_16">Remove</a></td>');
+	writeln('		<td><a href="edit?slug=' . $page["slug"] . '" class="icon_16 notepad_16">' . $page["title"] . '</a></td>');
+	writeln('		<td class="right"><a href="remove?slug=' . $page["slug"] . '" class="icon_16 minus_16">Remove</a></td>');
 	writeln('	</tr>');
 }
 end_tab();
 
-right_box('<a href="add" class="icon_plus_16">Add</a>');
+right_box('<a href="add" class="icon_16 plus_16">Add</a>');
 
 end_main();
 print_footer();

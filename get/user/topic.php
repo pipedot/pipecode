@@ -50,8 +50,7 @@ if ($topic == "") {
 		} else {
 			$icon = "news";
 		}
-		//writeln('<a href="/topic/' . $topic . '"><div class="topic_box"><img alt="' . $icon . '" src="/images/' . $icon . '-64.png"/>' . $topic . '</div></a>');
-		writeln('<a href="/topic/' . $topic . '"><div class="topic_box icon_' . $icon . '_64">' . $topic . '</div></a>');
+		writeln('<a href="/topic/' . $topic . '"><div class="topic_box ' . $icon . '_64">' . $topic . '</div></a>');
 	}
 } else {
 	$items_per_page = 10;

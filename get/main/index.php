@@ -56,14 +56,44 @@ if ($auth_zid == "") {
 }
 vote_box($poll_id, $vote);
 
+writeln('<div class="dialog_title">Recent Journals</div>');
+writeln('<div class="dialog_body">');
+$row = sql("select publish_time, slug, title, zid from journal where published = 1 order by publish_time desc limit 0, 5");
+for ($i = 0; $i < count($row); $i++) {
+	writeln('	<table class="recent_journal">');
+	writeln('		<tr>');
+	writeln('			<td><a href="' . user_page_link($row[$i]["zid"]) . '"><img class="recent_journal_image" src="' . profile_picture($row[$i]["zid"], 64) . '"/></a></td>');
+	writeln('			<td>');
+	writeln('				<div class="recent_journal_title"><a href="' . user_page_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
+	writeln('				<div class="recent_journal_author"><a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></div>');
+	writeln('			</td>');
+	writeln('		</tr>');
+	writeln('	</table>');
+
+//	writeln('	<div class="recent_journal">');
+//	writeln('		<div class="recent_journal_box">');
+//	writeln('			<img class="recent_journal_image" src="' . profile_picture($row[$i]["zid"], 64) . '"/>');
+//	writeln('		</div>');
+//	writeln('		<div class="recent_journal_box">');
+//	writeln('			<a class="recent_journal_title" href="' . user_page_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a>');
+//	writeln('			<div class="recent_journal_author"><a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></div>');
+//	writeln('		</div>');
+	//writeln('	<dl class="recent_journal" style="background-image: url(' . profile_picture($row[$i]["zid"], 64) . '); background-size: 32px 32px;">');
+	//writeln('		<dt><a href="' . user_page_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></dt>');
+	//writeln('		<dd><a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></dd>');
+	//writeln('	</dl>');
+//	writeln('	</div>');
+}
+writeln('</div>');
+
 writeln('<div class="dialog_title">Most Discussed</div>');
 writeln('<div class="dialog_body">');
-$row = sql("select * from (select * from (select story_id, title, slug, publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.root_id where type = 'story' group by story_id order by publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
+$row = sql("select * from (select * from (select story_id, title, slug, story.publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.root_id where type = 'story' group by story_id order by story.publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
 writeln('	<ul class="popular">');
 for ($i = 0; $i < count($row); $i++) {
 	writeln('		<li>');
 	writeln('			<div><div class="popular_count">' . $row[$i]["comments"] . '</div></div>');
-	writeln('			<div class="popular_title"><a href="/story/' . date("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
+	writeln('			<div class="popular_title"><a href="/story/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
 	writeln('		</li>');
 }
 writeln('	</ul>');

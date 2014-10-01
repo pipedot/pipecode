@@ -65,7 +65,11 @@ if (!$journal["published"] && $zid != $auth_zid) {
 	die("not published");
 }
 
-print_header($journal["title"], array("Write"), array("notepad"), array("/journal/write"));
+if ($auth_zid === $zid) {
+	print_header("Journal", array("Write"), array("notepad"), array("/journal/write"));
+} else {
+	print_header("Journal");
+}
 print_left_bar("user", "journal");
 beg_main("cell");
 

@@ -39,7 +39,7 @@ $poll = db_get_rec("poll", $poll_id);
 $clean = clean_url($poll["question"]);
 $type_id = $poll["type_id"];
 
-if ($auth_zid == "") {
+if ($auth_zid != "") {
 	$can_moderate = true;
 	$hide_value = $auth_user["hide_threshold"];
 	$expand_value = $auth_user["expand_threshold"];
@@ -67,24 +67,6 @@ end_main();
 $last_seen = update_view_time("poll", $poll_id);
 
 if ($auth_user["javascript_enabled"]) {
-//	if ($auth_zid == "") {
-//		$last_seen = 0;
-//	} else {
-//		if (db_has_rec("poll_view", array("poll_id" => $poll_id, "zid" => $auth_zid))) {
-//			$view = db_get_rec("poll_view", array("poll_id" => $poll_id, "zid" => $auth_zid));
-//			$view["last_time"] = $view["time"];
-//			$last_seen = $view["time"];
-//		} else {
-//			$view = array();
-//			$view["poll_id"] = $poll_id;
-//			$view["zid"] = $auth_zid;
-//			$view["last_time"] = 0;
-//			$last_seen = 0;
-//		}
-//		$view["time"] = time();
-//		db_set_rec("poll_view", $view);
-//	}
-
 	writeln('<script>');
 	writeln();
 	writeln('var hide_value = ' . $hide_value . ';');

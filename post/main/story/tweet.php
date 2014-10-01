@@ -25,7 +25,16 @@ if (!@$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$story_id = $s2;
+if (string_uses($s2, "[A-Z][a-z][0-9]")) {
+	$short_id = crypt_crockford_decode($s2);
+	$short = db_get_rec("short", $short_id);
+	if ($short["type"] != "story") {
+		die("invalid short code [$s2]");
+	}
+	$story_id = $short["item_id"];
+} else {
+	$story_id = $s2;
+}
 if (!string_uses($story_id, "[a-z][0-9]_")) {
 	die("invalid story_id [$story_id]");
 }

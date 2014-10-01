@@ -20,11 +20,27 @@
 //
 
 $row = sql("select sum(value) as karma from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ?", $zid);
-$karma = $row[0]["karma"];
+$karma = (int) $row[0]["karma"];
 $description = karma_description($karma);
 
 $page = http_get_int("page", array("default" => 1, "required" => false));
-$icon = "karma-" . strtolower($description) . "-32.png";
+switch ($description) {
+	case "Excellent":
+		$icon = "face_grin";
+		break;
+	case "Good":
+		$icon = "face_smile";
+		break;
+	case "Neutral":
+		$icon = "face_plain";
+		break;
+	case "Bad":
+		$icon = "face_sad";
+		break;
+	case "Terrible":
+		$icon = "face_crying";
+		break;
+}
 //$rows_per_page = 10;
 //$row = sql("select count(zid) as row_count from karma_log where zid = ?", $zid);
 //$row = sql("select count(*) as row_count from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0", $zid);
@@ -39,16 +55,18 @@ print_left_bar("user", "karma");
 beg_main("cell");
 
 writeln('<h1>Karma</h1>');
-writeln('<table>');
-writeln('	<tr>');
-writeln('		<td><img alt="Karma Face" src="/images/' . $icon . '"/></td>');
-writeln('		<td>' . $description . ' (' . $karma . ')</td>');
-writeln('	</tr>');
-writeln('</table>');
+writeln('<div class="icon_32 ' . $icon . '_32">' . $description . ' (' . $karma . ')</div>');
+
+//writeln('<table>');
+//writeln('	<tr>');
+//writeln('		<td><img alt="Karma Face" src="/images/' . $icon . '"/></td>');
+//writeln('		<td>' . $description . ' (' . $karma . ')</td>');
+//writeln('	</tr>');
+//writeln('</table>');
 
 //$row = sql("select time, karma_log.value, karma_log.type_id, type, id from karma_log inner join karma_type on karma_log.type_id = karma_type.type_id where zid = ? order by time desc limit $row_start, $rows_per_page", $zid);
 $row = sql("select comment_vote.time, value, comment.comment_id, short_id, comment_vote.zid from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0 order by comment_vote.time desc limit $item_start, $items_per_page", $zid);
-writeln('<h1>Log</h1>');
+writeln('<h2>Log</h2>');
 writeln('<table class="zebra">');
 writeln('	<tr>');
 writeln('		<th>Time</th>');

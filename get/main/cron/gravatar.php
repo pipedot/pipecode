@@ -22,8 +22,7 @@
 include("image.php");
 include("gravatar.php");
 
-header("Content-type: text/plain");
-
+header_text();
 update_gravatars();
 
 print "done\n";

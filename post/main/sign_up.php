@@ -85,7 +85,7 @@ $rfc_2142 = array("info", "marketing", "sales", "support", "abuse", "noc", "secu
 if (in_array($username, $rfc_2142)) {
 	die("username is reserved [$username]");
 }
-$reserved_usernames = array("admin", "administrator", "anonymous", "blog", "bugs", "code", "donate", "feed", "feedback", "forum", "git", "img", "legal", "list", "lists", "mail", "pipe", "pipecode", "pipedot", "pipeline", "root", "scm", "ssladmin", "wiki");
+$reserved_usernames = array("admin", "administrator", "anonymous", "blog", "bugs", "cash", "code", "donate", "feed", "feedback", "forum", "git", "img", "legal", "list", "lists", "mail", "pipe", "pipecode", "pipedot", "pipeline", "root", "scm", "ssladmin", "wiki");
 if (in_array($username, $reserved_usernames)) {
 	die("username is reserved [$username]");
 }

@@ -173,20 +173,16 @@ function print_mail_dir($location)
 
 	beg_tab();
 	writeln('	<tr>');
-	//writeln('		<td><a href="/mail/" class="icon_16" style="background-image: url(/images/inbox-16.png)">Inbox</a></td>');
-	writeln('		<td><a href="/mail/" class="icon_inbox_16">Inbox</a></td>');
+	writeln('		<td><a href="/mail/" class="icon_16 inbox_16">Inbox</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	//writeln('		<td><a href="/mail/sent" class="icon_16" style="background-image: url(/images/sent-16.png)">Sent</a></td>');
-	writeln('		<td><a href="/mail/sent" class="icon_sent_16">Sent</a></td>');
+	writeln('		<td><a href="/mail/sent" class="icon_16 sent_16">Sent</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	//writeln('		<td><a href="/mail/junk" class="icon_16" style="background-image: url(/images/junk-16.png)">Junk</a></td>');
-	writeln('		<td><a href="/mail/junk" class="icon_junk_16">Junk</a></td>');
+	writeln('		<td><a href="/mail/junk" class="icon_16 junk_16">Junk</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	//writeln('		<td><a href="/mail/trash" class="icon_16" style="background-image: url(/images/trash-16.png)">Trash</a></td>');
-	writeln('		<td><a href="/mail/trash" class="icon_trash_16">Trash</a></td>');
+	writeln('		<td><a href="/mail/trash" class="icon_16 trash_16">Trash</a></td>');
 	writeln('	</tr>');
 	end_tab();
 
@@ -213,7 +209,7 @@ function print_mail_dir($location)
 		}
 
 		writeln('	<tr>');
-		writeln('		<td><a href="view?mid=' . $message["mail_id"] . '" class="icon_16" style="background-image: url(/images/mail-16.png)">' . $message["subject"] . '</a></td>');
+		writeln('		<td><a href="view?mid=' . $message["mail_id"] . '" class="icon_16 mail_16">' . $message["subject"] . '</a></td>');
 		if (string_has($address["email"], "no-reply@")) {
 			writeln('		<td class="center">' . $address["email"] . '</td>');
 		} else {

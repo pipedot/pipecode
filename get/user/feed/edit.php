@@ -41,12 +41,12 @@ for ($c = 0; $c < 3; $c++) {
 	for ($i = 0; $i < count($row); $i++) {
 		writeln('				<tr>');
 		writeln('					<td>' . $row[$i]["title"] . '</td>');
-		writeln('					<td class="right"><a href="remove?fid=' . $row[$i]["fid"] . '" class="icon_minus_16">Remove</a></td>');
+		writeln('					<td class="right"><a href="remove?fid=' . $row[$i]["fid"] . '" class="icon_16 minus_16">Remove</a></td>');
 		writeln('				</tr>');
 		$r = ($r ? 0 : 1);
 	}
 	writeln('			</table>');
-	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon_plus_16">Add</a></div>');
+	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon_16 plus_16">Add</a></div>');
 	writeln('		</td>');
 }
 writeln('	</tr>');

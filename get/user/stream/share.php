@@ -26,6 +26,9 @@ include("image.php");
 if ($auth_zid == "") {
 	die("sign in to share");
 }
+if ($zid != $auth_zid) {
+	die("not your stream");
+}
 
 print_header("Share");
 beg_main();

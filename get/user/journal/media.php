@@ -42,9 +42,9 @@ beg_form("", "file");
 
 writeln('<h1>Journal</h1>');
 if ($journal["published"]) {
-	writeln('<p><a class="icon_notepad_16" href="/journal/' . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"] . '">' . $journal["title"] . '</a></p>');
+	writeln('<p><a class="icon_16 notepad_16" href="/journal/' . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"] . '">' . $journal["title"] . '</a></p>');
 } else {
-	writeln('<p><a class="icon_notepad_16" href="/journal/' . crypt_crockford_encode($journal["short_id"]) . '">' . $journal["title"] . '</a></p>');
+	writeln('<p><a class="icon_16 notepad_16" href="/journal/' . crypt_crockford_encode($journal["short_id"]) . '">' . $journal["title"] . '</a></p>');
 }
 
 writeln('<h2>Photos</h2>');
@@ -64,10 +64,10 @@ if (count($row) == 0) {
 }
 for ($i = 0; $i < count($row); $i++) {
 	writeln('	<tr>');
-	writeln('		<td><a class="icon_picture_16" href="' . $protocol . "://" . $server_name . "/photo/" . $row[$i]["photo_id"] . '">' . $row[$i]["original_name"] . '</a></td>');
+	writeln('		<td><a class="icon_16 picture_16" href="' . $protocol . "://" . $server_name . "/photo/" . $row[$i]["photo_id"] . '">' . $row[$i]["original_name"] . '</a></td>');
 	writeln('		<td class="center">' . sys_format_size($row[$i]["size"]) . '</td>');
 	writeln('		<td class="center">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('		<td class="right"><a class="icon_minus_16" href="delete_photo?photo_id=' . $row[$i]["photo_id"] . '">Delete</a></td>');
+	writeln('		<td class="right"><a class="icon_16 minus_16" href="delete_photo?photo_id=' . $row[$i]["photo_id"] . '">Delete</a></td>');
 	writeln('	</tr>');
 }
 end_tab();

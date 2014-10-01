@@ -39,8 +39,17 @@ if (string_uses($s2, "[0-9]-")) {
 		die("story not found - date [$date] title [$slug]");
 	}
 	$story_id = $row[0]["story_id"];
+} else if (string_uses($s2, "[A-Z][a-z][0-9]")) {
+	$short_id = crypt_crockford_decode($s2);
+	$short = db_get_rec("short", $short_id);
+	if ($short["type"] != "story") {
+		die("invalid short code [$s2]");
+	}
+	$story_id = $short["item_id"];
 } else if (string_uses($s2, "[a-z][0-9]_")) {
 	$story_id = $s2;
+} else {
+	die("unknown story [$s2]");
 }
 
 if ($auth_zid != "") {

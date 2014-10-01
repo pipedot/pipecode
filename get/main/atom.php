@@ -22,4 +22,4 @@
 include("atom.php");
 
 $topic = "main";
-print_atom($topic);
+print_atom("story", $topic);

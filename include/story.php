@@ -150,6 +150,7 @@ function print_article($a)
 	global $auth_zid;
 	global $protocol;
 	global $doc_root;
+	global $accounting_enabled;
 
 	if (array_key_exists("time", $a)) {
 		$time = $a["time"];
@@ -314,45 +315,44 @@ function print_article($a)
 		writeln("	<div>$story</div>");
 	}
 	writeln("	<footer>");
-	writeln('		<table class="fill">');
-	writeln('			<tr>');
 	if ($story_id != "") {
-		writeln("				<td><a href=\"/story/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></td>");
+		writeln("		<div><a href=\"/story/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></div>");
+		writeln("		<div class=\"right\">");
+		if ($accounting_enabled) {
+			writeln("			<a href=\"/story/$short_code/tip\" class=\"icon_16 coins_16\">Tip</a> | ");
+		}
 		if (@$auth_user["editor"]) {
-			writeln("				<td class=\"right\">");
 			if ($tweet_id == 0) {
 				if (is_file("$doc_root/www/images/tweet-16.png")) {
-					writeln("					<a href=\"/story/$story_id/tweet\" class=\"icon_tweet_16\">Tweet</a> | ");
+					writeln("			<a href=\"/story/$short_code/tweet\" class=\"icon_16 tweet_16\">Tweet</a> | ");
 				} else {
-					writeln("					<a href=\"/story/$story_id/tweet\" class=\"icon_music_16\">Tweet</a> | ");
+					writeln("			<a href=\"/story/$short_code/tweet\" class=\"icon_16 music_16\">Tweet</a> | ");
 				}
 			}
-			writeln("					<a href=\"/story/$story_id/image\" class=\"icon_picture_16\">Image</a> | ");
-			writeln("					<a href=\"/story/$story_id/edit\" class=\"icon_notepad_16\">Edit</a>");
-			writeln("				</td>");
+			writeln("			<a href=\"/story/$short_code/image\" class=\"icon_16 picture_16\">Image</a> | ");
+			writeln("			<a href=\"/story/$short_code/edit\" class=\"icon_16 notepad_16\">Edit</a>");
 		}
+		writeln("		</div>");
 	} else if ($pipe_id != "") {
-		writeln("				<td><b>$comments</b> comments</td>");
-		writeln("				<td class=\"right\">score <b>$score</b></td>");
+		writeln("		<div><b>$comments</b> comments</div>");
+		writeln("		<div class=\"right\">score <b>$score</b></div>");
 	} else if ($journal_id != "") {
 		if ($time > 0) {
-			writeln("				<td><a href=\"/journal/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></td>");
+			writeln("		<div><a href=\"/journal/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></div>");
 		} else {
-			writeln("				<td><a href=\"/journal/$short_code\"><b>$comments</b> $comments_label$comments_new</a></td>");
+			writeln("		<div><a href=\"/journal/$short_code\"><b>$comments</b> $comments_label$comments_new</a></div>");
 		}
 		if ($zid == $auth_zid) {
-			writeln("				<td class=\"right\">");
-			//writeln("					<a href=\"/journal/$short_code/image\" class=\"icon_picture_16\">Image</a> | ");
-			writeln("					<a href=\"/journal/$short_code/edit\" class=\"icon_notepad_16\">Edit</a>");
-			writeln("					<a href=\"/journal/$short_code/media\" class=\"icon_clip_16\">Media</a>");
+			writeln("		<div class=\"right\">");
+			//writeln("			<a href=\"/journal/$short_code/image\" class=\"icon_16 picture_16\">Image</a> | ");
+			writeln("			<a href=\"/journal/$short_code/edit\" class=\"icon_16 notepad_16\">Edit</a> | ");
+			writeln("			<a href=\"/journal/$short_code/media\" class=\"icon_16 clip_16\">Media</a>" . ($time == 0 ? ' | ' : ''));
 			if ($time == 0) {
-				writeln("					<a href=\"/journal/$short_code/publish\" class=\"icon_certificate_16\">Publish</a>");
+				writeln("			<a href=\"/journal/$short_code/publish\" class=\"icon_16 certificate_16\">Publish</a>");
 			}
-			writeln("				</td>");
+			writeln("		</div>");
 		}
 	}
-	writeln('			</tr>');
-	writeln('		</table>');
 	writeln("	</footer>");
 	writeln("</article>");
 }

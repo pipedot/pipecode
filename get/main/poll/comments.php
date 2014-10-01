@@ -21,7 +21,7 @@
 
 include("render.php");
 
-header("Content-Type: text/plain");
+header_text();
 
 $poll_id = $s2;
 if (!string_uses($poll_id, "[a-z][0-9]_")) {

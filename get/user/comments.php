@@ -30,9 +30,10 @@ writeln('<h1>Comments</h1>');
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("comment", $items_per_page, array("zid" => $zid));
 
-$row = sql("select comment_id, short_id, subject, time, body from comment where zid = ? order by time desc limit $item_start, $items_per_page", $zid);
+$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body from comment where zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
 for ($i = 0; $i < count($row); $i++) {
-	print render_comment($row[$i]["subject"], $zid, $row[$i]["time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $row[$i]["short_id"]);
+	$a = article_info($row[$i], false);
+	print render_comment($row[$i]["subject"], $zid, $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $row[$i]["short_id"], $a["link"], $a["title"]);
 	writeln('</div>');
 	writeln('</article>');
 	writeln();

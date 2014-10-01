@@ -21,7 +21,7 @@
 
 include("feed.php");
 
-header("Content-Type: text/plain");
+header_text();
 header_expires();
 
 $row = sql("select fid, uri, time from feed");

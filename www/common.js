@@ -192,16 +192,16 @@ function render(c)
 
 				s += "<" + seen + " id=\"subject_" + c.comment_id + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
 				s += "<h3 id=\"subtitle_" + c.comment_id + "\" class=\"comment_subtitle\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
-				s += "<div class=\"comment_body\">";
-				s += "<div id=\"body_" + c.comment_id + "\" class=\"comment_content\" style=\"display: none\">";
+				s += "<div class=\"comment_outline\">";
+				s += "<div id=\"body_" + c.comment_id + "\" style=\"display: none\">";
 			} else {
 				s += "<" + seen + " id=\"subject_" + c.comment_id + "\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
 				s += "<h3 id=\"subtitle_" + c.comment_id + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
-				s += "<div class=\"comment_body\">";
-				s += "<div id=\"body_" + c.comment_id + "\" class=\"comment_content\">";
+				s += "<div class=\"comment_outline\">";
+				s += "<div id=\"body_" + c.comment_id + "\">";
 			}
-			s += c.body;
-			s += "<footer><a rel=\"nofollow\" href=\"" + protocol + "://" + server_name + "/post?comment_id=" + c.comment_id + "\">Reply</a>";
+			s += "<div class=\"comment_body\">" + c.body + "</div>";
+			s += "<footer><div><a rel=\"nofollow\" href=\"" + protocol + "://" + server_name + "/post?comment_id=" + c.comment_id + "\">Reply</a>";
 			if (c.zid != auth_zid) {
 				s += "<select name=\"s_" + c.comment_id + "\" onchange=\"moderate(this, '" + c.comment_id + "')\">";
 
@@ -215,7 +215,12 @@ function render(c)
 					}
 				}
 				s += "</select>";
+			} else {
+				s += "</div>";
+				s += "<div class=\"right\">";
+				s += "<a class=\"icon_16 notepad_16\" href=\"" + protocol + "://" + server_name + "/comment/" + c.short + "/edit\">Edit</a>";
 			}
+			s += "</div>";
 			s += "</footer>";
 			s += "</div>";
 		}

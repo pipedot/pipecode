@@ -1,7 +1,0 @@
-designer: Tango Desktop Project
-icon-pack: Tango Icon Theme
-website: http://tango.freedesktop.org/Tango_Icon_Library
-license: Public Domain
-free: 1
-commercial: 1
-trademark: 0

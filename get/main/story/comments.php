@@ -21,7 +21,7 @@
 
 include("render.php");
 
-header("Content-Type: text/plain");
+header_text();
 
 $story_id = $s2;
 if (!string_uses($story_id, "[a-z][0-9]_")) {

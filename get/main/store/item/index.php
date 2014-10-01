@@ -15,7 +15,7 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('	</tr>');
 }
 end_tab();
-right_box('<a class="icon_plus_16" href="add">Add Item</a>');
+right_box('<a class="icon_16 plus_16" href="add">Add Item</a>');
 
 end_main();
 print_footer();

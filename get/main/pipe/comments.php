@@ -21,7 +21,7 @@
 
 include("render.php");
 
-header("Content-Type: text/plain");
+header_text();
 
 $pipe_id = $s2;
 if (!string_uses($pipe_id, "[a-z][0-9]_")) {

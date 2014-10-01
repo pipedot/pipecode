@@ -55,7 +55,7 @@ if ($needle != "") {
 			$title = $row[$i]["subject"];
 			$link = "/comment/" . $row[$i]["comment_id"];
 			$body = $row[$i]["body"];
-			$time = $row[$i]["time"];
+			$time = $row[$i]["edit_time"];
 			$zid = $row[$i]["zid"];
 		} else if ($haystack == "stories") {
 			$title = $row[$i]["title"];

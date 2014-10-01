@@ -40,9 +40,7 @@ $journal = db_get_rec("journal", $journal_id);
 $short_code = crypt_crockford_encode($journal["short_id"]);
 $title = clean_subject();
 $topic = clean_topic();
-//header("Content-type: text/plain");
 list($clean_body, $dirty_body) = clean_body(false, "journal");
-//die("clean_body [$clean_body]");
 $time = time();
 
 $journal["body"] = $clean_body;

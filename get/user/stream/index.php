@@ -21,7 +21,11 @@
 
 include("stream.php");
 
-print_header("Stream", array("Share"), array("share"), array("/stream/share"));
+if ($auth_zid === $zid) {
+	print_header("Stream", array("Share"), array("share"), array("/stream/share"));
+} else {
+	print_header("Stream");
+}
 
 beg_main("stream");
 

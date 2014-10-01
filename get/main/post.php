@@ -50,7 +50,7 @@ if ($comment_id != "") {
 	}
 
 	writeln('<div style="margin-bottom: 8px">');
-	print render_comment($comment["subject"], $zid, $comment["time"], $comment["comment_id"], $comment["body"], 0, $comment["short_id"]);
+	print render_comment($comment["subject"], $zid, $comment["edit_time"], $comment["comment_id"], $comment["body"], 0, $comment["short_id"]);
 	writeln('</div>');
 	writeln('</article>');
 	writeln('</div>');

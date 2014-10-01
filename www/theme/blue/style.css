@@ -258,11 +258,22 @@ textarea {
 	border-top: 0px;
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
+	display: table;
 	padding-top: 0px;
 	padding-bottom: 10px;
 	padding-left: 10px;
 	padding-right: 10px;
 	margin-bottom: 10px;
+	width: 100%;
+}
+.story footer div {
+	border-width: 0px;
+	display: table-cell;
+	padding: 0px;
+	width: 50%;
+}
+.story footer div a {
+	text-decoration: none;
 }
 .story_icon_middle {
 	position: absolute;
@@ -417,26 +428,52 @@ textarea {
 .comment h3 a:hover {
 	text-decoration: underline;
 }
-.comment div {
+.comment_outline {
 	border: 1px solid #d3d3d3;
 	border-top: 0px;
 	padding-left: 16px;
 	padding-right: 2px;
 	margin-bottom: 2px;
 }
-.comment div:nth-child(1) {
+.xcomment div {
+	border: 1px solid #d3d3d3;
+	border-top: 0px;
+	padding-left: 16px;
+	padding-right: 2px;
+	margin-bottom: 2px;
+}
+.comment_body {
+	border-width: 0px;
+	padding-top: 10px;
+	padding-right: 8px;
+	padding-left: 0px;
+	padding-bottom: 0px;
+}
+.comment_body a {
+	text-decoration: underline;
+}
+.xcomment div:nth-child(1) {
 	border: none;
 	padding-left: 0px;
 	padding-right: 0px;
 	padding-top: 10px;
 	padding-bottom: 0px;
 }
-.comment div:nth-child(1) a {
+.xcomment div:nth-child(1) a {
 	text-decoration: underline;
 }
 .comment footer {
+	display: table;
 	padding-top: 8px;
 	padding-bottom: 4px;
+	padding-right: 6px;
+	width: 100%;
+}
+.comment footer div {
+	border-width: 0px;
+	display: table-cell;
+	padding: 0px;
+	width: 50%;
 }
 .comment footer a {
 	text-decoration: none !important;
@@ -462,6 +499,33 @@ textarea {
 }
 .comment h4 b {
 	color: #506890;
+}
+.edit_title {
+	background-color: #d3d3d3;
+	border: 1px solid #888888;
+	border-top-left-radius: 10px;
+	border-bottom: 0px;
+	color: #666666;
+	font-weight: bolder;
+	padding: 4px;
+	padding-left: 16px;
+	width: 100%;
+}
+.edit_body {
+	border: 1px solid #888888;
+	border-bottom-right-radius: 10px;
+	margin-bottom: 8px;
+	padding: 8px;
+	padding-left: 16px;
+	width: 100%;
+}
+ins {
+	background-color: #bbc99b;
+	color: #456104;
+}
+del {
+	background-color: #e5ac9d;
+	color: #962000;
 }
 .topic_box {
 	background-position: 50% 16%;
@@ -501,76 +565,76 @@ textarea {
 	margin-left: auto;
 	margin-right: auto;
 }
-.icon_aphone_64 {
+.aphone_64 {
 	background-image: url(/images/aphone-64.png);
 }
-.icon_apple_64 {
+.apple_64 {
 	background-image: url(/images/apple-64.png);
 }
-.icon_beakers_64 {
+.beakers_64 {
 	background-image: url(/images/beakers-64.png);
 }
-.icon_binder_64 {
+.binder_64 {
 	background-image: url(/images/binder-64.png);
 }
-.icon_chrome_64 {
+.chrome_64 {
 	background-image: url(/images/chrome-64.png);
 }
-.icon_computers_64 {
+.computers_64 {
 	background-image: url(/images/computers-64.png);
 }
-.icon_devil_64 {
+.devil_64 {
 	background-image: url(/images/devil-64.png);
 }
-.icon_drive_64 {
+.drive_64 {
 	background-image: url(/images/drive-64.png);
 }
-.icon_gavel_64 {
+.gavel_64 {
 	background-image: url(/images/gavel-64.png);
 }
-.icon_globe_64 {
+.globe_64 {
 	background-image: url(/images/globe-64.png);
 }
-.icon_hardhat_64 {
+.hardhat_64 {
 	background-image: url(/images/hardhat-64.png);
 }
-.icon_internet_64 {
+.internet_64 {
 	background-image: url(/images/internet-64.png);
 }
-.icon_joystick_64 {
+.joystick_64 {
 	background-image: url(/images/joystick-64.png);
 }
-.icon_lock_64 {
+.lock_64 {
 	background-image: url(/images/lock-64.png);
 }
-.icon_microphone_64 {
+.microphone_64 {
 	background-image: url(/images/microphone-64.png);
 }
-.icon_microsoft_64 {
+.microsoft_64 {
 	background-image: url(/images/microsoft-64.png);
 }
-.icon_moon_64 {
+.moon_64 {
 	background-image: url(/images/moon-64.png);
 }
-.icon_movies_64 {
+.movies_64 {
 	background-image: url(/images/movies-64.png);
 }
-.icon_news_64 {
+.news_64 {
 	background-image: url(/images/news-64.png);
 }
-.icon_pipedot_64 {
+.pipedot_64 {
 	background-image: url(/images/pipedot-64.png);
 }
-.icon_robot_desktop_64 {
+.robot_desktop_64 {
 	background-image: url(/images/robot-desktop-64.png);
 }
-.icon_soccer_64 {
+.soccer_64 {
 	background-image: url(/images/soccer-64.png);
 }
-.icon_tux_64 {
+.tux_64 {
 	background-image: url(/images/tux-64.png);
 }
-.icon_ubunchu_64 {
+.ubunchu_64 {
 	background-image: url(/images/ubunchu-64.png);
 }
 .user_box {
@@ -621,13 +685,6 @@ textarea {
 	vertical-align: top;
 	padding-left: 8px;
 	width: 300px;
-}
-.icon_16 {
-	background-position: left;
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
 .feed_box {
 	padding: 8px;
@@ -748,26 +805,6 @@ textarea {
 	padding: 4px;
 	vertical-align: middle;
 }
-.zebra dl {
-	background-position: left center;
-	background-repeat: no-repeat;
-	margin: 0px;
-	padding-left: 40px;
-	height: 40px;
-}
-.zebra dt {
-	color: #000000;
-	font-size: 12pt;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
-.zebra dd {
-	color: #000000;
-	font-size: 8pt;
-	margin: 0px;
-	padding-top: 2px;
-	padding-bottom: 2px;
-}
 .zebra select {
 	width: 100%;
 }
@@ -795,6 +832,10 @@ textarea {
 	background-color: #aebcd4;
 	cursor: pointer;
 	padding: 4px;
+}
+.hover a {
+	color: #000000;
+	text-decoration: none;
 }
 .dialog_title {
 	background-color: #d3d3d3;
@@ -886,7 +927,47 @@ textarea {
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 40px;
+	padding-top: 8px;
 	height: 40px;
+	font-size: 12pt;
+}
+.dl_32 {
+	background-position: left center;
+	background-repeat: no-repeat;
+	margin: 0px;
+	padding-left: 40px;
+	height: 40px;
+}
+.dl_32 dt {
+	color: #000000;
+	font-size: 12pt;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.dl_32 dd {
+	color: #000000;
+	font-size: 8pt;
+	margin: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.recent_journal img {
+	border-radius: 4px;
+	height: 32px;
+	width: 32px;
+	margin-right: 4px;
+}
+.recent_journal_title {
+	font-size: 9pt;
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+.recent_journal_author {
+	font-size: 8pt;
+	padding-bottom: 4px;
+}
+.recent_journal_author a {
+	color: #666666;
 }
 .icon_description {
 	color: #000000;
@@ -1349,506 +1430,379 @@ textarea {
 		padding-right: 0px;
 	}
 }
-.icon_certificate_16 {
+.icon_16 {
 	background-position: left;
+	background-repeat: no-repeat;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
+.certificate_16 {
 	background-image: url(/images/certificate-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_chat_16 {
-	background-position: left;
+.chat_16 {
 	background-image: url(/images/chat-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_clip_16 {
-	background-position: left;
+.clip_16 {
 	background-image: url(/images/clip-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_contact_new_16 {
-	background-position: left;
+.coins_16 {
+	background-image: url(/images/coins-16.png);
+}
+.contact_new_16 {
 	background-image: url(/images/contact-new-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_exit_16 {
-	background-position: left;
+.exit_16 {
 	background-image: url(/images/exit-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_feed_16 {
-	background-position: left;
+.feed_16 {
 	background-image: url(/images/feed-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_heart_16 {
-	background-position: left;
+.heart_16 {
 	background-image: url(/images/heart-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_home_16 {
-	background-position: left;
+.home_16 {
 	background-image: url(/images/home-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_inbox_16 {
-	background-position: left;
+.inbox_16 {
 	background-image: url(/images/inbox-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_junk_16 {
-	background-position: left;
+.junk_16 {
 	background-image: url(/images/junk-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_mail_compose_16 {
-	background-position: left;
+.mail_16 {
+	background-image: url(/images/mail-16.png);
+}
+.mail_compose_16 {
 	background-image: url(/images/mail-compose-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_mail_forward_16 {
-	background-position: left;
+.mail_forward_16 {
 	background-image: url(/images/mail-forward-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_mail_reply_16 {
-	background-position: left;
+.mail_reply_16 {
 	background-image: url(/images/mail-reply-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_minus_16 {
-	background-position: left;
+.minus_16 {
 	background-image: url(/images/minus-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_news_16 {
-	background-position: left;
+.news_16 {
 	background-image: url(/images/news-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_notepad_16 {
-	background-position: left;
+.notepad_16 {
 	background-image: url(/images/notepad-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_picture_16 {
-	background-position: left;
+.picture_16 {
 	background-image: url(/images/picture-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_plus_16 {
-	background-position: left;
+.plus_16 {
 	background-image: url(/images/plus-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_sent_16 {
-	background-position: left;
+.sent_16 {
 	background-image: url(/images/sent-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_share_16 {
-	background-position: left;
+.share_16 {
 	background-image: url(/images/share-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_tools_16 {
-	background-position: left;
+.tools_16 {
 	background-image: url(/images/tools-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_trash_16 {
-	background-position: left;
+.trash_16 {
 	background-image: url(/images/trash-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_tweet_16 {
-	background-position: left;
+.tweet_16 {
 	background-image: url(/images/tweet-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_users_16 {
-	background-position: left;
+.users_16 {
 	background-image: url(/images/users-16.png);
-	background-repeat: no-repeat;
-	display: inline-block;
-	height: 16px;
-	padding-left: 20px;
 }
-.icon_chat_32 {
+.coins_32 {
+	background-image: url(/images/coins-32.png);
+}
+.chat_32 {
 	background-image: url(/images/chat-32.png);
 }
-.icon_heart_32 {
+.heart_32 {
 	background-image: url(/images/heart-32.png);
 }
-.icon_html_32 {
+.html_32 {
 	background-image: url(/images/html-32.png);
 }
-.icon_internet_32 {
+.internet_32 {
 	background-image: url(/images/internet-32.png);
 }
-.icon_karma_good_32 {
-	background-image: url(/images/karma-good-32.png);
+.face_crying_32 {
+	background-image: url(/images/face-crying-32.png);
 }
-.icon_mail_32 {
+.face_grin_32 {
+	background-image: url(/images/face-grin-32.png);
+}
+.face_plain_32 {
+	background-image: url(/images/face-plain-32.png);
+}
+.face_sad_32 {
+	background-image: url(/images/face-sad-32.png);
+}
+.face_smile_32 {
+	background-image: url(/images/face-smile-32.png);
+}
+.mail_32 {
 	background-image: url(/images/mail-32.png);
 }
-.icon_news_32 {
+.news_32 {
 	background-image: url(/images/news-32.png);
 }
-.icon_notepad_32 {
+.notepad_32 {
 	background-image: url(/images/notepad-32.png);
 }
-.icon_picture_32 {
+.picture_32 {
 	background-image: url(/images/picture-32.png);
 }
-.icon_plus_32 {
+.plus_32 {
 	background-image: url(/images/plus-32.png);
 }
-.icon_shirts_32 {
+.shirts_32 {
 	background-image: url(/images/shirts-32.png);
 }
-.icon_tools_32 {
+.tools_32 {
 	background-image: url(/images/tools-32.png);
 }
-.icon_update_32 {
+.update_32 {
 	background-image: url(/images/update-32.png);
 }
-.icon_usb_32 {
+.usb_32 {
 	background-image: url(/images/usb-32.png);
 }
-.icon_users_32 {
+.users_32 {
 	background-image: url(/images/users-32.png);
 }
-.icon_workgroup_32 {
+.workgroup_32 {
 	background-image: url(/images/workgroup-32.png);
 }
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
-	.icon_certificate_16 {
+	.icon_16 {
+		background-size: 16px 16px;
+	}
+	.icon_32 {
+		background-size: 32px 32px;
+	}
+	.icon_64 {
+		background-size: 64px 64px;
+	}
+	.dl_32 {
+		background-size: 32px 32px;
+	}
+	.certificate_16 {
 		background-image: url(/images/certificate-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_chat_16 {
+	.chat_16 {
 		background-image: url(/images/chat-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_clip_16 {
+	.clip_16 {
 		background-image: url(/images/clip-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_contact_new_16 {
+	.contact_new_16 {
 		background-image: url(/images/contact-new-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_edit_16 {
+	.edit_16 {
 		background-image: url(/images/edit-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_exit_16 {
+	.exit_16 {
 		background-image: url(/images/exit-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_feed_16 {
+	.feed_16 {
 		background-image: url(/images/feed-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_heart_16 {
+	.heart_16 {
 		background-image: url(/images/heart-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_home_16 {
+	.home_16 {
 		background-image: url(/images/home-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_inbox_16 {
+	.inbox_16 {
 		background-image: url(/images/inbox-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_junk_16 {
+	.junk_16 {
 		background-image: url(/images/junk-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_mail_compose_16 {
+	.mail_16 {
+		background-image: url(/images/mail-32.png);
+	}
+	.mail_compose_16 {
 		background-image: url(/images/mail-compose-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_mail_forward_16 {
+	.mail_forward_16 {
 		background-image: url(/images/mail-forward-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_mail_reply_16 {
+	.mail_reply_16 {
 		background-image: url(/images/mail-reply-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_minus_16 {
+	.minus_16 {
 		background-image: url(/images/minus-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_news_16 {
+	.news_16 {
 		background-image: url(/images/news-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_notepad_16 {
+	.notepad_16 {
 		background-image: url(/images/notepad-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_picture_16 {
+	.picture_16 {
 		background-image: url(/images/picture-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_plus_16 {
+	.plus_16 {
 		background-image: url(/images/plus-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_sent_16 {
+	.sent_16 {
 		background-image: url(/images/sent-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_share_16 {
+	.share_16 {
 		background-image: url(/images/share-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_tools_16 {
+	.tools_16 {
 		background-image: url(/images/tools-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_trash_16 {
+	.trash_16 {
 		background-image: url(/images/trash-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_tweet_16 {
+	.tweet_16 {
 		background-image: url(/images/tweet-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_users_16 {
+	.users_16 {
 		background-image: url(/images/users-32.png);
-		background-size: 16px 16px;
 	}
-	.icon_chat_32 {
+	.chat_32 {
 		background-image: url(/images/chat-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_heart_32 {
+	.coins_32 {
+		background-image: url(/images/coins-64.png);
+	}
+	.heart_32 {
 		background-image: url(/images/heart-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_html_32 {
+	.html_32 {
 		background-image: url(/images/html-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_internet_32 {
+	.internet_32 {
 		background-image: url(/images/internet-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_karma_good_32 {
-		background-image: url(/images/karma-good-64.png);
-		background-size: 32px 32px;
+	.face_crying_32 {
+		background-image: url(/images/face-crying-64.png);
 	}
-	.icon_mail_32 {
+	.face_grin_32 {
+		background-image: url(/images/face-grin-64.png);
+	}
+	.face_plain_32 {
+		background-image: url(/images/face-plain-64.png);
+	}
+	.face_sad_32 {
+		background-image: url(/images/face-sad-64.png);
+	}
+	.face_smile_32 {
+		background-image: url(/images/face-smile-64.png);
+	}
+	.mail_32 {
 		background-image: url(/images/mail-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_news_32 {
+	.news_32 {
 		background-image: url(/images/news-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_notepad_32 {
+	.notepad_32 {
 		background-image: url(/images/notepad-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_picture_32 {
+	.picture_32 {
 		background-image: url(/images/picture-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_plus_32 {
+	.plus_32 {
 		background-image: url(/images/plus-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_shirts_32 {
+	.shirts_32 {
 		background-image: url(/images/shirts-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_tools_32 {
+	.tools_32 {
 		background-image: url(/images/tools-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_update_32 {
+	.update_32 {
 		background-image: url(/images/update-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_usb_32 {
+	.usb_32 {
 		background-image: url(/images/usb-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_users_32 {
+	.users_32 {
 		background-image: url(/images/users-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_workgroup_32 {
+	.workgroup_32 {
 		background-image: url(/images/workgroup-64.png);
-		background-size: 32px 32px;
 	}
-	.icon_aphone_64 {
+	.aphone_64 {
 		background-image: url(/images/aphone-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_apple_64 {
+	.apple_64 {
 		background-image: url(/images/apple-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_beakers_64 {
+	.beakers_64 {
 		background-image: url(/images/beakers-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_binder_64 {
+	.binder_64 {
 		background-image: url(/images/binder-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_chrome_64 {
+	.chrome_64 {
 		background-image: url(/images/chrome-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_computers_64 {
+	.computers_64 {
 		background-image: url(/images/computers-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_devil_64 {
+	.devil_64 {
 		background-image: url(/images/devil-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_drive_64 {
+	.drive_64 {
 		background-image: url(/images/drive-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_gavel_64 {
+	.gavel_64 {
 		background-image: url(/images/gavel-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_globe_64 {
+	.globe_64 {
 		background-image: url(/images/globe-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_hardhat_64 {
+	.hardhat_64 {
 		background-image: url(/images/hardhat-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_internet_64 {
+	.internet_64 {
 		background-image: url(/images/internet-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_joystick_64 {
+	.joystick_64 {
 		background-image: url(/images/joystick-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_lock_64 {
+	.lock_64 {
 		background-image: url(/images/lock-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_microphone_64 {
+	.microphone_64 {
 		background-image: url(/images/microphone-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_microsoft_64 {
+	.microsoft_64 {
 		background-image: url(/images/microsoft-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_moon_64 {
+	.moon_64 {
 		background-image: url(/images/moon-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_movies_64 {
+	.movies_64 {
 		background-image: url(/images/movies-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_news_64 {
+	.news_64 {
 		background-image: url(/images/news-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_pipedot_64 {
+	.pipedot_64 {
 		background-image: url(/images/pipedot-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_robot_desktop_64 {
+	.robot_desktop_64 {
 		background-image: url(/images/robot-desktop-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_soccer_64 {
+	.soccer_64 {
 		background-image: url(/images/soccer-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_tux_64 {
+	.tux_64 {
 		background-image: url(/images/tux-128.png);
-		background-size: 64px 64px;
 	}
-	.icon_ubunchu_64 {
+	.ubunchu_64 {
 		background-image: url(/images/ubunchu-128.png);
-		background-size: 64px 64px;
 	}
 	.pages_first {
 		background-image: url(/images/first-32.png);

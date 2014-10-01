@@ -48,6 +48,8 @@ function moderate($comment_id, $zid, $reason)
 			db_del_rec("comment_vote", array("comment_id" => $comment_id, "zid" => $zid));
 		} else {
 			$comment_vote["reason"] = $reason;
+			$comment_vote["value"] = $reasons[$reason];
+			$comment_vote["time"] = time();
 			db_set_rec("comment_vote", $comment_vote);
 			return;
 		}

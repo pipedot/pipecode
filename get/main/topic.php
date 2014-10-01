@@ -43,8 +43,7 @@ if ($topic == "") {
 	$k = array_keys($list);
 	for ($i = 0; $i < count($list); $i++) {
 		$topic = $list[$k[$i]];
-		//writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic_box"><img alt="' . $topic["icon"] . '" src="/images/' . $topic["icon"] . '-64.png"/>' . $topic["topic"] . '</div></a>');
-		writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic_box icon_' . $topic["icon"] . '_64">' . $topic["topic"] . '</div></a>');
+		writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic_box ' . $topic["icon"] . '_64">' . $topic["topic"] . '</div></a>');
 	}
 } else if ($topic == "list") {
 	if (!$auth_user["admin"]) {
@@ -58,11 +57,11 @@ if ($topic == "") {
 	for ($i = 0; $i < count($list); $i++) {
 		$topic = $list[$k[$i]];
 		writeln('	<tr>');
-		writeln('		<td>' . $topic["topic"] . '</td><td class="right"><a class="icon_minus_16" href="">Remove</a></td>');
+		writeln('		<td>' . $topic["topic"] . '</td><td class="right"><a class="icon_16 minus_16" href="">Remove</a></td>');
 		writeln('	</tr>');
 	}
 	end_tab();
-	right_box('<a class="icon_plus_16" href="">Add</a>');
+	right_box('<a class="icon_16 plus_16" href="">Add</a>');
 } else {
 	$topic = db_get_rec("topic", array("slug" => $topic));
 

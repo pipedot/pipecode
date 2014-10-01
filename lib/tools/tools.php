@@ -17,6 +17,68 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function assert_equal($x, $y)
+{
+	if ($x != $y) {
+		assert_fail();
+	}
+}
+
+
+function assert_fail()
+{
+	$d = debug_backtrace();
+	writeln($s = "assert failed");
+	writeln();
+	writeln("file: " . $d[1]["file"]);
+	writeln("line: " . $d[1]["line"]);
+	writeln("function: " . $d[2]["function"]);
+	writeln("type: " . $d[1]["function"]);
+	writeln("args: " . implode(", ", $d[1]["args"]));
+	die();
+}
+
+
+function assert_false($test)
+{
+	if ($test) {
+		assert_fail();
+	}
+}
+
+
+function assert_identical($x, $y)
+{
+	if ($x !== $y) {
+		assert_fail();
+	}
+}
+
+
+function assert_not_equal($x, $y)
+{
+	if ($x == $y) {
+		assert_fail();
+	}
+}
+
+
+function assert_not_identical($x, $y)
+{
+	if ($x === $y) {
+		assert_fail();
+	}
+}
+
+
+function assert_true($test)
+{
+	if (!$test) {
+		assert_fail();
+	}
+}
+
+
 function auth_check($sign_in_page = "/sign_in")
 {
 	global $AUTH_KEY;
@@ -470,14 +532,31 @@ function crypt_uncompress($data, $uncompressed_size)
 }
 
 
+function db_begin()
+{
+	global $sql_dbh;
+
+	$sql_dbh->beginTransaction();
+}
+
+
+function db_commit()
+{
+	global $sql_dbh;
+
+	$sql_dbh->commit();
+}
+
+
 function db_del_rec($table, $id)
 {
 	global $db_table;
+	global $cache_enabled;
 
 	if (!array_key_exists($table, $db_table)) {
 		die("unknown table [$table]");
 	}
-	$key = $db_table[$table]["key"];
+	$key = db_key($table);
 	if (is_array($key)) {
 		if (!is_array($id)) {
 			die("error [id is not the full key] function [db_del_rec] table [$table] id [$id]");
@@ -493,6 +572,10 @@ function db_del_rec($table, $id)
 	} else {
 		sql("delete from $table where $key = ?", $id);
 	}
+	if ($cache_enabled && !is_array($id)) {
+		$cache_key = "$table.conf.$id";
+		cache_del($cache_key);
+	}
 }
 
 
@@ -502,7 +585,7 @@ function db_get_conf($table, $id = false)
 	global $cache_enabled;
 
 	if ($id !== false) {
-		$key = $db_table[$table]["key"];
+		$key = db_key($table);
 	}
 
 	if ($cache_enabled) {
@@ -541,6 +624,34 @@ function db_get_conf($table, $id = false)
 }
 
 
+function db_get_count($table, $id)
+{
+	global $db_table;
+
+	if (!array_key_exists($table, $db_table)) {
+		die("unknown table [$table]");
+	}
+	$key = db_key($table);
+	$tab = $db_table[$table];
+
+	if (is_array($id)) {
+		$k = array_keys($id);
+		$a = array();
+		$sql = "select count(*) as row_count from $table where ";
+		for ($i = 0; $i < count($id); $i++) {
+			$sql .= $k[$i] . ' = ? and ';
+			$a[] = $id[$k[$i]];
+		}
+		$sql = substr($sql, 0, -5);
+		$row = sql($sql, $a);
+	} else {
+		$row = sql("select count(*) as row_count from $table where $key = ?", $id);
+	}
+
+	return (int) $row[0]["row_count"];
+}
+
+
 function db_get_list($table, $order = "", $where = array())
 {
 	global $db_table;
@@ -548,8 +659,13 @@ function db_get_list($table, $order = "", $where = array())
 	if (!array_key_exists($table, $db_table)) {
 		die("unknown table [$table]");
 	}
-	$key = $db_table[$table]["key"];
-	$col = $db_table[$table]["col"];
+	if (strlen($order) > 0) {
+		if (!string_uses($order, "[a-z][A-Z][0-9]_, ")) {
+			die("invalid order [$order]");
+		}
+	}
+	$key = db_key($table);
+	$tab = $db_table[$table];
 
 	$a = array();
 	if (count($where) > 0) {
@@ -583,8 +699,8 @@ function db_get_list($table, $order = "", $where = array())
 			$n = $row[$i][$key];
 		}
 		$b = array();
-		for ($j = 0; $j < count($col); $j++) {
-			$b[$col[$j]] = $row[$i][$col[$j]];
+		for ($j = 0; $j < count($tab); $j++) {
+			$b[$tab[$j]["name"]] = $row[$i][$tab[$j]["name"]];
 		}
 		$a[$n] = $b;
 	}
@@ -609,8 +725,8 @@ function db_get_rec($table, $id)
 	if (!array_key_exists($table, $db_table)) {
 		die("unknown table [$table]");
 	}
-	$key = $db_table[$table]["key"];
-	$col = $db_table[$table]["col"];
+	$key = db_key($table);
+	$tab = $db_table[$table];
 
 	if (is_array($id)) {
 		$k = array_keys($id);
@@ -633,8 +749,8 @@ function db_get_rec($table, $id)
 		}
 	}
 	$rec = array();
-	for ($i = 0; $i < count($col); $i++) {
-		$rec[$col[$i]] = $row[0][$col[$i]];
+	for ($i = 0; $i < count($tab); $i++) {
+		$rec[$tab[$i]["name"]] = $row[0][$tab[$i]["name"]];
 	}
 
 	if ($cache_enabled && !is_array($id)) {
@@ -647,7 +763,7 @@ function db_get_rec($table, $id)
 
 function db_has_database($database)
 {
-	$row = sql("show databases like '$database'");
+	$row = sql("show databases like ?", $database);
 	if (count($row) == 0) {
 		return false;
 	}
@@ -681,7 +797,7 @@ function db_has_rec($table, $id)
 		$sql = substr($sql, 0, -5);
 		$row = sql($sql, $a);
 	} else {
-		$key = $db_table[$table]["key"];
+		$key = db_key($table);
 		$row = sql("select * from $table where $key = ?", $id);
 	}
 	if (count($row) == 0) {
@@ -691,13 +807,72 @@ function db_has_rec($table, $id)
 }
 
 
+function db_key($table)
+{
+	global $db_table;
+
+	$key = array();
+	$tab = $db_table[$table];
+	for ($i = 0; $i < count($tab); $i++) {
+		if (array_key_exists("key", $tab[$i])) {
+			if ($tab[$i]["key"]) {
+				$key[] = $tab[$i]["name"];
+			}
+		}
+	}
+
+	if (count($key) == 1) {
+		return $key[0];
+	} else {
+		return $key;
+	}
+}
+
+
+function db_last()
+{
+	global $sql_dbh;
+
+	return $sql_dbh->lastInsertId();
+}
+
+
+function db_new_rec($table)
+{
+	global $db_table;
+
+	$key = db_key($table);
+	$tab = $db_table[$table];
+	$rec = array();
+	for ($i = 0; $i < count($tab); $i++) {
+		$value = "";
+		if (array_key_exists("auto", $tab[$i])) {
+			$value = 0;
+		} else if (array_key_exists("default", $tab[$i])) {
+			$value = $tab[$i]["default"];
+		}
+		$rec[$tab[$i]["name"]] = $value;
+	}
+
+	return $rec;
+}
+
+
+function db_rollback()
+{
+	global $sql_dbh;
+
+	$sql_dbh->rollback();
+}
+
+
 function db_set_conf($table, $map, $id = false)
 {
 	global $db_table;
 	global $cache_enabled;
 
 	if ($id !== false) {
-		$key = $db_table[$table]["key"];
+		$key = db_key($table);
 	}
 	$current = array();
 	$default = array();
@@ -771,8 +946,8 @@ function db_set_rec($table, $rec)
 	if (!array_key_exists($table, $db_table)) {
 		die("unknown table [$table]");
 	}
-	$key = $db_table[$table]["key"];
-	$col = $db_table[$table]["col"];
+	$key = db_key($table);
+	$tab = $db_table[$table];
 	if (is_array($key)) {
 		$id = array();
 		for ($i = 0; $i < count($key); $i++) {
@@ -782,46 +957,54 @@ function db_set_rec($table, $rec)
 		$id = $rec[$key];
 	}
 
-	$insert = true;
-	$auto = false;
-	if ($id === 0 && array_key_exists("auto", $db_table[$table])) {
-		$auto = true;
+	$auto = "";
+	for ($i = 0; $i < count($tab); $i++) {
+		if (array_key_exists("auto", $tab[$i])) {
+			if ($tab[$i]["auto"]) {
+				$auto = $tab[$i]["name"];
+			}
+		}
+	}
+	if ($auto != "" && $id == 0) {
+		$insert = true;
 	} else if (db_has_rec($table, $id)) {
 		$insert = false;
+	} else {
+		$insert = true;
 	}
 
 	$a = array();
 	if ($insert) {
 		$sql = "insert into $table (";
-		for ($i = 0; $i < count($col); $i++) {
-			if (!$auto || $col[$i] != $key) {
-				$sql .= $col[$i] . ", ";
-				$a[] = $rec[$col[$i]];
+		for ($i = 0; $i < count($tab); $i++) {
+			if ($tab[$i]["name"] != $auto) {
+				$sql .= $tab[$i]["name"] . ", ";
+				$a[] = $rec[$tab[$i]["name"]];
 			}
 		}
 		if ($auto) {
-			$count = count($col) - 2;
+			$count = count($tab) - 2;
 		} else {
-			$count = count($col) - 1;
+			$count = count($tab) - 1;
 		}
 		$sql = substr($sql, 0, -2) . ") values (" . str_repeat("?, ", $count) . "?)";
 		sql($sql, $a);
 	} else {
 		$sql = "update $table set ";
-		for ($i = 0; $i < count($col); $i++) {
+		for ($i = 0; $i < count($tab); $i++) {
 			$is_key = false;
 			if (is_array($key)) {
-				if (in_array($col[$i], $key)) {
+				if (in_array($tab[$i]["name"], $key)) {
 					$is_key = true;
 				}
 			} else {
-				if ($col[$i] == $key) {
+				if ($tab[$i]["name"] == $key) {
 					$is_key = true;
 				}
 			}
 			if (!$is_key) {
-				$sql .= $col[$i] . " = ?, ";
-				$a[] = $rec[$col[$i]];
+				$sql .= $tab[$i]["name"] . " = ?, ";
+				$a[] = $rec[$tab[$i]["name"]];
 			}
 		}
 		$sql = substr($sql, 0, -2) . " where ";
@@ -838,7 +1021,7 @@ function db_set_rec($table, $rec)
 		sql($sql, $a);
 	}
 
-	if ($cache_enabled) {
+	if ($cache_enabled && !is_array($id)) {
 		$cache_key = "$table.rec.$id";
 		cache_set($cache_key, map_to_conf_string($rec));
 	}
@@ -1056,6 +1239,18 @@ function fs_unlink($path)
 function header_expires()
 {
 	header("Expires: Thur, 28 Aug 1980 10:00:00 GMT");
+}
+
+
+function header_html()
+{
+	header("Content-Type: text/html; charset=utf-8");
+}
+
+
+function header_text()
+{
+	header("Content-Type: text/plain");
 }
 
 
@@ -1401,6 +1596,47 @@ function http_test_string($name, $method, $arg = array())
 }
 
 
+function left_box($buttons, $style = "")
+{
+	if ($style == "") {
+		writeln('<div class="left_box">');
+	} else {
+		writeln('<div class="left_box" style="' . $style . '">');
+	}
+	left_right_buttons($buttons);
+	writeln('</div>');
+}
+
+
+function left_right_box($left, $right)
+{
+	writeln('<div class="left_right_box">');
+	writeln('<div class="left_box">');
+	left_right_buttons($left);
+	writeln('</div>');
+	writeln('<div class="right_box">');
+	left_right_buttons($right);
+	writeln('</div>');
+	writeln('</div>');
+}
+
+
+function left_right_buttons($buttons)
+{
+	if (string_has($buttons, "<")) {
+		writeln($buttons);
+	} else {
+		$a = explode(",", $buttons);
+		for ($i = 0; $i < count($a); $i++) {
+			$value = trim($a[$i]);
+			$name = strtolower($value);
+			$name = str_replace(" ", "_", $name);
+			writeln('<input type="submit" name="' . $name . '" value="' . $value .'"/>');
+		}
+	}
+}
+
+
 function map_from_attribute_string($s)
 {
 	$map = array();
@@ -1637,7 +1873,7 @@ function print_row($a)
 	} else if (array_key_exists("link", $a)) {
 		if (array_key_exists("description", $a)) {
 			writeln('			<a href="' . $a["link"] . '">');
-			writeln('			<dl class="icon_' . $a["icon"] . '_32">');
+			writeln('			<dl class="dl_32 ' . $a["icon"] . '_32">');
 			writeln('				<dt>' . $a["caption"] . '</dt>');
 			writeln('				<dd>' . $a["description"] . '</dd>');
 			writeln('			</dl>');
@@ -1647,12 +1883,12 @@ function print_row($a)
 		}
 	} else if (array_key_exists("icon_32", $a)) {
 		if (array_key_exists("description", $a)) {
-			writeln('			<dl class="icon_' . $a["icon"] . '_32">');
+			writeln('			<dl class="dl_32 ' . $a["icon_32"] . '_32">');
 			writeln('				<dt>' . $a["caption"] . '</dt>');
 			writeln('				<dd>' . $a["description"] . '</dd>');
 			writeln('			</dl>');
 		} else {
-			writeln('			<div class="icon_32" style="background-image: url(/images/' . $a["icon_32"] . '-32.png)"><h1>' . $a["caption"] . '</h1></div>');
+			writeln('			<div class="icon_32 ' . $a["icon_32"] . '_32">' . $a["caption"] . '</div>');
 		}
 	} else {
 		if (array_key_exists("check_key", $a)) {
@@ -1693,53 +1929,12 @@ function random_hash()
 }
 
 
-function left_right_buttons($buttons)
-{
-	if (string_has($buttons, "<")) {
-		writeln($buttons);
-	} else {
-		$a = explode(",", $buttons);
-		for ($i = 0; $i < count($a); $i++) {
-			$value = trim($a[$i]);
-			$name = strtolower($value);
-			$name = str_replace(" ", "_", $name);
-			writeln('<input type="submit" name="' . $name . '" value="' . $value .'"/>');
-		}
-	}
-}
-
-
-function left_right_box($left, $right)
-{
-	writeln('<div class="left_right_box">');
-	writeln('<div class="left_box">');
-	left_right_buttons($left);
-	writeln('</div>');
-	writeln('<div class="right_box">');
-	left_right_buttons($right);
-	writeln('</div>');
-	writeln('</div>');
-}
-
-
 function right_box($buttons, $style = "")
 {
 	if ($style == "") {
 		writeln('<div class="right_box">');
 	} else {
 		writeln('<div class="right_box" style="' . $style . '">');
-	}
-	left_right_buttons($buttons);
-	writeln('</div>');
-}
-
-
-function left_box($buttons, $style = "")
-{
-	if ($style == "") {
-		writeln('<div class="left_box">');
-	} else {
-		writeln('<div class="left_box" style="' . $style . '">');
 	}
 	left_right_buttons($buttons);
 	writeln('</div>');

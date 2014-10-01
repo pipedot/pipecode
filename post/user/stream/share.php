@@ -26,6 +26,9 @@ include("image.php");
 if ($auth_zid == "") {
 	die("sign in to share");
 }
+if ($zid != $auth_zid) {
+	die("not your stream");
+}
 
 list($clean_body, $dirty_body) = clean_body(false);
 $tags = clean_tags();

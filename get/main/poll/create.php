@@ -41,11 +41,11 @@ end_tab();
 beg_tab("Answers", array("id" => "answers", "colspan" => 2));
 writeln('	<tr>');
 writeln('		<td><input id="answer_0" name="answer_0" type="text"/></td>');
-writeln('		<td style="text-align: right"><a href="javascript: remove_item(0)" class="icon_minus_16">Remove</a></td>');
+writeln('		<td style="text-align: right"><a href="javascript: remove_item(0)" class="icon_16 minus_16">Remove</a></td>');
 writeln('	</tr>');
 end_tab();
 
-writeln('<div style="margin-bottom: 8px" class="right"><a href="javascript:add_item()" class="icon_plus_16">Add</a></div>');
+writeln('<div style="margin-bottom: 8px" class="right"><a href="javascript:add_item()" class="icon_16 plus_16">Add</a></div>');
 
 right_box("Publish");
 ?>
@@ -62,7 +62,7 @@ function add_item()
 	cell.innerHTML = '<input id="answer_' + current + '" name="answer_' + current + '" type="text" value=""/>';
 	cell = row.insertCell(1);
 	cell.style.textAlign = "right";
-	cell.innerHTML = '<a href="javascript: remove_item(' + current + ')" class="icon_minus_16">Remove</a>';
+	cell.innerHTML = '<a href="javascript: remove_item(' + current + ')" class="icon_16 minus_16">Remove</a>';
 	$('#last_row').val(current);
 
 	current++;

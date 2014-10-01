@@ -67,7 +67,7 @@ if (count($row) == 0) {
 for ($i = 0; $i < count($row); $i++) {
 	writeln('	<tr>');
 	writeln('		<td width="80%"><a href="/images/store/image/' . $row[$i]["image_id"] . '-800.jpg"><img class="store_image_40" src="/images/store/image/' . $row[$i]["image_id"] . '-40.jpg"/></a></td>');
-	writeln('		<td width="20%" align="center"><a href="image_delete?image_id=' . $row[$i]["image_id"] . '"><span class="icon_16" style="background-image: url(/images/no-16.png);">Delete</span></a></td>');
+	writeln('		<td width="20%" align="center"><a href="image_delete?image_id=' . $row[$i]["image_id"] . '"><span class="icon_16 minus_16">Delete</span></a></td>');
 	writeln('	</tr>');
 }
 end_tab();

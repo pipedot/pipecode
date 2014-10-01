@@ -25,8 +25,9 @@ function make_atom($topic)
 	global $server_title;
 	global $server_slogan;
 	global $cache_enabled;
+	global $protocol;
 
-	$row = sql("select story_id, pipe.author_zid, story.publish_time, story.title, story.slug, story.body from story inner join pipe on story.pipe_id = pipe.pipe_id order by publish_time desc limit 10");
+	$row = sql("select story_id, pipe.author_zid, story.publish_time, story.title, story.short_id, story.slug, story.body from story inner join pipe on story.pipe_id = pipe.pipe_id order by publish_time desc limit 10");
 	if (count($row) > 0) {
 		$updated = $row[0]["publish_time"];
 	} else {
@@ -38,18 +39,20 @@ function make_atom($topic)
 	$body .= "	<title type=\"text\">$server_title</title>\n";
 	$body .= "	<subtitle type=\"text\">$server_slogan</subtitle>\n";
 	$body .= "	<updated>" . gmdate(DATE_ATOM, $updated) . "</updated>\n";
-	$body .= "	<id>http://$server_name/atom</id>\n";
-	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"http://$server_name/\"/>\n";
-	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"http://$server_name/atom\"/>\n";
-	$body .= "	<icon>http://$server_name/favicon.ico</icon>\n";
-	$body .= "	<logo>http://$server_name/images/logo-feed.png</logo>\n";
+	$body .= "	<id>$protocol://$server_name/atom</id>\n";
+	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"$protocol://$server_name/\"/>\n";
+	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"$protocol://$server_name/atom\"/>\n";
+	$body .= "	<icon>$protocol://$server_name/favicon.ico</icon>\n";
+	$body .= "	<logo>$protocol://$server_name/images/logo-feed.png</logo>\n";
 
 	for ($i = 0; $i < count($row); $i++) {
+		$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+
 		$body .= "	<entry>\n";
-		$body .= "		<id>http://$server_name/story/" . $row[$i]["story_id"] . "</id>\n";
+		$body .= "		<id>$protocol://$server_name/story/$short_code</id>\n";
 		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
-		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"http://$server_name/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
 		$body .= "		<author>\n";
 		if ($row[$i]["author_zid"] == "") {
 			$body .= "			<name>Anonymous Coward</name>\n";
@@ -57,6 +60,126 @@ function make_atom($topic)
 			$body .= "			<name>" . $row[$i]["author_zid"] . "</name>\n";
 			$body .= "			<uri>" . user_page_link($row[$i]["author_zid"]) . "</uri>\n";
 		}
+		$body .= "		</author>\n";
+		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
+		$body .= "	</entry>\n";
+	}
+
+	$body .= "</feed>\n";
+
+	$time = time();
+	$etag = md5($body);
+
+	if ($cache_enabled) {
+		//cache_set("atom.$topic.time", $time);
+		//cache_set("atom.$topic.etag", $etag);
+		//cache_set("atom.$topic.body", $body);
+		cache_set(array("atom.$topic.time" => $time, "atom.$topic.etag" => $etag, "atom.$topic.body" => $body));
+	}
+
+	return array($time, $etag, $body);
+}
+
+
+function make_comment_atom($topic)
+{
+	global $server_name;
+	global $server_title;
+	global $server_slogan;
+	global $cache_enabled;
+	global $protocol;
+
+	$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body, zid from comment order by edit_time desc limit 50");
+	if (count($row) > 0) {
+		$updated = $row[0]["edit_time"];
+	} else {
+		$updated = time();
+	}
+
+	$body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	$body .= "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n";
+	$body .= "	<title type=\"text\">$server_title</title>\n";
+	$body .= "	<subtitle type=\"text\">Recent Comments</subtitle>\n";
+	$body .= "	<updated>" . gmdate(DATE_ATOM, $updated) . "</updated>\n";
+	$body .= "	<id>$protocol://$server_name/comment/atom</id>\n";
+	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"$protocol://$server_name/comment/\"/>\n";
+	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"$protocol://$server_name/comment/atom\"/>\n";
+	$body .= "	<icon>$protocol://$server_name/favicon.ico</icon>\n";
+	$body .= "	<logo>$protocol://$server_name/images/logo-feed.png</logo>\n";
+
+	for ($i = 0; $i < count($row); $i++) {
+		$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+
+		$body .= "	<entry>\n";
+		$body .= "		<id>$protocol://$server_name/comment/$short_code</id>\n";
+		$body .= "		<title>" . $row[$i]["subject"] . "</title>\n";
+		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["edit_time"]) . "</updated>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/comment/$short_code\"/>\n";
+		$body .= "		<author>\n";
+		if ($row[$i]["zid"] == "") {
+			$body .= "			<name>Anonymous Coward</name>\n";
+		} else {
+			$body .= "			<name>" . $row[$i]["zid"] . "</name>\n";
+			$body .= "			<uri>" . user_page_link($row[$i]["zid"]) . "</uri>\n";
+		}
+		$body .= "		</author>\n";
+		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
+		$body .= "	</entry>\n";
+	}
+
+	$body .= "</feed>\n";
+
+	$time = time();
+	$etag = md5($body);
+
+	if ($cache_enabled) {
+		//cache_set("atom.$topic.time", $time);
+		//cache_set("atom.$topic.etag", $etag);
+		//cache_set("atom.$topic.body", $body);
+		cache_set(array("atom.$topic.time" => $time, "atom.$topic.etag" => $etag, "atom.$topic.body" => $body));
+	}
+
+	return array($time, $etag, $body);
+}
+
+
+function make_journal_atom($zid)
+{
+	global $server_name;
+	global $server_title;
+	global $server_slogan;
+	global $cache_enabled;
+	global $protocol;
+
+	$row = sql("select body, publish_time, short_id, slug, title from journal where zid = ? and published = 1 order by publish_time desc limit 10", $zid);
+	if (count($row) > 0) {
+		$updated = $row[0]["publish_time"];
+	} else {
+		$updated = time();
+	}
+
+	$body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+	$body .= "<feed xmlns=\"http://www.w3.org/2005/Atom\">\n";
+	$body .= "	<title type=\"text\">$zid</title>\n";
+	$body .= "	<subtitle type=\"text\">Journal</subtitle>\n";
+	$body .= "	<updated>" . gmdate(DATE_ATOM, $updated) . "</updated>\n";
+	$body .= "	<id>$protocol://$server_name/atom</id>\n";
+	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"" . user_page_link($zid) . "journal/\"/>\n";
+	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"" . user_page_link($zid) . "journal/atom\"/>\n";
+	$body .= "	<icon>$protocol://$server_name/favicon.ico</icon>\n";
+	$body .= "	<logo>" . profile_picture($zid, 256) . "</logo>\n";
+
+	for ($i = 0; $i < count($row); $i++) {
+		$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+
+		$body .= "	<entry>\n";
+		$body .= "		<id>" . user_page_link($zid) . "journal/$short_code</id>\n";
+		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
+		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"" . user_page_link($zid) . "journal/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
+		$body .= "		<author>\n";
+		$body .= "			<name>$zid</name>\n";
+		$body .= "			<uri>" . user_page_link($zid) . "</uri>\n";
 		$body .= "		</author>\n";
 		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
 		$body .= "	</entry>\n";
@@ -93,7 +216,7 @@ function list_map($list, $map)
 }
 
 
-function print_atom($topic)
+function print_atom($type, $topic)
 {
 	global $cache_enabled;
 
@@ -133,7 +256,13 @@ function print_atom($topic)
 	}
 
 	if ($time === false || $etag === false || $body === false) {
-		list($time, $etag, $body) = make_atom($topic);
+		if ($type == "story") {
+			list($time, $etag, $body) = make_atom($topic);
+		} else if ($type == "comment") {
+			list($time, $etag, $body) = make_comment_atom($topic);
+		} else if ($type == "journal") {
+			list($time, $etag, $body) = make_journal_atom($topic);
+		}
 //		die("not cached\n");
 //	} else {
 //		die("cached\n");
