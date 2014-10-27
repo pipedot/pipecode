@@ -3,30 +3,28 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_card($card_id)
+function print_card($short_id, $size = "small")
 {
 	global $protocol;
 	global $server_name;
 	global $doc_root;
 
 	$a = array();
-	$card = db_get_rec("card", $card_id);
+	$card = db_get_rec("card", $short_id);
 //	$article = db_get_rec("article", $card["article_id"]);
 	if ($card["link_url"] != "") {
 //		$link = db_get_rec("link", $card["link_id"]);
@@ -41,20 +39,25 @@ function print_card($card_id)
 	}
 
 	$tags = array();
-	$row = sql("select tag from card_tags inner join tag on card_tags.tag_id = tag.tag_id where card_id = ?", $card_id);
+	$row = sql("select tag from card_tags where short_id = ? order by tag", $short_id);
 	for ($i = 0; $i < count($row); $i++) {
 		$tags[] = $row[$i]["tag"];
 	}
 
-	$a["card_id"] = $card_id;
+	$a["short_id"] = $short_id;
+	$a["card_id"] = $card["card_id"];
 	$a["zid"] = $card["zid"];
-	$a["time"] = $card["time"];
+	$a["time"] = $card["edit_time"];
 	$a["votes"] = 0;
 	$a["body"] = $card["body"];
 
-	$photo_id = $card["photo_id"];
-	if ($photo_id > 0) {
-		$a["photo_id"] = $photo_id;
+	$photo_short_id = $card["photo_short_id"];
+	if ($photo_short_id > 0) {
+		$photo = db_get_rec("photo", $photo_short_id);
+		$info = photo_info($photo);
+		$a["photo_short_code"] = crypt_crockford_encode($photo["short_id"]);
+		$a["photo_class"] = $info["small_class"];
+		/*$a["photo_id"] = $photo_id;
 		$photo = db_get_rec("photo", $photo_id);
 		$width = 320;
 		if ($photo["aspect_width"] == 9 && $photo["aspect_height"] == 16) {
@@ -99,13 +102,27 @@ function print_card($card_id)
 			$a["photo_class"] = "card_photo_16x9";
 		}
 		$path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
-		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
+		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");*/
+		$retina = true;
+		if ($retina && $photo["has_medium"]) {
+			$a["photo_link"] = $info["medium_link"];
+		} else {
+			$a["photo_link"] = $info["small_link"];
+		}
 	}
 
-	$a["comments"] = 0;
+	$a["comments"] = count_comments("card", $card["card_id"]);
 	$a["tags"] = $tags;
 
-	print_card_small($a);
+	if ($size == "small") {
+		print_card_small($a);
+	} else {
+		$row = sql("select count(*) as edit_count from card_edit where card_id = ?", $card["card_id"]);
+		if ($row[0]["edit_count"] > 0) {
+			$a["history"] = true;
+		}
+		print_card_large($a);
+	}
 }
 
 
@@ -114,6 +131,8 @@ function print_card_small($a)
 	global $server_name;
 	global $protocol;
 
+	$short_id = $a["short_id"];
+	$short_code = crypt_crockford_encode($short_id);
 	$card_id = $a["card_id"];
 	$zid = $a["zid"];
 	list($user, $host) = explode("@", $zid);
@@ -122,7 +141,7 @@ function print_card_small($a)
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
 	$votes = $a["votes"];
-	$body = $a["body"];
+	$body = make_clickable($a["body"]);
 	if (array_key_exists("link_url", $a)) {
 		$link_url = $a["link_url"];
 		$link_subject = $a["link_subject"];
@@ -136,16 +155,15 @@ function print_card_small($a)
 	} else {
 		$link_url = "";
 	}
-	if (array_key_exists("photo_id", $a)) {
-		$photo_id = $a["photo_id"];
-		$photo_url = $a["photo_url"];
+	if (array_key_exists("photo_short_code", $a)) {
+		$photo_short_code = $a["photo_short_code"];
+		$photo_link = $a["photo_link"];
 		$photo_class = $a["photo_class"];
 	} else {
-		$photo_id = 0;
-		$photo_url = "";
+		$photo_short_code = "";
+		$photo_link = "";
 		$photo_class = "";
 	}
-	$comments = $a["comments"];
 	$tag_links = "";
 	if (array_key_exists("tags", $a)) {
 		for ($i = 0; $i < count($a["tags"]); $i++) {
@@ -177,9 +195,9 @@ function print_card_small($a)
 		writeln("		<td class=\"card_row\">$body</td>");
 		writeln("	</tr>");
 	}
-	if ($photo_url != "") {
+	if ($photo_link != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/photo/$photo_id\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_url\"/></a></td>");
+		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/photo/$photo_short_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
 		writeln("	</tr>");
 	}
 	if ($link_url != "") {
@@ -197,9 +215,122 @@ function print_card_small($a)
 	}
 	writeln("	<tr>");
 	writeln("		<td class=\"card_footer\">");
-	writeln("			<a class=\"card_comments\" href=\"$protocol://$server_name/card/$card_id\">$comments comments</a>");
+	writeln("			<a class=\"card_comments\" href=\"$protocol://$server_name/card/$short_code\">{$a["comments"]["tag"]}</a>");
 	writeln("			<div class=\"card_tags\">$tag_links</div>");
-	writeln("			<img alt=\"Options\" class=\"card_button\" src=\"/images/gear-16.png\" title=\"Options\"/>");
+	//writeln("			<img alt=\"Options\" class=\"card_button\" src=\"/images/gear-16.png\" title=\"Options\"/>");
+	writeln("		</td>");
+	writeln("	</tr>");
+	writeln('</table>');
+}
+
+
+function print_card_large($a)
+{
+	global $server_name;
+	global $protocol;
+	global $auth_zid;
+
+	$short_id = $a["short_id"];
+	$short_code = crypt_crockford_encode($short_id);
+	$card_id = $a["card_id"];
+	$zid = $a["zid"];
+	list($user, $host) = explode("@", $zid);
+	$user_page_link = user_page_link($zid);
+	$profile_picture = profile_picture($zid, 64);
+	$time = $a["time"];
+	$date = date("Y-m-d H:i", $time);
+	$votes = $a["votes"];
+	$body = make_clickable($a["body"]);
+	if (array_key_exists("link_url", $a)) {
+		$link_url = $a["link_url"];
+		$link_subject = $a["link_subject"];
+		if (array_key_exists("image_url", $a)) {
+			$image_url = $a["image_url"];
+		} else {
+			$image_url = "";
+		}
+		$u = parse_url($link_url);
+		$link_site = $u["host"];
+	} else {
+		$link_url = "";
+	}
+	if (array_key_exists("photo_short_code", $a)) {
+		$photo_short_code = $a["photo_short_code"];
+		$photo_link = $a["photo_link"];
+		$photo_class = $a["photo_class"];
+	} else {
+		$photo_short_code = "";
+		$photo_link = "";
+		$photo_class = "";
+	}
+	$tag_links = "";
+	if (array_key_exists("tags", $a)) {
+		for ($i = 0; $i < count($a["tags"]); $i++) {
+			$tag = $a["tags"][$i];
+			$tag_links .= "<a class=\"card_tag\" href=\"$protocol://$server_name/tag/$tag\">#$tag</a> ";
+		}
+		$tag_links = trim($tag_links);
+	}
+	if (array_key_exists("history", $a)) {
+		$history = $a["history"];
+	} else {
+		$history = false;
+	}
+
+	writeln("<table class=\"card_large\">");
+	writeln("	<tr>");
+	writeln("		<td class=\"card_row\">");
+	writeln("			<a href=\"$user_page_link\"><img class=\"card_profile\" src=\"$profile_picture\"/></a>");
+	writeln("			<div class=\"card_by_box\">");
+	writeln("				<a class=\"card_by\" href=\"$user_page_link\">$zid</a>");
+	writeln("				<div class=\"card_time\">$date</div>");
+	writeln("			</div>");
+	writeln("			<div class=\"card_vote\">");
+	writeln("				<div class=\"card_vote_box\">");
+	writeln("					<img alt=\"Vote Up\" class=\"card_button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
+	writeln("					<div class=\"card_vote_count\">$votes</div>");
+	writeln("					<img alt=\"Vote Down\" class=\"card_button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
+	writeln("				</div>");
+	writeln("			</div>");
+	writeln("		</td>");
+	writeln("	</tr>");
+	if ($body != "") {
+		writeln("	<tr>");
+		writeln("		<td class=\"card_row\">$body</td>");
+		writeln("	</tr>");
+	}
+	if ($photo_link != "") {
+		writeln("	<tr>");
+		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/photo/$photo_short_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
+		writeln("	</tr>");
+	}
+	if ($link_url != "") {
+		writeln("	<tr>");
+		writeln("		<td class=\"card_row_link\">");
+		if ($image_url != "") {
+			writeln("			<a href=\"$link_url\"><img class=\"card_story_image\" src=\"$image_url\"/></a>");
+		}
+		writeln("			<div class=\"card_story_box\">");
+		writeln("				<a class=\"card_story_link\" href=\"$link_url\">$link_subject</a>");
+		writeln("				<a class=\"card_story_site\" href=\"$link_url\">$link_site</a>");
+		writeln("			</div>");
+		writeln("		</td>");
+		writeln("	</tr>");
+	}
+	writeln("	<tr>");
+	writeln("		<td class=\"card_footer\">");
+	writeln("			<a class=\"card_comments\" href=\"$protocol://$server_name/card/$short_code\">{$a["comments"]["tag"]}</a>");
+	writeln("			<div class=\"card_tags\">$tag_links</div>");
+	//writeln("			<img alt=\"Options\" class=\"card_button\" src=\"/images/gear-16.png\" title=\"Options\"/>"); <a class=\"icon_16 picture_16\" href=\"/card/$short_code/image\">Image</a> |
+	$options = array();
+	if ($history) {
+		$options[] = "<a class=\"icon_16 calendar_16\" href=\"/card/$short_code/history\">History</a>";
+	}
+	if ($zid === $auth_zid) {
+		$options[] = "<a class=\"icon_16 notepad_16\" href=\"/card/$short_code/edit\">Edit</a>";
+		//$options[] = "<a class=\"icon_16 tag_16\" href=\"/card/$short_code/tag\">Tag</a>";
+	}
+	writeln("			<div class=\"card_options\">" . implode(" | ", $options) . "</div>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	writeln('</table>');

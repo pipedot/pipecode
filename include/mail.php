@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("$doc_root/lib/phpmailer/class.phpmailer.php");
@@ -257,15 +255,18 @@ function send_notifications($comment)
 
 	$new_subject = $comment["subject"];
 	$new_comment_id = $comment["comment_id"];
+	$new_short_code = crypt_crockford_encode($comment["short_id"]);
 	$new_zid = $comment["zid"];
 	if ($new_zid == "") {
 		$new_zid = "Anonymous Coward";
 	}
 	$parent_id = $comment["parent_id"];
+
 	$sent_list = array();
 
 	while ($parent_id != "") {
 		$comment = db_get_rec("comment", $parent_id);
+		$parent_short_code = crypt_crockford_encode($comment["short_id"]);
 		$zid = $comment["zid"];
 		if ($zid != "" && $zid != $auth_zid && !in_array($zid, $sent_list)) {
 			$a = article_info($comment);
@@ -278,11 +279,11 @@ function send_notifications($comment)
 			$body .= "\n";
 			$body .= "Your original comment:\n";
 			$body .= $comment["subject"] . "\n";
-			$body .= "https://$server_name/comment/$parent_id\n";
+			$body .= "https://$server_name/comment/$parent_short_code\n";
 			$body .= "\n";
 			$body .= "The new reply:\n";
 			$body .= "$new_subject\n";
-			$body .= "https://$server_name/comment/$new_comment_id\n";
+			$body .= "https://$server_name/comment/$new_short_code\n";
 			$body .= "\n";
 
 			send_web_mail($zid, $subject, $body, "", false);

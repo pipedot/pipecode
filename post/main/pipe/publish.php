@@ -3,36 +3,29 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("clean.php");
 include("story.php");
 include("publish.php");
 
-$pipe_id = $s2;
-if (!string_uses($pipe_id, "[a-z][0-9]_")) {
-	die("invalid pipe_id [$pipe_id]");
-}
-
 if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$pipe = db_get_rec("pipe", $pipe_id);
+$pipe = find_rec("pipe");
 $zid = $pipe["author_zid"];
 
 $title = clean_subject();
@@ -42,7 +35,6 @@ $tid = http_post_int("tid");
 $time = time();
 
 if (http_post("publish")) {
-	$pipe = db_get_rec("pipe", $pipe_id);
 	if ($pipe["closed"] == 1) {
 		die("pipe [$pipe_id] is already closed");
 	}
@@ -58,7 +50,7 @@ if (http_post("publish")) {
 	$story["edit_zid"] = $auth_zid;
 	$story["icon"] = $icon;
 	$story["image_id"] = 0;
-	$story["pipe_id"] = $pipe_id;
+	$story["pipe_id"] = $pipe["pipe_id"];
 	$story["publish_time"] = $time;
 	$story["short_id"] = create_short("story", $story["story_id"]);
 	$story["slug"] = clean_url($title);
@@ -67,8 +59,8 @@ if (http_post("publish")) {
 	$story["tweet_id"] = 0;
 	db_set_rec("story", $story);
 
-	header("Location: /pipe/$pipe_id");
+	header("Location: /pipe/{$pipe["short_code"]}");
 	die();
 }
 
-print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_body, $zid);
+print_publish_box($pipe["pipe_id"], $tid, $icon, $title, $clean_body, $dirty_body, $zid);

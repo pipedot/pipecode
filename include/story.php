@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_body, $zid)
@@ -83,13 +81,15 @@ function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_bod
 }
 
 
-function print_story($story_id)
+function print_story($story)
 {
 	global $server_name;
 	global $auth_user;
 	global $auth_zid;
 
-	$story = db_get_rec("story", $story_id);
+	if (!is_array($story)) {
+		$story = db_get_rec("story", $story);
+	}
 	$topic = db_get_rec("topic", $story["tid"]);
 	$pipe = db_get_rec("pipe", $story["pipe_id"]);
 
@@ -99,18 +99,13 @@ function print_story($story_id)
 	$a["pipe_id"] = $story["pipe_id"];
 	$a["pipe_short_id"] = $pipe["short_id"];
 	$a["short_id"] = $story["short_id"];
-	$a["story_id"] = $story_id;
+	$a["story_id"] = $story["story_id"];
 	$a["time"] = $story["publish_time"];
 	$a["title"] = $story["title"];
 	$a["topic"] = $topic["topic"];
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["zid"] = $story["author_zid"];
-
-	$row = sql("select count(*) as comments from comment where type = 'story' and root_id = ?", $story_id);
-	$a["comments"] = $row[0]["comments"];
-	if ($auth_zid != "") {
-		$a["new"] = new_comments("story", $story_id);
-	}
+	$a["comments"] = count_comments("story", $story["story_id"]);
 
 	print_article($a);
 }
@@ -118,13 +113,14 @@ function print_story($story_id)
 
 function print_journal($journal_id)
 {
-	global $server_name;
-	global $auth_user;
 	global $auth_zid;
 
 	$journal = db_get_rec("journal", $journal_id);
 
-	$a["body"] = $journal["body"];
+	$body = $journal["body"];
+	$body = make_photo_links($body);
+
+	$a["body"] = $body;
 	$a["photo_id"] = $journal["photo_id"];
 	$a["short_id"] = $journal["short_id"];
 	$a["journal_id"] = $journal_id;
@@ -132,12 +128,7 @@ function print_journal($journal_id)
 	$a["title"] = $journal["title"];
 	$a["topic"] = $journal["topic"];
 	$a["zid"] = $journal["zid"];
-
-	$row = sql("select count(*) as comments from comment where type = 'journal' and root_id = ?", $journal_id);
-	$a["comments"] = $row[0]["comments"];
-	if ($auth_zid != "") {
-		$a["new"] = new_comments("journal", $journal_id);
-	}
+	$a["comments"] = count_comments("journal", $journal_id);
 
 	print_article($a);
 }
@@ -179,28 +170,11 @@ function print_article($a)
 	} else {
 		$journal_id = "";
 	}
-	if (array_key_exists("comments", $a)) {
-		$comments = (int) $a["comments"];
-		if ($comments == 1) {
-			$comments_label = "comment";
-		} else {
-			$comments_label = "comments";
-		}
+	if (array_key_exists("bug_id", $a)) {
+		$bug_id = $a["bug_id"];
+		$labels = $a["labels"];
 	} else {
-		$comments = 0;
-		$comments_label = "comments";
-	}
-	if (array_key_exists("new", $a)) {
-		$new = (int) $a["new"];
-		if ($new > 0) {
-			//$comments_new = " <span class=\"new_comments\">($new new)</span>";
-			$comments_new = ", <b>$new</b> new";
-		} else {
-			$comments_new = "";
-		}
-	} else {
-		$new = 0;
-		$comments_new = "";
+		$bug_id = "";
 	}
 	if (array_key_exists("pipe_id", $a)) {
 		$pipe_id = $a["pipe_id"];
@@ -237,7 +211,7 @@ function print_article($a)
 		$topic = "";
 		$topic_slug = "";
 	}
-	$story = $a["body"];
+	$story = make_clickable($a["body"]);
 	if (array_key_exists("icon", $a)) {
 		$icon = $a["icon"];
 	} else {
@@ -316,7 +290,7 @@ function print_article($a)
 	}
 	writeln("	<footer>");
 	if ($story_id != "") {
-		writeln("		<div><a href=\"/story/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></div>");
+		writeln("		<div><a href=\"/story/$day/$slug\">{$a["comments"]["tag"]}</a></div>");
 		writeln("		<div class=\"right\">");
 		if ($accounting_enabled) {
 			writeln("			<a href=\"/story/$short_code/tip\" class=\"icon_16 coins_16\">Tip</a> | ");
@@ -334,13 +308,13 @@ function print_article($a)
 		}
 		writeln("		</div>");
 	} else if ($pipe_id != "") {
-		writeln("		<div><b>$comments</b> comments</div>");
+		writeln("		<div>{$a["comments"]["tag"]}</div>");
 		writeln("		<div class=\"right\">score <b>$score</b></div>");
 	} else if ($journal_id != "") {
 		if ($time > 0) {
-			writeln("		<div><a href=\"/journal/$day/$slug\"><b>$comments</b> $comments_label$comments_new</a></div>");
+			writeln("		<div><a href=\"/journal/$day/$slug\">{$a["comments"]["tag"]}</a></div>");
 		} else {
-			writeln("		<div><a href=\"/journal/$short_code\"><b>$comments</b> $comments_label$comments_new</a></div>");
+			writeln("		<div><a href=\"/journal/$short_code\">{$a["comments"]["tag"]}</a></div>");
 		}
 		if ($zid == $auth_zid) {
 			writeln("		<div class=\"right\">");
@@ -352,6 +326,19 @@ function print_article($a)
 			}
 			writeln("		</div>");
 		}
+	} else if ($bug_id != "") {
+		writeln("		<div>{$a["comments"]["tag"]}</div>");
+		writeln("		<div class=\"right\">");
+		if ($auth_user["editor"] || $auth_user["admin"]) {
+			writeln("			<a href=\"/bug/$short_code/edit\" class=\"icon_16 notepad_16\">Edit</a> | ");
+			if (!$a["closed"]) {
+				writeln("			<a href=\"/bug/$short_code/close\" class=\"icon_16 close_16\">Close</a>");
+			}
+		}
+		if ($auth_zid !== "" && $a["closed"]) {
+			writeln("			<a href=\"/bug/$short_code/open\" class=\"icon_16 undo_16\">Open</a>");
+		}
+		writeln("		</div>");
 	}
 	writeln("	</footer>");
 	writeln("</article>");

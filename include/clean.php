@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("$doc_root/lib/htmlpurifier/HTMLPurifier.standalone.php");
@@ -594,6 +592,24 @@ function clean_entities($dirty)
 }
 
 
+function clean_text($text, $max = 200, $min = 1)
+{
+	$text = htmlspecialchars($text);
+	$text = clean_unicode($text);
+	$text = clean_entities($text);
+	$text = string_replace_all("  ", " ", trim($text));
+
+	if (strlen($text) > $max) {
+		$subject = substr($text, 0, $max);
+	}
+	if (strlen($text) < $min) {
+		die("missing text field");
+	}
+
+	return $text;
+}
+
+
 function clean_subject()
 {
 	if (array_key_exists("subject", $_POST)) {
@@ -604,19 +620,7 @@ function clean_subject()
 		die("no subject");
 	}
 
-	$subject = htmlspecialchars($subject);
-	$subject = clean_unicode($subject);
-	$subject = clean_entities($subject);
-	$subject = string_replace_all("  ", " ", trim($subject));
-
-	if (strlen($subject) > 200) {
-		$subject = substr($subject, 0, 200);
-	}
-	if (strlen($subject) == 0) {
-		die("no subject");
-	}
-
-	return $subject;
+	return clean_text($subject);
 }
 
 
@@ -628,7 +632,7 @@ function clean_topic()
 		$topic = "general";
 	}
 
-	$topic = string_clean($topic, "[a-z][0-9]/- ");
+	$topic = string_clean($topic, "[a-z][0-9]-");
 	$topic = clean_url($topic);
 
 	if (strlen($topic) > 20) {
@@ -641,8 +645,10 @@ function clean_topic()
 
 function clean_slug()
 {
-	$slug = http_get_string("slug", array("required" => false, "len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
-
+	$slug = http_post_string("slug", array("required" => false, "len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+	if ($slug == "") {
+		$slug = http_get_string("slug", array("required" => false, "len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+	}
 	if ($slug == "") {
 		$slug = clean_url(clean_subject());
 	}
@@ -718,6 +724,7 @@ function clean_tags()
 
 	$tags = $_POST["tags"];
 	$tags = strtolower($tags);
+	$tags = str_replace(",", " ", $tags);
 	$tags = string_clean($tags, "[a-z][0-9] ");
 	$tags = explode(" ", $tags);
 
@@ -730,7 +737,7 @@ function clean_tags()
 		for ($i = 0; $i < count($a); $i++) {
 			$tag = $a[$i];
 			if (substr($tag, 0, 1) == "#") {
-				$tags[] = substr($tag, 1);
+				$tags[] = string_clean(substr($tag, 1), "[a-z][0-9]");
 			}
 		}
 	}
@@ -738,9 +745,8 @@ function clean_tags()
 	$a = array_unique($tags);
 	$tags = array();
 	for ($i = 0; $i < count($a); $i++) {
-		$tag = $a[$i];
-		if (strlen($tag) <= 20 && string_uses(substr($tag, 0, 1), "[a-z]") && string_uses(substr($tag, 1), "[a-z][0-9]")) {
-			$tags[] = $tag;
+		if (strlen(string_clean($a[$i], "[a-z]")) > 0) {
+			$tags[] = substr($a[$i], 0, 20);
 		}
 		if (count($tags) == 3) {
 			return $tags;

@@ -3,23 +3,21 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-
 include("stream.php");
+include("image.php");
 
 if ($auth_zid === $zid) {
 	print_header("Stream", array("Share"), array("share"), array("/stream/share"));
@@ -30,11 +28,11 @@ if ($auth_zid === $zid) {
 beg_main("stream");
 
 //$row = sql("select card_id from card inner join article on card.article_id = article.article_id where zid = ? order by time desc", $zid);
-$row = sql("select card_id from card where zid = ? order by time desc", $zid);
+$row = sql("select short_id from card where zid = ? order by edit_time desc", $zid);
 
 for ($i = 0; $i < count($row); $i++) {
 	//print "card_id [" . $row[$i]["card_id"] . "]";
-	print_card($row[$i]["card_id"]);
+	print_card($row[$i]["short_id"]);
 }
 
 /*

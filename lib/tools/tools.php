@@ -1810,6 +1810,11 @@ function print_row($a)
 	} else {
 		$indent_width = "";
 	}
+	if (array_key_exists("required", $a)) {
+		$required = ' required="required"';
+	} else {
+		$required = '';
+	}
 
 	writeln('	<tr>');
 	if ($hover) {
@@ -1821,7 +1826,7 @@ function print_row($a)
 	if (array_key_exists("text_key", $a)) {
 		writeln('			<div class="row_tab">');
 		writeln('				<div' . $indent_width . ' class="row_caption">' . $a["caption"] . '</div>');
-		writeln('				<div><div class="row_outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text" value="' . @$a["text_value"] . '"/></div></div>');
+		writeln('				<div><div class="row_outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . @$a["text_value"] . '"/></div></div>');
 		if (array_key_exists("text_default", $a)) {
 			writeln('				<div style="width: 20px"><div class="row_button" style="background-image: url(/images/undo-16.png)" title="Reset" onclick="$(\'#' . $a["text_key"] . '\').val(\'' . addcslashes($a["text_default"], "\\") .'\')"></div></div>');
 		}
@@ -1890,27 +1895,34 @@ function print_row($a)
 		} else {
 			writeln('			<div class="icon_32 ' . $a["icon_32"] . '_32">' . $a["caption"] . '</div>');
 		}
-	} else {
-		if (array_key_exists("check_key", $a)) {
-			if (array_key_exists("check_show", $a) || array_key_exists("check_hide", $a)) {
-				//$on_click = ' onchange="alert(this.checked)" onclick="this.focus(); document.getElementById(\'location\').focus()"';
-				$show_id = @$a["check_show"];
-				$hide_id = @$a["check_hide"];
-				if (ie()) {
-					$event = ' onclick="check_click(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
-				} else {
-					$event = ' onchange="check_change(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
-				}
+	} else if (array_key_exists("check_key", $a)) {
+		if (array_key_exists("check_show", $a) || array_key_exists("check_hide", $a)) {
+			//$on_click = ' onchange="alert(this.checked)" onclick="this.focus(); document.getElementById(\'location\').focus()"';
+			$show_id = @$a["check_show"];
+			$hide_id = @$a["check_hide"];
+			if (ie()) {
+				$event = ' onclick="check_click(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
 			} else {
-				$event = '';
+				$event = ' onchange="check_change(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
 			}
-			if (array_key_exists("check_value", $a)) {
-				$check_value = ' value="' . $a["check_value"] . '"';
-			} else {
-				$check_value = '';
-			}
-			writeln('			<input name="' . $a["check_key"] . '" class="row_check" type="checkbox"' . $check_value . ( $checked ? ' checked="true"' : '' ) . $event . '/>');
+		} else {
+			$event = '';
 		}
+		if (array_key_exists("check_value", $a)) {
+			$check_value = ' value="' . $a["check_value"] . '"';
+		} else {
+			$check_value = '';
+		}
+		writeln('			<div class="row_tab">');
+		writeln('				<input name="' . $a["check_key"] . '" class="row_check" type="checkbox"' . $check_value . ( $checked ? ' checked="true"' : '' ) . $event . '/>');
+		if (array_key_exists("icon", $a)) {
+			writeln('				<img src="/images/' . $a["icon"] . '.png" style="vertical-align: middle; margin-right: 8px"/>');
+		}
+		if (array_key_exists("caption", $a)) {
+			writeln('				' . $a["caption"]);
+		}
+		writeln('			</div>');
+	} else {
 		if (array_key_exists("icon", $a)) {
 			writeln('			<img src="/images/' . $a["icon"] . '.png" style="vertical-align: middle; margin-right: 8px"/>');
 		}

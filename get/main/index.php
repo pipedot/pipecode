@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("story.php");
@@ -46,9 +44,9 @@ if ($auth_zid != "") {
 	writeln('<div style="width: 300px">');
 }
 
-$row = sql("select poll_id from poll order by time desc limit 1");
+$row = sql("select poll_id from poll order by publish_time desc limit 1");
 $poll_id = $row[0]["poll_id"];
-if ($auth_zid == "") {
+if ($auth_zid === "") {
 	$vote = false;
 } else {
 	$row = sql("select count(*) as answers from poll_vote where poll_id = ? and zid = ?", $poll_id, $auth_zid);
@@ -69,20 +67,6 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('			</td>');
 	writeln('		</tr>');
 	writeln('	</table>');
-
-//	writeln('	<div class="recent_journal">');
-//	writeln('		<div class="recent_journal_box">');
-//	writeln('			<img class="recent_journal_image" src="' . profile_picture($row[$i]["zid"], 64) . '"/>');
-//	writeln('		</div>');
-//	writeln('		<div class="recent_journal_box">');
-//	writeln('			<a class="recent_journal_title" href="' . user_page_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a>');
-//	writeln('			<div class="recent_journal_author"><a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></div>');
-//	writeln('		</div>');
-	//writeln('	<dl class="recent_journal" style="background-image: url(' . profile_picture($row[$i]["zid"], 64) . '); background-size: 32px 32px;">');
-	//writeln('		<dt><a href="' . user_page_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></dt>');
-	//writeln('		<dd><a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></dd>');
-	//writeln('	</dl>');
-//	writeln('	</div>');
 }
 writeln('</div>');
 
@@ -99,7 +83,7 @@ for ($i = 0; $i < count($row); $i++) {
 writeln('	</ul>');
 writeln('</div>');
 
-if ($auth_zid == "") {
+if ($auth_zid === "") {
 	writeln('</div>');
 }
 

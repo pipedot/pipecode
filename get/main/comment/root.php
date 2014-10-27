@@ -3,39 +3,24 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("render.php");
-include("$doc_root/lib/finediff/finediff.php");
+include("diff.php");
 
-if (string_uses($s2, "[A-Z][a-z][0-9]")) {
-	$short_id = crypt_crockford_decode($s2);
-	$short = db_get_rec("short", $short_id);
-	if ($short["type"] != "comment") {
-		die("invalid short code [$s2]");
-	}
-	$comment_id = $short["item_id"];
-} else if (string_uses($s2, "[a-z][0-9]_")) {
-	$comment_id = $s2;
-} else {
-	die("invalid request");
-}
-
-$comment = db_get_rec("comment", $comment_id);
+$comment = find_rec("comment");
 $comment_body = $comment["body"];
 $can_moderate = false;
 $a = article_info($comment);
@@ -71,24 +56,17 @@ for ($i = count($list) - 1; $i >= 0; $i--) {
 $s .= str_repeat("</div>\n</article>\n", count($list));
 writeln($s);
 
-$row = sql("select * from comment_edit where comment_id = ? order by edit_time", $comment_id);
+$row = sql("select * from comment_edit where comment_id = ? order by edit_time", $comment["comment_id"]);
 if (count($row) > 0) {
 	writeln('<h2>History</h2>');
 	for ($i = 0; $i < count($row); $i++) {
-		//$old_body = $row[$i]["body"];
-		$old_body = mb_convert_encoding($row[$i]["body"], 'HTML-ENTITIES', 'UTF-8');
+		$old_body = $row[$i]["body"];
 		if ($i == count($row) - 1) {
-			//$new_body = $comment_body;
-			$new_body = mb_convert_encoding($comment_body, 'HTML-ENTITIES', 'UTF-8');
+			$new_body = $comment_body;
 		} else {
-			//$new_body = $row[$i + 1]["body"];
-			$new_body = mb_convert_encoding($row[$i + 1]["body"], 'HTML-ENTITIES', 'UTF-8');
+			$new_body = $row[$i + 1]["body"];
 		}
-		$opcodes = FineDiff::getDiffOpcodes($old_body, $new_body);
-		$diff = FineDiff::renderDiffToHTMLFromOpcodes($old_body, $opcodes);
-		$diff = mb_convert_encoding($diff, 'UTF-8', 'HTML-ENTITIES');
-		$diff = str_replace("&lt;", "<", $diff);
-		$diff = str_replace("&gt;", ">", $diff);
+		$diff = diff($old_body, $new_body);
 
 		writeln('<div class="edit_title">' . date("Y-m-d H:i", $row[$i]["edit_time"]) . '</div>');
 		writeln('<div class="edit_body">' . $diff . '</div>');

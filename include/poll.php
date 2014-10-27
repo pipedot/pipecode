@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 function vote_box($poll_id, $vote)
@@ -24,9 +22,10 @@ function vote_box($poll_id, $vote)
 	global $auth_zid;
 
 	$poll = db_get_rec("poll", $poll_id);
+	$short_code = crypt_crockford_encode($poll["short_id"]);
 	$clean = clean_url($poll["question"]);
 	$type_id = $poll["type_id"];
-	$time = $poll["time"];
+	$time = $poll["publish_time"];
 	$day = gmdate("Y-m-d", $time);
 	writeln('<div class="dialog_title">Poll</div>');
 	writeln('<div class="dialog_body">');
@@ -34,23 +33,10 @@ function vote_box($poll_id, $vote)
 	$poll_answer = db_get_list("poll_answer", "position", array("poll_id" => $poll["poll_id"]));
 	$k = array_keys($poll_answer);
 
-	$row = sql("select count(*) as comments from comment where type = 'poll' and root_id = ?", $poll_id);
-	$comments = (int) $row[0]["comments"];
-	if ($comments == 1) {
-		$comments_label = "comment";
-	} else {
-		$comments_label = "comments";
-	}
-	$new = new_comments("poll", $poll_id);
-	if ($new > 0) {
-		//$comments_new = " <span class=\"new_comments\">($new new)</a>";
-		$comments_new = ", <b>$new</b> new</a>";
-	} else {
-		$comments_new = "";
-	}
+	$comments = count_comments("poll", $poll_id);
 
 	if ($vote) {
-		beg_form("/poll/$poll_id/vote");
+		beg_form("/poll/$short_code/vote");
 		writeln('	<div class="poll_question">' . $poll["question"] . '</div>');
 
 		writeln('	<table class="poll_table">');
@@ -87,7 +73,7 @@ function vote_box($poll_id, $vote)
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
 		writeln('			<td style="width: 40px"><input type="submit" value="Vote"/></td>');
-		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> ' . $comments_label . $comments_new . '</a></td>');
+		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></td>');
 		writeln('			<td class="right" style="white-space: nowrap;"><b>' . $votes . '</b> ' . $units . '</td>');
 		writeln('		</tr>');
 		writeln('	</table>');
@@ -148,9 +134,9 @@ function vote_box($poll_id, $vote)
 		$short_code = crypt_crockford_encode($poll["short_id"]);
 
 		writeln('	<div class="poll_footer">');
-		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '"><b>' . $comments . '</b> ' . $comments_label . $comments_new . '</a></div>');
+		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></div>');
 		writeln('		<div class="poll_short">(<a href="/' . $short_code . '">#' . $short_code . '</a>)</div>');
-		if ($auth_zid == "") {
+		if ($auth_zid === "") {
 			writeln('		<div class="right"><b>' . $total . '</b> ' . $units . '</div>');
 		} else {
 			writeln('		<div class="right"><a href="/poll/' . $poll_id . '/vote"><b>' . $total . '</b> ' . $units . '</a></div>');

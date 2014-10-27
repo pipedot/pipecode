@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $short_id, $article_link = "", $article_title = "")
@@ -40,6 +38,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$s .= "<h2>$subject (Score: $score_reason)</h2>\n";
 	}
 	$date = date("Y-m-d H:i", $time);
+	$body = make_clickable($body);
 	//if ($comment_id != "") {
 	//	$date = "<a href=\"$protocol://$server_name/comment/$short_code\">$date</a>";
 	//}
@@ -107,6 +106,7 @@ function render_comment_json($subject, $zid, $time, $comment_id, $body, $short_i
 			$vote = $row[0]["reason"];
 		}
 	}
+	$body = make_clickable($body);
 
 	$s = "\$level{\n";
 	$s .= "\$level	\"comment_id\": \"$comment_id\",\n";
@@ -176,7 +176,7 @@ function render_page($type, $root_id, $json)
 	$username = array();
 	$parent = array();
 
-	if ($auth_zid == "") {
+	if ($auth_zid === "") {
 		$last_seen = 0;
 	} else {
 		if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
@@ -301,15 +301,14 @@ function render_page($type, $root_id, $json)
 }
 
 
-function render_sliders($type, $root_id)
+function print_sliders($type, $root_id)
 {
 	global $protocol;
 	global $server_name;
 	global $hide_value;
 	global $expand_value;
 
-	$row = sql("select count(*) as comments from comment where root_id = ?", $root_id);
-	$total = (int) $row[0]["comments"];
+	$comments = count_comments($type, $root_id);
 
 	writeln('<div class="comment_header">');
 	writeln('	<table class="fill">');
@@ -333,7 +332,7 @@ function render_sliders($type, $root_id)
 	writeln('					</tr>');
 	writeln('				</table>');
 	writeln('			</td>');
-	writeln('			<td style="width: 20%; text-align: right">' . $total . ' comments</td>');
+	writeln('			<td style="width: 20%; text-align: right">' . $comments["tag"] . '</td>');
 	writeln('		</tr>');
 	writeln('	</table>');
 	writeln('</div>');

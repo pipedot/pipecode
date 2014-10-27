@@ -3,30 +3,28 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("clean.php");
 include("stream.php");
 include("image.php");
 
-if ($auth_zid == "") {
+if ($auth_zid === "") {
 	die("sign in to share");
 }
-if ($zid != $auth_zid) {
+if ($zid !== $auth_zid) {
 	die("not your stream");
 }
 
@@ -71,7 +69,7 @@ beg_tab();
 writeln('	<tr>');
 writeln('		<td>');
 writeln('			<div class="row_tab">');
-writeln('				<div class="row_caption">Picture</div>');
+writeln('				<div class="row_caption">Photo</div>');
 writeln('				<div><input name="upload" type="file" style="width: 100%"/></div></div>');
 writeln('			</div>');
 writeln('		</td>');

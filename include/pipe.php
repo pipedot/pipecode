@@ -3,44 +3,19 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-
-function print_story_edit($story_id, $edit_time = 0)
-{
-	global $server_name;
-
-	if ($edit_time == 0) {
-		$story = db_get_rec("story", $story_id);
-	} else {
-		$story = db_get_rec("story_edit", array("story_id" => $story_id, "edit_time" => $edit_time));
-	}
-	$date = date("Y-m-d H:i", $story["edit_time"]);
-	$topic = db_get_rec("topic", $story["tid"]);
-	//$a["story_id"] = $story["story_id"];
-	$a["body"] = $story["body"];
-	$a["icon"] = $story["icon"];
-	$a["time"] = $story["edit_time"];
-	$a["title"] = $story["title"];
-	$a["topic"] = $topic["topic"];
-	$a["zid"] = $story["edit_zid"];
-
-	print_article($a);
-}
-
 
 function print_pipe($pipe_id)
 {
@@ -57,9 +32,7 @@ function print_pipe($pipe_id)
 	$a["title"] = $pipe["title"];
 	$a["topic"] = $topic["topic"];
 	$a["zid"] = $pipe["author_zid"];
-
-	$row = sql("select count(*) as comments from comment where type = 'pipe' and root_id = ?", $pipe_id);
-	$a["comments"] = $row[0]["comments"];
+	$a["comments"] = count_comments("pipe", $pipe_id);
 
 	$row = sql("select sum(value) as score from pipe_vote where pipe_id = ?", $pipe_id);
 	$a["score"] = (int) $row[0]["score"];
@@ -78,6 +51,7 @@ function print_pipe_small($pipe_id, $full)
 	global $auth_user;
 
 	$pipe = db_get_rec("pipe", $pipe_id);
+	$short_code = crypt_crockford_encode($pipe["short_id"]);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$score = 0;
 	$topic = db_get_rec("topic", $pipe["tid"]);
@@ -88,8 +62,7 @@ function print_pipe_small($pipe_id, $full)
 		$by = "<b>$zid</b>";
 	}
 
-	$row = sql("select count(*) as total from comment where type = 'pipe' and root_id = ?", $pipe_id);
-	$total = $row[0]["total"];
+	$comments = count_comments("pipe", $pipe_id);
 
 	$row = sql("select value from pipe_vote where pipe_id = ? and zid = ?", $pipe_id, $auth_zid);
 	if (count($row) == 0) {
@@ -158,7 +131,7 @@ function print_pipe_small($pipe_id, $full)
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');
-	writeln('		<td style="text-align: right; white-space: nowrap;"><a href="/pipe/' . $pipe_id . '" class="icon_16 chat_16"><b>' . $total . '</b> comments</a></td>');
+	writeln('		<td style="padding-right: 8px; text-align: right; white-space: nowrap;"><a href="/pipe/' . $short_code . '" class="icon_16 chat_16"><b>' . $comments["count"] . '</b> ' . $comments["label"] . '</a></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');

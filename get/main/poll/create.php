@@ -3,20 +3,18 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 if (!$auth_user["admin"]) {
@@ -31,50 +29,44 @@ beg_main("cell");
 writeln('<h1>Create Poll</h1>');
 
 beg_form();
-writeln('<input type="hidden" id="last_row" name="last_row" value="0"/>');
 
-beg_tab("Question");
-print_row(array("caption" => "Text", "text_key" => "question"));
+beg_tab();
+print_row(array("caption" => "Question", "text_key" => "question"));
 print_row(array("caption" => "Type", "option_key" => "type_id", "option_keys" => array(1, 2, 3), "option_list" => array("Multiple Choice", "Approval Voting", "Borda Count")));
 end_tab();
 
-beg_tab("Answers", array("id" => "answers", "colspan" => 2));
-writeln('	<tr>');
-writeln('		<td><input id="answer_0" name="answer_0" type="text"/></td>');
-writeln('		<td style="text-align: right"><a href="javascript: remove_item(0)" class="icon_16 minus_16">Remove</a></td>');
-writeln('	</tr>');
-end_tab();
+$li = '<li><div class="icon_16 vsort_16" title="Drag to Reorder"></div><div><input type="text" name="answer[]" value=""/></div><div><a class="icon_16 minus_16" href="javascript:remove_answer()">Remove</a></div></li>';
 
-writeln('<div style="margin-bottom: 8px" class="right"><a href="javascript:add_item()" class="icon_16 plus_16">Add</a></div>');
+writeln('<h2>Answers</h2>');
+writeln('<ul id="sortable" class="poll_sortable">');
+writeln($li);
+writeln($li);
+writeln($li);
+writeln('</ul>');
 
+right_box('<a href="javascript:add_answer()" class="icon_16 plus_16">Add</a>');
 right_box("Publish");
+
 ?>
 <script type="text/javascript">
 
-var current = 1;
-
-function add_item()
+function add_answer()
 {
-	table = document.getElementById("answers");
-	row = table.insertRow(table.rows.length);
-	row.id = "row_" + current;
-	cell = row.insertCell(0);
-	cell.innerHTML = '<input id="answer_' + current + '" name="answer_' + current + '" type="text" value=""/>';
-	cell = row.insertCell(1);
-	cell.style.textAlign = "right";
-	cell.innerHTML = '<a href="javascript: remove_item(' + current + ')" class="icon_16 minus_16">Remove</a>';
-	$('#last_row').val(current);
-
-	current++;
+	$("#sortable").append('<?= $li ?>');
 }
 
 
-function remove_item(i)
+function remove_answer()
 {
-	table = document.getElementById("answers");
-	row = document.getElementById("row_" + i);
-	table.deleteRow(row.rowIndex);
+	// FAKE
 }
+
+
+$("#sortable").sortable();
+
+$('.minus_16').live('click', function() {
+	$(this).closest('li').remove();
+});
 
 </script>
 <?

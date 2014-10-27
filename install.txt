@@ -7,7 +7,7 @@ Quick Install
 -------------
 
 1. Download and extract the package.
-2. Set the document root of your webserver to the "www" directory of Pipecode.
+2. Set the document root of your webserver to the "www" directory.
 3. Navigate to the site in your web browser.
 4. Enter the SQL connection string and other information when asked.
 5. Done.

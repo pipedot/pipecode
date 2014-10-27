@@ -3,48 +3,35 @@
 // Pipecode - distributed social network
 // Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
 //
-// This file is part of Pipecode.
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
 //
-// Pipecode is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Pipecode is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with Pipecode.  If not, see <http://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 include("render.php");
 include("pipe.php");
 include("story.php");
+include("diff.php");
 
-if (string_uses($s2, "[a-z][0-9]_")) {
-	$pipe_id = $s2;
-} else if (string_uses($s2, "[A-Z][a-z][0-9]")) {
-	$short_id = crypt_crockford_decode($s2);
-	$short = db_get_rec("short", $short_id);
-	if ($short["type"] != "pipe") {
-		die("invalid short code [$s2]");
-	}
-	$pipe_id = $short["item_id"];
-} else {
-	die("invalid request");
-}
-
-$pipe = db_get_rec("pipe", $pipe_id);
+$pipe = find_rec("pipe");
 $status = "Voting";
 $story_id = "";
 if ($pipe["closed"]) {
 	$status = "Closed";
-	$row = sql("select story_id from story where pipe_id = ?", $pipe_id);
-	if (count($row) > 0) {
-		$story_id = $row[0]["story_id"];
-		$status = "<a href=\"/story/$story_id\">Published</a>";
+	if (db_has_rec("story", array("pipe_id" => $pipe["pipe_id"]))) {
+		$story = db_get_rec("story", array("pipe_id" => $pipe["pipe_id"]));
+		$story_id = $story["story_id"];
+		$story_short_code = crypt_crockford_encode($story["short_id"]);
+		$status = "<a href=\"/story/$story_short_code\">Published</a>";
 	}
 }
 if ($pipe["reason"] == "") {
@@ -53,39 +40,45 @@ if ($pipe["reason"] == "") {
 	$reason = " (" . $pipe["reason"] . ")";
 }
 
-if ($auth_zid != "") {
-	$can_moderate = true;
-	$hide_value = $auth_user["hide_threshold"];
-	$expand_value = $auth_user["expand_threshold"];
-} else {
-	$can_moderate = false;
-	$hide_value = -1;
-	$expand_value = 0;
-}
-
 print_header($pipe["title"]);
-
 print_left_bar("main", "pipe");
-
 beg_main("cell");
-print_pipe($pipe_id);
+
+print_pipe($pipe["pipe_id"]);
 
 if ($story_id > 0) {
-	$list = db_get_list("story_edit", "edit_time", array("story_id" => $story_id));
-	$keys = array_keys($list);
-	for ($i = 0; $i < count($list); $i++) {
-		$edit_time = $list[$keys[$i]]["edit_time"];
-		print_story_edit($story_id, $edit_time);
+	writeln('<h2>History</h2>');
+	$row = sql("select * from story_edit where story_id = ? order by edit_time", $story_id);
+	for ($i = 0; $i <= count($row); $i++) {
+		if ($i == 0) {
+			$old_body = $pipe["body"];
+			$old_body = str_replace(' rel="nofollow"', '', $old_body);
+		} else {
+			$old_body = $row[$i - 1]["body"];
+		}
+		if ($i == count($row)) {
+			$new_body = $story["body"];
+			$edit_time = $story["edit_time"];
+			$title = $story["title"];
+			$edit_zid = $story["edit_zid"];
+		} else {
+			$new_body = $row[$i]["body"];
+			$edit_time = $row[$i]["edit_time"];
+			$title = $row[$i]["title"];
+			$edit_zid = $row[$i]["edit_zid"];
+		}
+		$diff = diff($old_body, $new_body);
+
+		writeln('<div class="edit_title">');
+		writeln('	<div>' . date("Y-m-d H:i", $edit_time) . '</div>');
+		writeln('	<div>' . $title . '</div>');
+		writeln('	<div>' . $edit_zid . '</div>');
+		writeln('</div>');
+		writeln('<div class="edit_body">' . $diff . '</div>');
 	}
-	print_story_edit($story_id);
 }
 
-if ($auth_user["javascript_enabled"]) {
-	render_sliders("pipe", $pipe_id);
-	print_noscript();
-} else {
-	render_page("pipe", $pipe_id, false);
-}
+print_comments("pipe", $pipe);
 
 end_main();
 
@@ -99,7 +92,7 @@ if (!$pipe["closed"]) {
 	if ($auth_user["editor"]) {
 		writeln('<div class="dialog_title">Editor</div>');
 		writeln('<div class="dialog_body">');
-		writeln('	<div class="pipe_editor"><a href="/pipe/' . $pipe_id . '/publish">Publish</a> | <a href="/pipe/' . $pipe_id . '/close">Close</a></div>');
+		writeln('	<div class="pipe_editor"><a href="/pipe/' . $pipe["short_code"] . '/publish">Publish</a> | <a href="/pipe/' . $pipe["short_code"] . '/close">Close</a></div>');
 		writeln('</div>');
 	}
 //} else {
@@ -109,21 +102,5 @@ if (!$pipe["closed"]) {
 //	writeln('</div>');
 }
 writeln('</aside>');
-
-$last_seen = update_view_time("pipe", $pipe_id);
-
-if ($auth_user["javascript_enabled"]) {
-	writeln('<script>');
-	writeln();
-	writeln('var hide_value = ' . $hide_value . ';');
-	writeln('var expand_value = ' . $expand_value . ';');
-	writeln('var auth_zid = "' . $auth_zid . '";');
-	writeln('var last_seen = ' . $last_seen . ';');
-	writeln();
-	writeln('get_comments("pipe", "' . $pipe_id . '");');
-	writeln('render_page();');
-	writeln();
-	writeln('</script>');
-}
 
 print_footer();
