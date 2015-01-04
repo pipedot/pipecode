@@ -17,7 +17,7 @@
 //
 
 var comments;
-var reasons = new Array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
+var reasons = new Array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated", "Spam");
 var protocol = get_protocol();
 var server_name = get_server_name();
 
@@ -179,22 +179,24 @@ function render(c)
 		if (hide) {
 			s += "<div>";
 		} else {
-			if (c.time > last_seen) {
-				seen = "h1";
+			if (c.junk > 0) {
+				seen = "h3 class=\"color_junk\"";
+			} else if (c.time > last_seen) {
+				seen = "h3 class=\"color_new\"";
 			} else {
-				seen = "h2";
+				seen = "h3 class=\"color_old\"";
 			}
 			s += "<article class=\"comment\">";
 			if (collapse) {
-				s += "<h4 id=\"collapse_" + c.comment_id + "\" onclick=\"show_comment('" + c.comment_id + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
+				s += "<h5 id=\"collapse_" + c.comment_id + "\" onclick=\"show_comment('" + c.comment_id + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
 
 				s += "<" + seen + " id=\"subject_" + c.comment_id + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h3 id=\"subtitle_" + c.comment_id + "\" class=\"comment_subtitle\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
+				s += "<h4 id=\"subtitle_" + c.comment_id + "\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
 				s += "<div class=\"comment_outline\">";
 				s += "<div id=\"body_" + c.comment_id + "\" style=\"display: none\">";
 			} else {
 				s += "<" + seen + " id=\"subject_" + c.comment_id + "\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h3 id=\"subtitle_" + c.comment_id + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
+				s += "<h4 id=\"subtitle_" + c.comment_id + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
 				s += "<div class=\"comment_outline\">";
 				s += "<div id=\"body_" + c.comment_id + "\">";
 			}

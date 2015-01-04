@@ -22,8 +22,7 @@ set_time_limit(15 * 60);
 include("image.php");
 
 clean_tmp_images();
-$card_id = (int) $s2;
-$card = db_get_rec("card", $card_id);
+$card = find_rec("card");
 $link_url = $card["link_url"];
 
 $images = build_preview_images("<a href=\"$link_url\">link</a>");

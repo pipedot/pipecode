@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+include("$doc_root/lib/geoip/geoip.php");
 include("$doc_root/lib/geoip/geoipcity.php");
 include("$doc_root/lib/geoip/timezone.php");
 

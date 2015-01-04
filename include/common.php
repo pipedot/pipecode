@@ -32,6 +32,13 @@ if (fs_is_file("$doc_root/conf.php")) {
 $now = time();
 $year = gmdate("Y");
 
+$db_table["ban_ip"] = array(
+	array("name" => "remote_ip", "key" => true),
+	array("name" => "short_id", "default" => 0),
+	array("name" => "time", "default" => $now),
+	array("name" => "zid")
+);
+
 $db_table["bug"] = array(
 	array("name" => "bug_id", "key" => true),
 	array("name" => "author_zid"),
@@ -131,8 +138,12 @@ $db_table["comment"] = array(
 	array("name" => "comment_id", "key" => true),
 	array("name" => "body"),
 	array("name" => "edit_time", "default" => $now),
+	array("name" => "junk_status", "default" => 0),
+	array("name" => "junk_time", "default" => 0),
+	array("name" => "junk_zid"),
 	array("name" => "parent_id"),
 	array("name" => "publish_time", "default" => $now),
+	array("name" => "remote_ip"),
 	array("name" => "root_id"),
 	array("name" => "short_id", "default" => 0),
 	array("name" => "subject"),
@@ -159,6 +170,16 @@ $db_table["default_conf"] = array(
 	array("name" => "conf", "key" => true),
 	array("name" => "name", "key" => true),
 	array("name" => "value")
+);
+
+$db_table["drive_file"] = array(
+	array("name" => "file_id", "key" => true, "auto" => true),
+	array("name" => "hash"),
+	array("name" => "name"),
+	array("name" => "parent_id", "default" => 0),
+	array("name" => "time", "default" => $now),
+	array("name" => "type", "default" => 1),
+	array("name" => "zid")
 );
 
 $db_table["email_challenge"] = array(
@@ -426,6 +447,7 @@ $reasons["Informative"] = 1;
 $reasons["Funny"] = 1;
 $reasons["Overrated"] = -1;
 $reasons["Underrated"] = 1;
+$reasons["Spam"] = -1;
 
 
 function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array())
@@ -568,10 +590,10 @@ function print_left_bar($type = "main", $selected = "stories")
 	if ($type === "main") {
 		if ($auth_zid === "") {
 			$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
-			$section_link = array("", "pipe/", "poll/", "search", "topic", "feed/", "stream/");
+			$section_link = array("story/", "pipe/", "poll/", "search", "topic", "feed/", "stream/");
 		} else {
 			$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
-			$section_link = array("", "pipe/", "poll/", "search", "topic", "stream/");
+			$section_link = array("story/", "pipe/", "poll/", "search", "topic", "stream/");
 		}
 	} else if ($type === "user") {
 		if ($auth_zid === $zid) {
@@ -650,24 +672,23 @@ function print_user_box()
 	writeln('<table class="user_box">');
 	writeln('	<tr>');
 	//writeln('		<td><a href="' . $link . 'comments"><div class="chat_32">Comments</div></a></td>');
-	writeln('		<td><a href="' . $link . 'feed/"><div class="news_32">Feed</div></a></td>');
-	writeln('		<td><a href="' . $link . 'journal/"><div class="notepad_32">Journal</div></a></td>');
+	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'feed/">Feed</a></td>');
+	writeln('		<td><a class="icon_32 notepad_32" href="' . $link . 'journal/">Journal</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a href="' . $link . 'karma/"><div class="user_box_icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
-//	writeln('		<td><a href="' . $link . '"><div class="user_box_icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
+//	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'karma/"><div class="user_box_icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
+//	writeln('		<td><a class="icon_32 news_32" href="' . $link . '"><div class="user_box_icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
 //	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
+//	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
 //	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="' . $link . 'mail/"><div class="mail_32">' . $mail . '</div></a></td>');
-	writeln('		<td><a href="' . $link . 'profile/"><div class="tools_32">Settings</div></a></td>');
+	writeln('		<td><a class="icon_32 mail_32" href="' . $link . 'mail/">' . $mail . '</a></td>');
+	writeln('		<td><a class="icon_32 tools_32" href="' . $link . 'profile/">Settings</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a href="' . $link . 'stream/"><div class="internet_32">Stream</div></a></td>');
-//	writeln('		<td><a href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user_box_icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
-//	writeln('		<td><div class="user_box_icon"></div></td>');
+//	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'stream/"><div class="internet_32">Stream</div></a></td>');
+//	writeln('		<td><a class="icon_32 news_32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user_box_icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
 //	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
@@ -916,7 +937,7 @@ function article_info($comment, $force_https = true)
 		$poll = db_get_rec("poll", $comment["root_id"]);
 		$a["type"] = "poll";
 		$a["title"] = $poll["question"];
-		$a["link"] = "$p://$server_name/poll/" . gmdate("Y-m-d", $poll["time"]) . "/" . $poll["slug"];
+		$a["link"] = "$p://$server_name/poll/" . gmdate("Y-m-d", $poll["publish_time"]) . "/" . $poll["slug"];
 	} else if ($comment["type"] == "journal") {
 		$journal = db_get_rec("journal", $comment["root_id"]);
 		$a["type"] = "journal";
@@ -1104,12 +1125,25 @@ function revert_view_time($type, $root_id)
 }
 
 
-function count_comments($type, $root_id)
+function count_comments($type = "", $root_id = "")
 {
 	global $auth_zid;
+	global $auth_user;
+
+	if ($type === "" && $root_id === "") {
+		$comments["count"] = 0;
+		$comments["label"] = " comments";
+		$comments["new"] = 0;
+		$comments["tag"] = "<b>0</b> comments";
+		return;
+	}
 
 	$comments = array();
-	$row = sql("select count(*) as comments from comment where type = ? and root_id = ?", $type, $root_id);
+	if ($auth_user["show_junk_enabled"]) {
+		$row = sql("select count(*) as comments from comment where type = ? and root_id = ?", $type, $root_id);
+	} else {
+		$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and junk_status <= 0", $type, $root_id);
+	}
 	$comments["count"] = $row[0]["comments"];
 	if ($comments["count"] == 1) {
 		$comments["label"] = " comment";
@@ -1125,7 +1159,11 @@ function count_comments($type, $root_id)
 		//if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
 			//$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
 			$time = $row[0]["time"];
-			$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and edit_time > ?", $type, $root_id, $time);
+			if ($auth_user["show_junk_enabled"]) {
+				$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and edit_time > ?", $type, $root_id, $time);
+			} else {
+				$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and edit_time > ? and junk_status <= 0", $type, $root_id, $time);
+			}
 			$comments["new"] = $row[0]["comments"];
 		} else {
 			$comments["new"] = $comments["count"];
@@ -1145,7 +1183,8 @@ function find_rec($type = "")
 	global $s2;
 	global $s3;
 
-	if (($type == "story" || $type == "poll" || $type == "journal") && string_uses($s2, "[0-9]-") && string_uses($s3, "[a-z][0-9]-")) {
+	$date_based = array("story", "poll", "journal");
+	if (in_array($type, $date_based) && string_uses($s2, "[0-9]-") && string_uses($s3, "[a-z][0-9]-")) {
 		$date = $s2;
 		$slug = $s3;
 		$time_beg = strtotime("$date GMT");
@@ -1156,7 +1195,15 @@ function find_rec($type = "")
 
 		$row = sql("select short_id from $type where publish_time > ? and publish_time < ? and slug = ? order by publish_time", $time_beg, $time_end, $slug);
 		if (count($row) == 0) {
-			die("$type not found - date [$date] title [$slug]");
+			if ($type == "story") {
+				$row = sql("select short_id, story.story_id from story inner join story_edit on story.story_id = story_edit.story_id where publish_time > ? and publish_time < ? and story_edit.slug = ?", $time_beg, $time_end, $slug);
+				if (count($row) > 0) {
+					header("Location: " . item_link("story", $row[0]["story_id"], $row[0]["short_id"]));
+					die();
+				}
+			}
+			header("Location: ./");
+			die();
 		}
 		$short_id = $row[0]["short_id"];
 		$short_code = crypt_crockford_encode($short_id);
@@ -1350,6 +1397,13 @@ if (string_has($request_uri, "?")) {
 	$request_script = substr($request_uri, 0, strpos($request_uri, "?"));
 } else {
 	$request_script = $request_uri;
+}
+
+$a = parse_url($request_uri);
+if (array_key_exists("query", $a)) {
+	$query = $a["query"];
+} else {
+	$query = "";
 }
 
 if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == 1) || isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {

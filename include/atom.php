@@ -86,8 +86,13 @@ function make_comment_atom($topic)
 	global $server_slogan;
 	global $cache_enabled;
 	global $protocol;
+	global $auth_user;
 
-	$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body, zid from comment order by edit_time desc limit 50");
+	if ($auth_user["show_junk_enabled"]) {
+		$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body, zid from comment order by edit_time desc limit 50");
+	} else {
+		$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit 50");
+	}
 	if (count($row) > 0) {
 		$updated = $row[0]["edit_time"];
 	} else {

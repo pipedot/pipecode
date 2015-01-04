@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("file.php");
+include("drive.php");
 
 if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");

@@ -38,7 +38,7 @@ if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 }
 
 if ($photo_short_id > 0) {
-	sql("insert into journal_photo (journal_short_id, photo_short_id) values (?, ?)", $short_id, $photo_short_id);
+	sql("insert into journal_photo (journal_short_id, photo_short_id) values (?, ?)", $journal["short_id"], $photo_short_id);
 }
 
 header("Location: /journal/{$journal["short_code"]}/media");

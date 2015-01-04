@@ -80,15 +80,20 @@ if (http_post("preview")) {
 	die();
 }
 
-$comment = array();
+if ($auth_zid === "" || $zid === "") {
+	if (db_has_rec("ban_ip", $remote_ip)) {
+		die("Your IP address is banned for sending junk messages");
+	}
+}
+
+$comment = db_new_rec("comment");
 $comment["comment_id"] = create_id($zid);
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
 $comment["parent_id"] = $comment_id;
 $comment["publish_time"] = $time;
-$comment["rating"] = "";
+$comment["remote_ip"] = $remote_ip;
 $comment["root_id"] = $root_id;
-$comment["score"] = 0;
 $comment["short_id"] = create_short("comment", $comment["comment_id"]);
 $comment["subject"] = $subject;
 $comment["type"] = $type;

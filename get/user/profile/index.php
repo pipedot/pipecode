@@ -49,6 +49,7 @@ beg_tab("Comments");
 $scores = array("-1", "0", "1", "2", "3", "4", "5");
 print_row(array("caption" => "Hide Threshold", "option_key" => "hide_threshold", "option_list" => $scores, "option_value" => $user_conf["hide_threshold"]));
 print_row(array("caption" => "Expand Threshold", "option_key" => "expand_threshold", "option_list" => $scores, "option_value" => $user_conf["expand_threshold"]));
+print_row(array("caption" => "Show Junk Comments", "check_key" => "show_junk_enabled", "checked" => $user_conf["show_junk_enabled"]));
 end_tab();
 
 beg_tab("Gravatar");
@@ -60,9 +61,9 @@ print_row(array("caption" => "Real Name", "text_key" => "real_name", "text_value
 print_row(array("caption" => "External Email", "text_key" => "email", "text_value" => $user_conf["email"]));
 end_tab();
 
-beg_tab("Mailing List");
-print_row(array("caption" => "Subscribe to Mailing List (list@$server_name)", "check_key" => "list_enabled", "checked" => $user_conf["list_enabled"]));
-end_tab();
+//beg_tab("Mailing List");
+//print_row(array("caption" => "Subscribe to Mailing List (list@$server_name)", "check_key" => "list_enabled", "checked" => $user_conf["list_enabled"]));
+//end_tab();
 
 //
 // Eastern: America/New_York

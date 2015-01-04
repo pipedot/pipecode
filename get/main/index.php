@@ -21,7 +21,6 @@ include("story.php");
 include("poll.php");
 
 print_header();
-
 print_left_bar("main", "stories");
 beg_main("cell");
 

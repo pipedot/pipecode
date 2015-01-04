@@ -28,10 +28,11 @@ $wysiwyg_enabled = http_post_bool("wysiwyg_enabled", array("numeric" => true));
 $time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
 $hide_threshold = http_post_string("hide_threshold", array("valid" => "[0-9]-"));
 $expand_threshold = http_post_string("expand_threshold", array("valid" => "[0-9]-"));
+$show_junk_enabled = http_post_bool("show_junk_enabled", array("numeric" => true));
 $gravatar_enabled = http_post_bool("gravatar_enabled", array("numeric" => true));
 $real_name = http_post_string("real_name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z]- "));
 $email = http_post_string("email", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
-$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
+//$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
 $story_image_style = http_post_int("story_image_style");
 
 if (!in_array($time_zone, $zones)) {
@@ -44,10 +45,11 @@ $user_conf["time_zone"] = $time_zone;
 $user_conf["story_image_style"] = $story_image_style;
 $user_conf["hide_threshold"] = $hide_threshold;
 $user_conf["expand_threshold"] = $expand_threshold;
+$user_conf["show_junk_enabled"] = $show_junk_enabled;
 $user_conf["gravatar_enabled"] = $gravatar_enabled;
 $user_conf["real_name"] = $real_name;
 $user_conf["email"] = $email;
-$user_conf["list_enabled"] = $list_enabled;
+//$user_conf["list_enabled"] = $list_enabled;
 
 db_set_conf("user_conf", $user_conf, $auth_zid);
 

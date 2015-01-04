@@ -19,8 +19,7 @@
 
 include("image.php");
 
-$card_id = (int) $s2;
-$card = db_get_rec("card", $card_id);
+$card = find_rec("card");
 
 $tmp_image_id = http_post_int("tmp_image_id");
 
@@ -32,4 +31,4 @@ if ($tmp_image_id > 0) {
 $card["image_id"] = $image_id;
 db_set_rec("card", $card);
 
-header("Location: $protocol://$server_name/card/$card_id");
+header("Location: $protocol://$server_name/card/{$card["short_code"]}");

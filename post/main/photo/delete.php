@@ -18,8 +18,8 @@
 //
 
 $photo = find_rec("photo");
-$short_code = $photo["short_code"]
-
+$short_code = $photo["short_code"];
+$short_id = $photo["short_id"];
 if ($photo["zid"] !== $auth_zid) {
 	die("not your photo");
 }

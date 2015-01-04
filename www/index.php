@@ -21,10 +21,6 @@ include("../include/common.php");
 include("short.php");
 include("geoip.php");
 
-if (!string_uses($request_script, "[A-Z][a-z][0-9]_-./+")) {
-	die("invalid request [$request_script]");
-}
-
 $a = explode("/", $request_script);
 if (count($a) >= 2) {
 	$s1 = $a[1];
@@ -52,13 +48,37 @@ if (http_post()) {
 } else {
 	$root = "$doc_root/get/";
 }
-if ($user_page == "") {
+if ($user_page === "") {
 	$root .= "main";
 } else {
 	$root .= "user";
 }
 
-if ($s1 == "") {
+if ($s1 === "drive") {
+	if (!string_uses($request_script, "[A-Z][a-z][0-9]`~!@#\$%^&()_+-=[]{};',./ ")) {
+		die("invalid drive request [$request_script]");
+	}
+	include("drive.php");
+	$path = decode_file_name(substr($request_script, 6));
+	if (string_uses($query, "[a-z]")) {
+		if (fs_is_file("$root/$s1/$query.php")) {
+			include("$root/$s1/$query.php");
+			die();
+		} else {
+			die("unknown action [$query]");
+		}
+	}
+	if (substr($request_script, -1) !== "/") {
+		header("Location: $request_script/");
+		die();
+	}
+	include("$root/$s1/index.php");
+	die();
+} else if (!string_uses($request_script, "[A-Z][a-z][0-9]_-./+")) {
+	die("invalid request [$request_script]");
+}
+
+if ($s1 === "") {
 	include("$root/index.php");
 	die();
 }
@@ -67,7 +87,7 @@ if (fs_is_file("$root/$s1.php")) {
 	die();
 }
 if (fs_is_dir("$root/$s1")) {
-	if ($s2 == "") {
+	if ($s2 === "") {
 		if (fs_is_file("$root/$s1/index.php")) {
 			include("$root/$s1/index.php");
 			die();
@@ -77,7 +97,7 @@ if (fs_is_dir("$root/$s1")) {
 			include("$root/$s1/$s2.php");
 			die();
 		}
-		if ($s3 != "" && fs_is_file("$root/$s1/$s3.php")) {
+		if ($s3 !== "" && fs_is_file("$root/$s1/$s3.php")) {
 			include("$root/$s1/$s3.php");
 			die();
 		}
@@ -88,7 +108,7 @@ if (fs_is_dir("$root/$s1")) {
 	}
 }
 if (fs_is_dir("$root/$s1/$s2")) {
-	if ($s3 == "") {
+	if ($s3 === "") {
 		if (fs_is_file("$root/$s1/$s2/index.php")) {
 			include("$root/$s1/$s2/index.php");
 			die();
@@ -98,7 +118,7 @@ if (fs_is_dir("$root/$s1/$s2")) {
 			include("$root/$s1/$s2/$s3.php");
 			die();
 		}
-		if ($s4 != "" && fs_is_file("$root/$s1/$s2/$s4.php")) {
+		if ($s4 !== "" && fs_is_file("$root/$s1/$s2/$s4.php")) {
 			include("$root/$s1/$s2/$s4.php");
 			die();
 		}
@@ -129,7 +149,7 @@ if (string_uses($slug, "[A-Z][a-z][0-9]")) {
 	short_redirect($slug);
 }
 
-if (substr($slug, -1) == "+") {
+if (substr($slug, -1) === "+") {
 	$slug = substr($slug, 0, -1);
 	if (string_uses($slug, "[A-Z][a-z][0-9]")) {
 		short_info($slug);

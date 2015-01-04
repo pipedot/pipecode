@@ -27,7 +27,11 @@ if ($needle != "") {
 	$needle = str_replace("%2B", "+", $needle);
 
 	if ($haystack == "comments") {
-		$sql = "select * , match (subject, body) against (? in boolean mode) as relevance from comment where match (subject, body) against (? in boolean mode) order by relevance";
+		if ($auth_user["show_junk_enabled"]) {
+			$sql = "select * , match (subject, body) against (? in boolean mode) as relevance from comment where match (subject, body) against (? in boolean mode) order by relevance";
+		} else {
+			$sql = "select * , match (subject, body) against (? in boolean mode) as relevance from comment where match (subject, body) against (? in boolean mode) and junk_status <= 0 order by relevance";
+		}
 	} else if ($haystack == "stories") {
 		$sql = "select * , match (title, body) against (? in boolean mode) as relevance from story where match (title, body) against (? in boolean mode) order by relevance";
 	} else if ($haystack == "pipe") {

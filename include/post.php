@@ -22,6 +22,27 @@ function print_post_box($type, $root_id, $subject, $dirty_body, $coward)
 	global $auth_zid;
 	global $auth_user;
 	global $doc_root;
+	global $remote_ip;
+	global $protocol;
+	global $server_name;
+
+	if (db_has_rec("ban_ip", $remote_ip)) {
+		$banned = true;
+		$ban_ip = db_get_rec("ban_ip", $remote_ip);
+		$short_code = crypt_crockford_encode($ban_ip["short_id"]);
+		writeln('<div class="balloon">');
+		writeln('<h1>Banned IP Address</h1>');
+		writeln("<p>Your IP address [<b>$remote_ip</b>] is banned for sending junk messages. Anonymous posting is disabled.</p>");
+		writeln("<p>An example junk message can be found here: <a href=\"$protocol://$server_name/$short_code\">#$short_code</a></p>");
+		writeln('</div>');
+		if ($auth_zid === "") {
+			end_main();
+			print_footer();
+			die();
+		}
+	} else {
+		$banned = false;
+	}
 
 	beg_form();
 	writeln('<input type="hidden" name="type" value="' . $type . '"/>');
@@ -44,7 +65,11 @@ function print_post_box($type, $root_id, $subject, $dirty_body, $coward)
 		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"/></td></tr></table></td>');
 	} else {
 		writeln('		<td></td>');
-		writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked="checked"' : '') . '/>Post Anonymously</label></td>');
+		if ($banned) {
+			writeln('		<td></td>');
+		} else {
+			writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked="checked"' : '') . '/>Post Anonymously</label></td>');
+		}
 	}
 	writeln('		<td class="right"><input name="post" type="submit" value="Post"/> <input name="preview" type="submit" value="Preview"/></td>');
 	writeln('	</tr>');

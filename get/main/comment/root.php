@@ -44,14 +44,15 @@ writeln('<a class="icon_16 ' . $icon . '_16" href="' . $a["link"] . '">' . $a["t
 writeln('<h2>Preview</h2>');
 
 $list = array($comment);
-while ($comment["parent_id"] != "") {
-	$comment = db_get_rec("comment", $comment["parent_id"]);
-	$list[] = $comment;
+$c = $comment;
+while ($c["parent_id"] != "") {
+	$c = db_get_rec("comment", $c["parent_id"]);
+	$list[] = $c;
 }
 
 $s = "";
 for ($i = count($list) - 1; $i >= 0; $i--) {
-	$s .= render_comment($list[$i]["subject"], $list[$i]["zid"], $list[$i]["publish_time"], $list[$i]["comment_id"], $list[$i]["body"], 0, $list[$i]["short_id"]);
+	$s .= render_comment($list[$i]["subject"], $list[$i]["zid"], $list[$i]["publish_time"], $list[$i]["comment_id"], $list[$i]["body"], 0, $list[$i]["short_id"], "", "", $list[$i]["junk_status"]);
 }
 $s .= str_repeat("</div>\n</article>\n", count($list));
 writeln($s);
@@ -71,6 +72,51 @@ if (count($row) > 0) {
 		writeln('<div class="edit_title">' . date("Y-m-d H:i", $row[$i]["edit_time"]) . '</div>');
 		writeln('<div class="edit_body">' . $diff . '</div>');
 	}
+}
+
+$row = sql("select * from comment_vote where comment_id = ?", $comment["comment_id"]);
+if (count($row) > 0) {
+	writeln('<h2>Moderation</h2>');
+
+	beg_tab();
+	writeln('	<tr>');
+	writeln('		<th>Time</th>');
+	writeln('		<th>Reason</th>');
+	writeln('		<th>Points</th>');
+	writeln('		<th>Voter</th>');
+	writeln('	</tr>');
+	for ($i = 0; $i < count($row); $i++) {
+		$value = (int) $row[$i]["value"];
+		if ($value > 0) {
+			$value = "+$value";
+		}
+		writeln('	<tr>');
+		writeln('		<td>' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
+		writeln('		<td>' . $row[$i]["reason"] . '</td>');
+		writeln('		<td>' . $value . '</td>');
+		writeln('		<td>' . user_page_link($row[$i]["zid"], true) . '</td>');
+		writeln('	</tr>');
+	}
+	end_tab();
+}
+
+writeln('<h2>Junk Status</h2>');
+
+if ($comment["junk_status"] == -1) {
+	writeln("<p>Marked as [<b>Not Junk</b>] by " . user_page_link($comment["junk_zid"], true) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");
+} else if ($comment["junk_status"] == 0) {
+	writeln("<p>Not marked as junk</p>");
+} else if ($comment["junk_status"] == 1) {
+	writeln("<p>Marked as [<b>Spam</b>] by " . user_page_link($comment["junk_zid"], true) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");
+}
+if ($auth_user["admin"] || $auth_user["editor"]) {
+	beg_form();
+	writeln('<p>');
+	writeln('<label><input name="junk" type="radio" value="spam"' . ($comment["junk_status"] == 1 ? ' checked="checked"' : '') . '/>Spam</label>');
+	writeln('<label><input name="junk" type="radio" value="not-junk"' . ($comment["junk_status"] != 1 ? ' checked="checked"' : '') . '/>Not Junk</label>');
+	writeln('</p>');
+	left_box("Save");
+	end_form();
 }
 
 end_main();

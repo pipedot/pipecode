@@ -54,6 +54,7 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 	$a["topic"] = $topic;
 	$a["icon"] = $icon;
 	$a["body"] = $clean_body;
+	$a["comments"] = count_comments();
 	print_article($a);
 
 	writeln('<h1>Publish</h1>');

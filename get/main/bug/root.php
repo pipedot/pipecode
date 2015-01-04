@@ -20,7 +20,7 @@
 include("render.php");
 include("story.php");
 include("bug.php");
-include("file.php");
+include("drive.php");
 
 if (string_uses($s2, "[A-Z][0-9]")) {
 	$bug = find_rec("bug");

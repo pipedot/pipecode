@@ -43,7 +43,7 @@ writeln('		<th class="center">Size</th>');
 writeln('		<th class="center">Date</th>');
 writeln('		<th></th>');
 writeln('	</tr>');
-$row = sql("select short_id, original_name, size, time from journal_photo inner join photo on photo_short_id = short_id where journal_short_id = ?", $short_id);
+$row = sql("select short_id, original_name, size, time from journal_photo inner join photo on photo_short_id = short_id where journal_short_id = ? order by original_name", $journal["short_id"]);
 if (count($row) == 0) {
 	writeln('	<tr>');
 	writeln('		<td colspan="4">(no photos)</th>');

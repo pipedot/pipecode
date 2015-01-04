@@ -24,7 +24,6 @@ if ($zid !== $auth_zid) {
 print_header("Menu");
 beg_main("dual_table");
 
-//writeln('<div class="dual_table">');
 writeln('<div class="dual_left">');
 
 beg_tab();
@@ -32,6 +31,7 @@ print_row(array("caption" => "Journal", "description" => "View your journal", "i
 print_row(array("caption" => "Feed", "description" => "View news feeds", "icon" => "news", "link" => "/feed/"));
 print_row(array("caption" => "Stream", "description" => "View news stream", "icon" => "internet", "link" => "/stream/"));
 print_row(array("caption" => "Comments", "description" => "View your past comments", "icon" => "chat", "link" => "/comments"));
+//print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
 end_tab();
 
 writeln('</div>');
@@ -45,7 +45,6 @@ print_row(array("caption" => "Karma", "description" => "Monitor your karma ratin
 end_tab();
 
 writeln('</div>');
-//writeln('</div>');
 
 end_main();
 print_footer();

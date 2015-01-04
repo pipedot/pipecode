@@ -20,14 +20,38 @@
 include("render.php");
 include("story.php");
 
-$story = find_rec("story");
+if (string_has($s2, "-") && $s3 === "") {
+	$date = $s2;
+	$time_beg = strtotime("$date GMT");
+	if ($time_beg === false) {
+		die("invalid date [$date]");
+	}
+	$time_end = $time_beg + 86400;
 
-print_header($story["title"]);
-print_left_bar("main", "stories");
-beg_main("cell");
+	print_header();
+	print_left_bar("main", "stories");
+	beg_main("cell");
 
-print_story($story);
-print_comments("story", $story);
+	$row = sql("select story_id from story where publish_time > ? and publish_time < ? order by publish_time desc", $time_beg, $time_end);
+	if (count($row) == 0) {
+		writeln("No stories published on [" . gmdate("Y-m-d", $time_beg) . "]");
+	}
+	for ($i = 0; $i < count($row); $i++) {
+		print_story($row[$i]["story_id"]);
+	}
 
-end_main();
-print_footer();
+	end_main();
+	print_footer();
+} else {
+	$story = find_rec("story");
+
+	print_header($story["title"]);
+	print_left_bar("main", "stories");
+	beg_main("cell");
+
+	print_story($story);
+	print_comments("story", $story);
+
+	end_main();
+	print_footer();
+}

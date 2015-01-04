@@ -17,10 +17,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $short_id, $article_link = "", $article_title = "")
+function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $short_id, $article_link = "", $article_title = "", $junk_status = 0)
 {
 	global $server_name;
 	global $can_moderate;
+	global $junk;
+	global $query;
 	global $auth_zid;
 	global $protocol;
 	global $reasons;
@@ -32,10 +34,12 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	}
 
 	$s = "<article class=\"comment\">\n";
-	if ($time > $last_seen) {
-		$s .= "<h1>$subject (Score: $score_reason)</h1>\n";
+	if ($junk_status > 0) {
+		$s .= "<h3 class=\"color_junk\">$subject (Score: $score_reason)</h3>\n";
+	} else if ($time > $last_seen) {
+		$s .= "<h3 class=\"color_new\">$subject (Score: $score_reason)</h3>\n";
 	} else {
-		$s .= "<h2>$subject (Score: $score_reason)</h2>\n";
+		$s .= "<h3 class=\"color_old\">$subject (Score: $score_reason)</h3>\n";
 	}
 	$date = date("Y-m-d H:i", $time);
 	$body = make_clickable($body);
@@ -49,7 +53,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$in = "";
 	}
 	$short_code = crypt_crockford_encode($short_id);
-	$s .= "<h3>by " . user_page_link($zid, true) . "$in on $date (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)</h3>\n";
+	$s .= "<h4>by " . user_page_link($zid, true) . "$in on $date (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)</h4>\n";
 	$s .= "<div class=\"comment_outline\">\n";
 	$s .= "<div>";
 	$s .= "<div class=\"comment_body\">$body</div>\n";
@@ -75,6 +79,33 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 			}
 		}
 		$s .= "</select> <input type=\"submit\" value=\"Moderate\"/></footer>\n";
+	} else if ($junk) {
+		if ($query == "default=spam") {
+			$junk_default = true;
+		} else {
+			$junk_default = false;
+		}
+		$s .= "<footer>\n";
+		$s .= "<div>\n";
+		if ($junk_default) {
+			$s .= "	<label><input name=\"junk_$short_code\" type=\"radio\" value=\"spam\" checked=\"checked\"/>Spam</label>\n";
+			$s .= "	<label><input name=\"junk_$short_code\" type=\"radio\" value=\"not-junk\"/>Not Junk</label>\n";
+		} else {
+			$s .= "	<label><input name=\"junk_$short_code\" type=\"radio\" value=\"spam\"/>Spam</label>\n";
+			$s .= "	<label><input name=\"junk_$short_code\" type=\"radio\" value=\"not-junk\" checked=\"checked\"/>Not Junk</label>\n";
+		}
+		$s .= "</div>\n";
+		$s .= "<div class=\"right\">\n";
+		if ($junk_default) {
+			$s .= "	<label><input name=\"ban_$short_code\" type=\"checkbox\" checked=\"checked\"/>Ban IP</label>\n";
+		} else {
+			$s .= "	<label><input name=\"ban_$short_code\" type=\"checkbox\"/>Ban IP</label>\n";
+		}
+		$s .= "</div>\n";
+		//$s .= "	<label><input type=\"radio\"/>Spam</label>\n";
+		//$s .= "	<label><input type=\"radio\"/>Abuse</label>\n";
+		//$s .= "	<label><input type=\"radio\"/>Inappropriate</label>\n";
+		$s .= "</footer>\n";
 	} else {
 		$s .= "<footer>\n";
 		$s .= "	<div><a href=\"$protocol://$server_name/post?comment_id=$comment_id\">Reply</a></div>\n";
@@ -91,7 +122,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 }
 
 
-function render_comment_json($subject, $zid, $time, $comment_id, $body, $short_id)
+function render_comment_json($subject, $zid, $time, $comment_id, $body, $short_id, $junk_status)
 {
 	global $can_moderate;
 	global $auth_zid;
@@ -110,10 +141,11 @@ function render_comment_json($subject, $zid, $time, $comment_id, $body, $short_i
 
 	$s = "\$level{\n";
 	$s .= "\$level	\"comment_id\": \"$comment_id\",\n";
+	$s .= "\$level	\"short\": \"" . crypt_crockford_encode($short_id) . "\",\n";
 	$s .= "\$level	\"body\": \"" . addcslashes($body, "\\\"") . "\",\n";
 	$s .= "\$level	\"score\": $score,\n";
 	$s .= "\$level	\"reason\": \"$reason\",\n";
-	$s .= "\$level	\"short\": \"" . crypt_crockford_encode($short_id) . "\",\n";
+	$s .= "\$level	\"junk\": $junk_status,\n";
 	$s .= "\$level	\"subject\": \"" . addcslashes($subject, "\\\"") . "\",\n";
 	$s .= "\$level	\"time\": $time,\n";
 	$s .= "\$level	\"vote\": \"$vote\",\n";
@@ -168,6 +200,7 @@ function render_page($type, $root_id, $json)
 	global $protocol;
 	global $server_name;
 	global $auth_zid;
+	global $auth_user;
 	global $can_moderate;
 	global $hide_value;
 	global $expand_value;
@@ -194,9 +227,15 @@ function render_page($type, $root_id, $json)
 		db_set_rec("{$type}_view", $view);
 	}
 
-	$comments = db_get_list("comment", "publish_time", array("root_id" => $root_id));
-	$total = count($comments);
-	$k = array_keys($comments);
+	if ($auth_user["show_junk_enabled"]) {
+		//$comments = db_get_list("comment", "publish_time", array("root_id" => $root_id));
+		$row = sql("select * from comment where root_id = ? order by publish_time", $root_id);
+	} else {
+		$row = sql("select * from comment where root_id = ? and junk_status <= 0 order by publish_time", $root_id);
+	}
+	$total = count($row);
+	$comments = array();
+	//$k = array_keys($comments);
 
 	if ($json) {
 		writeln('{');
@@ -257,12 +296,14 @@ function render_page($type, $root_id, $json)
 	}
 
 	for ($i = 0; $i < $total; $i++) {
-		$comment = $comments[$k[$i]];
-		$zid = $comment["zid"];
+		//$comment = $comments[$k[$i]];
+		$comment = $row[$i];
+		$comments[$comment["comment_id"]] = $row[$i];
+		//$zid = $comment["zid"];
 		if ($json) {
-			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $zid, $comment["edit_time"], $comment["comment_id"], $comment["body"], $comment["short_id"]);
+			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $comment["short_id"], $comment["junk_status"]);
 		} else {
-			$render[$comment["comment_id"]] = render_comment($comment["subject"], $zid, $comment["edit_time"], $comment["comment_id"], $comment["body"], $last_seen, $comment["short_id"]);
+			$render[$comment["comment_id"]] = render_comment($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $last_seen, $comment["short_id"], "", "", $comment["junk_status"]);
 		}
 		$parent[$comment["comment_id"]] = $comment["parent_id"];
 	}

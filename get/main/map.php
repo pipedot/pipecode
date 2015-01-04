@@ -20,7 +20,7 @@
 $rec = find_rec();
 
 geo_init();
-$row = sql("select remote_ip, count(remote_ip) as hits from short_view where short_id = ? group by remote_ip", $short_id);
+$row = sql("select remote_ip, count(remote_ip) as hits from short_view where short_id = ? group by remote_ip", $rec["short_id"]);
 for ($i = 0; $i < count($row); $i++) {
 	$geo = geo_ip($row[$i]["remote_ip"]);
 	if (!empty($geo["latitude"]) && !empty($geo["longitude"])) {

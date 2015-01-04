@@ -57,6 +57,7 @@ function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_bod
 	$a["topic"] = $topic;
 	$a["icon"] = $icon;
 	$a["body"] = $clean_body;
+	$a["comments"] = count_comments("story", $story_id);
 	print_article($a);
 
 	writeln('<h1>Edit</h1>');
