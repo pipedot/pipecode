@@ -464,6 +464,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	global $request_script;
 	global $doc_root;
 	global $server_conf;
+	global $meta;
 
 	header_expires();
 	header_html();
@@ -481,8 +482,10 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 		$title .= $user_page . '.' . $server_name;
 	}
 	writeln('<title>' . $title . '</title>');
-	writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">');
-	writeln('<meta name="viewport" content="width=device-width, initial-scale=1">');
+	writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>');
+	writeln('<meta name="viewport" content="width=device-width, initial-scale=1"/>');
+	print $meta;
+	writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon"/>');
 	$theme = $server_conf["theme"];
 	writeln('<link rel="stylesheet" href="/theme/' . $theme . '/style.css?t=' . fs_time("$doc_root/www/theme/$theme/style.css") . '" type="text/css"/>');
 	if ($request_script == "/") {
@@ -1274,19 +1277,36 @@ function print_comments($type, $rec)
 }
 
 
-function user_page_link($zid, $link = false, $ac = true)
+function user_page_link($zid, $tag = false, $ac = true, $author = false)
 {
 	global $protocol;
 
-	$s = $protocol . "://" . str_replace("@", ".", $zid) . "/";
-	if ($link) {
-		$s = "<a href=\"$s\">$zid</a>";
-	}
 	if ($ac && $zid == "") {
-		$s = "Anonymous Coward";
+		$name = "Anonymous Coward";
+		$url = "";
+	} else {
+		$name = $zid;
+		$url = $protocol . "://" . str_replace("@", ".", $zid) . "/";
 	}
-
-	return $s;
+	//if ($micro) {
+	//	// schema.org is ugly
+	//	$text = "<span itemprop=\"author\" itemscope itemtype=\"http://schema.org/Person\"><span itemprop=\"name\">$name</span></span>";
+	//} else {
+		$text = $name;
+	//}
+	if ($tag) {
+		if ($url == "") {
+			return $text;
+		} else {
+			if ($author) {
+				return "<a href=\"$url\" rel=\"author\">$text</a>";
+			} else {
+				return "<a href=\"$url\">$text</a>";
+			}
+		}
+	} else {
+		return $url;
+	}
 }
 
 
@@ -1420,6 +1440,7 @@ if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
 $server_conf = db_get_conf("server_conf");
 $http_host = $_SERVER["HTTP_HOST"];
 $user_page = "";
+$meta = "";
 $a = explode(".", $http_host);
 if (count($a) == 2) {
 	if ($http_host != $server_name) {

@@ -27,10 +27,11 @@ beg_main("dual_table");
 writeln('<div class="dual_left">');
 
 beg_tab();
+print_row(array("caption" => "Ban IP", "description" => "Manage banned IP addresses", "icon" => "error", "link" => "/ban_ip/"));
+print_row(array("caption" => "Ban User", "description" => "Manage banned users", "icon" => "users", "link" => "/ban_user/"));
 print_row(array("caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/"));
-print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
 if ($auth_user["admin"]) {
-	print_row(array("caption" => "Topics", "description" => "Add and remove topics", "icon" => "chat", "link" => "/topic/list"));
+	print_row(array("caption" => "Links", "description" => "Manage server links", "icon" => "workgroup", "link" => "/link/"));
 }
 end_tab();
 
@@ -39,9 +40,10 @@ writeln('<div class="dual_right">');
 
 beg_tab();
 print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
+print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
 if ($auth_user["admin"]) {
-	print_row(array("caption" => "Links", "description" => "Manage server links", "icon" => "workgroup", "link" => "/link/"));
 	print_row(array("caption" => "Settings", "description" => "Configure the server settings", "icon" => "tools", "link" => "settings"));
+	print_row(array("caption" => "Topics", "description" => "Add and remove topics", "icon" => "chat", "link" => "/topic/list"));
 }
 end_tab();
 

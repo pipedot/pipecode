@@ -109,9 +109,9 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	} else {
 		$s .= "<footer>\n";
 		$s .= "	<div><a href=\"$protocol://$server_name/post?comment_id=$comment_id\">Reply</a></div>\n";
-		$s .= "	<div class=\"right\">";
+		$s .= "	<div class=\"right\">\n";
 		if ($auth_zid !== "" && $auth_zid === $zid) {
-			$s .= "		<a class=\"icon_16 notepad_16\" style=\"xcolor: #666666\" href=\"$protocol://$server_name/comment/$short_code/edit\">Edit</a>";
+			$s .= "		<a class=\"icon_16 notepad_16\" href=\"$protocol://$server_name/comment/$short_code/edit\">Edit</a>\n";
 		}
 		$s .= "	</div>\n";
 		$s .= "</footer>\n";

@@ -31,7 +31,7 @@ list($item_start, $page_footer) = page_footer("comment", $items_per_page, array(
 if ($auth_user["show_junk_enabled"]) {
 	$row = sql("select comment_id, root_id, junk_status, short_id, subject, type, edit_time, body from comment where zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
 } else {
-	$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
+	$row = sql("select comment_id, root_id, junk_status, short_id, subject, type, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
 }
 for ($i = 0; $i < count($row); $i++) {
 	$a = article_info($row[$i], false);

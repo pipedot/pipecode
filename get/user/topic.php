@@ -18,6 +18,7 @@
 //
 
 include("story.php");
+include("image.php");
 
 $topic = $s2;
 if (strlen($topic) > 0 && !string_uses($topic, "[a-z][0-9]-")) {

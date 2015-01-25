@@ -150,7 +150,8 @@ function print_article($a)
 		$time = time();
 	}
 	$zid = $a["zid"];
-	$by = "<b>" . user_page_link($zid, true) . "</b>";
+	$by = user_page_link($zid, true, true, true);
+	//$by = "<b>" . $by . "</b>";
 	if (array_key_exists("story_id", $a)) {
 		$story_id = $a["story_id"];
 	} else {
@@ -221,14 +222,20 @@ function print_article($a)
 	$title = $a["title"];
 	$slug = clean_url($title);
 	if ($time == 0) {
-		$date = "as draft";
+		$date_label = "as";
+		$date_value = "draft";
 		$day = "";
 	} else {
-		$date = "on " . date("Y-m-d H:i", $time);
+		$date_label = "on";
+		// schema.org is ugly
+		//$date_value = "<span itemprop=\"datePublished\" content=\"" .  date("c", $time) . "\">" . date("Y-m-d H:i", $time) . "</span>";
+		$date_value = "<time datetime=\"" .  date("c", $time) . "\">" . date("Y-m-d H:i", $time) . "</time>";
 		$day = gmdate("Y-m-d", $time);
 	}
 	if ($pipe_short_id > 0) {
-		$date = "<a href=\"/pipe/" . crypt_crockford_encode($pipe_short_id) . "\">$date</a>";
+		$date = "$date_label <a href=\"/pipe/" . crypt_crockford_encode($pipe_short_id) . "\">$date_value</a>";
+	} else {
+		$date = "$date_label $date_value";
 	}
 
 	if ($image_style == 1) {
@@ -260,28 +267,51 @@ function print_article($a)
 		}
 	}
 
+	// schema.org is ugly
+	//writeln("<article class=\"story\" itemscope itemtype=\"http://schema.org/Article\">");
+
 	writeln("<article class=\"story\">");
 	if ($story_id != "") {
-		writeln("	<h1><a href=\"/story/$day/$slug\">$title</a></h1>");
+		$title_link = "/story/$day/$slug";
 	} else if ($pipe_id != "") {
-		writeln("	<h1><a href=\"/pipe/$short_code\">$title</a></h1>");
+		$title_link = "/pipe/$short_code";
 	} else if ($journal_id != "" && $time > 0) {
-		writeln("	<h1><a href=\"/journal/$day/$slug\">$title</a></h1>");
+		$title_link = "/journal/$day/$slug";
 	} else {
-		writeln("	<h1>$title</h1>");
+		$title_link = "";
 	}
-	if ($topic == "") {
-		writeln("	<h2>by $by $date$short</h2>");
+	if ($title_link == "") {
+		// schema.org is ugly
+		//writeln("	<h1><span itemprop=\"name\">$title</span></h1>");
+
+		writeln("	<h1>$title</h1>");
 	} else {
-		if ($journal_id == "") {
-			writeln("	<h2>by $by in <a href=\"$protocol://$server_name/topic/$topic_slug\"><b>$topic</b></a> $date$short</h2>");
-		} else {
-			writeln("	<h2>by $by in <a href=\"" . user_page_link($zid) . "topic/$topic_slug\"><b>$topic</b></a> $date$short</h2>");
-		}
+		// schema.org is ugly
+		//writeln("	<h1><a href=\"$title_link\"><span itemprop=\"name\">$title</span></a></h1>");
+
+		writeln("	<h1><a href=\"$title_link\">$title</a></h1>");
+	}
+
+	if ($journal_id == "") {
+		$topic_link = "$protocol://$server_name/topic/$topic_slug";
+	} else {
+		$topic_link = user_page_link($zid) . "topic/$topic_slug";
+	}
+
+	if ($topic == "") {
+		writeln("	<h2>by <address>$by</address> $date$short</h2>");
+	} else {
+		// schema.org is ugly
+		//writeln("	<h2>by <address>$by</address> in <a href=\"$topic_link\"><b itemprop=\"articleSection\">$topic</b></a> $date$short</h2>");
+
+		writeln("	<h2>by <address>$by</address> in <a href=\"$topic_link\"><b>$topic</b></a> $date$short</h2>");
 	}
 
 	if ($image_path != "") {
 		if ($image_url != "") {
+			// schema.org is ugly
+			//writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story_image_128\" itemprop=\"image\" src=\"$image_path\"/></a>$story</div>");
+
 			writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story_image_128\" src=\"$image_path\"/></a>$story</div>");
 		} else {
 			writeln("	<div><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\"/>$story</div>");
@@ -344,4 +374,3 @@ function print_article($a)
 	writeln("	</footer>");
 	writeln("</article>");
 }
-

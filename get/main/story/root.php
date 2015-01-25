@@ -19,6 +19,7 @@
 
 include("render.php");
 include("story.php");
+include("clean.php");
 
 if (string_has($s2, "-") && $s3 === "") {
 	$date = $s2;
@@ -44,6 +45,28 @@ if (string_has($s2, "-") && $s3 === "") {
 	print_footer();
 } else {
 	$story = find_rec("story");
+	$short_code = crypt_crockford_encode($story["short_id"]);
+
+	if ($story["image_id"] > 0) {
+		$image = db_get_rec("image", $story["image_id"]);
+		$image_path = public_path($image["time"]) . "/i{$story["image_id"]}.256x256.jpg";
+		$image_type = "image/jpeg";
+	} else {
+		$image_path = "/images/logo-256.png";
+		$image_type = "image/png";
+	}
+
+	$meta .= "<meta property=\"og:title\" content=\"{$story["title"]}\"/>\n";
+	$meta .= "<meta property=\"og:type\" content=\"article\"/>\n";
+	$meta .= "<meta property=\"og:url\" content=\"http://$server_name/story/$short_code\"/>\n";
+	$meta .= "<meta property=\"og:description\" content=\"" . make_description($story["body"]) . "\"/>\n";
+	$meta .= "<meta property=\"og:image\" content=\"http://$server_name$image_path\"/>\n";
+	$meta .= "<meta property=\"og:image:secure_url\" content=\"https://$server_name$image_path\"/>\n";
+	//$meta .= "<meta property=\"og:image:type\" content=\"$image_type\"/>\n";
+	//$meta .= "<meta property=\"og:image:width\" content=\"256\"/>\n";
+	//$meta .= "<meta property=\"og:image:height\" content=\"256\"/>\n";
+	$meta .= "<meta property=\"og:site_name\" content=\"$server_title\"/>\n";
+	$meta .= "<link rel=\"image_src\" href=\"http://$server_name$image_path\" type=\"$image_type\"/>\n";
 
 	print_header($story["title"]);
 	print_left_bar("main", "stories");

@@ -755,3 +755,37 @@ function clean_tags()
 
 	return $tags;
 }
+
+
+function make_description($body)
+{
+	$desc = $body;
+
+	if (string_has($desc, "<br/>")) {
+		$desc = substr($desc, 0, strpos($desc, "<br/>"));
+	}
+	if (string_has($desc, "<blockquote>")) {
+		$desc = substr($desc, 0, strpos($desc, "<blockquote>"));
+	}
+	if (string_has($desc, "<pre>")) {
+		$desc = substr($desc, 0, strpos($desc, "<pre>"));
+	}
+	if (string_has($desc, "<ul>")) {
+		$desc = substr($desc, 0, strpos($desc, "<ul>"));
+	}
+	if (string_has($desc, "<ol>")) {
+		$desc = substr($desc, 0, strpos($desc, "<ol>"));
+	}
+
+	$config = HTMLPurifier_Config::createDefault();
+	$config->set('HTML.DefinitionID', "description");
+	$config->set('HTML.DefinitionRev', 1);
+	$config->set('Cache.DefinitionImpl', null); // TODO: remove this later!
+	$config->set('HTML.Allowed', '');
+	$config->set('Core.HiddenElements', array("sub" => true, "sup" => true));
+
+	$purifier = new HTMLPurifier($config);
+	$desc = $purifier->purify($desc);
+
+	return trim($desc);
+}

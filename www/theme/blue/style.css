@@ -14,6 +14,11 @@ a:hover {
 	color: #ff0000;
 	text-decoration: underline;
 }
+article address {
+	display: inline-block;
+	font-style: normal;
+	font-weight: bolder;
+}
 body {
 	background-color: #ffffff;
 	font-family: sans-serif;
@@ -644,13 +649,6 @@ textarea {
 	padding-right: 2px;
 	margin-bottom: 2px;
 }
-.xcomment div {
-	border: 1px solid #d3d3d3;
-	border-top: 0px;
-	padding-left: 16px;
-	padding-right: 2px;
-	margin-bottom: 2px;
-}
 .comment_body {
 	border-width: 0px;
 	padding-top: 10px;
@@ -879,110 +877,6 @@ del {
 	vertical-align: top;
 	padding-left: 8px;
 	width: 300px;
-}
-.drive_crumbs {
-	background-color: #eeeeee;
-	border: 1px solid #d3d3d3;
-	border-top-right-radius: 14px;
-	border-bottom-right-radius: 14px;
-	display: inline-block;
-	font-size: 12pt;
-	font-weight: bolder;
-	margin-bottom: 8px;
-	padding: 4px;
-	padding-right: 8px;
-}
-.crumbs2 ul li a {
-	display: block;
-	float: left;
-	height: 50px;
-	background: #3498db;
-	text-align: center;
-	xpadding: 30px 40px 0 40px;
-	padding: 4px;
-	position: relative;
-	xmargin: 0 10px 0 0;
-	font-size: 12px;
-	text-decoration: none;
-	color: #fff;
-}
-.crumbs2 ul li a:after {
-	content: "";
-	xborder-top: 40px solid red;
-	xborder-bottom: 40px solid red;
-	xborder-left: 40px solid blue;
-	position: absolute; right: -40px; top: 0;
-	border-top: 20px solid transparent;
-	border-bottom: 20px solid transparent;
-	border-left: 20px solid #3498db;
-	xborder-left: 20px solid rgba(255, 255, 255, 0);
-	xborder-right: 20px solid rgba(255, 255, 255, 0);
-	-moz-transform: scale(.9999);
-}
-.triangle {
-	width: 0;
-	height: 0;
-	border-top: 0;
-	border-bottom: 30px solid #666699;
-	border-left: 20px solid rgba(255, 255, 255, 0);
-	border-right: 20px solid rgba(255, 255, 255, 0);
-	xtransform: rotate(360deg);
-	-moz-transform: scale(.9999);
-}
-.breadcrumb {
-	list-style: none;
-	overflow: hidden;
-	font-size: 10pt;
-}
-.breadcrumb li {
-	float: left;
-}
-.breadcrumb li a {
-	color: white;
-	text-decoration: none;
-	padding: 4px 0 4px 40px;
-	xbackground: brown;                   /* fallback color */
-	background: hsla(34,85%,35%,1);
-	position: relative;
-	display: block;
-	float: left;
-}
-.breadcrumb li a:after {
-	content: " ";
-	display: block;
-	width: 0;
-	height: 0;
-	border-top: 50px solid transparent;           /* Go big on the size, and let overflow hide */
-	border-bottom: 50px solid transparent;
-	border-left: 30px solid hsla(34,85%,35%,1);
-	position: absolute;
-	top: 50%;
-	margin-top: -50px;
-	left: 100%;
-	z-index: 2;
-	-moz-transform: scale(.9999);
-}
-.breadcrumb li a:before {
-	content: " ";
-	display: block;
-	width: 0;
-	height: 0;
-	border-top: 50px solid transparent;
-	border-bottom: 50px solid transparent;
-	border-left: 30px solid white;
-	position: absolute;
-	top: 50%;
-	margin-top: -50px;
-	margin-left: 1px;
-	left: 100%;
-	z-index: 1;
-	-moz-transform: scale(.9999);
-}
-.breadcrumb li a:hover {
-	background: hsla(34,85%,25%,1);
-}
-.breadcrumb li a:hover:after {
-	border-left-color: hsla(34,85%,25%,1) !important;
 }
 .feed_box {
 	padding: 8px;
@@ -2001,32 +1895,20 @@ del {
 .vsort_16 {
 	background-image: url(/images/vsort-16.png);
 }
-.coins_32 {
-	background-image: url(/images/coins-32.png);
-}
-.drive_32 {
-	background-image: url(/images/drive-32.png);
-}
 .bulb_32 {
 	background-image: url(/images/bulb-32.png);
 }
 .chat_32 {
 	background-image: url(/images/chat-32.png);
 }
-.heart_32 {
-	background-image: url(/images/heart-32.png);
+.coins_32 {
+	background-image: url(/images/coins-32.png);
 }
-.html_32 {
-	background-image: url(/images/html-32.png);
+.drive_32 {
+	background-image: url(/images/drive-32.png);
 }
-.important_32 {
-	background-image: url(/images/important-32.png);
-}
-.internet_32 {
-	background-image: url(/images/internet-32.png);
-}
-.junk_32 {
-	background-image: url(/images/junk-32.png);
+.error_32 {
+	background-image: url(/images/error-32.png);
 }
 .face_crying_32 {
 	background-image: url(/images/face-crying-32.png);
@@ -2042,6 +1924,21 @@ del {
 }
 .face_smile_32 {
 	background-image: url(/images/face-smile-32.png);
+}
+.heart_32 {
+	background-image: url(/images/heart-32.png);
+}
+.html_32 {
+	background-image: url(/images/html-32.png);
+}
+.important_32 {
+	background-image: url(/images/important-32.png);
+}
+.internet_32 {
+	background-image: url(/images/internet-32.png);
+}
+.junk_32 {
+	background-image: url(/images/junk-32.png);
 }
 .mail_32 {
 	background-image: url(/images/mail-32.png);
@@ -2226,6 +2123,9 @@ del {
 	}
 	.drive_32 {
 		background-image: url(/images/drive-64.png);
+	}
+	.error_32 {
+		background-image: url(/images/error-64.png);
 	}
 	.face_crying_32 {
 		background-image: url(/images/face-crying-64.png);
