@@ -378,6 +378,43 @@ function crypt_crc32($src)
 }
 
 
+function gz_slap($path, $data)
+{
+	$size = strlen($data);
+	$fp = @gzopen($path, "w9");
+	if ($fp === false) {
+		return false;
+	}
+	if (@gzwrite($fp, $data) != $size) {
+		return false;
+	}
+
+	return @gzclose($fp);
+}
+
+
+function gz_slurp($path)
+{
+	$fp = @gzopen($path, "r");
+	if (!$fp) {
+		return false;
+	}
+
+	$data = "";
+	while (!@gzeof($fp)) {
+		$data .= @gzread($fp, 1024);
+	}
+	@gzclose($fp);
+
+	return $data;
+}
+
+
+function http_modified($time, $etag) {
+	return !((isset($_SERVER["HTTP_IF_MODIFIED_SINCE"]) && strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]) >= $time) || (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $etag));
+}
+
+
 function crypt_crc32_file($path)
 {
 	return string_pad(@hash_file("crc32b", $path), 8);
@@ -711,6 +748,21 @@ function db_get_list($table, $order = "", $where = array())
 
 function db_get_rec($table, $id)
 {
+	$rec = db_find_rec($table, $id);
+	if ($rec === false) {
+		if (is_array($id)) {
+			die("record not found - table [$table] id [" . map_to_tag_string($id) . "]");
+		} else {
+			die("record not found - table [$table] id [$id]");
+		}
+	}
+
+	return $rec;
+}
+
+
+function db_find_rec($table, $id)
+{
 	global $db_table;
 	global $cache_enabled;
 
@@ -742,11 +794,7 @@ function db_get_rec($table, $id)
 		$row = sql("select * from $table where $key = ?", $id);
 	}
 	if (count($row) == 0) {
-		if (is_array($id)) {
-			die("record not found - table [$table] id [" . map_to_tag_string($id) . "]");
-		} else {
-			die("record not found - table [$table] id [$id]");
-		}
+		return false;
 	}
 	$rec = array();
 	for ($i = 0; $i < count($tab); $i++) {
@@ -1034,6 +1082,90 @@ function default_error($text)
 		fatal_error($text);
 	}
 	die("error: $text");
+}
+
+
+function dict_beg($caption = "")
+{
+	writeln('<table class="dict">');
+	if ($caption != "") {
+		writeln('	<tr>');
+		writeln('		<th colspan="2">' . $caption . '</th>');
+		writeln('	</tr>');
+	}
+}
+
+
+function dict_row($name, $value = "")
+{
+	if (is_array($name)) {
+		$a = $name;
+		if (array_key_exists("name", $a)) {
+			$name = $a["name"];
+		} else {
+			$name = "";
+		}
+		if (array_key_exists("value", $a)) {
+			$value = $a["value"];
+		} else {
+			$value = "";
+		}
+
+		if (array_key_exists("name_icon", $a)) {
+			$class = ' class="icon_16 ' . $a["name_icon"] . '_16"';
+			$tag = "div";
+		} else {
+			$class = "";
+			$tag = "";
+		}
+		if (array_key_exists("name_link", $a)) {
+			$href = ' href="' . $a["name_link"] . '"';
+			$tag = "a";
+		} else {
+			$href = "";
+			$tag = "div";
+		}
+		if ($class != "") {
+			$name = "<$tag$class$href>$name</$tag>";
+		}
+
+		if (array_key_exists("value_icon", $a)) {
+			$class = ' class="icon_16 ' . $a["value_icon"] . '_16"';
+			$tag = "div";
+		} else {
+			$class = "";
+			$tag = "";
+		}
+		if (array_key_exists("value_link", $a)) {
+			$href = ' href="' . $a["value_link"] . '"';
+			$tag = "a";
+		} else {
+			$href = "";
+			$tag = "div";
+		}
+		if ($class != "") {
+			$value = "<$tag$class$href>$value</$tag>";
+		}
+	}
+
+	writeln('	<tr>');
+	writeln('		<td>' . $name . '</td>');
+	writeln('		<td>' . $value . '</td>');
+	writeln('	</tr>');
+}
+
+
+function dict_none($caption = "none")
+{
+	writeln('	<tr>');
+	writeln('		<td colspan="2">(' . $caption . ')</td>');
+	writeln('	</tr>');
+}
+
+
+function dict_end()
+{
+	writeln('</table>');
 }
 
 

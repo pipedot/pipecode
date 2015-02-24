@@ -17,28 +17,26 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-include("clean.php");
-include("image.php");
 include("drive.php");
 
-set_time_limit(14 * 60);
-header_text();
-header_expires();
+print_header("Thumbnail");
+beg_main();
 
-$row = sql("select feed_id, uri, time from feed");
+writeln('<h1>Thumbnails</h1>');
+
+$items_per_page = 100;
+list($item_start, $page_footer) = page_footer("thumb", $items_per_page);
+
+$row = sql("select * from thumb order by time desc limit $item_start, $items_per_page");
 for ($i = 0; $i < count($row); $i++) {
-	$feed_id = $row[$i]["feed_id"];
-	$uri = $row[$i]["uri"];
-	$time = $row[$i]["time"];
-
-	if (time() > ($time + 60 * 5)) {
-		print "downloading feed_id [$feed_id] uri [$uri] ";
-		$data = download_feed($uri);
-		//$data = http_slurp($uri);
-		print "len [" . strlen($data) . "]\n";
-		save_feed($feed_id, $data);
-	}
+	$short_code = crypt_crockford_encode($row[$i]["thumb_id"]);
+	//writeln('<div class="photo_frame">');
+	writeln('	<a href="' . $short_code . '"><img alt="photo" class="thumb" src="' . $short_code . '.jpg"/></a>');
+	//writeln('	<div><a href="' . $short_code . '.jpg">' . $size . '</a></div>');
+	//writeln('</div>');
 }
 
-print "done";
+writeln($page_footer);
+
+end_main();
+print_footer();

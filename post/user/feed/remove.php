@@ -21,16 +21,16 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$fid = http_get_int("fid");
-$feed = db_get_rec("feed", $fid);
+$feed_id = http_get_int("feed_id");
+$feed = db_get_rec("feed", $feed_id);
 
-db_del_rec("feed_user", array("zid" => $auth_zid, "fid" => $fid));
+db_del_rec("feed_user", array("zid" => $auth_zid, "feed_id" => $feed_id));
 
-$row = sql("select count(zid) as user_count from feed_user where fid = ?", $fid);
-$count = $row[0]["user_count"];
-if ($count == 0) {
-	sql("delete from feed_item where fid = ?", $fid);
-	sql("delete from feed where fid = ?", $fid);
-}
+//$row = sql("select count(zid) as user_count from feed_user where feed_id = ?", $feed_id);
+//$count = $row[0]["user_count"];
+//if ($count == 0) {
+//	sql("delete from feed_item where feed_id = ?", $feed_id);
+//	sql("delete from feed where feed_id = ?", $feed_id);
+//}
 
 header("Location: edit");

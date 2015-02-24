@@ -281,9 +281,3 @@ function print_atom($type, $topic)
 		print $body;
 	}
 }
-
-
-function http_modified($time, $etag) {
-	return !((isset($_SERVER["HTTP_IF_MODIFIED_SINCE"]) && strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]) >= $time) || (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $etag));
-}
-

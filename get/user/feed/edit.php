@@ -31,17 +31,15 @@ writeln('	<tr>');
 for ($c = 0; $c < 3; $c++) {
 	writeln('		<td class="feed_box">');
 	writeln('			<table class="zebra">');
-	$r = 0;
-	$row = sql("select feed_user.fid, title from feed_user inner join feed on feed_user.fid = feed.fid where zid = ? and col = ? order by pos", $auth_zid, $c);
+	$row = sql("select feed_user.feed_id, title from feed_user inner join feed on feed_user.feed_id = feed.feed_id where zid = ? and col = ? order by pos", $auth_zid, $c);
 	if (count($row) == 0) {
 		writeln('				<tr><td>(no feeds)</td></tr>');
 	}
 	for ($i = 0; $i < count($row); $i++) {
 		writeln('				<tr>');
 		writeln('					<td>' . $row[$i]["title"] . '</td>');
-		writeln('					<td class="right"><a href="remove?fid=' . $row[$i]["fid"] . '" class="icon_16 minus_16">Remove</a></td>');
+		writeln('					<td class="right"><a href="remove?feed_id=' . $row[$i]["feed_id"] . '" class="icon_16 minus_16">Remove</a></td>');
 		writeln('				</tr>');
-		$r = ($r ? 0 : 1);
 	}
 	writeln('			</table>');
 	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon_16 plus_16">Add</a></div>');

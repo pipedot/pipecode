@@ -219,12 +219,13 @@ function download_image($doc_url, $img_url)
 	$tmp_image["time"] = time();
 	$tmp_image["zid"] = $auth_zid;
 	db_set_rec("tmp_image", $tmp_image);
-	$tmp_image = db_get_rec("tmp_image", array("original_url" => $img_url));
+	//$tmp_image = db_get_rec("tmp_image", array("original_url" => $img_url));
 
 	//print "tmp_image_id [" . $tmp_image["tmp_image_id"] . "]\n";
 	//print "size [" . strlen($data) . "]\n";
 
-	$id = $tmp_image["tmp_image_id"];
+	//$id = $tmp_image["tmp_image_id"];
+	$id = db_last();
 	$path = $doc_root . "/www" . public_path($tmp_image["time"]); //$id, "t");
 	//print "source path [$path]\n";
 	//die();
@@ -276,8 +277,9 @@ function promote_image($tmp_image_id)
 	$image["zid"] = $tmp_image["zid"];
 	db_set_rec("image", $image);
 
-	$image = db_get_rec("image", array("zid" => $tmp_image["zid"], "time" => $tmp_image["time"]));
-	$image_id = $image["image_id"];
+	//$image = db_get_rec("image", array("zid" => $tmp_image["zid"], "time" => $tmp_image["time"]));
+	//$image_id = $image["image_id"];
+	$image_id = db_last();
 
 	fs_rename("$doc_root/www$path/t$tmp_image_id.128x128.jpg", "$doc_root/www$path/i$image_id.128x128.jpg");
 	fs_rename("$doc_root/www$path/t$tmp_image_id.256x256.jpg", "$doc_root/www$path/i$image_id.256x256.jpg");
@@ -285,6 +287,71 @@ function promote_image($tmp_image_id)
 	db_del_rec("tmp_image", $tmp_image_id);
 
 	return $image_id;
+}
+
+
+function create_thumb($image_url)
+{
+	global $doc_root;
+
+	$data = http_cache($image_url);
+
+	$orig_img = @imagecreatefromstring($data);
+	if ($orig_img === false) {
+		return -1;
+	}
+	$width = imagesx($orig_img);
+	$height = imagesy($orig_img);
+	if ($width < 128 || $height < 128) {
+		return -1;
+	}
+
+	// set background of transparent images to white instead of black
+	$src_img = imagecreatetruecolor($width, $height);
+	$white = imagecolorallocate($src_img, 255, 255, 255);
+	imagefilledrectangle($src_img, 0, 0, $width, $height, $white);
+	imagecopy($src_img, $orig_img, 0, 0, 0, 0, $width, $height);
+	imagedestroy($orig_img);
+
+	if ($width < 256 || $height < 256) {
+		$low_res = 1;
+		$tmp_img = resize_image($src_img, 128, 128);
+	} else {
+		$low_res = 0;
+		$tmp_img = resize_image($src_img, 256, 256);
+	}
+
+	// XXX: gd lacks a decent method to save the image to a string
+	if (!fs_is_dir("$doc_root/tmp")) {
+		if (!fs_make_dir("$doc_root/tmp")) {
+			return 0;
+		}
+	}
+	$path = tempnam("$doc_root/tmp", "thumb");
+	if ($path === false) {
+		return -1;
+	}
+	imagejpeg($tmp_img, $path);
+	imagedestroy($tmp_img);
+	$data = fs_slurp($path);
+	fs_unlink($path);
+	$hash = crypt_sha256($data);
+
+	$thumb = db_find_rec("thumb", array("hash" => $hash));
+	if ($thumb === false) {
+		if (!drive_set($data)) {
+			return -1;
+		}
+
+		$fake_id = create_id("");
+		$thumb = db_new_rec("thumb");
+		$thumb["thumb_id"] = create_short("thumb", $fake_id);
+		$thumb["hash"] = $hash;
+		$thumb["low_res"] = $low_res;
+		db_set_rec("thumb", $thumb);
+	}
+
+	return $thumb["thumb_id"];
 }
 
 /*
@@ -571,3 +638,87 @@ function clean_tmp_images()
 	}
 }
 
+
+function save_favicon($name, $url)
+{
+	global $doc_root;
+
+	$ext = fs_ext($url);
+	$data = http_cache($url);
+
+	try {
+		$thumb = new Imagick();
+		if ($ext == "ico") {
+			$thumb->setFormat('ICO');
+		}
+		$thumb->readImageBlob($data);
+		$thumb->resizeImage(32, 32, Imagick::FILTER_LANCZOS, 1);
+		$thumb->writeImage("PNG32:$doc_root/www/pub/favicon/$name.png");
+		$thumb->destroy();
+	} catch (Exception $e) {
+		return false;
+	}
+
+	return true;
+}
+
+
+function find_favicon($url)
+{
+	$a = parse_url($url);
+	$scheme = $a["scheme"];
+	$host = $a["host"];
+	$data = http_cache($url);
+	$doc = new DOMDocument();
+	@$doc->loadHTML($data);
+
+	$all = array();
+	$png = array();
+	$ico = array();
+	$metas = $doc->getElementsByTagName("link");
+	for ($i = 0; $i < $metas->length; $i++) {
+		$meta = $metas->item($i);
+		$rel = $meta->getAttribute("rel");
+		if ($rel == "icon" || $rel == "shortcut icon") {
+			$type = $meta->getAttribute("type");
+			$href = $meta->getAttribute("href");
+			if (substr($href, 0, 2) == "//") {
+				$href = "$scheme:$href";
+			} else if (substr($href, 0, 1) == "/") {
+				$href = "$scheme://$host$href";
+			}
+			if (!string_has($href, "/")) {
+				$href = "$scheme://$host/$href";
+			}
+			if (substr($href, 0, 1) == ".") {
+				// FIXME: relative link
+				$href = "$scheme://$host/favicon.ico";
+			}
+			//print "rel [$rel] type [$type] href [$href]\n";
+			$all[] = $href;
+			if (fs_ext($href) == "png") {
+				$png[] = $href;
+			}
+			if (fs_ext($href) == "ico") {
+				$ico[] = $href;
+			}
+		}
+	}
+
+	if (count($all) == 0) {
+		return "$scheme://$host/favicon.ico";
+	} else if (count($all) == 1) {
+		return $all[0];
+	} else {
+		for ($i = 0; $i < count($all); $i++) {
+			if (string_has($all[$i], "32")) {
+				return $all[$i];
+			}
+		}
+		if (count($png) > 0) {
+			return $png[0];
+		} else {
+			return $all[0];
+		}
+	}
+}

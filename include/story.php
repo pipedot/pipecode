@@ -149,9 +149,31 @@ function print_article($a)
 	} else {
 		$time = time();
 	}
-	$zid = $a["zid"];
-	$by = user_page_link($zid, true, true, true);
-	//$by = "<b>" . $by . "</b>";
+	if (array_key_exists("zid", $a)) {
+		$zid = $a["zid"];
+		$by = user_page_link($zid, true, true, true);
+	} else {
+		$zid = "";
+		$by = "";
+	}
+	$article_id = 0;
+	$feed_title = "";
+	$feed_link = "";
+	if (array_key_exists("article_id", $a)) {
+		$article_id = $a["article_id"];
+		if ($a["feed_id"] > 0) {
+			$feed = db_get_rec("feed", $a["feed_id"]);
+			$feed_title = $feed["title"];
+			//$feed_link = $feed["link"];
+			$feed_link = "$protocol://$server_name/feed/" . crypt_crockford_encode($a["feed_id"]);
+		}
+		if ($a["author_name"] != "") {
+			$by = $a["author_name"];
+		}
+		if ($a["author_link"] != "") {
+			$by = "<a href=\"{$a["author_link"]}\">$by</a>";
+		}
+	}
 	if (array_key_exists("story_id", $a)) {
 		$story_id = $a["story_id"];
 	} else {
@@ -193,6 +215,11 @@ function print_article($a)
 	} else {
 		$image_id = 0;
 	}
+	if (array_key_exists("thumb_id", $a)) {
+		$thumb_id = $a["thumb_id"];
+	} else {
+		$thumb_id = 0;
+	}
 	if (array_key_exists("tweet_id", $a)) {
 		$tweet_id = $a["tweet_id"];
 	} else {
@@ -200,6 +227,9 @@ function print_article($a)
 	}
 	if (array_key_exists("short_id", $a)) {
 		$short_code = crypt_crockford_encode($a["short_id"]);
+		$short = " (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)";
+	} else if (array_key_exists("article_id", $a)) {
+		$short_code = crypt_crockford_encode($a["article_id"]);
 		$short = " (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)";
 	} else {
 		$short_code = "";
@@ -252,7 +282,7 @@ function print_article($a)
 			$width = "64";
 		}
 	} else {
-		if ($image_id == 0) {
+		if ($image_id <= 0) {
 			$image_path = "";
 		} else {
 			$image = db_get_rec("image", $image_id);
@@ -265,6 +295,14 @@ function print_article($a)
 			$image_url = $image["parent_url"];
 			$image_path = public_path($image["time"]) . "/i$image_id.$size.jpg";
 		}
+	}
+	if ($thumb_id > 0) {
+		$image_url = $a["link"];
+		$image_path = "/thumb/" . crypt_crockford_encode($thumb_id) . ".jpg";
+	}
+	if ($article_id > 0 && string_has($story, "<img ")) {
+		$image_url = "";
+		$image_path = "";
 	}
 
 	// schema.org is ugly
@@ -298,7 +336,13 @@ function print_article($a)
 		$topic_link = user_page_link($zid) . "topic/$topic_slug";
 	}
 
-	if ($topic == "") {
+	if ($feed_title != "") {
+		if ($by == "") {
+			writeln("	<h2>from <a href=\"$feed_link\"><b>$feed_title</b></a> $date$short</h2>");
+		} else {
+			writeln("	<h2>by <address>$by</address> from <a href=\"$feed_link\"><b>$feed_title</b></a> $date$short</h2>");
+		}
+	} else if ($topic == "") {
 		writeln("	<h2>by <address>$by</address> $date$short</h2>");
 	} else {
 		// schema.org is ugly
@@ -370,6 +414,8 @@ function print_article($a)
 			writeln("			<a href=\"/bug/$short_code/open\" class=\"icon_16 undo_16\">Open</a>");
 		}
 		writeln("		</div>");
+	} else if ($article_id > 0) {
+		writeln("		<a class=\"icon_16 globe_16\" href=\"{$a["link"]}\">View Site</a>");
 	}
 	writeln("	</footer>");
 	writeln("</article>");

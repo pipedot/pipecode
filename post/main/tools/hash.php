@@ -17,28 +17,18 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-include("clean.php");
-include("image.php");
-include("drive.php");
-
-set_time_limit(14 * 60);
-header_text();
-header_expires();
-
-$row = sql("select feed_id, uri, time from feed");
-for ($i = 0; $i < count($row); $i++) {
-	$feed_id = $row[$i]["feed_id"];
-	$uri = $row[$i]["uri"];
-	$time = $row[$i]["time"];
-
-	if (time() > ($time + 60 * 5)) {
-		print "downloading feed_id [$feed_id] uri [$uri] ";
-		$data = download_feed($uri);
-		//$data = http_slurp($uri);
-		print "len [" . strlen($data) . "]\n";
-		save_feed($feed_id, $data);
-	}
+if (!$auth_user["admin"]) {
+	die("not an admin");
 }
 
-print "done";
+print_header("Hash");
+beg_main();
+
+dict_beg();
+dict_row("Hash", crypt_sha256($_POST["str"]));
+dict_end();
+
+end_main();
+print_footer();
+
+

@@ -17,28 +17,26 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-include("clean.php");
-include("image.php");
 include("drive.php");
 
-set_time_limit(14 * 60);
-header_text();
-header_expires();
-
-$row = sql("select feed_id, uri, time from feed");
-for ($i = 0; $i < count($row); $i++) {
-	$feed_id = $row[$i]["feed_id"];
-	$uri = $row[$i]["uri"];
-	$time = $row[$i]["time"];
-
-	if (time() > ($time + 60 * 5)) {
-		print "downloading feed_id [$feed_id] uri [$uri] ";
-		$data = download_feed($uri);
-		//$data = http_slurp($uri);
-		print "len [" . strlen($data) . "]\n";
-		save_feed($feed_id, $data);
-	}
+if (!$auth_user["admin"]) {
+	die("not an admin");
 }
 
-print "done";
+$hash = http_post_string("hash", array("valid" => "[a-z][A-Z][0-9]~#%&()-_+=[];:./?", "len" => 200));
+
+if (!string_uses($hash, "[0-9]abcdef")) {
+	$hash = crypt_sha256($hash);
+}
+$cache = db_find_rec("cache", $hash);
+
+if ($cache === false) {
+	die("cache item not found");
+}
+
+//$row = sql("select count(*) as links from drive_data
+
+db_del_rec("cache", $hash);
+
+die("deleted item [$hash]");
+

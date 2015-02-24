@@ -1,3 +1,6 @@
+html {
+	font-size: 62.5%;
+}
 a:link {
 	color: #1e3c82;
 	text-decoration: none;
@@ -22,25 +25,30 @@ article address {
 body {
 	background-color: #ffffff;
 	font-family: sans-serif;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	margin: 0px;
 }
 div {
 	font-family: sans-serif;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 }
 h1 {
 	font-family: sans-serif;
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 	margin-top: 0px;
 }
 h2 {
 	font-family: sans-serif;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 }
 h3 {
 	font-family: sans-serif;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.3rem;
 	font-weight: bolder;
 }
 table {
@@ -333,7 +341,8 @@ textarea {
 	background-color: #506890;
 	border-top-left-radius: 10px;
 	color: #ffffff;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	margin: 0px;
 	padding: 6px;
@@ -344,10 +353,11 @@ textarea {
 }.story h2 {
 	background-color: #d3d3d3;
 	color: #666666;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 	font-weight: normal;
 	margin: 0px;
-	padding: 8px;
+	padding: 7px;
 	padding-left: 10px;
 }
 .story h2 a {
@@ -428,7 +438,8 @@ textarea {
 }
 .bug_title {
 	xdisplay: table;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	padding-bottom: 6px;
 	xpadding-top: 2px;
@@ -443,7 +454,8 @@ textarea {
 }
 .bug_subtitle {
 	color: #666666;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.4rem;
 	font-weight: normal;
 }
 .bug_subtitle a {
@@ -456,7 +468,8 @@ textarea {
 .label {
 	border-radius: 2px;
 	box-shadow: -1px -1px 0 rgba(0, 0, 0, 0.2) inset;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 	font-weight: bolder;
 	padding-top: 3px;
 	padding-bottom: 3px;
@@ -495,7 +508,8 @@ textarea {
 	border: 1px solid #888888;
 	border-top-left-radius: 10px;
 	color: #000000;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	padding: 0px;
 	padding-left: 4px;
@@ -510,7 +524,8 @@ textarea {
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
 	color: #000000;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	padding: 0px;
 	padding-left: 4px;
@@ -521,7 +536,8 @@ textarea {
 }
 .pipe_subtitle {
 	color: #666666;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 	font-weight: normal;
 	padding: 0px;
 }
@@ -586,13 +602,15 @@ textarea {
 }
 .comment_header a {
 	color: #666666;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 }
 .comment h3 {
 	border-top-left-radius: 10px;
 	color: #ffffff;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	padding: 4px;
 	padding-left: 16px;
 	margin-top: 2px;
@@ -610,7 +628,8 @@ textarea {
 .comment h4 {
 	background-color: #d3d3d3;
 	color: #666666;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 	font-weight: normal;
 	padding: 4px;
 	padding-left: 16px;
@@ -628,7 +647,8 @@ textarea {
 	border-top-left-radius: 10px;
 	border-bottom: 0px;
 	cursor: pointer;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	font-weight: normal;
 	height: 24px;
 	line-height: 22px;
@@ -689,6 +709,29 @@ textarea {
 	margin-left: 8px;
 	width: 100px;
 }
+.dict {
+	border: 1px #d3d3d3 solid;
+	margin-bottom: 8px;
+	padding: 4px;
+	width: 100%;
+}
+.dict tr:nth-child(even) {
+	background-color: #ffffff;
+}
+.dict tr:nth-child(odd) {
+	background-color: #eeeeee;
+}
+.dict th
+{
+	padding: 4px;
+}
+.dict td
+{
+	padding: 4px;
+}
+.dict td:nth-child(2) {
+	text-align: right;
+}
 .edit_title {
 	background-color: #d3d3d3;
 	border: 1px solid #888888;
@@ -720,6 +763,41 @@ textarea {
 }
 .edit_body a {
 	text-decoration: underline;
+}
+.external_title {
+	background-color: #d3d3d3;
+	border: 1px solid #888888;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom: 0px;
+	color: #666666;
+	text-align: center;
+	font-weight: bolder;
+	padding: 4px;
+	padding-left: 16px;
+	width: 100%;
+}
+.external_table {
+	border: 1px #888888 solid;
+	border-spacing: 0px;
+	color: #666666;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
+	margin-bottom: 8px;
+	padding: 4px;
+	width: 100%;
+}
+.external_table tr:nth-child(even) {
+	background-color: #eeeeee;
+}
+.external_table tr:nth-child(odd) {
+	background-color: #ffffff;
+}
+.external_table td {
+	padding: 4px;
+}
+.external_table td:nth-child(even) {
+	text-align: right;
 }
 ins {
 	background-color: #bbc99b;
@@ -848,7 +926,8 @@ del {
 	border: 1px solid #ffffff;
 	border-radius: 4px;
 	display: block;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	font-weight: bolder;
 	height: 48px;
 	line-height: 32px;
@@ -891,7 +970,8 @@ del {
 	border-bottom: 0px;
 	border-spacing: 0px;
 	font-weight: bolder;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	padding: 4px;
 	spacing: 8px;
 	text-align: center;
@@ -1039,7 +1119,8 @@ del {
 	background-color: #d3d3d3;
 	border: 1px solid #888888;
 	border-top-right-radius: 10px;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	padding: 8px;
 }
@@ -1082,7 +1163,8 @@ del {
 	text-decoration: underline;
 }
 .search h1 {
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 	margin: 0px;
 	margin-bottom: 2px;
 	margin-top: 16px;
@@ -1090,13 +1172,15 @@ del {
 .search h2 {
 	color: darkgreen;
 	display: inline;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	font-weight: normal;
 }
 .search h3 {
 	color: #666666;
 	display: inline;
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	font-weight: normal;
 }
 .search h3 a {
@@ -1127,7 +1211,8 @@ del {
 	padding-left: 40px;
 	padding-top: 8px;
 	height: 40px;
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 }
 .dl_32 {
 	background-position: left center;
@@ -1138,13 +1223,15 @@ del {
 }
 .dl_32 dt {
 	color: #000000;
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
 .dl_32 dd {
 	color: #000000;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 	margin: 0px;
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -1156,12 +1243,14 @@ del {
 	margin-right: 4px;
 }
 .recent_journal_title {
-	font-size: 9pt;
+	xfont-size: 9pt;
+	font-size: 1.2rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
 .recent_journal_author {
 	font-size: 8pt;
+	font-size: 1.1rem;
 	padding-bottom: 4px;
 }
 .recent_journal_author a {
@@ -1170,14 +1259,80 @@ del {
 .icon_description {
 	color: #000000;
 	font-size: 8pt;
+	font-size: 1.1rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
 }
 .icon_title {
 	color: #000000;
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
+}
+.thumb {
+	width: 128px;
+	height: 128px;
+}
+.article_text_row {
+	border: 1px solid #9f9f9f;
+	border-radius: 10px;
+	margin-bottom: 8px;
+	padding: 8px;
+}
+.article_text_row .article_link {
+	margin-top: 2px;
+}
+.article_image_row {
+	border: 1px solid #9f9f9f;
+	border-radius: 10px;
+	padding: 7px;
+	margin-bottom: 8px;
+	height: 146px;
+}
+.article_image_row td {
+	vertical-align: top;
+}
+.article_image_row .article_link {
+	margin-top: 8px;
+}
+.article_image_row .article_description {
+	height: 74px;
+}
+.article_image_row .article_preview {
+	height: 128px;
+	xbackground-color: green;
+	overflow: hidden;
+}
+.article_image {
+	width: 128px;
+	height: 128px;
+}
+.article_link {
+	display: block;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
+	font-weight: bolder;
+	margin-left: 4px;
+	margin-bottom: 8px;
+}
+.article_preview {
+	xdisplay: table-cell;
+}
+.article_info {
+	display: block;
+	xcolor: #666666 !important;
+	color: #666666;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
+	margin-left: 4px;
+	margin-bottom: 8px;
+}
+.article_info a {
+	color: #666666;
+}
+.article_description {
+	margin-left: 4px;
 }
 .story_image_128 {
 	float: right;
@@ -1248,13 +1403,15 @@ del {
 }
 .card_by {
 	display: block;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	padding-top: 2px;
 }
 .card_time {
 	color: #666666;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 }
 .card_vote {
 	display: table-cell;
@@ -1301,14 +1458,16 @@ del {
 }
 .card_story_link {
 	display: block;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	padding-bottom: 8px;
 }
 .card_story_site {
 	display: block;
 	color: #666666 !important;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 }
 .card_photo_9x16 {
 	width: 320px;
@@ -1346,7 +1505,8 @@ del {
 }
 .card_tags {
 	display: table-cell;
-	font-size: 8pt;
+	xfont-size: 8pt;
+	font-size: 1.1rem;
 	padding-top: 6px;
 	text-align: right;
 	vertical-align: top;
@@ -1375,110 +1535,137 @@ del {
 	background-color: #eeeeee;
 }
 .photo_thumb_small {
+	margin-bottom: 0px !important;
 	width: 128px;
 	height: 128px;
 }
 .photo_thumb_large {
+	margin-bottom: 0px !important;
 	width: 256px;
 	height: 256px;
 }
 .photo_tiny_9x16 {
+	margin-bottom: 0px !important;
 	width: 160px;
 	height: 284px;
 }
 .photo_tiny_3x4 {
+	margin-bottom: 0px !important;
 	width: 160px;
 	height: 213px;
 }
 .photo_tiny_1x1 {
+	margin-bottom: 0px !important;
 	width: 160px;
 	height: 160px;
 }
 .photo_tiny_4x3 {
+	margin-bottom: 0px !important;
 	width: 160px;
 	height: 120px;
 }
 .photo_tiny_16x9 {
+	margin-bottom: 0px !important;
 	width: 160px;
 	height: 90px;
 }
 .photo_small_9x16 {
+	margin-bottom: 0px !important;
 	width: 320px;
 	height: 569px;
 }
 .photo_small_3x4 {
+	margin-bottom: 0px !important;
 	width: 320px;
 	height: 427px;
 }
 .photo_small_1x1 {
+	margin-bottom: 0px !important;
 	width: 320px;
 	height: 320px;
 }
 .photo_small_4x3 {
+	margin-bottom: 0px !important;
 	width: 320px;
 	height: 240px;
 }
 .photo_small_16x9 {
+	margin-bottom: 0px !important;
 	width: 320px;
 	height: 180px;
 }
 .photo_medium_9x16 {
+	margin-bottom: 0px !important;
 	width: 640px;
 	height: 1138px;
 }
 .photo_medium_3x4 {
+	margin-bottom: 0px !important;
 	width: 640px;
 	height: 853px;
 }
 .photo_medium_1x1 {
+	margin-bottom: 0px !important;
 	width: 640px;
 	height: 640px;
 }
 .photo_medium_4x3 {
+	margin-bottom: 0px !important;
 	width: 640px;
 	height: 480px;
 }
 .photo_medium_16x9 {
+	margin-bottom: 0px !important;
 	width: 640px;
 	height: 360px;
 }
 .photo_big_9x16 {
+	margin-bottom: 0px !important;
 	width: 540px;
 	height: 960px;
 }
 .photo_big_3x4 {
+	margin-bottom: 0px !important;
 	width: 540px;
 	height: 720px;
 }
 .photo_big_1x1 {
+	margin-bottom: 0px !important;
 	width: 540px;
 	height: 540px;
 }
 .photo_big_4x3 {
+	margin-bottom: 0px !important;
 	width: 720px;
 	height: 540px;
 }
 .photo_big_16x9 {
+	margin-bottom: 0px !important;
 	width: 480px;
 	height: 540px;
 }
 .photo_large_9x16 {
+	margin-bottom: 0px !important;
 	width: 1080px;
 	height: 1920px;
 }
 .photo_large_3x4 {
+	margin-bottom: 0px !important;
 	width: 1080px;
 	height: 1440px;
 }
 .photo_large_1x1 {
+	margin-bottom: 0px !important;
 	width: 1080px;
 	height: 1080px;
 }
 .photo_large_4x3 {
+	margin-bottom: 0px !important;
 	width: 1440px;
 	height: 1080px;
 }
 .photo_large_16x9 {
+	margin-bottom: 0px !important;
 	width: 1920px;
 	height: 1080px;
 }
@@ -1494,6 +1681,10 @@ del {
 	border: 0px;
 	padding: 0px;
 	padding-top: 4px;
+}
+.story img {
+	display: block;
+	margin-bottom: 8px;
 }
 .photo_frame {
 	border: 1px #d3d3d3 solid;
@@ -1781,6 +1972,15 @@ del {
 	height: 16px;
 	padding-left: 20px;
 }
+.favicon_16 {
+	background-image: url(/images/globe-32.png);
+	background-position: left;
+	background-repeat: no-repeat;
+	background-size: 16px 16px;
+	display: inline-block;
+	height: 16px;
+	padding-left: 20px;
+}
 .calendar_16 {
 	background-image: url(/images/calendar-16.png);
 }
@@ -1822,6 +2022,9 @@ del {
 }
 .folder_new_16 {
 	background-image: url(/images/folder-new-16.png);
+}
+.globe_16 {
+	background-image: url(/images/globe-16.png);
 }
 .heart_16 {
 	background-image: url(/images/heart-16.png);
@@ -2039,6 +2242,9 @@ del {
 	}
 	.folder_new_16 {
 		background-image: url(/images/folder-new-32.png);
+	}
+	.globe_16 {
+		background-image: url(/images/globe-32.png);
 	}
 	.heart_16 {
 		background-image: url(/images/heart-32.png);
@@ -2319,38 +2525,45 @@ del {
 }
 .store_item_title {
 	font-weight: bolder;
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 }
 .store_item_tag {
 	font-weight: bolder;
 }
 .store_item_price {
-	font-size: 20pt;
+	xfont-size: 20pt;
+	font-size: 2.6rem;
 	line-height: 1.0;
 }
 .store_item_price sup {
 	vertical-align: top;
-	font-size: 12pt;
+	xfont-size: 12pt;
+	font-size: 1.6rem;
 }
 .store_item_shipping {
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	color: #008000;
 	white-space: nowrap;
 	padding-top: 4px;
 	padding-bottom: 9px;
 }
 .store_item_feature {
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	font-weight: bolder;
 	white-space: nowrap;
 }
 .store_cart_price {
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 	text-align: right;
 }
 .store_cart_title {
 	font-weight: bolder;
-	font-size: 10pt;
+	xfont-size: 10pt;
+	font-size: 1.4rem;
 }
 .store_sort_by {
 	text-align: right;

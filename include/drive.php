@@ -176,3 +176,96 @@ function drive_is_dir($drive_file)
 {
 	return ($drive_file["type"] == 0);
 }
+
+
+function drive_set($data)
+{
+	global $doc_root;
+	global $server_id;
+
+	//if (strlen($hash) != 64 || !string_uses($hash, "[0-9]abcdef")) {
+	//	//die("invalid hash [$hash]");
+	//	return false;
+	//}
+
+	if ($data === "") {
+		return crypt_sha256("");
+	}
+
+	$hash = crypt_sha256($data);
+	$path = "$doc_root/drive/" . substr($hash, 0, 3);
+	$file = substr($hash, 3) . ".gz";
+	$size = strlen($data);
+
+	$drive_data = db_find_rec("drive_data", $hash);
+	if ($drive_data === false) {
+		$drive_data = db_new_rec("drive_data");
+		$drive_data["hash"] = $hash;
+		$drive_data["server_id"] = $server_id;
+		$drive_data["size"] = $size;
+	} else {
+		if ($drive_data["size"] != $size) {
+			//die("hash collision [$hash]");
+			return false;
+		}
+
+		return $hash;
+	}
+
+	if (!fs_is_dir($path)) {
+		if (!fs_make_dir($path)) {
+			//die("unable to make dir [$path]");
+			return false;
+		}
+	}
+
+	if (!fs_is_file("$path/$file")) {
+		if (!gz_slap("$path/$file", $data)) {
+			//die("unable to save file [$hash]");
+			return false;
+		}
+
+//		$fp = gzopen("$path/$file", "w9");
+//		if ($fp === false) {
+//			//die("unable to gzopen file [$hash]");
+//			return false;
+//		}
+//		if (gzwrite($fp, $data) != $size) {
+//			//die("unable to save entire file [$hash]");
+//			return false;
+//		}
+//		gzclose($fp);
+	}
+
+	db_set_rec("drive_data", $drive_data);
+
+	return $hash;
+}
+
+
+function drive_get($hash)
+{
+	global $doc_root;
+	global $server_id;
+
+	if (strlen($hash) != 64 || !string_uses($hash, "[0-9]abcdef")) {
+		//die("invalid hash [$hash]");
+		return false;
+	}
+
+	$drive_data = db_find_rec("drive_data", $hash);
+	if ($drive_data === false) {
+		return false;
+	}
+
+	if ($drive_data["server_id"] != $server_id) {
+		//die("wrong server [$server_id]");
+		return false;
+	}
+
+	$path = "$doc_root/drive/" . substr($hash, 0, 3);
+	$file = substr($hash, 3) . ".gz";
+
+	//die("file [$path/$file]");
+	return gz_slurp("$path/$file");
+}

@@ -21,8 +21,8 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$fid = http_get_int("fid");
-$feed = db_get_rec("feed", $fid);
+$feed_id = http_get_int("feed_id");
+$feed = db_get_rec("feed", $feed_id);
 
 print_header();
 beg_main();

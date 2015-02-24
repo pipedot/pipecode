@@ -18,6 +18,9 @@
 //
 
 include("feed.php");
+include("clean.php");
+include("image.php");
+include("drive.php");
 
 if ($zid !== $auth_zid) {
 	die("not your page");
@@ -28,29 +31,30 @@ if ($col < 0 || $col > 2) {
 	die("invalid col [$col]");
 }
 
-$fid = http_post_int("fid", array("required" => false));
+$feed_id = http_post_int("feed_id", array("required" => false));
 $uri = http_post_string("uri", array("required" => false, "len" => 100, "valid" => "[a-z][A-Z][0-9]~@#$%&()-_=+[];:,./?"));
 
-if ($fid == 0) {
+if ($feed_id == 0) {
 	if ($uri == "") {
 		die("no feed uri given");
 	}
-	$fid = add_feed($uri);
+	$feed_id = add_feed($uri);
 }
-if (!db_has_rec("feed", $fid)) {
-	die("fid not found [$fid]");
+if (!db_has_rec("feed", $feed_id)) {
+	die("feed_id not found [$feed_id]");
 }
-if (db_has_rec("feed_user", array("zid" => $auth_zid, "fid" => $fid))) {
-	die("feed [$fid] is already on your page");
+if (db_has_rec("feed_user", array("zid" => $auth_zid, "feed_id" => $feed_id))) {
+	die("feed [$feed_id] is already on your page");
 }
 
 $row = sql("select max(pos) as max_pos from feed_user where zid = ? and col = ?", $auth_zid, $col);
 $pos = $row[0]["max_pos"] + 1;
 
-$feed_user = array();
+$feed_user = db_new_rec("feed_user");
 $feed_user["zid"] = $auth_zid;
-$feed_user["fid"] = $fid;
+$feed_user["feed_id"] = $feed_id;
 $feed_user["col"] = $col;
 $feed_user["pos"] = $pos;
 db_set_rec("feed_user", $feed_user);
+
 header("Location: edit");

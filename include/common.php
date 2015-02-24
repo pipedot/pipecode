@@ -32,6 +32,22 @@ if (fs_is_file("$doc_root/conf.php")) {
 $now = time();
 $year = gmdate("Y");
 
+$db_table["article"] = array(
+	array("name" => "article_id", "key" => true, "default" => 0),
+	array("name" => "author_link"),
+	array("name" => "author_name"),
+	array("name" => "body"),
+	array("name" => "description"),
+	array("name" => "feed_html"),
+	array("name" => "feed_id", "default" => 0),
+	array("name" => "guid"),
+	array("name" => "link"),
+	array("name" => "publish_time", "default" => $now),
+	array("name" => "redirect_link"),
+	array("name" => "title"),
+	array("name" => "thumb_id", "default" => 0)
+);
+
 $db_table["ban_ip"] = array(
 	array("name" => "remote_ip", "key" => true),
 	array("name" => "short_id", "default" => 0),
@@ -84,6 +100,13 @@ $db_table["bug_view"] = array(
 	array("name" => "zid", "key" => true),
 	array("name" => "time", "default" => 0),
 	array("name" => "last_time", "default" => 0)
+);
+
+$db_table["cache"] = array(
+	array("name" => "cache_id", "key" => true),
+	array("name" => "hash"),
+	array("name" => "time", "default" => $now),
+	array("name" => "url")
 );
 
 $db_table["captcha"] = array(
@@ -172,6 +195,12 @@ $db_table["default_conf"] = array(
 	array("name" => "value")
 );
 
+$db_table["drive_data"] = array(
+	array("name" => "hash", "key" => true),
+	array("name" => "server_id", "default" => 0),
+	array("name" => "size", "default" => 0)
+);
+
 $db_table["drive_file"] = array(
 	array("name" => "file_id", "key" => true, "auto" => true),
 	array("name" => "hash"),
@@ -190,23 +219,19 @@ $db_table["email_challenge"] = array(
 );
 
 $db_table["feed"] = array(
-	array("name" => "fid", "auto" => true, "key" => true),
+	array("name" => "feed_id", "key" => true),
+	array("name" => "copyright"),
+	array("name" => "description"),
+	array("name" => "link"),
+	array("name" => "slug"),
 	array("name" => "time", "default" => $now),
-	array("name" => "uri"),
 	array("name" => "title"),
-	array("name" => "link")
-);
-
-$db_table["feed_item"] = array(
-	array("name" => "fid", "key" => true),
-	array("name" => "time", "key" => true, "default" => $now),
-	array("name" => "title"),
-	array("name" => "link")
+	array("name" => "uri")
 );
 
 $db_table["feed_user"] = array(
 	array("name" => "zid", "key" => true),
-	array("name" => "fid", "key" => true),
+	array("name" => "feed_id", "key" => true),
 	array("name" => "col", "default" => 0),
 	array("name" => "pos", "default" => 0)
 );
@@ -408,6 +433,13 @@ $db_table["story_view"] = array(
 $db_table["tag"] = array(
 	array("name" => "tag_id", "auto" => true, "key" => true),
 	array("name" => "tag")
+);
+
+$db_table["thumb"] = array(
+	array("name" => "thumb_id", "key" => true),
+	array("name" => "hash"),
+	array("name" => "low_res", "default" => 0),
+	array("name" => "time", "default" => $now)
 );
 
 $db_table["tmp_image"] = array(
@@ -1187,7 +1219,7 @@ function find_rec($type = "")
 	global $s3;
 
 	$date_based = array("story", "poll", "journal");
-	if (in_array($type, $date_based) && string_uses($s2, "[0-9]-") && string_uses($s3, "[a-z][0-9]-")) {
+	if (in_array($type, $date_based) && string_uses($s2, "[0-9]-") && string_uses($s3, "[a-z][0-9]-") && string_has($s2, "-")) {
 		$date = $s2;
 		$slug = $s3;
 		$time_beg = strtotime("$date GMT");
@@ -1210,6 +1242,30 @@ function find_rec($type = "")
 		}
 		$short_id = $row[0]["short_id"];
 		$short_code = crypt_crockford_encode($short_id);
+	} else if ($type == "feed") {
+		if (string_uses($s2, "[A-Z][0-9]")) {
+			$short_code = $s2;
+			$short_id = crypt_crockford_decode($short_code);
+			$feed = db_find_rec("feed", $short_id);
+		} else if (string_uses($s2, "[a-z][0-9]-")) {
+			$slug = $s2;
+			$feed = db_find_rec("feed", array("slug" => $slug));
+		} else {
+			die("invalid request [$s2]");
+		}
+		if ($feed === false) {
+			die("unknown feed [$s2]");
+		}
+
+		return $feed;
+	} else if ($type == "article" || $type == "thumb") {
+		$short_code = $s2;
+		if (!string_uses($short_code, "[A-Z][a-z][0-9]")) {
+			die("invalid short code [$short_code]");
+		}
+		$short_id = crypt_crockford_decode($short_code);
+
+		return db_get_rec($type, $short_id);
 	} else {
 		if ($type == "bug_file") {
 			$short_code = $s3;
@@ -1400,6 +1456,54 @@ function make_photo_links($text)
 }
 
 
+function http_cache($url)
+{
+	global $redirect_url;
+
+	$cache_id = crypt_sha256($url);
+	$url = string_clean($url, "[a-z][A-Z][0-9]~#%&()-_+=[];:./?", 200);
+	$redirect_url = "";
+
+	if ($url === "") {
+		return false;
+	}
+
+	$cache = db_find_rec("cache", $cache_id);
+	if ($cache === false) {
+		$timeout = 5;
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+		curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+		$data = curl_exec($ch);
+		$redirect_url = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+		if ($redirect_url === $url) {
+			$redirect_url = "";
+		}
+		curl_close($ch);
+
+		//$data = http_slurp($url);
+		$hash = drive_set($data);
+		if ($hash === false) {
+			return false;
+		}
+
+		$cache = db_new_rec("cache");
+		$cache["cache_id"] = $cache_id;
+		$cache["hash"] = $hash;
+		$cache["url"] = $url;
+		db_set_rec("cache", $cache);
+	} else {
+		//writeln("drive_get [" . $cache["hash"] . "]");
+		//var_dump($cache);
+		$data = drive_get($cache["hash"]);
+	}
+
+	return $data;
+}
+
+
 function public_path($time)
 {
 	return "/pub/" . gmdate("Y", $time) . "/" . gmdate("m", $time) . "/" . gmdate("d", $time);
@@ -1438,7 +1542,11 @@ if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
 }
 
 $server_conf = db_get_conf("server_conf");
-$http_host = $_SERVER["HTTP_HOST"];
+if (array_key_exists("HTTP_HOST", $_SERVER)) {
+	$http_host = $_SERVER["HTTP_HOST"];
+} else {
+	$http_host = $server_name;
+}
 $user_page = "";
 $meta = "";
 $a = explode(".", $http_host);

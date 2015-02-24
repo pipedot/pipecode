@@ -40,19 +40,19 @@ writeln('<table style="width: 100%">');
 writeln('	<tr>');
 writeln('		<td style="width: 120px">Use existing feed:</td>');
 writeln('		<td>');
-writeln('			<select name="fid" style="width: 100%">');
+writeln('			<select name="feed_id" style="width: 100%">');
 writeln('				<option value="0">(select feed)</option>');
 
 $existing = array();
-$row = sql("select fid from feed_user where zid = ?", $auth_zid);
+$row = sql("select feed_id from feed_user where zid = ?", $auth_zid);
 for ($i = 0; $i < count($row); $i++) {
-	$existing[$row[$i]["fid"]] = 1;
+	$existing[$row[$i]["feed_id"]] = 1;
 }
 
-$row = sql("select fid, title from feed order by title");
+$row = sql("select feed_id, title from feed order by title");
 for ($i = 0; $i < count($row); $i++) {
-	if (!array_key_exists($row[$i]["fid"], $existing)) {
-		writeln('				<option value="' . $row[$i]["fid"] . '">' . $row[$i]["title"] . '</option>');
+	if (!array_key_exists($row[$i]["feed_id"], $existing)) {
+		writeln('				<option value="' . $row[$i]["feed_id"] . '">' . $row[$i]["title"] . '</option>');
 	}
 }
 writeln('			</select>');

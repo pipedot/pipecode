@@ -17,28 +17,26 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-include("clean.php");
-include("image.php");
-include("drive.php");
+print_header("Articles");
+beg_main();
 
-set_time_limit(14 * 60);
-header_text();
-header_expires();
+writeln('<h1>Articles</h1>');
 
-$row = sql("select feed_id, uri, time from feed");
+$row = sql("select * from article order by publish_time desc limit 0, 50");
+beg_tab();
+writeln('	<tr>');
+writeln('		<th>Title</th>');
+writeln('		<th class="right">Time</th>');
+writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
-	$feed_id = $row[$i]["feed_id"];
-	$uri = $row[$i]["uri"];
-	$time = $row[$i]["time"];
+	$short_code = crypt_crockford_encode($row[$i]["article_id"]);
 
-	if (time() > ($time + 60 * 5)) {
-		print "downloading feed_id [$feed_id] uri [$uri] ";
-		$data = download_feed($uri);
-		//$data = http_slurp($uri);
-		print "len [" . strlen($data) . "]\n";
-		save_feed($feed_id, $data);
-	}
+	writeln('	<tr>');
+	writeln('		<td><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></td>');
+	writeln('		<td class="right">' . date("Y-m-d H:i", $row[$i]["publish_time"]) . '</td>');
+	writeln('	</tr>');
 }
+end_tab();
 
-print "done";
+end_main();
+print_footer();

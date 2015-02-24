@@ -201,15 +201,22 @@ function clean_html($dirty, $definition = "comment")
 		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,img[src],li,ol,pre,q,s,sub,sup,u,ul,p,table,tr,td');
 	} else if ($definition == "journal") {
 		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,img[src],li,ol,pre,q,s,sub,sup,u,ul');
+	} else if ($definition == "article") {
+		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,img[src],li,ol,pre,q,s,sub,sup,u,ul,p,table,tr,th,td');
+	} else if ($definition == "text") {
+		$config->set('HTML.Allowed', '');
 	} else {
 		$config->set('HTML.Allowed', 'a[href],b,br,blockquote,i,li,ol,q,s,sub,sup,u,ul');
-		//$config->set('HTML.Allowed', 'a[href],br,b,i,u,s,sub,sup,q,blockquote,ul,ol,li');
 	}
-	if ($definition != "story") {
-		$config->set('HTML.Nofollow', true);
+	if ($definition == "text") {
+		$config->set('Core.HiddenElements', array("sub" => true, "sup" => true));
+	} else {
+		if ($definition != "story") {
+			$config->set('HTML.Nofollow', true);
+		}
+		$config->set('Output.SortAttr', true);
+		$config->set('AutoFormat.Linkify', true);
 	}
-	$config->set('Output.SortAttr', true);
-	$config->set('AutoFormat.Linkify', true);
 
 	// FIXME: this should match subdomains, but doesn't seem to work
 	// Ideally, subdomains of $server_name wouldn't get nofollow links

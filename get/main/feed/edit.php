@@ -17,28 +17,35 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-include("clean.php");
-include("image.php");
-include("drive.php");
-
-set_time_limit(14 * 60);
-header_text();
-header_expires();
-
-$row = sql("select feed_id, uri, time from feed");
-for ($i = 0; $i < count($row); $i++) {
-	$feed_id = $row[$i]["feed_id"];
-	$uri = $row[$i]["uri"];
-	$time = $row[$i]["time"];
-
-	if (time() > ($time + 60 * 5)) {
-		print "downloading feed_id [$feed_id] uri [$uri] ";
-		$data = download_feed($uri);
-		//$data = http_slurp($uri);
-		print "len [" . strlen($data) . "]\n";
-		save_feed($feed_id, $data);
-	}
+if (!$auth_user["admin"]) {
+	die("you are not an admin");
 }
 
-print "done";
+$feed = find_rec("feed");
+$short_code = crypt_crockford_encode($feed["feed_id"]);
+
+print_header("Edit Feed");
+beg_main();
+beg_form();
+
+writeln('<h1>Edit Feed</h1>');
+
+dict_beg();
+dict_row("Title", $feed["title"]);
+dict_row("Link", '<a href="' . $feed["link"] . '">' . $feed["link"] . '</a>');
+dict_row("Feed", '<a href="' . $feed["uri"] . '">' . $feed["uri"] . '</a>');
+if ($feed["copyright"] != "") {
+	dict_row("Copyright", $feed["copyright"]);
+}
+dict_row("Updated", date("Y-m-d H:i", $feed["time"]));
+dict_end();
+
+beg_tab();
+print_row(array("caption" => "Slug", "text_key" => "slug", "text_value" => $feed["slug"]));
+end_tab();
+
+right_box("Delete,Save");
+
+end_form();
+end_main();
+print_footer();

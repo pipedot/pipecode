@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.38, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
 --
 -- Host: yuzu.zenbi.net    Database: pipedot
 -- ------------------------------------------------------
--- Server version	5.5.38-0ubuntu0.14.04.1
+-- Server version	5.5.40-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -14,6 +14,217 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `account_journal`
+--
+
+DROP TABLE IF EXISTS `account_journal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `account_journal` (
+  `journal_id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) NOT NULL,
+  `period` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  PRIMARY KEY (`journal_id`),
+  UNIQUE KEY `journal_id_UNIQUE` (`journal_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `account_posting`
+--
+
+DROP TABLE IF EXISTS `account_posting`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `account_posting` (
+  `posting_id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` int(11) NOT NULL,
+  `journal_id` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`posting_id`),
+  UNIQUE KEY `posting_id_UNIQUE` (`posting_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `article`
+--
+
+DROP TABLE IF EXISTS `article`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `article` (
+  `article_id` int(11) NOT NULL,
+  `author_link` varchar(200) NOT NULL,
+  `author_name` varchar(50) NOT NULL,
+  `body` text NOT NULL,
+  `description` text NOT NULL,
+  `feed_html` text NOT NULL,
+  `feed_id` int(11) NOT NULL,
+  `guid` varchar(200) NOT NULL,
+  `link` varchar(200) NOT NULL,
+  `publish_time` int(11) NOT NULL,
+  `redirect_link` varchar(200) NOT NULL,
+  `title` varchar(200) NOT NULL,
+  `thumb_id` int(11) NOT NULL,
+  PRIMARY KEY (`article_id`),
+  UNIQUE KEY `article_id_UNIQUE` (`article_id`),
+  UNIQUE KEY `guid_UNIQUE` (`guid`),
+  KEY `feed_id` (`feed_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ban_ip`
+--
+
+DROP TABLE IF EXISTS `ban_ip`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ban_ip` (
+  `remote_ip` varchar(45) NOT NULL,
+  `short_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`remote_ip`),
+  UNIQUE KEY `remote_ip_UNIQUE` (`remote_ip`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `ban_user`
+--
+
+DROP TABLE IF EXISTS `ban_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ban_user` (
+  `zid` varchar(50) NOT NULL,
+  `short_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `editor_zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`zid`),
+  UNIQUE KEY `zid_UNIQUE` (`zid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bug`
+--
+
+DROP TABLE IF EXISTS `bug`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bug` (
+  `short_id` int(11) NOT NULL,
+  `bug_id` varchar(64) NOT NULL,
+  `author_zid` varchar(50) NOT NULL,
+  `body` text NOT NULL,
+  `closed` int(11) NOT NULL,
+  `closed_zid` varchar(50) NOT NULL,
+  `priority` varchar(20) NOT NULL,
+  `publish_time` int(11) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  PRIMARY KEY (`short_id`),
+  UNIQUE KEY `bug_id_UNIQUE` (`bug_id`),
+  UNIQUE KEY `short_id_UNIQUE` (`short_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bug_file`
+--
+
+DROP TABLE IF EXISTS `bug_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bug_file` (
+  `short_id` int(11) NOT NULL,
+  `long_id` varchar(64) NOT NULL,
+  `bug_short_id` int(11) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `remote_ip` varchar(45) NOT NULL,
+  `server` varchar(50) NOT NULL,
+  `size` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`short_id`),
+  UNIQUE KEY `short_id_UNIQUE` (`short_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bug_label`
+--
+
+DROP TABLE IF EXISTS `bug_label`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bug_label` (
+  `label_id` int(11) NOT NULL AUTO_INCREMENT,
+  `label_name` varchar(20) NOT NULL,
+  `label_tag` varchar(20) NOT NULL,
+  `background_color` varchar(7) NOT NULL,
+  `foreground_color` varchar(7) NOT NULL,
+  `reportable` int(11) NOT NULL,
+  PRIMARY KEY (`label_id`),
+  UNIQUE KEY `label_id_UNIQUE` (`label_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bug_labels`
+--
+
+DROP TABLE IF EXISTS `bug_labels`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bug_labels` (
+  `bug_short_id` int(11) NOT NULL,
+  `label_id` int(11) NOT NULL,
+  KEY `bug_label_bug_id` (`bug_short_id`),
+  KEY `bug_label_label_id` (`label_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `bug_view`
+--
+
+DROP TABLE IF EXISTS `bug_view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bug_view` (
+  `bug_id` varchar(64) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`bug_id`,`zid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cache`
+--
+
+DROP TABLE IF EXISTS `cache`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cache` (
+  `cache_id` varchar(64) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `time` int(11) NOT NULL,
+  `url` varchar(200) NOT NULL,
+  PRIMARY KEY (`cache_id`),
+  UNIQUE KEY `cache_id_UNIQUE` (`cache_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Table structure for table `captcha`
@@ -52,18 +263,33 @@ DROP TABLE IF EXISTS `card`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `card` (
-  `card_id` int(11) NOT NULL AUTO_INCREMENT,
-  `article_id` int(11) NOT NULL,
-  `link_id` int(11) NOT NULL,
-  `archive` int(11) NOT NULL,
+  `short_id` int(11) NOT NULL,
+  `card_id` varchar(64) NOT NULL,
   `body` text NOT NULL,
+  `edit_time` int(11) NOT NULL,
   `image_id` int(11) NOT NULL,
   `link_subject` varchar(200) NOT NULL,
   `link_url` varchar(200) NOT NULL,
-  `photo_id` int(11) NOT NULL,
-  `time` int(11) NOT NULL,
+  `photo_short_id` int(11) NOT NULL,
+  `publish_time` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
-  PRIMARY KEY (`card_id`)
+  PRIMARY KEY (`short_id`),
+  UNIQUE KEY `short_id_UNIQUE` (`short_id`),
+  UNIQUE KEY `card_id_UNIQUE` (`card_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `card_edit`
+--
+
+DROP TABLE IF EXISTS `card_edit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `card_edit` (
+  `card_id` varchar(64) NOT NULL,
+  `body` text NOT NULL,
+  `edit_time` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -75,9 +301,24 @@ DROP TABLE IF EXISTS `card_tags`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `card_tags` (
-  `card_id` int(11) NOT NULL,
-  `tag_id` int(11) NOT NULL,
-  UNIQUE KEY `card_tags_index` (`card_id`,`tag_id`)
+  `short_id` int(11) NOT NULL,
+  `tag` varchar(20) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `card_view`
+--
+
+DROP TABLE IF EXISTS `card_view`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `card_view` (
+  `card_id` varchar(64) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  `time` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  PRIMARY KEY (`card_id`,`zid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -89,7 +330,7 @@ DROP TABLE IF EXISTS `card_vote`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `card_vote` (
-  `card_id` int(11) NOT NULL,
+  `card_id` varchar(64) NOT NULL,
   `zid` varchar(50) NOT NULL,
   `value` int(11) NOT NULL,
   UNIQUE KEY `card_vote_index` (`card_id`,`zid`)
@@ -106,11 +347,16 @@ DROP TABLE IF EXISTS `comment`;
 CREATE TABLE `comment` (
   `comment_id` varchar(64) NOT NULL,
   `body` text NOT NULL,
+  `edit_time` int(11) NOT NULL,
+  `junk_status` int(11) NOT NULL,
+  `junk_time` int(11) NOT NULL,
+  `junk_zid` varchar(50) NOT NULL,
   `parent_id` varchar(64) NOT NULL,
+  `publish_time` int(11) NOT NULL,
+  `remote_ip` varchar(45) NOT NULL,
   `root_id` varchar(64) NOT NULL,
   `short_id` int(11) NOT NULL,
   `subject` varchar(100) NOT NULL,
-  `time` int(11) NOT NULL,
   `type` varchar(20) NOT NULL,
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`comment_id`),
@@ -119,6 +365,22 @@ CREATE TABLE `comment` (
   KEY `comment_short_id` (`short_id`),
   FULLTEXT KEY `comment_search` (`subject`,`body`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `comment_edit`
+--
+
+DROP TABLE IF EXISTS `comment_edit`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `comment_edit` (
+  `comment_id` varchar(64) NOT NULL,
+  `edit_time` int(11) NOT NULL,
+  `body` text NOT NULL,
+  `subject` varchar(100) NOT NULL,
+  KEY `comment_edit_index` (`comment_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -154,6 +416,91 @@ CREATE TABLE `default_conf` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `drive_data`
+--
+
+DROP TABLE IF EXISTS `drive_data`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_data` (
+  `hash` varchar(64) NOT NULL,
+  `server_id` int(11) NOT NULL,
+  `size` bigint(20) NOT NULL,
+  PRIMARY KEY (`hash`),
+  UNIQUE KEY `hash_UNIQUE` (`hash`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `drive_file`
+--
+
+DROP TABLE IF EXISTS `drive_file`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_file` (
+  `file_id` int(11) NOT NULL AUTO_INCREMENT,
+  `hash` varchar(64) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`file_id`),
+  UNIQUE KEY `file_id_UNIQUE` (`file_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `drive_path`
+--
+
+DROP TABLE IF EXISTS `drive_path`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_path` (
+  `path_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`path_id`),
+  UNIQUE KEY `path_id_UNIQUE` (`path_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `drive_server`
+--
+
+DROP TABLE IF EXISTS `drive_server`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_server` (
+  `server_id` int(11) NOT NULL AUTO_INCREMENT,
+  `server_name` varchar(50) NOT NULL,
+  PRIMARY KEY (`server_id`),
+  UNIQUE KEY `server_id_UNIQUE` (`server_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `drive_version`
+--
+
+DROP TABLE IF EXISTS `drive_version`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_version` (
+  `file_id` int(11) NOT NULL,
+  `version` int(11) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`file_id`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `email_challenge`
 --
 
@@ -177,27 +524,17 @@ DROP TABLE IF EXISTS `feed`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feed` (
-  `fid` int(11) NOT NULL AUTO_INCREMENT,
+  `feed_id` int(11) NOT NULL,
+  `copyright` varchar(200) NOT NULL,
+  `description` varchar(200) NOT NULL,
+  `link` varchar(200) NOT NULL,
+  `slug` varchar(200) NOT NULL,
   `time` int(11) NOT NULL,
+  `title` varchar(200) NOT NULL,
   `uri` varchar(200) NOT NULL,
-  `title` varchar(200) NOT NULL,
-  `link` varchar(200) NOT NULL,
-  PRIMARY KEY (`fid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `feed_item`
---
-
-DROP TABLE IF EXISTS `feed_item`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `feed_item` (
-  `fid` int(11) NOT NULL,
-  `title` varchar(200) NOT NULL,
-  `link` varchar(200) NOT NULL,
-  `time` varchar(45) NOT NULL
+  PRIMARY KEY (`feed_id`),
+  UNIQUE KEY `slug_UNIQUE` (`slug`),
+  UNIQUE KEY `feed_id_UNIQUE` (`feed_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -210,25 +547,10 @@ DROP TABLE IF EXISTS `feed_user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `feed_user` (
   `zid` varchar(50) NOT NULL,
-  `fid` int(11) NOT NULL,
+  `feed_id` int(11) NOT NULL,
   `col` int(11) NOT NULL,
   `pos` int(11) NOT NULL,
-  PRIMARY KEY (`fid`,`zid`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `gravatar`
---
-
-DROP TABLE IF EXISTS `gravatar`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `gravatar` (
-  `zid` varchar(50) NOT NULL,
-  `last_view` int(11) NOT NULL,
-  `last_sync` int(11) NOT NULL,
-  PRIMARY KEY (`zid`)
+  PRIMARY KEY (`zid`,`feed_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -300,7 +622,9 @@ DROP TABLE IF EXISTS `journal_photo`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `journal_photo` (
   `journal_id` varchar(64) NOT NULL,
-  `photo_id` int(11) NOT NULL
+  `photo_id` int(11) NOT NULL,
+  `journal_short_id` int(11) NOT NULL,
+  `photo_short_id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -353,20 +677,22 @@ CREATE TABLE `karma_type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `link`
+-- Table structure for table `ledger`
 --
 
-DROP TABLE IF EXISTS `link`;
+DROP TABLE IF EXISTS `ledger`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `link` (
-  `link_id` int(11) NOT NULL AUTO_INCREMENT,
-  `image_id` int(11) NOT NULL,
-  `subject` varchar(200) NOT NULL,
+CREATE TABLE `ledger` (
+  `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
+  `amount` int(11) NOT NULL,
+  `from_zid` varchar(50) NOT NULL,
+  `item_id` int(11) NOT NULL,
   `time` int(11) NOT NULL,
-  `url` varchar(200) NOT NULL,
-  PRIMARY KEY (`link_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+  `to_zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`transaction_id`),
+  UNIQUE KEY `transaction_id_UNIQUE` (`transaction_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -435,7 +761,9 @@ DROP TABLE IF EXISTS `photo`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `photo` (
-  `photo_id` int(11) NOT NULL AUTO_INCREMENT,
+  `short_id` int(11) NOT NULL,
+  `photo_id_old` int(11) NOT NULL,
+  `photo_id` varchar(64) NOT NULL,
   `aspect_width` int(11) NOT NULL,
   `aspect_height` int(11) NOT NULL,
   `has_medium` int(11) NOT NULL,
@@ -448,7 +776,8 @@ CREATE TABLE `photo` (
   `size` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
-  PRIMARY KEY (`photo_id`)
+  PRIMARY KEY (`short_id`),
+  UNIQUE KEY `short_id_UNIQUE` (`short_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -518,10 +847,10 @@ DROP TABLE IF EXISTS `poll`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `poll` (
   `poll_id` varchar(64) NOT NULL,
+  `publish_time` int(11) NOT NULL,
   `question` varchar(200) NOT NULL,
   `short_id` int(11) NOT NULL,
   `slug` varchar(200) NOT NULL,
-  `time` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`poll_id`),
@@ -592,6 +921,28 @@ CREATE TABLE `poll_vote` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `screenshot`
+--
+
+DROP TABLE IF EXISTS `screenshot`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `screenshot` (
+  `short_id` int(11) NOT NULL,
+  `screenshot_id` varchar(64) NOT NULL,
+  `body` text NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `height` int(11) NOT NULL,
+  `size` int(11) NOT NULL,
+  `type` varchar(3) NOT NULL,
+  `width` int(11) NOT NULL,
+  PRIMARY KEY (`short_id`),
+  UNIQUE KEY `short_id_UNIQUE` (`short_id`),
+  UNIQUE KEY `screenshot_id_UNIQUE` (`screenshot_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `server_conf`
 --
 
@@ -616,7 +967,8 @@ CREATE TABLE `short` (
   `short_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(20) NOT NULL,
   `item_id` varchar(64) NOT NULL,
-  PRIMARY KEY (`short_id`)
+  PRIMARY KEY (`short_id`),
+  UNIQUE KEY `short_id_UNIQUE` (`short_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -628,13 +980,15 @@ DROP TABLE IF EXISTS `short_view`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `short_view` (
+  `view_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `short_id` int(11) NOT NULL,
   `agent` varchar(250) NOT NULL,
   `referer` varchar(250) NOT NULL,
   `remote_ip` varchar(45) NOT NULL,
   `time` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
-  KEY `short_view_index` (`short_id`)
+  PRIMARY KEY (`view_id`),
+  UNIQUE KEY `view_id_UNIQUE` (`view_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -830,6 +1184,24 @@ CREATE TABLE `tag` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `thumb`
+--
+
+DROP TABLE IF EXISTS `thumb`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `thumb` (
+  `thumb_id` int(11) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `low_res` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  PRIMARY KEY (`thumb_id`),
+  UNIQUE KEY `thumb_id_UNIQUE` (`thumb_id`),
+  UNIQUE KEY `hash_UNIQUE` (`hash`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `tmp_image`
 --
 
@@ -868,6 +1240,22 @@ CREATE TABLE `topic` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user` (
+  `user_id` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`user_id`),
+  UNIQUE KEY `zid_UNIQUE` (`zid`),
+  UNIQUE KEY `user_id_UNIQUE` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user_conf`
 --
 
@@ -891,4 +1279,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-09-13 18:58:50
+-- Dump completed on 2015-02-24  3:37:47
