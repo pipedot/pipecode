@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = find_rec("journal");
+$journal = item_request("journal");
 
 print_header("Media");
 beg_main();
@@ -29,9 +29,9 @@ beg_form("", "file");
 
 writeln('<h1>Journal</h1>');
 if ($journal["published"]) {
-	writeln('<p><a class="icon_16 notepad_16" href="/journal/' . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"] . '">' . $journal["title"] . '</a></p>');
+	writeln('<p><a class="icon-16 notepad-16" href="/journal/' . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"] . '">' . $journal["title"] . '</a></p>');
 } else {
-	writeln('<p><a class="icon_16 notepad_16" href="/journal/' . $journal["short_code"] . '">' . $journal["title"] . '</a></p>');
+	writeln('<p><a class="icon-16 notepad-16" href="/journal/' . $journal["short_code"] . '">' . $journal["title"] . '</a></p>');
 }
 
 writeln('<h2>Photos</h2>');
@@ -43,24 +43,24 @@ writeln('		<th class="center">Size</th>');
 writeln('		<th class="center">Date</th>');
 writeln('		<th></th>');
 writeln('	</tr>');
-$row = sql("select short_id, original_name, size, time from journal_photo inner join photo on photo_short_id = short_id where journal_short_id = ? order by original_name", $journal["short_id"]);
+$row = sql("select photo_id, original_name, size, time from journal_photo inner join photo on journal_photo.photo_id = photo.photo_id where journal_id = ? order by original_name", $journal["journal_id"]);
 if (count($row) == 0) {
 	writeln('	<tr>');
 	writeln('		<td colspan="4">(no photos)</th>');
 	writeln('	</tr>');
 }
 for ($i = 0; $i < count($row); $i++) {
-	$photo_short_code = crypt_crockford_encode($row[$i]["short_id"]);
+	$photo_code = crypt_crockford_encode($row[$i]["photo_id"]);
 	writeln('	<tr>');
-	writeln('		<td><a class="icon_16 picture_16" href="' . $protocol . "://" . $server_name . "/photo/" . $photo_short_code . '">' . $row[$i]["original_name"] . '</a></td>');
+	writeln('		<td><a class="icon-16 picture-16" href="' . $protocol . "://" . $server_name . "/photo/" . $photo_code . '">' . $row[$i]["original_name"] . '</a></td>');
 	writeln('		<td class="center">' . sys_format_size($row[$i]["size"]) . '</td>');
 	writeln('		<td class="center">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('		<td class="right"><a class="icon_16 minus_16" href="' . $protocol . '://' . $server_name . '/photo/' . $photo_short_code . '/delete">Delete</a></td>');
+	writeln('		<td class="right"><a class="icon-16 minus-16" href="' . $protocol . '://' . $server_name . '/photo/' . $photo_code . '/delete">Delete</a></td>');
 	writeln('	</tr>');
 }
 end_tab();
 
-left_right_box('<input name="upload" type="file"/>', "Upload");
+box_two('<input name="upload" type="file"/>', "Upload");
 
 end_form();
 end_main();

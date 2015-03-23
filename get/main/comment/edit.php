@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -24,7 +24,7 @@ if ($auth_zid === "") {
 	die("sign in to edit");
 }
 
-$comment = find_rec("comment");
+$comment = item_request("comment");
 $clean_body = $comment["body"];
 $dirty_body = dirty_html($clean_body);
 if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
@@ -52,7 +52,7 @@ writeln('<div style="margin-bottom: 8px">');
 writeln('<textarea name="body" style="width: 100%; height: 100px">' . $dirty_body . '</textarea>');
 writeln('</div>');
 
-right_box("Save");
+box_right("Save");
 
 if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 	writeln('<script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>');

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,7 +23,7 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");
 }
 
-$bug = find_rec("bug");
+$bug = item_request("bug");
 
 print_header("Attachments", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
@@ -38,20 +38,20 @@ writeln('		<th>Date</th>');
 writeln('		<th>Author</th>');
 writeln('		<th></th>');
 writeln('	</tr>');
-$row = sql("select short_id, name, size, time, type, zid from bug_file where bug_short_id = ? order by time", $short_id);
+$row = sql("select bug_file_id, name, size, time, type, zid from bug_file where bug_id = ? order by time", $bug["bug_id"]);
 for ($i = 0; $i < count($row); $i++) {
-	$bug_file_short_code = crypt_crockford_encode($row[$i]["short_id"]);
+	$bug_file_code = crypt_crockford_encode($row[$i]["bug_file_id"]);
 	writeln('	<tr>');
-	writeln('		<td><a class="icon_16 ' . file_icon($row[$i]["type"]) . '" href="/pub/bug/' . $bug_file_short_code . '.' . $row[$i]["type"] . '">' . $row[$i]["name"] . '</a></td>');
+	writeln('		<td><a class="icon-16 ' . file_icon($row[$i]["type"]) . '" href="/pub/bug/' . $bug_file_code . '.' . $row[$i]["type"] . '">' . $row[$i]["name"] . '</a></td>');
 	writeln('		<td>' . sys_format_size($row[$i]["size"]) . '</a></td>');
 	writeln('		<td>' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('		<td>' . user_page_link($row[$i]["zid"], true) . '</td>');
-	writeln('		<td class="right"><a class="icon_16 delete_16" href="/bug/delete/' . $bug_file_short_code . '">Delete</a></td>');
+	writeln('		<td>' . user_link($row[$i]["zid"], ["tag" => true]) . '</td>');
+	writeln('		<td class="right"><a class="icon-16 delete-16" href="/bug/delete/' . $bug_file_code . '">Delete</a></td>');
 	writeln('	</tr>');
 }
 end_tab();
 
-right_box('<a class="icon_16 clip_16" href="/bug/' . $bug["short_code"] . '/attach">Attach</a>');
+box_right('<a class="icon-16 clip-16" href="/bug/' . $bug["short_code"] . '/attach">Attach</a>');
 
 end_main();
 print_footer();

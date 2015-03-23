@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,7 +23,7 @@ if (!$auth_user["editor"]) {
 
 $reason = http_post_string("reason", array("len" => 50, "valid" => "[a-z][A-Z][0-9]~!@#$%^*()_+-=[]\{}|;',./? "));
 
-$pipe = find_rec("pipe");
+$pipe = item_request("pipe");
 $pipe["closed"] = 1;
 $pipe["edit_zid"] = $auth_zid;
 $pipe["reason"] = $reason;

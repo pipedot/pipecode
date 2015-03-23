@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -42,9 +42,9 @@ for ($i = 0; $i < count($row); $i++) {
 
 	writeln('	<tr>');
 	writeln('		<td>' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('		<td class="center">' . user_page_link($row[$i]["zid"], true) . '</td>');
+	writeln('		<td class="center">' . user_link($row[$i]["zid"], ["tag" => true]) . '</td>');
 	writeln('		<td class="center"><a href="/comment/' . $short_code . '">#' . $short_code . '</a></td>');
-	writeln('		<td class="right">' . user_page_link($row[$i]["editor_zid"], true) . '</td>');
+	writeln('		<td class="right">' . user_link($row[$i]["editor_zid"], ["tag" => true]) . '</td>');
 	writeln('	</tr>');
 }
 end_tab();

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,11 +21,7 @@ include("render.php");
 
 header_text();
 
-$journal_id = $s2;
-if (!string_uses($journal_id, "[a-z][0-9]_")) {
-	die("invalid journal_id [$journal_id]");
-}
-
+$journal = item_request("journal");
 $can_moderate = true;
-render_page("journal", $journal_id, true);
+render_page("journal", $journal["journal_id"], true);
 

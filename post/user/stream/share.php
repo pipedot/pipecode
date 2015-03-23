@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -40,9 +40,9 @@ if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	if ($src_img === false) {
 		die("unable to open uploaded file");
 	}
-	$photo_short_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
+	$photo_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
 } else {
-	$photo_short_id = 0;
+	$photo_id = 0;
 }
 
 if ($link_url == "") {
@@ -54,36 +54,33 @@ if ($link_url == "") {
 	}
 }
 
-if ($clean_body == "" && $link_url == "" && $photo_short_id == 0) {
+if ($clean_body == "" && $link_url == "" && $photo_id == 0) {
 	die("nothing to share");
 }
 
 $card = db_new_rec("card");
-$card["card_id"] = create_id($auth_zid, $time);
-$card["short_id"] = create_short("card", $card["card_id"]);
+$card["card_id"] = create_short("card");
 $card["image_id"] = 0;
 $card["archive"] = $time + 86400 * 90;
 $card["body"] = $clean_body;
 $card["link_subject"] = $link_subject;
 $card["link_url"] = $link_url;
-$card["photo_short_id"] = $photo_short_id;
+$card["photo_id"] = $photo_id;
 $card["zid"] = $auth_zid;
 
 db_set_rec("card", $card);
-$short_code = crypt_crockford_encode($card["short_id"]);
-//$card = db_get_rec("card", array("zid" => $zid, "time" => $time));
-//$card_id = $card["card_id"];
+$card_code = crypt_crockford_encode($card["card_id"]);
 
 for ($i = 0; $i < count($tags); $i++) {
 	$card_tags = db_new_rec("card_tags");
-	$card_tags["short_id"] = $card["short_id"];
+	$card_tags["card_id"] = $card["card_id"];
 	$card_tags["tag"] = $tags[$i];
 	db_set_rec("card_tags", $card_tags);
 }
 
 if ($link_url == "") {
-	header("Location: " . user_page_link($auth_zid) . "stream/");
+	header("Location: " . user_link($auth_zid) . "stream/");
 } else {
-	header("Location: $protocol://$server_name/card/$short_code/image");
+	header("Location: $protocol://$server_name/card/$card_code/image");
 }
 

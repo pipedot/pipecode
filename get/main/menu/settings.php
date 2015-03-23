@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -34,16 +34,16 @@ beg_main();
 beg_form();
 writeln('<h1>Settings</h1>');
 
-beg_tab("Appearance");
-print_row(array("caption" => "Theme", "option_key" => "theme", "option_list" => $themes, "option_value" => $server_conf["theme"]));
-end_tab();
+//beg_tab("Appearance");
+//print_row(array("caption" => "Theme", "option_key" => "theme", "option_list" => $themes, "option_value" => $server_conf["theme"]));
+//end_tab();
 
 beg_tab("Features");
 print_row(array("caption" => "Allow Sign Up", "check_key" => "sign_up_enabled", "checked" => $server_conf["sign_up_enabled"]));
 print_row(array("caption" => "Allow Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
 end_tab();
 
-right_box("Save");
+box_right("Save");
 
 end_form();
 end_main();

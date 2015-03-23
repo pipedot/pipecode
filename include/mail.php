@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -162,7 +162,7 @@ function print_mail_dir($location)
 {
 	global $auth_zid;
 
-	print_header($location, array("Compose"), array("mail_compose"), array("/mail/compose"));
+	print_header($location, array("Compose"), array("mail-compose"), array("/mail/compose"));
 
 	beg_main();
 	writeln('<table class="fill">');
@@ -171,16 +171,16 @@ function print_mail_dir($location)
 
 	beg_tab();
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/" class="icon_16 inbox_16">Inbox</a></td>');
+	writeln('		<td><a href="/mail/" class="icon-16 inbox-16">Inbox</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/sent" class="icon_16 sent_16">Sent</a></td>');
+	writeln('		<td><a href="/mail/sent" class="icon-16 sent-16">Sent</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/junk" class="icon_16 junk_16">Junk</a></td>');
+	writeln('		<td><a href="/mail/junk" class="icon-16 junk-16">Junk</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/trash" class="icon_16 trash_16">Trash</a></td>');
+	writeln('		<td><a href="/mail/trash" class="icon-16 trash-16">Trash</a></td>');
 	writeln('	</tr>');
 	end_tab();
 
@@ -207,7 +207,7 @@ function print_mail_dir($location)
 		}
 
 		writeln('	<tr>');
-		writeln('		<td><a href="view?mid=' . $message["mail_id"] . '" class="icon_16 mail_16">' . $message["subject"] . '</a></td>');
+		writeln('		<td><a href="view?mid=' . $message["mail_id"] . '" class="icon-16 mail-16">' . $message["subject"] . '</a></td>');
 		if (string_has($address["email"], "no-reply@")) {
 			writeln('		<td class="center">' . $address["email"] . '</td>');
 		} else {
@@ -225,9 +225,9 @@ function print_mail_dir($location)
 	if (count($list) > 0) {
 		beg_form();
 		if ($location == "Junk" || $location == "Trash") {
-			right_box("Empty");
+			box_right("Empty");
 		} else {
-			right_box("Delete All");
+			box_right("Delete All");
 		}
 		end_form();
 	}
@@ -255,7 +255,7 @@ function send_notifications($comment)
 
 	$new_subject = $comment["subject"];
 	$new_comment_id = $comment["comment_id"];
-	$new_short_code = crypt_crockford_encode($comment["short_id"]);
+	$new_comment_code = crypt_crockford_encode($new_comment_id);
 	$new_zid = $comment["zid"];
 	if ($new_zid == "") {
 		$new_zid = "Anonymous Coward";
@@ -264,9 +264,9 @@ function send_notifications($comment)
 
 	$sent_list = array();
 
-	while ($parent_id != "") {
+	while ($parent_id != 0) {
 		$comment = db_get_rec("comment", $parent_id);
-		$parent_short_code = crypt_crockford_encode($comment["short_id"]);
+		$parent_code = crypt_crockford_encode($comment["comment_id"]);
 		$zid = $comment["zid"];
 		if ($zid != "" && $zid != $auth_zid && !in_array($zid, $sent_list)) {
 			$a = article_info($comment);
@@ -279,11 +279,11 @@ function send_notifications($comment)
 			$body .= "\n";
 			$body .= "Your original comment:\n";
 			$body .= $comment["subject"] . "\n";
-			$body .= "https://$server_name/comment/$parent_short_code\n";
+			$body .= "https://$server_name/comment/$parent_code\n";
 			$body .= "\n";
 			$body .= "The new reply:\n";
 			$body .= "$new_subject\n";
-			$body .= "https://$server_name/comment/$new_short_code\n";
+			$body .= "https://$server_name/comment/$new_comment_code\n";
 			$body .= "\n";
 
 			send_web_mail($zid, $subject, $body, "", false);

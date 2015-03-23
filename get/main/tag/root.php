@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -30,19 +30,19 @@ if (!string_uses($tag, "[a-z][0-9]")) {
 if ($auth_zid === "") {
 	print_header("#$tag");
 } else {
-	print_header("#$tag", array("Share"), array("share"), array(user_page_link($auth_zid) . "stream/share"));
+	print_header("#$tag", array("Share"), array("share"), array(user_link($auth_zid) . "stream/share"));
 }
 
 beg_main("stream");
 
-$row = sql("select card.short_id from card inner join card_tags on card.short_id = card_tags.short_id where tag = ? order by edit_time desc", $tag);
+$row = sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id where tag = ? order by edit_time desc", $tag);
 //$row = sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id order by time desc");
 //var_dump($row);
 //print "tag_id [$tag_id]";
 
 for ($i = 0; $i < count($row); $i++) {
 	//print "card_id [" . $row[$i]["card_id"] . "]";
-	print_card($row[$i]["short_id"]);
+	print_card($row[$i]["card_id"]);
 }
 
 //writeln('<h1>Tag</h1>');

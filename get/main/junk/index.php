@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -31,24 +31,24 @@ beg_main();
 
 writeln('<h1>Junk</h1>');
 
-$row = sql("select comment_vote.comment_id, count(*) as votes, root_id, short_id, subject, type, edit_time, body, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
+$row = sql("select comment_vote.comment_id, count(*) as votes, root_id, subject, type, edit_time, body, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
 if (count($row) == 0) {
 	writeln('<p>No unmarked junk comments</p>');
 } else {
 	beg_form();
 	for ($i = 0; $i < count($row); $i++) {
 		$a = article_info($row[$i], false);
-		print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $row[$i]["short_id"], $a["link"], $a["title"]);
+		print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"]);
 		writeln('</div>');
 		writeln('</article>');
 		writeln();
 	}
 
-	left_right_box("<a href=\"?default=spam\">Default to Spam</a>", "Save");
+	box_two('<a href="?default=spam">Default to Spam</a>', "Save");
 	end_form();
 }
 
-writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a href="anonymous">Show All Anonymous</a></div>');
+box_center('<a href="anonymous">Show All Anonymous</a>');
 
 end_main();
 print_footer();

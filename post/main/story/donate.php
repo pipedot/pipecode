@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if ($auth_zid === "") {
 	die("sign in to donate");
 }
 
-$story = find_rec("story");
+$story = item_request("story");
 $pipe = db_get_rec("pipe", $story["pipe_id"]);
 $link = item_link("story", $story["story_id"]);
 
@@ -52,7 +52,7 @@ beg_main("cell");
 beg_form();
 
 writeln('<h1>Story</h1>');
-writeln('<a class="icon_16 news_16" href="' . $link . '" style="margin-bottom: 8px;">' . $story["title"] . '</a>');
+writeln('<a class="icon-16 news-16" href="' . $link . '" style="margin-bottom: 8px;">' . $story["title"] . '</a>');
 
 writeln('<h2>Your Donation</h2>');
 writeln('<div class="icon_32 coins_32">$' . format_money($amount) . '</div>');
@@ -63,21 +63,21 @@ beg_tab();
 if ($amount_author > 0) {
 	writeln('	<tr>');
 	writeln('		<td>Author</td>');
-	writeln('		<td class="center">' . user_page_link($story["author_zid"], true) . '</td>');
+	writeln('		<td class="center">' . user_link($story["author_zid"], ["tag" => true]) . '</td>');
 	writeln('		<td class="right">$' . format_money($amount_author) . '</td>');
 	writeln('	</tr>');
 }
 if ($amount_editor > 0) {
 	writeln('	<tr>');
 	writeln('		<td>Editor</td>');
-	writeln('		<td class="center">' . user_page_link($pipe["edit_zid"], true) . '</td>');
+	writeln('		<td class="center">' . user_link($pipe["edit_zid"], ["tag" => true]) . '</td>');
 	writeln('		<td class="right">$' . format_money($amount_editor) . '</td>');
 	writeln('	</tr>');
 }
 if ($amount_server > 0) {
 	writeln('	<tr>');
 	writeln('		<td>Server</td>');
-	writeln('		<td class="center">' . user_page_link($server_zid, true) . '</td>');
+	writeln('		<td class="center">' . user_link($server_zid, ["tag" => true]) . '</td>');
 	writeln('		<td class="right">$' . format_money($amount_server) . '</td>');
 	writeln('	</tr>');
 }
@@ -88,7 +88,7 @@ beg_tab();
 print_row(array("caption" => "Password", "password_key" => "password"));
 end_tab();
 
-right_box("Confirm");
+box_right("Confirm");
 
 end_form();
 end_main();

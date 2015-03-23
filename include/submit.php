@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -28,6 +28,7 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	beg_main("cell");
 
 	if ($preview) {
+		$a["type"] = "story";
 		$a["zid"] = $auth_zid;
 		$topic = db_get_rec("topic", $tid);
 		$a["title"] = $title;
@@ -40,8 +41,8 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	}
 
 	beg_form();
-	writeln('<div class="dialog_title">Submit Story</div>');
-	writeln('<div class="dialog_body">');
+	writeln('<div class="dialog-title">Submit Story</div>');
+	writeln('<div class="dialog-body">');
 
 	writeln('<table class="fill" style="padding: 0px">');
 	writeln('	<tr>');

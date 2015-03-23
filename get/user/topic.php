@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -49,7 +49,7 @@ if ($topic == "") {
 		} else {
 			$icon = "news";
 		}
-		writeln('<a href="/topic/' . $topic . '"><div class="topic_box ' . $icon . '_64">' . $topic . '</div></a>');
+		writeln('<a href="/topic/' . $topic . '"><div class="topic-box ' . $icon . '-64">' . $topic . '</div></a>');
 	}
 } else {
 	$items_per_page = 10;

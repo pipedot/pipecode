@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -29,13 +29,13 @@ $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("comment", $items_per_page, array("zid" => $zid));
 
 if ($auth_user["show_junk_enabled"]) {
-	$row = sql("select comment_id, root_id, junk_status, short_id, subject, type, edit_time, body from comment where zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
+	$row = sql("select comment_id, root_id, junk_status, subject, type, edit_time, body from comment where zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
 } else {
-	$row = sql("select comment_id, root_id, junk_status, short_id, subject, type, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
+	$row = sql("select comment_id, root_id, junk_status, subject, type, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
 }
 for ($i = 0; $i < count($row); $i++) {
 	$a = article_info($row[$i], false);
-	print render_comment($row[$i]["subject"], $zid, $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $row[$i]["short_id"], $a["link"], $a["title"], $row[$i]["junk_status"]);
+	print render_comment($row[$i]["subject"], $zid, $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"], $row[$i]["junk_status"]);
 	writeln('</div>');
 	writeln('</article>');
 	writeln();

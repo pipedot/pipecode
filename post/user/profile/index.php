@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -25,7 +25,9 @@ $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 
 $javascript_enabled = http_post_bool("javascript_enabled", array("numeric" => true));
 $wysiwyg_enabled = http_post_bool("wysiwyg_enabled", array("numeric" => true));
+$inline_reply_enabled = http_post_bool("inline_reply_enabled", array("numeric" => true));
 $time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
+$large_text_enabled = http_post_bool("large_text_enabled", array("numeric" => true));
 $hide_threshold = http_post_string("hide_threshold", array("valid" => "[0-9]-"));
 $expand_threshold = http_post_string("expand_threshold", array("valid" => "[0-9]-"));
 $show_junk_enabled = http_post_bool("show_junk_enabled", array("numeric" => true));
@@ -41,7 +43,9 @@ if (!in_array($time_zone, $zones)) {
 
 $user_conf["javascript_enabled"] = $javascript_enabled;
 $user_conf["wysiwyg_enabled"] = $wysiwyg_enabled;
+$user_conf["inline_reply_enabled"] = $inline_reply_enabled;
 $user_conf["time_zone"] = $time_zone;
+$user_conf["large_text_enabled"] = $large_text_enabled;
 $user_conf["story_image_style"] = $story_image_style;
 $user_conf["hide_threshold"] = $hide_threshold;
 $user_conf["expand_threshold"] = $expand_threshold;

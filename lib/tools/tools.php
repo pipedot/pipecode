@@ -1,7 +1,7 @@
 <?
 //
 // tools - general utility functions
-// Copyright (C) 1998-2014 Bryan Beicker <bryan@beicker.com>
+// Copyright (C) 1998-2015 Bryan Beicker <bryan@beicker.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -1085,12 +1085,17 @@ function default_error($text)
 }
 
 
-function dict_beg($caption = "")
+function dict_beg($caption1 = "", $caption2 = "")
 {
 	writeln('<table class="dict">');
-	if ($caption != "") {
+	if ($caption2 != "") {
 		writeln('	<tr>');
-		writeln('		<th colspan="2">' . $caption . '</th>');
+		writeln('		<th>' . $caption1 . '</th>');
+		writeln('		<th>' . $caption2 . '</th>');
+		writeln('	</tr>');
+	} else if ($caption1 != "") {
+		writeln('	<tr>');
+		writeln('		<th colspan="2">' . $caption1 . '</th>');
 		writeln('	</tr>');
 	}
 }
@@ -1112,7 +1117,7 @@ function dict_row($name, $value = "")
 		}
 
 		if (array_key_exists("name_icon", $a)) {
-			$class = ' class="icon_16 ' . $a["name_icon"] . '_16"';
+			$class = ' class="icon-16 ' . $a["name_icon"] . '-16"';
 			$tag = "div";
 		} else {
 			$class = "";
@@ -1130,7 +1135,7 @@ function dict_row($name, $value = "")
 		}
 
 		if (array_key_exists("value_icon", $a)) {
-			$class = ' class="icon_16 ' . $a["value_icon"] . '_16"';
+			$class = ' class="icon-16 ' . $a["value_icon"] . '-16"';
 			$tag = "div";
 		} else {
 			$class = "";
@@ -1244,6 +1249,15 @@ function fs_dir_name($path)
 	}
 
 	return substr($path, 0, $pos);
+}
+
+
+function fs_ensure_dir($path, $mode = 0755)
+{
+	if (is_dir($path)) {
+		return true;
+	}
+	return mkdir($path, $mode, true);
 }
 
 
@@ -1422,7 +1436,7 @@ function http_get($name)
 	if (!array_key_exists($name, $map)) {
 		return "";
 	}
-	return $map[$name];
+	return urldecode($map[$name]);
 }
 
 
@@ -1728,43 +1742,57 @@ function http_test_string($name, $method, $arg = array())
 }
 
 
-function left_box($buttons, $style = "")
+function box_center($buttons)
 {
-	if ($style == "") {
-		writeln('<div class="left_box">');
-	} else {
-		writeln('<div class="left_box" style="' . $style . '">');
-	}
-	left_right_buttons($buttons);
+	writeln('<div class="box-center">' . box_buttons($buttons) . '</div>');
+}
+
+
+function box_left($buttons)
+{
+	writeln('<div class="box-left">' . box_buttons($buttons) . '</div>');
+}
+
+
+function box_right($buttons)
+{
+	writeln('<div class="box-right">' . box_buttons($buttons) . '</div>');
+}
+
+
+function box_two($left, $right)
+{
+	writeln('<div class="box-two">');
+	writeln('	<div>' . box_buttons($left) . '</div>');
+	writeln('	<div>' . box_buttons($right) . '</div>');
 	writeln('</div>');
 }
 
 
-function left_right_box($left, $right)
+function box_three($left, $center, $right)
 {
-	writeln('<div class="left_right_box">');
-	writeln('<div class="left_box">');
-	left_right_buttons($left);
-	writeln('</div>');
-	writeln('<div class="right_box">');
-	left_right_buttons($right);
-	writeln('</div>');
+	writeln('<div class="box-three">');
+	writeln('	<div>' . box_buttons($left) . '</div>');
+	writeln('	<div>' . box_buttons($center) . '</div>');
+	writeln('	<div>' . box_buttons($right) . '</div>');
 	writeln('</div>');
 }
 
 
-function left_right_buttons($buttons)
+function box_buttons($buttons)
 {
 	if (string_has($buttons, "<")) {
-		writeln($buttons);
+		return $buttons;
 	} else {
 		$a = explode(",", $buttons);
+		$s = "";
 		for ($i = 0; $i < count($a); $i++) {
 			$value = trim($a[$i]);
 			$name = strtolower($value);
 			$name = str_replace(" ", "_", $name);
-			writeln('<input type="submit" name="' . $name . '" value="' . $value .'"/>');
+			$s .= '<input type="submit" name="' . $name . '" value="' . $value .'"/> ';
 		}
+		return trim($s);
 	}
 }
 
@@ -1956,20 +1984,20 @@ function print_row($a)
 	}
 
 	if (array_key_exists("text_key", $a)) {
-		writeln('			<div class="row_tab">');
-		writeln('				<div' . $indent_width . ' class="row_caption">' . $a["caption"] . '</div>');
-		writeln('				<div><div class="row_outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . @$a["text_value"] . '"/></div></div>');
+		writeln('			<div class="row-tab">');
+		writeln('				<div' . $indent_width . ' class="row-caption">' . $a["caption"] . '</div>');
+		writeln('				<div><div class="row-outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . @$a["text_value"] . '"/></div></div>');
 		if (array_key_exists("text_default", $a)) {
-			writeln('				<div style="width: 20px"><div class="row_button" style="background-image: url(/images/undo-16.png)" title="Reset" onclick="$(\'#' . $a["text_key"] . '\').val(\'' . addcslashes($a["text_default"], "\\") .'\')"></div></div>');
+			writeln('				<div class="row-action"><div class="row-button undo-16" title="Reset" onclick="$(\'#' . $a["text_key"] . '\').val(\'' . addcslashes($a["text_default"], "\\") .'\')"></div></div>');
 		}
 		if (array_key_exists("text_browse", $a)) {
-			writeln('				<div style="width: 20px"><div class="row_button" style="background-image: url(/images/folder.png)" title="Browse" onclick="$( \'#' . $a["text_key"] . '_dialog\' ).dialog( \'open\' );"></div></div>');
+			writeln('				<div class="row-action"><div class="row-button folder-16" title="Browse" onclick="$( \'#' . $a["text_key"] . '_dialog\' ).dialog( \'open\' );"></div></div>');
 		}
 		writeln('			</div>');
 	} else if (array_key_exists("password_key", $a)) {
-		writeln('			<div class="row_tab">');
-		writeln('				<div' . $indent_width . ' class="row_caption">' . $a["caption"] . '</div>');
-		writeln('				<div><div class="row_outline"><input id="' . $a["password_key"] . '" name="' . $a["password_key"] . '" type="password" value="' . @$a["password_value"] . '"/></div></div>');
+		writeln('			<div class="row-tab">');
+		writeln('				<div' . $indent_width . ' class="row-caption">' . $a["caption"] . '</div>');
+		writeln('				<div><div class="row-outline"><input id="' . $a["password_key"] . '" name="' . $a["password_key"] . '" type="password" value="' . @$a["password_value"] . '"/></div></div>');
 		writeln('			</div>');
 	} else if (array_key_exists("textarea_key", $a)) {
 		if (array_key_exists("textarea_height", $a)) {
@@ -1977,8 +2005,8 @@ function print_row($a)
 		} else {
 			$height = 100;
 		}
-		writeln('			<div class="row_tab">');
-		writeln('				<div' . $indent_width . ' class="row_caption">' . $a["caption"] . '</div>');
+		writeln('			<div class="row-tab">');
+		writeln('				<div' . $indent_width . ' class="row-caption">' . $a["caption"] . '</div>');
 		writeln('				<' . 'textarea name="' . $a["textarea_key"] . '" style="height: ' . $height . 'px">' . @$a["textarea_value"] . '<' . '/textarea>');
 		writeln('			</div>');
 	} else if (array_key_exists("option_key", $a)) {
@@ -1987,8 +2015,8 @@ function print_row($a)
 		} else {
 			$event = '';
 		}
-		writeln('			<div class="row_tab">');
-		writeln('				<div class="row_caption">' . $a["caption"] . '</div>');
+		writeln('			<div class="row-tab">');
+		writeln('				<div class="row-caption">' . $a["caption"] . '</div>');
 		writeln('				<select name="' . $a["option_key"] . '"' . $event . '>');
 		for ($i = 0; $i < count($a["option_list"]); $i++) {
 			if (array_key_exists("option_keys", $a)) {
@@ -2010,51 +2038,44 @@ function print_row($a)
 	} else if (array_key_exists("link", $a)) {
 		if (array_key_exists("description", $a)) {
 			writeln('			<a href="' . $a["link"] . '">');
-			writeln('			<dl class="dl_32 ' . $a["icon"] . '_32">');
+			writeln('			<dl class="dl-32 ' . $a["icon"] . '-32">');
 			writeln('				<dt>' . $a["caption"] . '</dt>');
 			writeln('				<dd>' . $a["description"] . '</dd>');
 			writeln('			</dl>');
 			writeln('			</a>');
 		} else {
-			writeln('			<a href="' . $a["link"] . '"><div class="icon_16" style="background-image: url(/images/' . $a["icon"] . '-16.png); color: #000000">' . $a["caption"] . '</div></a>');
+			writeln('			<a href="' . $a["link"] . '"><div class="icon-16 ' . $a["icon"] . '-16" style="color: #000000">' . $a["caption"] . '</div></a>');
 		}
-	} else if (array_key_exists("icon_32", $a)) {
+	} else if (array_key_exists("icon-32", $a)) {
 		if (array_key_exists("description", $a)) {
-			writeln('			<dl class="dl_32 ' . $a["icon_32"] . '_32">');
+			writeln('			<dl class="dl-32 ' . $a["icon-32"] . '-32">');
 			writeln('				<dt>' . $a["caption"] . '</dt>');
 			writeln('				<dd>' . $a["description"] . '</dd>');
 			writeln('			</dl>');
 		} else {
-			writeln('			<div class="icon_32 ' . $a["icon_32"] . '_32">' . $a["caption"] . '</div>');
+			writeln('			<div class="icon-32 ' . $a["icon-32"] . '-32 single-32">' . $a["caption"] . '</div>');
 		}
-	} else if (array_key_exists("check_key", $a)) {
-		if (array_key_exists("check_show", $a) || array_key_exists("check_hide", $a)) {
-			//$on_click = ' onchange="alert(this.checked)" onclick="this.focus(); document.getElementById(\'location\').focus()"';
-			$show_id = @$a["check_show"];
-			$hide_id = @$a["check_hide"];
-			if (ie()) {
-				$event = ' onclick="check_click(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
-			} else {
-				$event = ' onchange="check_change(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
-			}
-		} else {
-			$event = '';
-		}
-		if (array_key_exists("check_value", $a)) {
-			$check_value = ' value="' . $a["check_value"] . '"';
-		} else {
-			$check_value = '';
-		}
-		writeln('			<div class="row_tab">');
-		writeln('				<input name="' . $a["check_key"] . '" class="row_check" type="checkbox"' . $check_value . ( $checked ? ' checked="true"' : '' ) . $event . '/>');
-		if (array_key_exists("icon", $a)) {
-			writeln('				<img src="/images/' . $a["icon"] . '.png" style="vertical-align: middle; margin-right: 8px"/>');
-		}
-		if (array_key_exists("caption", $a)) {
-			writeln('				' . $a["caption"]);
-		}
-		writeln('			</div>');
 	} else {
+		if (array_key_exists("check_key", $a)) {
+			if (array_key_exists("check_show", $a) || array_key_exists("check_hide", $a)) {
+				//$on_click = ' onchange="alert(this.checked)" onclick="this.focus(); document.getElementById(\'location\').focus()"';
+				$show_id = @$a["check_show"];
+				$hide_id = @$a["check_hide"];
+				if (ie()) {
+					$event = ' onclick="check_click(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
+				} else {
+					$event = ' onchange="check_change(this, \'' . $show_id . '\', \'' . $hide_id . '\')"';
+				}
+			} else {
+				$event = '';
+			}
+			if (array_key_exists("check_value", $a)) {
+				$check_value = ' value="' . $a["check_value"] . '"';
+			} else {
+				$check_value = '';
+			}
+			writeln('			<input name="' . $a["check_key"] . '" class="row-check" type="checkbox"' . $check_value . ( $checked ? ' checked="true"' : '' ) . $event . '/>');
+		}
 		if (array_key_exists("icon", $a)) {
 			writeln('			<img src="/images/' . $a["icon"] . '.png" style="vertical-align: middle; margin-right: 8px"/>');
 		}
@@ -2070,18 +2091,6 @@ function print_row($a)
 function random_hash()
 {
 	return crypt_sha256(time() . getmypid() . rand());
-}
-
-
-function right_box($buttons, $style = "")
-{
-	if ($style == "") {
-		writeln('<div class="right_box">');
-	} else {
-		writeln('<div class="right_box" style="' . $style . '">');
-	}
-	left_right_buttons($buttons);
-	writeln('</div>');
 }
 
 

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -51,10 +51,10 @@ function resolve_path($path, $zid)
 
 function print_drive_crumbs($path, $zid)
 {
-	//$crumbs = '<a class="icon_16 home_16" href="/drive/">Home</a>';
-	$crumbs = '<li><a class="icon_16 home_16" href="/drive/"></a></li>';
+	//$crumbs = '<a class="icon-16 home-16" href="/drive/">Home</a>';
+	$crumbs = '<li><a class="icon-16 home-16" href="/drive/"></a></li>';
 	if ($path === "/") {
-		//writeln('<div class="drive_crumbs">' . $crumbs . '</div>');
+		//writeln('<div class="drive-crumbs">' . $crumbs . '</div>');
 		writeln('<ul class="breadcrumbs">' . $crumbs . '</ul>');
 		return;
 	}
@@ -82,7 +82,7 @@ function print_drive_crumbs($path, $zid)
 		//writeln("found [" . $a[$i] . "] file_id [$parent_id]<br/>\n");
 	}
 
-	//writeln('<div class="drive_crumbs">' . $crumbs . '</div>');
+	//writeln('<div class="drive-crumbs">' . $crumbs . '</div>');
 	writeln('<ul class="breadcrumbs">' . $crumbs . '</ul>');
 }
 
@@ -97,7 +97,7 @@ function print_drive_folder($path, $zid)
 		$clean_name = encode_file_name($row[$i]["name"]);
 
 		writeln('	<tr>');
-		writeln('		<td><a class="icon_16 folder_16" href="' . $clean_name . '/">' . $clean_name . '</a></td>');
+		writeln('		<td><a class="icon-16 folder-16" href="' . $clean_name . '/">' . $clean_name . '</a></td>');
 		writeln('		<td class="center"></td>');
 		writeln('		<td class="right nowrap">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 		writeln('	</tr>');
@@ -112,7 +112,7 @@ function print_drive_folder($path, $zid)
 	for ($i = 0; $i < count($row); $i++) {
 		$clean_name = encode_file_name($row[$i]["name"]);
 		if ($row[$i]["type"] == DRIVE_DIR) {
-			$icon = "folder_16";
+			$icon = "folder-16";
 			$link = "$clean_name/";
 		} else {
 			$icon = file_icon(fs_ext($clean_name));
@@ -120,7 +120,7 @@ function print_drive_folder($path, $zid)
 		}
 
 		writeln('	<tr>');
-		writeln('		<td><a class="icon_16 ' . $icon . '" href="' . $link . '">' . $clean_name . '</a></td>');
+		writeln('		<td><a class="icon-16 ' . $icon . '" href="' . $link . '">' . $clean_name . '</a></td>');
 		writeln('		<td class="center"></td>');
 		writeln('		<td class="right nowrap">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 		writeln('	</tr>');
@@ -132,13 +132,13 @@ function print_drive_folder($path, $zid)
 function file_icon($ext)
 {
 	if ($ext == "txt") {
-		return "notepad_16";
+		return "notepad-16";
 	} else if ($ext == "jpg") {
-		return "picture_16";
+		return "picture-16";
 	} else if ($ext == "png") {
-		return "picture_16";
+		return "picture-16";
 	} else {
-		return "package_16";
+		return "package-16";
 	}
 }
 

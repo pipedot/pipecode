@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -47,16 +47,17 @@ function print_post_box($type, $root_id, $subject, $dirty_body, $coward)
 	beg_form();
 	writeln('<input type="hidden" name="type" value="' . $type . '"/>');
 	writeln('<input type="hidden" name="root_id" value="' . $root_id . '"/>');
-	writeln('<div class="dialog_title">Post Comment</div>');
-	writeln('<div class="dialog_body">');
-	writeln('<table class="fill">');
+	writeln('<div class="reply">');
+	writeln('<div class="dialog-title">Post Comment</div>');
+	writeln('<div class="dialog-body">');
+	writeln('<table>');
 	writeln('	<tr>');
-	writeln('		<td style="width: 80px">Subject</td>');
-	writeln('		<td colspan="2" style="padding-bottom: 4px"><input name="subject" type="text" value="' . $subject . '" required="required"/></td>');
+	writeln('		<td>Subject</td>');
+	writeln('		<td colspan="2"><input name="subject" type="text" value="' . $subject . '" required="required"/></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Comment</td>');
-	writeln('		<td colspan="2" style="padding-bottom: 4px"><textarea name="comment" style="height: 120px" required="required">' . $dirty_body . '</textarea></td>');
+	writeln('		<td>Comment</td>');
+	writeln('		<td colspan="2"><textarea name="comment" required="required">' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid === "") {
@@ -71,9 +72,10 @@ function print_post_box($type, $root_id, $subject, $dirty_body, $coward)
 			writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked="checked"' : '') . '/>Post Anonymously</label></td>');
 		}
 	}
-	writeln('		<td class="right"><input name="post" type="submit" value="Post"/> <input name="preview" type="submit" value="Preview"/></td>');
+	writeln('		<td><input name="post" type="submit" value="Post"/> <input name="preview" type="submit" value="Preview"/></td>');
 	writeln('	</tr>');
 	writeln('</table>');
+	writeln('</div>');
 	writeln('</div>');
 	end_form();
 	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {

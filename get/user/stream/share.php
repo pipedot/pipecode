@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -68,15 +68,15 @@ end_tab();
 beg_tab();
 writeln('	<tr>');
 writeln('		<td>');
-writeln('			<div class="row_tab">');
-writeln('				<div class="row_caption">Photo</div>');
+writeln('			<div class="row-tab">');
+writeln('				<div class="row-caption">Photo</div>');
 writeln('				<div><input name="upload" type="file" style="width: 100%"/></div></div>');
 writeln('			</div>');
 writeln('		</td>');
 writeln('	</tr>');
 end_tab();
 
-right_box("Share");
+box_right("Share");
 
 end_form();
 end_main();

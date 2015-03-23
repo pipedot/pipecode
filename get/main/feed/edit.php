@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if (!$auth_user["admin"]) {
 	die("you are not an admin");
 }
 
-$feed = find_rec("feed");
+$feed = item_request("feed");
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
 print_header("Edit Feed");
@@ -44,7 +44,7 @@ beg_tab();
 print_row(array("caption" => "Slug", "text_key" => "slug", "text_value" => $feed["slug"]));
 end_tab();
 
-right_box("Delete,Save");
+box_right("Delete,Save");
 
 end_form();
 end_main();

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,11 +21,11 @@ if (!$auth_user["admin"]) {
 	die("not an admin");
 }
 
-$theme = http_post_string("theme", array("len" => 50, "valid" => "[a-z][0-9]-_"));
+//$theme = http_post_string("theme", array("len" => 50, "valid" => "[a-z][0-9]-_"));
 $sign_up_enabled = http_post_bool("sign_up_enabled", array("numeric" => true));
 $submit_enabled = http_post_bool("submit_enabled", array("numeric" => true));
 
-$server_conf["theme"] = $theme;
+//$server_conf["theme"] = $theme;
 $server_conf["sign_up_enabled"] = $sign_up_enabled;
 $server_conf["submit_enabled"] = $submit_enabled;
 db_set_conf("server_conf", $server_conf);

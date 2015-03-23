@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -27,12 +27,10 @@ if ($auth_zid === $zid) {
 
 beg_main("stream");
 
-//$row = sql("select card_id from card inner join article on card.article_id = article.article_id where zid = ? order by time desc", $zid);
-$row = sql("select short_id from card where zid = ? order by edit_time desc", $zid);
+$row = sql("select card_id from card where zid = ? order by edit_time desc", $zid);
 
 for ($i = 0; $i < count($row); $i++) {
-	//print "card_id [" . $row[$i]["card_id"] . "]";
-	print_card($row[$i]["short_id"]);
+	print_card($row[$i]["card_id"]);
 }
 
 /*

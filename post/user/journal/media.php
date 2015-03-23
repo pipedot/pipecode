@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,7 +23,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = find_rec("journal");
+$journal = item_request("journal");
 
 if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$data = fs_slurp($_FILES["upload"]["tmp_name"]);
@@ -32,13 +32,13 @@ if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	if ($src_img === false) {
 		die("unable to open uploaded file");
 	}
-	$photo_short_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
+	$photo_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
 } else {
-	$photo_short_id = 0;
+	$photo_id = 0;
 }
 
-if ($photo_short_id > 0) {
-	sql("insert into journal_photo (journal_short_id, photo_short_id) values (?, ?)", $journal["short_id"], $photo_short_id);
+if ($photo_id > 0) {
+	sql("insert into journal_photo (journal_id, photo_id) values (?, ?)", $journal["journal_id"], $photo_id);
 }
 
 header("Location: /journal/{$journal["short_code"]}/media");

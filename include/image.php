@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -343,9 +343,8 @@ function create_thumb($image_url)
 			return -1;
 		}
 
-		$fake_id = create_id("");
 		$thumb = db_new_rec("thumb");
-		$thumb["thumb_id"] = create_short("thumb", $fake_id);
+		$thumb["thumb_id"] = create_short("thumb");
 		$thumb["hash"] = $hash;
 		$thumb["low_res"] = $low_res;
 		db_set_rec("thumb", $thumb);
@@ -453,8 +452,7 @@ function create_photo($src_img, $original_name, $hash)
 	list($aspect_width, $aspect_height) = find_aspect($original_width, $original_height);
 
 	$photo = db_new_rec("photo");
-	$photo["photo_id"] = create_id("", $time);
-	$photo["short_id"] = create_short("photo", $photo["photo_id"]);
+	$photo["photo_id"] = create_short("photo");
 	$photo["aspect_height"] = $aspect_height;
 	$photo["aspect_width"] = $aspect_width;
 	$photo["hash"] = $hash;
@@ -468,7 +466,7 @@ function create_photo($src_img, $original_name, $hash)
 	$photo["has_large"] = 0;
 	$photo["zid"] = $auth_zid;
 	//db_set_rec("photo", $photo);
-	$short_code = crypt_crockford_encode($photo["short_id"]);
+	$photo_code = crypt_crockford_encode($photo["photo_id"]);
 	//$photo = db_get_rec("photo", array("zid" => $auth_zid, "time" => $time));
 	//$photo_id = $photo["photo_id"];
 	//var_dump($photo);
@@ -492,7 +490,7 @@ function create_photo($src_img, $original_name, $hash)
 				$photo["has_large"] = 1;
 			}
 			$tmp_img = resize_image($src_img, $w, $h);
-			$file = "$doc_root/www$path/photo_{$short_code}_{$w}x{$h}.jpg";
+			$file = "$doc_root/www$path/photo_{$photo_code}_{$w}x{$h}.jpg";
 			if (fs_is_file($file)) {
 				fs_unlink($file);
 			}
@@ -506,7 +504,7 @@ function create_photo($src_img, $original_name, $hash)
 	db_set_rec("photo", $photo);
 	//die("here");
 
-	return $photo["short_id"];
+	return $photo["photo_id"];
 }
 
 
@@ -516,13 +514,13 @@ function photo_info($photo)
 	global $server_name;
 
 	$a = array();
-	$a["thumb_small_class"] = "photo_thumb_small";
-	$a["thumb_large_class"] = "photo_thumb_large";
-	$a["tiny_class"] = "photo_tiny_{$photo["aspect_width"]}x{$photo["aspect_height"]}";
-	$a["small_class"] = "photo_small_{$photo["aspect_width"]}x{$photo["aspect_height"]}";
-	$a["medium_class"] = "photo_medium_{$photo["aspect_width"]}x{$photo["aspect_height"]}";
-	$a["big_class"] = "photo_big_{$photo["aspect_width"]}x{$photo["aspect_height"]}";
-	$a["large_class"] = "photo_large_{$photo["aspect_width"]}x{$photo["aspect_height"]}";
+	$a["thumb_small_class"] = "photo-thumb-small";
+	$a["thumb_large_class"] = "photo-thumb-large";
+	$a["tiny_class"] = "photo-tiny-{$photo["aspect_width"]}x{$photo["aspect_height"]}";
+	$a["small_class"] = "photo-small-{$photo["aspect_width"]}x{$photo["aspect_height"]}";
+	$a["medium_class"] = "photo-medium-{$photo["aspect_width"]}x{$photo["aspect_height"]}";
+	$a["big_class"] = "photo-big-{$photo["aspect_width"]}x{$photo["aspect_height"]}";
+	$a["large_class"] = "photo-large-{$photo["aspect_width"]}x{$photo["aspect_height"]}";
 
 	$a["small_width"] = 320;
 	$a["medium_width"] = 640;
@@ -571,14 +569,14 @@ function photo_info($photo)
 	}
 
 	$path = public_path($photo["time"]);
-	$short_code = crypt_crockford_encode($photo["short_id"]);
+	$photo_code = crypt_crockford_encode($photo["photo_id"]);
 
-	$a["thumb_small_path"] = "$path/photo_{$short_code}_128x128.jpg";
-	$a["thumb_large_path"] = "$path/photo_{$short_code}_256x256.jpg";
-	$a["small_path"] = "$path/photo_{$short_code}_{$a["small_width"]}x{$a["small_height"]}.jpg";
-	$a["medium_path"] = "$path/photo_{$short_code}_{$a["medium_width"]}x{$a["medium_height"]}.jpg";
-	$a["large_path"] = "$path/photo_{$short_code}_{$a["large_width"]}x{$a["large_height"]}.jpg";
-	$a["largest_path"] = "$path/photo_{$short_code}_{$a["largest_width"]}x{$a["largest_height"]}.jpg";
+	$a["thumb_small_path"] = "$path/photo_{$photo_code}_128x128.jpg";
+	$a["thumb_large_path"] = "$path/photo_{$photo_code}_256x256.jpg";
+	$a["small_path"] = "$path/photo_{$photo_code}_{$a["small_width"]}x{$a["small_height"]}.jpg";
+	$a["medium_path"] = "$path/photo_{$photo_code}_{$a["medium_width"]}x{$a["medium_height"]}.jpg";
+	$a["large_path"] = "$path/photo_{$photo_code}_{$a["large_width"]}x{$a["large_height"]}.jpg";
+	$a["largest_path"] = "$path/photo_{$photo_code}_{$a["largest_width"]}x{$a["largest_height"]}.jpg";
 
 	$a["thumb_small_link"] = "$protocol://$server_name{$a["thumb_small_path"]}";
 	$a["thumb_large_link"] = "$protocol://$server_name{$a["thumb_large_path"]}";

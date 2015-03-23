@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -41,13 +41,13 @@ writeln('		<td class="right">' . date("Y-m-d H:i", $ban_ip["time"]) . '</td>');
 writeln('	</tr>');
 writeln('	<tr>');
 writeln('		<td>Editor</td>');
-writeln('		<td class="right">' . user_page_link($ban_ip["zid"], true) . '</td>');
+writeln('		<td class="right">' . user_link($ban_ip["zid"], ["tag" => true]) . '</td>');
 writeln('	</tr>');
 end_tab();
 
 writeln('<h2>Example Comment</h2>');
 
-$comment = db_get_rec("comment", array("short_id" => $ban_ip["short_id"]));
+$comment = db_get_rec("comment", $ban_ip["short_id"]);
 
 print render_comment($comment["subject"], $comment["zid"], $comment["publish_time"], $comment["comment_id"], $comment["body"], 0, $comment["short_id"], "", "", $comment["junk_status"]);
 writeln('</div>');
@@ -55,7 +55,7 @@ writeln('</article>');
 
 if ($auth_user["admin"] || $auth_user["editor"]) {
 	beg_form();
-	right_box("Remove Ban");
+	box_right("Remove Ban");
 	end_form();
 }
 

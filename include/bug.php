@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,10 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function make_bug_labels($bug_short_id)
+function make_bug_labels($bug_id)
 {
 	$labels = "";
-	$row = sql("select label_name, label_tag, background_color, foreground_color from bug_labels inner join bug_label on bug_labels.label_id = bug_label.label_id where bug_short_id = ?", $bug_short_id);
+	$row = sql("select label_name, label_tag, background_color, foreground_color from bug_labels inner join bug_label on bug_labels.label_id = bug_label.label_id where bug_id = ?", $bug_id);
 	for ($i = 0; $i < count($row); $i++) {
 		$labels .= '<a class="label" style="background-color: ' . $row[$i]["background_color"] . '; color: ' . $row[$i]["foreground_color"] . ';" href="' . $row[$i]["label_tag"] . '">' . $row[$i]["label_name"] . '</a>';
 	}
@@ -29,14 +29,14 @@ function make_bug_labels($bug_short_id)
 }
 
 
-function print_bug_label_checkboxes($bug_short_id = 0)
+function print_bug_label_checkboxes($bug_id = 0)
 {
 	$labels = array();
 	beg_tab("Labels");
-	if ($bug_short_id == 0) {
+	if ($bug_id == 0) {
 		$list = db_get_list("bug_label", "label_name", array("reportable" => 1));
 	} else {
-		$row = sql("select label_id from bug_labels where bug_short_id = ?", $bug_short_id);
+		$row = sql("select label_id from bug_labels where bug_id = ?", $bug_id);
 		for ($i = 0; $i < count($row); $i++) {
 			$labels[] = $row[$i]["label_id"];
 		}
@@ -71,14 +71,13 @@ function print_bug($bug)
 	global $auth_zid;
 
 	$a["body"] = $bug["body"];
-	$a["short_id"] = $bug["short_id"];
 	$a["bug_id"] = $bug["bug_id"];
 	$a["time"] = $bug["publish_time"];
 	$a["title"] = $bug["title"];
 	$a["zid"] = $bug["author_zid"];
-	$a["labels"] = make_bug_labels($bug["short_id"]);
+	$a["labels"] = make_bug_labels($bug["bug_id"]);
 	$a["closed"] = $bug["closed"];
-	$a["comments"] = count_comments("bug", $bug["long_id"]);
+	$a["comments"] = count_comments("bug", $bug["bug_id"]);
 
 	print_article($a);
 }

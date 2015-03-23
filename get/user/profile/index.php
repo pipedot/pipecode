@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -31,6 +31,7 @@ writeln('<h1>Profile Settings</h1>');
 beg_tab("JavaScript");
 print_row(array("caption" => "Enable JavaScript", "check_key" => "javascript_enabled", "checked" => $user_conf["javascript_enabled"]));
 print_row(array("caption" => "WYSIWYG Editor", "check_key" => "wysiwyg_enabled", "checked" => $user_conf["wysiwyg_enabled"]));
+print_row(array("caption" => "Inline Reply", "check_key" => "inline_reply_enabled", "checked" => $user_conf["inline_reply_enabled"]));
 end_tab();
 
 beg_tab("Display");
@@ -43,6 +44,7 @@ for ($i = 0; $i < count($row); $i++) {
 }
 print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $user_conf["time_zone"]));
+print_row(array("caption" => "Large Text", "check_key" => "large_text_enabled", "checked" => $user_conf["large_text_enabled"]));
 end_tab();
 
 beg_tab("Comments");
@@ -75,7 +77,7 @@ end_tab();
 // Eastern Europe Time: Athens
 //
 
-right_box("Save");
+box_right("Save");
 
 end_form();
 end_main();

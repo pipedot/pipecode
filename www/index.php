@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,7 +18,7 @@
 //
 
 include("../include/common.php");
-include("short.php");
+include("link.php");
 include("geoip.php");
 
 $a = explode("/", $request_script);
@@ -152,7 +152,9 @@ if (string_uses($slug, "[A-Z][a-z][0-9]")) {
 if (substr($slug, -1) === "+") {
 	$slug = substr($slug, 0, -1);
 	if (string_uses($slug, "[A-Z][a-z][0-9]")) {
-		short_info($slug);
+		//short_info($slug);
+		include("$root/short.php");
+		die();
 	}
 }
 

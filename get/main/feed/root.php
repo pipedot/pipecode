@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$feed = find_rec("feed");
+$feed = item_request("feed");
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
 print_header($feed["title"]);
@@ -30,11 +30,11 @@ if (fs_is_file("$doc_root/www/pub/favicon/$short_code.png")) {
 }
 //writeln('<table class="zebra">');
 //writeln('	<tr>');
-//writeln('		<td><div class="favicon_16"' . $icon . '>' . $feed["title"] . '</div></td>');
+//writeln('		<td><div class="favicon-16"' . $icon . '>' . $feed["title"] . '</div></td>');
 //writeln('	</tr>');
 //writeln('</table>');
 
-writeln('<h1 class="favicon_16"' . $icon . '>' . $feed["title"] . '</h1>');
+writeln('<h1 class="favicon-16"' . $icon . '>' . $feed["title"] . '</h1>');
 
 dict_beg();
 dict_row("Link", '<a href="' . $feed["link"] . '">' . $feed["link"] . '</a>');
@@ -46,7 +46,7 @@ dict_row("Updated", date("Y-m-d H:i", $feed["time"]));
 dict_end();
 
 if ($auth_user["admin"]) {
-	right_box("<a class=\"icon_16 notepad_16\" href=\"/feed/$short_code/edit\">Edit</a>");
+	box_right("<a class=\"icon-16 notepad-16\" href=\"/feed/$short_code/edit\">Edit</a>");
 }
 
 $items_per_page = 50;
@@ -96,30 +96,29 @@ for ($i = 0; $i < count($row); $i++) {
 	}
 
 	if ($thumb_code == "") {
-		writeln('<article class="article_text_row">');
+		writeln('<article class="news-text">');
 		writeln('<table>');
 		writeln('	<tr>');
 		writeln('		<td>');
-		writeln('			<div class="article_preview">');
-		writeln('				<div class="article_link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
-		writeln('				<div class="article_info">' . $info . '</div>');
-		writeln('				<div class="article_description">' . $row[$i]["description"] . '</div>');
+		writeln('			<div class="article-preview">');
+		writeln('				<div class="article-link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
+		writeln('				<div class="article-info">' . $info . '</div>');
+		writeln('				<div class="article-description">' . $row[$i]["description"] . '</div>');
 		writeln('			</div>');
 		writeln('		</td>');
 		writeln('	</tr>');
 		writeln('</table>');
 		writeln('</article>');
 	} else {
-		writeln('<article class="article_image_row">');
+		writeln('<article class="news-image">');
 		writeln('<table>');
 		writeln('	<tr>');
-		writeln('		<td><a href="/article/' . $short_code . '"><img class="thumb" src="/thumb/' . $thumb_code . '.jpg"/></a><td>');
+		writeln('		<td><a href="/article/' . $short_code . '"><img src="/thumb/' . $thumb_code . '.jpg"/></a></td>');
 		writeln('		<td>');
-		//writeln('			<a class="article_image" href="/article/' . $short_code . '" style="background-image: url(' . $image_path . ')"></a>');
-		writeln('			<div class="article_preview">');
-		writeln('				<div class="article_link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
-		writeln('				<div class="article_info">' . $info . '</div>');
-		writeln('				<div class="article_description">' . $row[$i]["description"] . '</div>');
+		writeln('			<div class="article-preview">');
+		writeln('				<div class="article-link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
+		writeln('				<div class="article-info">' . $info . '</div>');
+		writeln('				<div class="article-description">' . $row[$i]["description"] . '</div>');
 		writeln('			</div>');
 		writeln('		</td>');
 		writeln('	</tr>');

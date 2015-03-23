@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -61,7 +61,7 @@ function search_result($title, $link, $zid, $time, $body)
 	global $protocol;
 
 	$date = date("Y-m-d H:i", $time);
-	$by = user_page_link($zid, true);
+	$by = user_link($zid, ["tag" => true]);
 
 	writeln("<article>");
 	writeln("	<h1><a href=\"$link\">$title</a></h1>");

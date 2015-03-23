@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if ($auth_zid === "") {
 	die("sign in to open this bug");
 }
 
-$bug = find_rec("bug");
+$bug = item_request("bug");
 $bug["closed"] = 0;
 $bug["closed_zid"] = $auth_zid;
 db_set_rec("bug", $bug);

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$photo = find_rec("photo");
+$photo = item_request("photo");
 
 if ($photo["zid"] !== $auth_zid) {
 	die("not your photo");
@@ -39,7 +39,7 @@ writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="widt
 writeln('	</tr>');
 writeln('</table>');
 
-left_box("Delete");
+box_left("Delete");
 
 end_form();
 end_main();

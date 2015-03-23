@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -43,19 +43,18 @@ if (http_post("preview")) {
 	die();
 }
 
-$pipe = array();
-$pipe["pipe_id"] = create_id($auth_zid, $time);
+$pipe = db_new_rec("pipe");
+$pipe["pipe_id"] = create_short("pipe");
 $pipe["author_zid"] = $auth_zid;
 $pipe["body"] = $clean_body;
 $pipe["closed"] = 0;
 $pipe["edit_zid"] = "";
 $pipe["icon"] = $topic["icon"];
 $pipe["reason"] = "";
-$pipe["short_id"] = create_short("pipe", $pipe["pipe_id"]);
 $pipe["slug"] = clean_url($title);
 $pipe["tid"] = $tid;
 $pipe["title"] = $title;
 $pipe["time"] = $time;
 db_set_rec("pipe", $pipe);
 
-header("Location: /pipe/" . crypt_crockford_encode($pipe["short_id"]));
+header("Location: /pipe/" . crypt_crockford_encode($pipe["pipe_id"]));

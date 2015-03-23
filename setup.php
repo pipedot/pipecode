@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -134,7 +134,7 @@ print_row(array("caption" => "Admin Username", "text_key" => "admin_username", "
 print_row(array("caption" => "Admin Password", "text_key" => "admin_password", "text_value" => "crunchyfrog"));
 end_tab();
 
-right_box("Save");
+box_right("Save");
 
 end_form();
 

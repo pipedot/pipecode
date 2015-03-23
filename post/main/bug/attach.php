@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,7 +23,7 @@ if ($auth_zid === "") {
 	die("sign in to attach");
 }
 
-$bug = find_rec("bug");
+$bug = item_request("bug");
 
 if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$bug_file["name"] = string_clean($_FILES["upload"]["name"], "[A-Z][a-z][0-9].-_", 100);
@@ -38,9 +38,8 @@ if ($bug_file["type"] === "php") {
 }
 
 $bug_file = db_new_rec("bug_file");
-$bug_file["long_id"] = create_id($auth_zid, $now);
-$bug_file["short_id"] = create_short("bug_file", $bug_file["long_id"]);
-$bug_file["bug_short_id"] = $bug["short_id"];
+$bug_file["bug_file_id"] = create_short("bug_file");
+$bug_file["bug_id"] = $bug["bug_id"];
 $bug_file["remote_ip"] = $remote_ip;
 $bug_file["server"] = $server_name;
 $bug_file["zid"] = $auth_zid;
@@ -71,4 +70,4 @@ if (!move_uploaded_file($_FILES["upload"]["tmp_name"], "$doc_root/www/pub/bug/{$
 
 db_set_rec("bug_file", $bug_file);
 
-header("Location: /bug/" . crypt_crockford_encode($bug["short_id"]));
+header("Location: /bug/" . crypt_crockford_encode($bug["bug_id"]));

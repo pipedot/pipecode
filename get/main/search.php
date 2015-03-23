@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -18,6 +18,10 @@
 //
 
 include("search.php");
+include("render.php");
+include("story.php");
+include("pipe.php");
+include("poll.php");
 
 $needle = http_get_string("needle", array("required" => false, "valid" => "[a-z][A-Z][0-9]_+-=%|./? "));
 $haystack = http_get_string("haystack", array("required" => false, "len" => 20, "valid" => "[a-z]"));
@@ -55,31 +59,44 @@ if ($needle != "") {
 	for ($i = 0; $i < count($row); $i++) {
 		if ($haystack == "comments") {
 			$title = $row[$i]["subject"];
-			$link = "/comment/" . crypt_crockford_encode($row[$i]["short_id"]);
+			$link = "/comment/" . crypt_crockford_encode($row[$i]["comment_id"]);
 			$body = $row[$i]["body"];
 			$time = $row[$i]["edit_time"];
 			$zid = $row[$i]["zid"];
+			$a = article_info($row[$i], false);
+
+			//search_result($title, $link, $zid, $time, $body);
+			print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["publish_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"], $row[$i]["junk_status"]); //, $last_seen = 0, $article_link = "", $article_title = "", $junk_status = 0)
+			writeln('</div>');
+			writeln('</article>');
 		} else if ($haystack == "stories") {
 			$title = $row[$i]["title"];
 			$body = $row[$i]["body"];
 			$time = $row[$i]["publish_time"];
 			$link = "/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"];
 			$zid = $row[$i]["author_zid"];
+
+			print_story($row[$i]["story_id"]);
+			//search_result($title, $link, $zid, $time, $body);
 		} else if ($haystack == "pipe") {
 			$title = $row[$i]["title"];
 			$link = "/pipe/" . $row[$i]["pipe_id"];
 			$body = $row[$i]["body"];
 			$time = $row[$i]["time"];
 			$zid = $row[$i]["author_zid"];
+
+			print_pipe($row[$i]["pipe_id"]);
+			//search_result($title, $link, $zid, $time, $body);
 		} else if ($haystack == "polls") {
 			$title = $row[$i]["question"];
-			$link = "/poll/" . gmdate("Y-m-d", $row[$i]["time"]) . "/" . $row[$i]["slug"];
+			$link = "/poll/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"];
 			$body = "";
-			$time = $row[$i]["time"];
+			$time = $row[$i]["publish_time"];
 			$zid = $row[$i]["zid"];
-		}
 
-		search_result($title, $link, $zid, $time, $body);
+			vote_box($row[$i]["poll_id"], false);
+			//search_result($title, $link, $zid, $time, $body);
+		}
 	}
 	end_main();
 

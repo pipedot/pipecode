@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if (!$auth_user["admin"] || !$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$bug = find_rec("bug");
+$bug = item_request("bug");
 
 print_header("Close Bug");
 beg_main();
@@ -30,7 +30,7 @@ writeln("<h1>Close Bug</h1>");
 
 writeln('<p>Are you sure you want to close this bug?</p>');
 
-left_box("Close");
+box_left("Close");
 
 end_form();
 end_main();

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -32,441 +32,7 @@ if (fs_is_file("$doc_root/conf.php")) {
 $now = time();
 $year = gmdate("Y");
 
-$db_table["article"] = array(
-	array("name" => "article_id", "key" => true, "default" => 0),
-	array("name" => "author_link"),
-	array("name" => "author_name"),
-	array("name" => "body"),
-	array("name" => "description"),
-	array("name" => "feed_html"),
-	array("name" => "feed_id", "default" => 0),
-	array("name" => "guid"),
-	array("name" => "link"),
-	array("name" => "publish_time", "default" => $now),
-	array("name" => "redirect_link"),
-	array("name" => "title"),
-	array("name" => "thumb_id", "default" => 0)
-);
-
-$db_table["ban_ip"] = array(
-	array("name" => "remote_ip", "key" => true),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "time", "default" => $now),
-	array("name" => "zid")
-);
-
-$db_table["bug"] = array(
-	array("name" => "bug_id", "key" => true),
-	array("name" => "author_zid"),
-	array("name" => "body"),
-	array("name" => "closed", "default" => 0),
-	array("name" => "closed_zid"),
-	array("name" => "priority"),
-	array("name" => "publish_time", "default" => $now),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "title")
-);
-
-$db_table["bug_file"] = array(
-	array("name" => "short_id", "key" => true, "default" => 0),
-	array("name" => "long_id"),
-	array("name" => "bug_short_id", "default" => 0),
-	array("name" => "hash"),
-	array("name" => "name"),
-	array("name" => "remote_ip"),
-	array("name" => "server"),
-	array("name" => "size", "default" => 0),
-	array("name" => "time", "default" => $now),
-	array("name" => "type"),
-	array("name" => "zid")
-);
-
-$db_table["bug_label"] = array(
-	array("name" => "label_id", "key" => true, "auto" => true),
-	array("name" => "label_name"),
-	array("name" => "label_tag"),
-	array("name" => "background_color"),
-	array("name" => "foreground_color"),
-	array("name" => "reportable", "default" => 0)
-);
-
-$db_table["bug_labels"] = array(
-	array("name" => "bug_short_id", "default" => 0),
-	array("name" => "label_id", "default" => 0)
-);
-
-$db_table["bug_view"] = array(
-	array("name" => "bug_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["cache"] = array(
-	array("name" => "cache_id", "key" => true),
-	array("name" => "hash"),
-	array("name" => "time", "default" => $now),
-	array("name" => "url")
-);
-
-$db_table["captcha"] = array(
-	array("name" => "captcha_id", "auto" => true, "key" => true),
-	array("name" => "question"),
-	array("name" => "answer")
-);
-
-$db_table["captcha_challenge"] = array(
-	array("name" => "remote_ip", "key" => true),
-	array("name" => "captcha_id", "default" => 0)
-);
-
-$db_table["card"] = array(
-	array("name" => "short_id", "key" => true),
-	array("name" => "card_id"),
-	array("name" => "body"),
-	array("name" => "edit_time", "default" => $now),
-	array("name" => "image_id", "default" => 0),
-	array("name" => "link_subject"),
-	array("name" => "link_url"),
-	array("name" => "photo_short_id", "default" => 0),
-	array("name" => "publish_time", "default" => $now),
-	array("name" => "zid"),
-);
-
-$db_table["card_edit"] = array(
-	array("name" => "card_id", "key" => true),
-	array("name" => "edit_time", "key" => true, "default" => $now),
-	array("name" => "body")
-);
-
-$db_table["card_tags"] = array(
-	array("name" => "short_id", "key" => true),
-	array("name" => "tag", "key" => true)
-);
-
-$db_table["card_view"] = array(
-	array("name" => "card_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => $now),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["card_vote"] = array(
-	array("name" => "card_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "value", "default" => 0)
-);
-
-$db_table["comment"] = array(
-	array("name" => "comment_id", "key" => true),
-	array("name" => "body"),
-	array("name" => "edit_time", "default" => $now),
-	array("name" => "junk_status", "default" => 0),
-	array("name" => "junk_time", "default" => 0),
-	array("name" => "junk_zid"),
-	array("name" => "parent_id"),
-	array("name" => "publish_time", "default" => $now),
-	array("name" => "remote_ip"),
-	array("name" => "root_id"),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "subject"),
-	array("name" => "type"),
-	array("name" => "zid")
-);
-
-$db_table["comment_edit"] = array(
-	array("name" => "comment_id", "key" => true),
-	array("name" => "edit_time", "key" => true, "default" => $now),
-	array("name" => "body"),
-	array("name" => "subject")
-);
-
-$db_table["comment_vote"] = array(
-	array("name" => "comment_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "reason"),
-	array("name" => "time", "default" => $now),
-	array("name" => "value", "default" => 0)
-);
-
-$db_table["default_conf"] = array(
-	array("name" => "conf", "key" => true),
-	array("name" => "name", "key" => true),
-	array("name" => "value")
-);
-
-$db_table["drive_data"] = array(
-	array("name" => "hash", "key" => true),
-	array("name" => "server_id", "default" => 0),
-	array("name" => "size", "default" => 0)
-);
-
-$db_table["drive_file"] = array(
-	array("name" => "file_id", "key" => true, "auto" => true),
-	array("name" => "hash"),
-	array("name" => "name"),
-	array("name" => "parent_id", "default" => 0),
-	array("name" => "time", "default" => $now),
-	array("name" => "type", "default" => 1),
-	array("name" => "zid")
-);
-
-$db_table["email_challenge"] = array(
-	array("name" => "challenge", "key" => true),
-	array("name" => "username"),
-	array("name" => "email"),
-	array("name" => "expires", "default" => $now + 86400 * 3)
-);
-
-$db_table["feed"] = array(
-	array("name" => "feed_id", "key" => true),
-	array("name" => "copyright"),
-	array("name" => "description"),
-	array("name" => "link"),
-	array("name" => "slug"),
-	array("name" => "time", "default" => $now),
-	array("name" => "title"),
-	array("name" => "uri")
-);
-
-$db_table["feed_user"] = array(
-	array("name" => "zid", "key" => true),
-	array("name" => "feed_id", "key" => true),
-	array("name" => "col", "default" => 0),
-	array("name" => "pos", "default" => 0)
-);
-
-$db_table["image"] = array(
-	array("name" => "image_id", "key" => true),
-	array("name" => "hash"),
-	array("name" => "original_width", "default" => 0),
-	array("name" => "original_height", "default" => 0),
-	array("name" => "original_url"),
-	array("name" => "parent_url"),
-	array("name" => "server"),
-	array("name" => "time", "default" => $now),
-	array("name" => "zid")
-);
-
-$db_table["journal"] = array(
-	array("name" => "journal_id", "key" => true),
-	array("name" => "body"),
-	array("name" => "edit_time", "default" => $now),
-	array("name" => "photo_id", "default" => 0),
-	array("name" => "publish_time", "default" => 0),
-	array("name" => "published", "default" => 0),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "slug"),
-	array("name" => "title"),
-	array("name" => "topic"),
-	array("name" => "zid")
-);
-
-$db_table["journal_photo"] = array(
-	array("name" => "journal_short_id", "key" => true, "default" => 0),
-	array("name" => "photo_short_id", "key" => true, "default" => 0)
-);
-
-$db_table["journal_view"] = array(
-	array("name" => "journal_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["mail"] = array(
-	array("name" => "mail_id", "auto" => true, "key" => true),
-	array("name" => "body"),
-	array("name" => "in_reply_to"),
-	array("name" => "location"),
-	array("name" => "mail_from"),
-	array("name" => "message_id"),
-	array("name" => "rcpt_to"),
-	array("name" => "received_time", "default" => $now),
-	array("name" => "reply_to"),
-	array("name" => "size", "default" => 0),
-	array("name" => "subject"),
-	array("name" => "zid")
-);
-
-$db_table["page"] = array(
-	array("name" => "slug", "key" => true),
-	array("name" => "title"),
-	array("name" => "body")
-);
-
-$db_table["photo"] = array(
-	array("name" => "short_id", "key" => true, "default" => 0),
-	array("name" => "photo_id"),
-	array("name" => "aspect_width", "default" => 0),
-	array("name" => "aspect_height", "default" => 0),
-	array("name" => "has_medium", "default" => 0),
-	array("name" => "has_large", "default" => 0),
-	array("name" => "hash"),
-	array("name" => "original_name", "default" => 0),
-	array("name" => "original_width", "default" => 0),
-	array("name" => "original_height", "default" => 0),
-	array("name" => "server"),
-	array("name" => "size", "default" => 0),
-	array("name" => "time", "default" => $now),
-	array("name" => "zid")
-);
-
-$db_table["pipe"] = array(
-	array("name" => "pipe_id", "key" => true),
-	array("name" => "author_zid"),
-	array("name" => "body"),
-	array("name" => "closed", "default" => 0),
-	array("name" => "edit_zid"),
-	array("name" => "icon"),
-	array("name" => "reason"),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "slug"),
-	array("name" => "tid", "default" => 0),
-	array("name" => "time", "default" => $now),
-	array("name" => "title")
-);
-
-$db_table["pipe_view"] = array(
-	array("name" => "pipe_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["pipe_vote"] = array(
-	array("name" => "pipe_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => $now),
-	array("name" => "value", "default" => 0)
-);
-
-$db_table["poll_answer"] = array(
-	array("name" => "answer_id", "key" => true),
-	array("name" => "poll_id"),
-	array("name" => "answer"),
-	array("name" => "position", "default" => 0)
-);
-
-$db_table["poll"] = array(
-	array("name" => "poll_id", "key" => true),
-	array("name" => "publish_time", "default" => $now),
-	array("name" => "question"),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "slug"),
-	array("name" => "type_id", "default" => 0),
-	array("name" => "zid")
-);
-
-$db_table["poll_view"] = array(
-	array("name" => "poll_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["poll_vote"] = array(
-	array("name" => "poll_id"),
-	array("name" => "zid"),
-	array("name" => "answer_id"),
-	array("name" => "time", "default" => $now),
-	array("name" => "points", "default" => 0)
-);
-
-$db_table["server_conf"] = array(
-	array("name" => "name"),
-	array("name" => "value")
-);
-
-$db_table["short"] = array(
-	array("name" => "short_id", "auto" => true, "key" => true),
-	array("name" => "type"),
-	array("name" => "item_id")
-);
-
-$db_table["short_view"] = array(
-	array("name" => "view_id", "auto" => true, "key" => true),
-	array("name" => "short_id"),
-	array("name" => "remote_ip"),
-	array("name" => "time", "default" => $now),
-	array("name" => "agent"),
-	array("name" => "referer"),
-	array("name" => "zid")
-);
-
-$db_table["story"] = array(
-	array("name" => "story_id", "key" => true),
-	array("name" => "author_zid"),
-	array("name" => "body"),
-	array("name" => "edit_time", "default" => $now),
-	array("name" => "edit_zid"),
-	array("name" => "icon"),
-	array("name" => "image_id", "default" => 0),
-	array("name" => "pipe_id"),
-	array("name" => "publish_time", "default" => $now),
-	array("name" => "short_id", "default" => 0),
-	array("name" => "slug"),
-	array("name" => "tid", "default" => 0),
-	array("name" => "title"),
-	array("name" => "tweet_id", "default" => 0)
-);
-
-$db_table["story_edit"] = array(
-	array("name" => "story_id", "key" => true),
-	array("name" => "edit_time", "key" => true, "default" => $now),
-	array("name" => "body"),
-	array("name" => "edit_zid"),
-	array("name" => "icon"),
-	array("name" => "image_id", "default" => 0),
-	array("name" => "slug"),
-	array("name" => "tid", "default" => 0),
-	array("name" => "title")
-);
-
-$db_table["story_view"] = array(
-	array("name" => "story_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => $now),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["tag"] = array(
-	array("name" => "tag_id", "auto" => true, "key" => true),
-	array("name" => "tag")
-);
-
-$db_table["thumb"] = array(
-	array("name" => "thumb_id", "key" => true),
-	array("name" => "hash"),
-	array("name" => "low_res", "default" => 0),
-	array("name" => "time", "default" => $now)
-);
-
-$db_table["tmp_image"] = array(
-	array("name" => "tmp_image_id", "auto" => true, "key" => true),
-	array("name" => "hash"),
-	array("name" => "original_width", "default" => 0),
-	array("name" => "original_height", "default" => 0),
-	array("name" => "original_url"),
-	array("name" => "parent_url"),
-	array("name" => "server"),
-	array("name" => "time", "default" => $now),
-	array("name" => "zid")
-);
-
-$db_table["topic"] = array(
-	array("name" => "tid", "auto" => true, "key" => true),
-	array("name" => "icon"),
-	array("name" => "promoted", "default" => 0),
-	array("name" => "slug"),
-	array("name" => "topic")
-);
-
-$db_table["user_conf"] = array(
-	array("name" => "zid", "key" => true),
-	array("name" => "name"),
-	array("name" => "value")
-);
+include("sql.php");
 
 $reasons["Normal"] = 0;
 $reasons["Offtopic"] = -1;
@@ -482,7 +48,7 @@ $reasons["Underrated"] = 1;
 $reasons["Spam"] = -1;
 
 
-function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array())
+function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array(), $logo = "")
 {
 	global $request_script;
 	global $auth_zid;
@@ -514,33 +80,33 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 		$title .= $user_page . '.' . $server_name;
 	}
 	writeln('<title>' . $title . '</title>');
-	writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8"/>');
+	writeln('<meta charset="utf-8"/>');
 	writeln('<meta name="viewport" content="width=device-width, initial-scale=1"/>');
 	print $meta;
 	writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon"/>');
-	$theme = $server_conf["theme"];
-	writeln('<link rel="stylesheet" href="/theme/' . $theme . '/style.css?t=' . fs_time("$doc_root/www/theme/$theme/style.css") . '" type="text/css"/>');
+	//$theme = $server_conf["theme"];
+	writeln('<link rel="stylesheet" href="/style.css?t=' . fs_time("$doc_root/www/style.css") . '"/>');
+	//writeln('<link rel="stylesheet" href="/theme/text.css?t=' . fs_time("$doc_root/www/theme/text.css") . '"/>');
+	if ($auth_user["large_text_enabled"]) {
+		//die("[" . $user_conf["large_text_enabled"] . "]");
+		writeln('<style>');
+		writeln('html { font-size: 80%; }');
+		writeln('</style>');
+	}
 	if ($request_script == "/") {
 		writeln('<link rel="alternate" href="/atom" type="application/atom+xml" title="Stories">');
 	}
 	if ($auth_user["javascript_enabled"]) {
-		writeln('<script type="text/javascript" src="/lib/jquery/jquery.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery.js") . '"></script>');
-		writeln('<script type="text/javascript" src="/lib/jquery/jquery-ui.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery-ui.js") . '"></script>');
-		writeln('<script type="text/javascript" src="/common.js?t=' . fs_time("$doc_root/www/common.js") . '"></script>');
+		writeln('<script src="/lib/jquery/jquery.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery.js") . '"></script>');
+		writeln('<script src="/lib/jquery/jquery-ui.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery-ui.js") . '"></script>');
+		writeln('<script src="/common.js?t=' . fs_time("$doc_root/www/common.js") . '"></script>');
 	}
 
 	writeln('</head>');
 	writeln('<body>');
 
-	writeln('<header>');
-	writeln('<table class="title">');
-	writeln('	<tr>');
-	//if ($user_page == "") {
-		//writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><img alt="' . $server_title . '" class="logo_large" src="' . $protocol . '://' . $server_name . '/images/logo-top.png"/><img alt="' . $server_title . '" class="logo_small" src="' . $protocol . '://' . $server_name . '/images/logo-64.png"/></a></td>');
-		writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><div class="logo_big"></div><div class="logo_small"></div></a></td>');
-	//} else {
-	//	writeln('		<td><a href="' . $protocol . '://' . $server_name . '/"><img alt="' . $server_title . '" src="/images/logo-top.png"/></a></td>');
-	//}
+	writeln('<header class="title">');
+	writeln('	<div><a class="logo-big" href="' . $protocol . '://' . $server_name . '/"></a><a class="logo-small" href="' . $protocol . '://' . $server_name . '/"></a></div>');
 
 	if ($user_page === "") {
 		if ($auth_zid === "") {
@@ -572,7 +138,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 		}
 	}
 
-	writeln("		<td class=\"title_links\">");
+	writeln("	<div>");
 	for ($i = 0; $i < count($link_name); $i++) {
 		$name = $link_name[$i];
 		$icon = "";
@@ -583,12 +149,12 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			$link = "/submit";
 		} else if ($name == "Home") {
 			$icon = "home";
-			$link = user_page_link($auth_zid) . "menu/";
+			$link = user_link($auth_zid) . "menu/";
 		} else if ($name == "Tools") {
 			$icon = "tools";
 			$link = "/menu/";
 		} else if ($name == "Sign Up") {
-			$icon = "contact_new";
+			$icon = "contact-new";
 			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/sign_up";
 		} else if ($name == "Sign In") {
 			$icon = "users";
@@ -605,12 +171,9 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			$link = $link_url[$i];
 		}
 
-		writeln("			<a href=\"$link\" class=\"icon_16 {$icon}_16\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
+		writeln("		<a href=\"$link\" class=\"icon-16 {$icon}-16\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
 	}
-	writeln("		</td>");
-
-	writeln('	</tr>');
-	writeln('</table>');
+	writeln("	</div>");
 	writeln('</header>');
 }
 
@@ -625,10 +188,10 @@ function print_left_bar($type = "main", $selected = "stories")
 	if ($type === "main") {
 		if ($auth_zid === "") {
 			$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
-			$section_link = array("story/", "pipe/", "poll/", "search", "topic", "feed/", "stream/");
+			$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "feed/", "stream/");
 		} else {
 			$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
-			$section_link = array("story/", "pipe/", "poll/", "search", "topic", "stream/");
+			$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "stream/");
 		}
 	} else if ($type === "user") {
 		if ($auth_zid === $zid) {
@@ -646,9 +209,11 @@ function print_left_bar($type = "main", $selected = "stories")
 	for ($i = 0; $i < count($section_name); $i++) {
 		$link = "/" . $section_link[$i];
 		if ($selected == $section_name[$i]) {
-			writeln('	<a class="nav_active" href="' . $link . '">' . $section_name[$i] . '</a>');
+			//writeln('	<a class="nav-active" href="' . $link . '">' . $section_name[$i] . '</a>');
+			writeln('	<a class="active" href="' . $link . '">' . $section_name[$i] . '</a>');
 		} else {
-			writeln('	<a class="nav_inactive" href="' . $link . '">' . $section_name[$i] . '</a>');
+			//writeln('	<a class="nav-inactive" href="' . $link . '">' . $section_name[$i] . '</a>');
+			writeln('	<a href="' . $link . '">' . $section_name[$i] . '</a>');
 		}
 	}
 
@@ -660,9 +225,9 @@ function print_left_bar($type = "main", $selected = "stories")
 		for ($i = 0; $i < count($keys); $i++) {
 			$topic = $list[$keys[$i]]["topic"];
 			if ($topic == $selected) {
-				writeln('	<a class="nav_active" href="/topic/' . $topic . '">' . $topic . '</a>');
+				writeln('	<a class="active" href="/topic/' . $topic . '">' . $topic . '</a>');
 			} else {
-				writeln('	<a class="nav_inactive" href="/topic/' . $topic . '">' . $topic . '</a>');
+				writeln('	<a href="/topic/' . $topic . '">' . $topic . '</a>');
 			}
 		}
 		writeln('	</div>');
@@ -674,9 +239,9 @@ function print_left_bar($type = "main", $selected = "stories")
 			for ($i = 0; $i < count($row); $i++) {
 				$topic = $row[$i]["topic"];
 				if ($topic == $selected) {
-					writeln('	<a class="nav_active" href="/topic/' . $topic . '">' . $topic . '</a>');
+					writeln('	<a class="active" href="/topic/' . $topic . '">' . $topic . '</a>');
 				} else {
-					writeln('	<a class="nav_inactive" href="/topic/' . $topic . '">' . $topic . '</a>');
+					writeln('	<a href="/topic/' . $topic . '">' . $topic . '</a>');
 				}
 			}
 			writeln('	</div>');
@@ -700,30 +265,30 @@ function print_user_box()
 	} else {
 		$mail = "Mail";
 	}
-	$link = user_page_link($auth_zid);
+	$link = user_link($auth_zid);
 
-	writeln('<div class="dialog_title">' . $auth_zid . '</div>');
-	writeln('<div class="dialog_body">');
-	writeln('<table class="user_box">');
+	writeln('<div class="dialog-title">' . $auth_zid . '</div>');
+	writeln('<div class="dialog-body">');
+	writeln('<table class="user-box">');
 	writeln('	<tr>');
-	//writeln('		<td><a href="' . $link . 'comments"><div class="chat_32">Comments</div></a></td>');
-	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'feed/">Feed</a></td>');
-	writeln('		<td><a class="icon_32 notepad_32" href="' . $link . 'journal/">Journal</a></td>');
+	//writeln('		<td><a href="' . $link . 'comments"><div class="chat-32">Comments</div></a></td>');
+	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'feed/">Feed</a></td>');
+	writeln('		<td><a class="icon-32 notepad-32" href="' . $link . 'journal/">Journal</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'karma/"><div class="user_box_icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
-//	writeln('		<td><a class="icon_32 news_32" href="' . $link . '"><div class="user_box_icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
+//	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'karma/"><div class="user-box-icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
+//	writeln('		<td><a class="icon-32 news-32" href="' . $link . '"><div class="user-box-icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
 //	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'comments"><div class="user_box_icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
+//	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'comments"><div class="user-box-icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
 //	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a class="icon_32 mail_32" href="' . $link . 'mail/">' . $mail . '</a></td>');
-	writeln('		<td><a class="icon_32 tools_32" href="' . $link . 'profile/">Settings</a></td>');
+	writeln('		<td><a class="icon-32 mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
+	writeln('		<td><a class="icon-32 tools-32" href="' . $link . 'profile/">Settings</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon_32 news_32" href="' . $link . 'stream/"><div class="internet_32">Stream</div></a></td>');
-//	writeln('		<td><a class="icon_32 news_32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user_box_icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
+//	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'stream/"><div class="internet-32">Stream</div></a></td>');
+//	writeln('		<td><a class="icon-32 news-32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user-box-icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
 //	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
@@ -793,7 +358,7 @@ function page_footer($table, $items_per_page, $where = array())
 
 	$s = "";
 	if ($page > 1) {
-		$s .= "<a class=\"pages_left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
+		$s .= "<a class=\"pages-left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
 	}
 	if ($pages_count > 10) {
 		if ($page > 5) {
@@ -827,7 +392,7 @@ function page_footer($table, $items_per_page, $where = array())
 		}
 	}
 	if ($page < $pages_count) {
-		$s .= "<a class=\"pages_right\" href=\"?page=" . ($page + 1) . "\" title=\"Next\"></a>";
+		$s .= "<a class=\"pages-right\" href=\"?page=" . ($page + 1) . "\" title=\"Next\"></a>";
 	}
 
 	return array($item_start, "<div class=\"pages\">$s</div>");
@@ -848,7 +413,7 @@ function print_footer()
 		//writeln('	<a href="/bug/">Bugs</a>');
 		writeln('	<a href="http://bugs.pipedot.org/">Bugs</a>');
 		writeln('	<a href="/faq">FAQ</a>');
-		writeln('	<a href="/atom" class="icon_16 feed_16">Feed</a>');
+		writeln('	<a href="/atom" class="icon-16 feed-16">Feed</a>');
 		//writeln('	<a href="/privacy">Privacy</a>');
 		//writeln('	<a href="/terms">Terms</a>');
 		writeln('	<a href="/source">Source</a>');
@@ -967,7 +532,7 @@ function article_info($comment, $force_https = true)
 		$pipe = db_get_rec("pipe", $comment["root_id"]);
 		$a["type"] = "pipe";
 		$a["title"] = $pipe["title"];
-		$a["link"] = "$p://$server_name/pipe/" . crypt_crockford_encode($pipe["short_id"]);
+		$a["link"] = "$p://$server_name/pipe/" . crypt_crockford_encode($pipe["pipe_id"]);
 	} else if ($comment["type"] == "poll") {
 		$poll = db_get_rec("poll", $comment["root_id"]);
 		$a["type"] = "poll";
@@ -978,15 +543,15 @@ function article_info($comment, $force_https = true)
 		$a["type"] = "journal";
 		$a["title"] = $journal["title"];
 		if ($journal["published"]) {
-			$a["link"] = user_page_link($journal["zid"]) . "journal/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
+			$a["link"] = user_link($journal["zid"]) . "journal/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
 		} else {
-			$a["link"] = user_page_link($journal["zid"]) . "journal/" . crypt_crockford_encode($journal["short_id"]);
+			$a["link"] = user_link($journal["zid"]) . "journal/" . crypt_crockford_encode($journal["journal_id"]);
 		}
 	} else if ($comment["type"] == "card") {
 		$card = db_get_rec("card", array("card_id" => $comment["root_id"]));
 		$a["type"] = "card";
-		$a["title"] = "#" . crypt_crockford_encode($card["short_id"]);
-		$a["link"] = "$p://$server_name/card/" . crypt_crockford_encode($card["short_id"]);
+		$a["title"] = "#" . crypt_crockford_encode($card["card_id"]);
+		$a["link"] = "$p://$server_name/card/" . crypt_crockford_encode($card["card_id"]);
 	}
 
 	return $a;
@@ -998,40 +563,6 @@ function check_article_type($type)
 	$a = array("card", "story", "pipe", "poll", "journal");
 	if (!in_array($type, $a)) {
 		die("unknown article type [$type]");
-	}
-}
-
-
-function item_link($type, $item_id, $short_code = "")
-{
-	global $protocol;
-	global $server_name;
-
-	if ($type != "story" && $short_code == "") {
-		$short = db_get_rec("short", array("item_id" => $item_id));
-		$short_code = crypt_crockford_encode($short["short_id"]);
-	}
-	if ($type == "story") {
-		$story = db_get_rec("story", $item_id);
-		return "$protocol://$server_name/$type/" . gmdate("Y-m-d", $story["publish_time"]) . "/" . $story["slug"];
-	} else if ($type == "pipe") {
-		return "$protocol://$server_name/$type/$short_code";
-	} else if ($type == "poll") {
-		$poll = db_get_rec("poll", $item_id);
-		return "$protocol://$server_name/$type/" . gmdate("Y-m-d", $poll["publish_time"]) . "/" . $poll["slug"];
-	} else if ($type == "journal") {
-		$journal = db_get_rec("journal", $item_id);
-		if ($journal["publish_time"] > 0) {
-			return user_page_link($journal["zid"]) . "$type/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
-		} else {
-			return user_page_link($journal["zid"]) . "$type/$short_code";
-		}
-	} else if ($type == "user") {
-		return user_page_link($item_id);
-	} else if ($type == "topic") {
-		return "$protocol://$server_name/topic/" . clean_url($item_id);
-	} else {
-		return "$protocol://$server_name/$type/$short_code";
 	}
 }
 
@@ -1051,9 +582,8 @@ function print_noscript()
 	writeln('	<li>Enable scripts from <b>' . $server_name . '</b></li>');
 	if ($auth_zid === "") {
 		writeln('	<li>Sign in and uncheck the "Use JavaScript" option on your account settings page.</li>');
-		//writeln('	<li>Click <a href="">this link</a> to get a cookie that disables JavaScript. (not working yet)</li>');
 	} else {
-		writeln('	<li>Uncheck the "Use JavaScript" option on your <a href="' . user_page_link($auth_zid) . 'profile/">account settings page</a>.</li>');
+		writeln('	<li>Uncheck the "Use JavaScript" option on your <a href="' . user_link($auth_zid) . 'profile/">account settings page</a>.</li>');
 	}
 	writeln('</ul>');
 	writeln('</div>');
@@ -1077,37 +607,13 @@ function karma_description($karma)
 }
 
 
-function create_id($zid, $time = 0)
+function create_short($type)
 {
-	global $server_name;
+	$short = db_new_rec("short");
+	$short["type"] = $type;
+	db_set_rec("short", $short);
 
-	if ($zid == "") {
-		$zid = "a_" . substr(crypt_sha256(rand() . microtime()), 0, 8) . "_$server_name";
-	} else {
-		$zid = str_replace("@", "_", $zid);
-	}
-	$zid = string_replace_all(".", "_", $zid);
-	$zid = string_replace_all("-", "_", $zid);
-	if ($time == 0) {
-		$time = time();
-	}
-
-	return "{$time}_$zid";
-}
-
-
-function create_short($type, $item_id)
-{
-	if (!db_has_rec("short", array("type" => $type, "item_id" => $item_id))) {
-		$short = array();
-		$short["short_id"] = 0;
-		$short["type"] = $type;
-		$short["item_id"] = $item_id;
-		db_set_rec("short", $short);
-	}
-
-	$short = db_get_rec("short", array("type" => $type, "item_id" => $item_id));
-	return $short["short_id"];
+	return db_last();
 }
 
 
@@ -1213,83 +719,6 @@ function count_comments($type = "", $root_id = "")
 }
 
 
-function find_rec($type = "")
-{
-	global $s2;
-	global $s3;
-
-	$date_based = array("story", "poll", "journal");
-	if (in_array($type, $date_based) && string_uses($s2, "[0-9]-") && string_uses($s3, "[a-z][0-9]-") && string_has($s2, "-")) {
-		$date = $s2;
-		$slug = $s3;
-		$time_beg = strtotime("$date GMT");
-		if ($time_beg === false) {
-			die("invalid date [$date]");
-		}
-		$time_end = $time_beg + 86400;
-
-		$row = sql("select short_id from $type where publish_time > ? and publish_time < ? and slug = ? order by publish_time", $time_beg, $time_end, $slug);
-		if (count($row) == 0) {
-			if ($type == "story") {
-				$row = sql("select short_id, story.story_id from story inner join story_edit on story.story_id = story_edit.story_id where publish_time > ? and publish_time < ? and story_edit.slug = ?", $time_beg, $time_end, $slug);
-				if (count($row) > 0) {
-					header("Location: " . item_link("story", $row[0]["story_id"], $row[0]["short_id"]));
-					die();
-				}
-			}
-			header("Location: ./");
-			die();
-		}
-		$short_id = $row[0]["short_id"];
-		$short_code = crypt_crockford_encode($short_id);
-	} else if ($type == "feed") {
-		if (string_uses($s2, "[A-Z][0-9]")) {
-			$short_code = $s2;
-			$short_id = crypt_crockford_decode($short_code);
-			$feed = db_find_rec("feed", $short_id);
-		} else if (string_uses($s2, "[a-z][0-9]-")) {
-			$slug = $s2;
-			$feed = db_find_rec("feed", array("slug" => $slug));
-		} else {
-			die("invalid request [$s2]");
-		}
-		if ($feed === false) {
-			die("unknown feed [$s2]");
-		}
-
-		return $feed;
-	} else if ($type == "article" || $type == "thumb") {
-		$short_code = $s2;
-		if (!string_uses($short_code, "[A-Z][a-z][0-9]")) {
-			die("invalid short code [$short_code]");
-		}
-		$short_id = crypt_crockford_decode($short_code);
-
-		return db_get_rec($type, $short_id);
-	} else {
-		if ($type == "bug_file") {
-			$short_code = $s3;
-		} else {
-			$short_code = $s2;
-		}
-		if (!string_uses($short_code, "[A-Z][a-z][0-9]")) {
-			die("invalid short code [$short_code]");
-		}
-		$short_id = crypt_crockford_decode($short_code);
-
-		if ($type === "") {
-			$short = db_get_rec("short", $short_id);
-			$type = $short["type"];
-		}
-	}
-
-	$rec = db_get_rec($type, array("short_id" => $short_id));
-	$rec["short_code"] = $short_code;
-
-	return $rec;
-}
-
-
 function print_comments($type, $rec)
 {
 	global $auth_zid;
@@ -1302,10 +731,12 @@ function print_comments($type, $rec)
 		$can_moderate = true;
 		$hide_value = $auth_user["hide_threshold"];
 		$expand_value = $auth_user["expand_threshold"];
+		$inline_reply = $auth_user["inline_reply_enabled"];
 	} else {
 		$can_moderate = false;
 		$hide_value = -1;
 		$expand_value = 0;
+		$inline_reply = false;
 	}
 
 	if ($auth_user["javascript_enabled"]) {
@@ -1324,44 +755,13 @@ function print_comments($type, $rec)
 		writeln('var expand_value = ' . $expand_value . ';');
 		writeln('var auth_zid = "' . $auth_zid . '";');
 		writeln('var last_seen = ' . $last_seen . ';');
+		writeln('var inline_reply = ' . ($inline_reply ? "true" : "false") . ';');
 		writeln();
-		writeln('get_comments("' . $type . '", "' . $rec["{$type}_id"] . '");');
+		//writeln('get_comments("' . $type . '", "' . $rec["{$type}_id"] . '");');
+		writeln('get_comments("' . $type . '", "' . crypt_crockford_encode($rec["{$type}_id"]) . '");');
 		writeln('render_page();');
 		writeln();
 		writeln('</script>');
-	}
-}
-
-
-function user_page_link($zid, $tag = false, $ac = true, $author = false)
-{
-	global $protocol;
-
-	if ($ac && $zid == "") {
-		$name = "Anonymous Coward";
-		$url = "";
-	} else {
-		$name = $zid;
-		$url = $protocol . "://" . str_replace("@", ".", $zid) . "/";
-	}
-	//if ($micro) {
-	//	// schema.org is ugly
-	//	$text = "<span itemprop=\"author\" itemscope itemtype=\"http://schema.org/Person\"><span itemprop=\"name\">$name</span></span>";
-	//} else {
-		$text = $name;
-	//}
-	if ($tag) {
-		if ($url == "") {
-			return $text;
-		} else {
-			if ($author) {
-				return "<a href=\"$url\" rel=\"author\">$text</a>";
-			} else {
-				return "<a href=\"$url\">$text</a>";
-			}
-		}
-	} else {
-		return $url;
 	}
 }
 
@@ -1444,7 +844,7 @@ function make_photo_links($text)
 				}
 			}
 			if ($frame || $label !== "") {
-				$tag = "<div class=\"photo_frame\">$tag$label</div>";
+				$tag = "<div class=\"photo-frame\">$tag$label</div>";
 			}
 
 			$text = str_replace($matches[0][$i], $tag, $text);

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -24,10 +24,10 @@ function print_pipe($pipe_id)
 	$pipe = db_get_rec("pipe", $pipe_id);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$topic = db_get_rec("topic", $pipe["tid"]);
+	$a["type"] = "story";
 	$a["pipe_id"] = $pipe["pipe_id"];
 	$a["body"] = $pipe["body"];
 	$a["icon"] = $pipe["icon"];
-	$a["short_id"] = $pipe["short_id"];
 	$a["time"] = $pipe["time"];
 	$a["title"] = $pipe["title"];
 	$a["topic"] = $topic["topic"];
@@ -51,7 +51,7 @@ function print_pipe_small($pipe_id, $full)
 	global $auth_user;
 
 	$pipe = db_get_rec("pipe", $pipe_id);
-	$short_code = crypt_crockford_encode($pipe["short_id"]);
+	$pipe_code = crypt_crockford_encode($pipe_id);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$score = 0;
 	$topic = db_get_rec("topic", $pipe["tid"]);
@@ -78,24 +78,24 @@ function print_pipe_small($pipe_id, $full)
 	}
 
 	if ($auth_user["javascript_enabled"]) {
-		writeln('<div id="title_' . $pipe_id . '" class="pipe_title_collapse">');
+		writeln('<div id="title_' . $pipe_id . '" class="pipe-title-collapse">');
 	} else {
 		beg_form("/pipe/$pipe_id/vote");
-		writeln('<div id="title_' . $pipe_id . '" class="pipe_title_expand">');
+		writeln('<div id="title_' . $pipe_id . '" class="pipe-title-expand">');
 	}
 	writeln('<table class="fill">');
 	writeln('	<tr>');
 	if ($auth_zid != "") {
 		if ($auth_user["javascript_enabled"]) {
 			if ($value < 0) {
-				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_a" class="pipe_down" title="You Voted Down" onclick="vote(\'' . $pipe_id . '\', 1)"></div></td>');
-				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_b" class="pipe_undo" title="Undo Vote" onclick="vote(\'' . $pipe_id . '\', 0)"></div></td>');
+				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_a" class="pipe-down" title="You Voted Down" onclick="vote(\'' . $pipe_id . '\', 1)"></div></td>');
+				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_b" class="pipe-undo" title="Undo Vote" onclick="vote(\'' . $pipe_id . '\', 0)"></div></td>');
 			} else if ($value == 0) {
-				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_a" class="pipe_plus" title="Vote Up" onclick="vote(\'' . $pipe_id . '\', 1)"></div></td>');
-				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_b" class="pipe_minus" title="Vote Down" onclick="vote(\'' . $pipe_id . '\', 0)"></div></td>');
+				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_a" class="pipe-plus" title="Vote Up" onclick="vote(\'' . $pipe_id . '\', 1)"></div></td>');
+				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_b" class="pipe-minus" title="Vote Down" onclick="vote(\'' . $pipe_id . '\', 0)"></div></td>');
 			} else if ($value > 0) {
-				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_a" class="pipe_up" title="You Voted Up" onclick="vote(\'' . $pipe_id . '\', 1)"></div></td>');
-				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_b" class="pipe_undo" title="Undo Vote" onclick="vote(\'' . $pipe_id . '\', 0)"></div></td>');
+				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_a" class="pipe-up" title="You Voted Up" onclick="vote(\'' . $pipe_id . '\', 1)"></div></td>');
+				writeln('		<td style="width: 32px"><div id="icon_' . $pipe_id . '_b" class="pipe-undo" title="Undo Vote" onclick="vote(\'' . $pipe_id . '\', 0)"></div></td>');
 			}
 		} else {
 			if ($value < 0) {
@@ -112,7 +112,7 @@ function print_pipe_small($pipe_id, $full)
 	}
 	writeln('		<td style="width: 100%">');
 	if ($auth_user["javascript_enabled"]) {
-		writeln('			<table class="pipe_pointer" onclick="toggle_body(\'' . $pipe_id . '\')">');
+		writeln('			<table class="pipe-pointer" onclick="toggle_body(\'' . $pipe_id . '\')">');
 	} else {
 		writeln('			<table class="fill">');
 	}
@@ -124,22 +124,22 @@ function print_pipe_small($pipe_id, $full)
 	writeln('								<td>' . $pipe["title"] . '</td>');
 	writeln('							</tr>');
 	writeln('							<tr>');
-	writeln('								<td class="pipe_subtitle">by ' . $by . ' on ' . $date . '</td>');
+	writeln('								<td class="pipe-subtitle">by ' . $by . ' on ' . $date . '</td>');
 	writeln('							</tr>');
 	writeln('						</table>');
 	writeln('					</td>');
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');
-	writeln('		<td style="padding-right: 8px; text-align: right; white-space: nowrap;"><a href="/pipe/' . $short_code . '" class="icon_16 chat_16"><b>' . $comments["count"] . '</b> ' . $comments["label"] . '</a></td>');
+	writeln('		<td style="padding-right: 8px; text-align: right; white-space: nowrap;"><a href="/pipe/' . $pipe_code . '" class="icon-16 chat-16"><b>' . $comments["count"] . '</b> ' . $comments["label"] . '</a></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
 	if ($auth_user["javascript_enabled"]) {
-		writeln('<div id="body_' . $pipe_id . '" class="pipe_body" style="display: none">');
+		writeln('<div id="body_' . $pipe_id . '" class="pipe-body" style="display: none">');
 	} else {
 		end_form();
-		writeln('<div class="pipe_body">');
+		writeln('<div class="pipe-body">');
 	}
 	writeln($pipe["body"]);
 	writeln('</div>');

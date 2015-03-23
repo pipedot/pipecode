@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -40,7 +40,7 @@ for ($i = 0; $i < count($pipes); $i++) {
 }
 
 if (count($pipes) > 0) {
-	writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a class="icon_16 calendar_16" href="history">History</a></div>');
+	writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a class="icon-16 calendar-16" href="history">History</a></div>');
 }
 end_main();
 
@@ -55,10 +55,10 @@ function toggle_body(pipe_id)
 
 	if (e.is(':visible')) {
 		e.hide();
-		t.attr("class","pipe_title_collapse");
+		t.attr("class","pipe-title-collapse");
 	} else {
 		e.show();
-		t.attr("class","pipe_title_expand");
+		t.attr("class","pipe-title-expand");
 	}
 }
 
@@ -80,19 +80,19 @@ function vote(pipe_id, up)
 			icon_b = $('#icon_' + pipe_id + '_b');
 
 			if (result == "undone") {
-				icon_a.attr("class", "pipe_plus");
+				icon_a.attr("class", "pipe-plus");
 				icon_a.attr("title", "Vote Up");
-				icon_b.attr("class", "pipe_minus");
+				icon_b.attr("class", "pipe-minus");
 				icon_b.attr("title", "Vote Down");
 			} else {
 				if (result == "up") {
-					icon_a.attr("class", "pipe_up");
+					icon_a.attr("class", "pipe-up");
 					icon_a.attr("title", "You Voted Up");
 				} else {
-					icon_a.attr("class", "pipe_down");
+					icon_a.attr("class", "pipe-down");
 					icon_a.attr("title", "You Voted Down");
 				}
-				icon_b.attr("class", "pipe_undo");
+				icon_b.attr("class", "pipe-undo");
 				icon_b.attr("title", "Undo Vote");
 			}
 

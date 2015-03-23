@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,9 +23,16 @@ include("captcha.php");
 include("post.php");
 include("mail.php");
 
-$type = http_get_string("type", array("required" => false, "valid" => "[a-z]"));
-$comment_id = http_get_string("comment_id", array("required" => false, "valid" => "[a-z][0-9]_"));
-$root_id = http_get_string("root_id", array("required" => false, "valid" => "[a-z][0-9]_"));
+$item = item_request();
+if ($item["short_type"] === "comment") {
+	$root_id = $item["root_id"];
+	$parent_id = $item["comment_id"];
+	$type = $item["type"];
+} else {
+	$root_id = $item[$item["short_type"] . "_id"];
+	$parent_id = "";
+	$type = $item["short_type"];
+}
 
 $subject = clean_subject();
 list($clean_body, $dirty_body) = clean_body();
@@ -47,15 +54,6 @@ if ($auth_zid === "") {
 	}
 }
 $time = time();
-
-if ($comment_id != "") {
-	$comment = db_get_rec("comment", $comment_id);
-	$type = $comment["type"];
-	$root_id = $comment["root_id"];
-} else if ($type == "" || $root_id == "") {
-	die("unknown root");
-}
-check_article_type($type);
 
 if (http_post("preview")) {
 	$zid = $auth_zid;
@@ -87,20 +85,18 @@ if ($auth_zid === "" || $zid === "") {
 }
 
 $comment = db_new_rec("comment");
-$comment["comment_id"] = create_id($zid);
+$comment["comment_id"] = create_short("comment");
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
-$comment["parent_id"] = $comment_id;
+$comment["parent_id"] = $parent_id;
 $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
 $comment["root_id"] = $root_id;
-$comment["short_id"] = create_short("comment", $comment["comment_id"]);
 $comment["subject"] = $subject;
 $comment["type"] = $type;
 $comment["zid"] = $zid;
 db_set_rec("comment", $comment);
 
-$comment = db_get_rec("comment", $comment["comment_id"]);
 send_notifications($comment);
 
 revert_view_time($type, $root_id);

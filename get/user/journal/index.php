@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -50,7 +50,7 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-writeln('<div style="text-align: center; margin-bottom: 8px;"><a class="icon_16 feed_16" href="atom">Journal Feed</a></div>');
+writeln('<div style="text-align: center; margin-bottom: 8px;"><a class="icon-16 feed-16" href="atom">Journal Feed</a></div>');
 
 end_main();
 print_footer();

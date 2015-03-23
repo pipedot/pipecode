@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -33,8 +33,8 @@ print_left_bar("user", "feed");
 beg_main("cell");
 beg_form();
 
-writeln('<div class="dialog_title">Add Feed</div>');
-writeln('<div class="dialog_body">');
+writeln('<div class="dialog-title">Add Feed</div>');
+writeln('<div class="dialog-body">');
 
 writeln('<table style="width: 100%">');
 writeln('	<tr>');

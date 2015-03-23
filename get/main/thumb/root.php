@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -46,7 +46,7 @@ if ($ext == "jpg") {
 print_header("Thumbnail");
 beg_main();
 
-$thumb = find_rec("thumb");
+$thumb = item_request("thumb");
 $short_code = crypt_crockford_encode($thumb["thumb_id"]);
 
 if ($thumb["low_res"]) {
@@ -56,21 +56,20 @@ if ($thumb["low_res"]) {
 }
 
 writeln('<h1>Thumbnail</h1>');
-writeln('<div class="photo_frame">');
-writeln('	<img alt="photo" class="thumb" src="' . $short_code . '.jpg"/>');
+writeln('<div class="photo-frame">');
+writeln('	<img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg"/>');
 writeln('	<div><a href="' . $short_code . '.jpg">' . $size . '</a></div>');
 writeln('</div>');
-
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("select count(*) as item_count from article where thumb_id = ?", $items_per_page, array($thumb["thumb_id"]));
 
-$row = sql("select * from article where thumb_id = ? limit $item_start, $items_per_page", $thumb["thumb_id"]);
+$row = sql("select article_id, author_name, author_link, article.description, publish_time, article.title, feed.slug, feed.title as feed_title from article inner join feed on article.feed_id = feed.feed_id where thumb_id = ? limit $item_start, $items_per_page", $thumb["thumb_id"]);
 if (count($row) > 0) {
 	writeln('<h2>Articles</h2>');
 
 	for ($i = 0; $i < count($row); $i++) {
-		$info = "on " . date("Y-m-d H:i", $row[$i]["publish_time"]);
+		$info = "in <b><a href=\"/feed/" . $row[$i]["slug"] . "\">" . $row[$i]["feed_title"] . "</a></b> on " . date("Y-m-d H:i", $row[$i]["publish_time"]);
 		if ($row[$i]["author_name"] != "") {
 			$by = $row[$i]["author_name"];
 			if ($row[$i]["author_link"] != "") {
@@ -81,14 +80,14 @@ if (count($row) > 0) {
 		}
 		$short_code = crypt_crockford_encode($row[$i]["article_id"]);
 
-		writeln('<article class="article_text_row">');
+		writeln('<article class="news-text">');
 		writeln('<table>');
 		writeln('	<tr>');
 		writeln('		<td>');
-		writeln('			<div class="article_preview">');
-		writeln('				<div class="article_link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
-		writeln('				<div class="article_info">' . $info . '</div>');
-		writeln('				<div class="article_description">' . $row[$i]["description"] . '</div>');
+		writeln('			<div class="article-preview">');
+		writeln('				<div class="article-link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
+		writeln('				<div class="article-info">' . $info . '</div>');
+		writeln('				<div class="article-description">' . $row[$i]["description"] . '</div>');
 		writeln('			</div>');
 		writeln('		</td>');
 		writeln('	</tr>');

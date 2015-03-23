@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -26,29 +26,29 @@ writeln("<h1>Open Bugs</h1>");
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 0));
 
-$row = sql("select bug_id, author_zid, body, priority, publish_time, short_id, title from bug where closed = 0 order by publish_time desc limit $item_start, $items_per_page");
+$row = sql("select bug_id, author_zid, body, priority, publish_time, title from bug where closed = 0 order by publish_time desc limit $item_start, $items_per_page");
 $comments = count_comments("bug", $row[$i]["bug_id"]);
 beg_tab();
 for ($i = 0; $i < count($row); $i++) {
-	$author_zid = user_page_link($row[$i]["author_zid"], true);
-	$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+	$author_zid = user_link($row[$i]["author_zid"], ["tag" => true]);
+	$bug_code = crypt_crockford_encode($row[$i]["bug_id"]);
 	$icon = bug_priority_icon($row[$i]["priority"]);
-	$labels = make_bug_labels($row[$i]["short_id"]);
+	$labels = make_bug_labels($row[$i]["bug_id"]);
 
 	writeln('	<tr>');
 	writeln('		<td>');
 	writeln('			<div class="bug_row ' . $icon . '">');
-	writeln('				<div class="bug_title"><div><a href="' . $short_code . '">' . $row[$i]["title"] . '</a></div><div>' . $labels . '</div></div>');
-	writeln('				<div class="bug_subtitle">by <b>' . $author_zid . '</b> on ' . date("Y-m-d H:i", $row[$i]["publish_time"]) . ' (<a href="/' . $short_code . '">#' . $short_code . '</a>)</div>');
+	writeln('				<div class="bug-title"><div><a href="' . $short_code . '">' . $row[$i]["title"] . '</a></div><div>' . $labels . '</div></div>');
+	writeln('				<div class="bug-subtitle">by <b>' . $author_zid . '</b> on ' . date("Y-m-d H:i", $row[$i]["publish_time"]) . ' (<a href="/' . $bug_code . '">#' . $bug_code . '</a>)</div>');
 	writeln('			</div>');
 	writeln('		</td>');
-	writeln('		<td class="right"><a href="' . $short_code . '">' . $comments["tag"] . '</a></td>');
+	writeln('		<td class="right"><a href="' . $bug_code . '">' . $comments["tag"] . '</a></td>');
 	writeln('	</tr>');
 }
 end_tab();
 
 writeln($page_footer);
-writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a class="icon_16 calendar_16" href="history">History</a></div>');
+box_center('<a class="icon-16 calendar-16" href="history">History</a>');
 
 end_main();
 print_footer();

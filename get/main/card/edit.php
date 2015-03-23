@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,7 +19,7 @@
 
 include("clean.php");
 
-$card = find_rec("card");
+$card = item_request("card");
 
 if ($card["zid"] !== $auth_zid) {
 	die("not your card");
@@ -38,7 +38,7 @@ beg_form();
 writeln('<h1>Edit Card</h1>');
 
 $tags = array();
-$row = sql("select tag from card_tags where short_id = ?", $card["short_id"]);
+$row = sql("select tag from card_tags where card_id = ?", $card["card_id"]);
 for ($i = 0; $i < count($row); $i++) {
 	$tags[] = $row[$i]["tag"];
 }
@@ -73,7 +73,7 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 	writeln('</script>');
 }
 
-right_box("Save");
+box_right("Save");
 
 end_form();
 end_main();

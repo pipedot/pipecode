@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -55,7 +55,7 @@ if ($verify != "") {
 	writeln('		<td style="padding-bottom: 8px"><input name="password_2" type="password"/></td>');
 	writeln('	</tr>');
 	writeln('</table>');
-	left_box("Finish");
+	box_left("Finish");
 	end_form();
 	end_main();
 	print_footer();
@@ -76,7 +76,7 @@ writeln('		<td><input name="username" type="text"/></td>');
 writeln('	</tr>');
 writeln('</table>');
 
-left_box("Send");
+box_left("Send");
 
 end_form();
 end_main();

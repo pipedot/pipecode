@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,17 +21,17 @@ include("render.php");
 include("stream.php");
 include("image.php");
 
-$card = find_rec("card");
+$card = item_request("card");
 
 if ($auth_zid === "") {
 	print_header("Card");
 } else {
-	print_header("Card", array("Share"), array("share"), array(user_page_link($auth_zid) . "stream/share"));
+	print_header("Card", array("Share"), array("share"), array(user_link($auth_zid) . "stream/share"));
 }
 beg_main();
 writeln('<h1>Card</h1>');
 
-print_card($card["short_id"], "large");
+print_card($card["card_id"], "large");
 print_comments("card", $card);
 
 end_main();

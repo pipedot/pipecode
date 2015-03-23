@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,16 +23,16 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");
 }
 
-$bug_file = find_rec("bug_file");
+$bug_file = item_request("bug_file");
 
 if ($bug_file["type"] == "jpg" || $bug_file["type"] == "png") {
 	$path = $doc_root . "/www" . public_path($bug_file["time"]);
 
-	fs_remove("$path/bug_file_{$bug_file["short_code"]}_128x128.jpg");
-	fs_remove("$path/bug_file_{$bug_file["short_code"]}_256x256.jpg");
+	fs_remove("$path/bug_file_{$bug_file["bug_code"]}_128x128.jpg");
+	fs_remove("$path/bug_file_{$bug_file["bug_code"]}_256x256.jpg");
 }
-fs_remove("$doc_root/www/pub/bug/{$bug_file["short_code"]}." . $bug_file["type"]);
+fs_remove("$doc_root/www/pub/bug/{$bug_file["bug_code"]}." . $bug_file["type"]);
 
-db_del_rec("bug_file", $short_id);
+db_del_rec("bug_file", $bug_file["bug_file_id"]);
 
-header("Location: /bug/{$bug_file["short_code"]}");
+header("Location: /bug/{$bug_file["bug_code"]}");

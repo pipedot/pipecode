@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -27,7 +27,7 @@ beg_form("", "file");
 
 writeln('<h1>Attach File</h1>');
 
-left_right_box('<input name="upload" type="file"/>', "Upload");
+box_two('<input name="upload" type="file"/>', "Upload");
 
 end_form();
 end_main();

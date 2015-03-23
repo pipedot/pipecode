@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -43,7 +43,7 @@ if ($auth_zid != "") {
 	writeln('<div style="width: 300px">');
 }
 
-$row = sql("select poll_id from poll order by publish_time desc limit 1");
+$row = sql("select poll_id from poll where promoted = 1 order by publish_time desc limit 1");
 $poll_id = $row[0]["poll_id"];
 if ($auth_zid === "") {
 	$vote = false;
@@ -53,30 +53,30 @@ if ($auth_zid === "") {
 }
 vote_box($poll_id, $vote);
 
-writeln('<div class="dialog_title">Recent Journals</div>');
-writeln('<div class="dialog_body">');
+writeln('<div class="dialog-title">Recent Journals</div>');
+writeln('<div class="dialog-body">');
 $row = sql("select publish_time, slug, title, zid from journal where published = 1 order by publish_time desc limit 0, 5");
 for ($i = 0; $i < count($row); $i++) {
-	writeln('	<table class="recent_journal">');
+	writeln('	<table class="recent-journal">');
 	writeln('		<tr>');
-	writeln('			<td><a href="' . user_page_link($row[$i]["zid"]) . '"><img class="recent_journal_image" src="' . profile_picture($row[$i]["zid"], 64) . '"/></a></td>');
+	writeln('			<td><a href="' . user_link($row[$i]["zid"]) . '"><img class="recent-journal_image" src="' . profile_picture($row[$i]["zid"], 64) . '"/></a></td>');
 	writeln('			<td>');
-	writeln('				<div class="recent_journal_title"><a href="' . user_page_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
-	writeln('				<div class="recent_journal_author"><a href="' . user_page_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></div>');
+	writeln('				<div class="recent-journal-title"><a href="' . user_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
+	writeln('				<div class="recent-journal-author"><a href="' . user_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></div>');
 	writeln('			</td>');
 	writeln('		</tr>');
 	writeln('	</table>');
 }
 writeln('</div>');
 
-writeln('<div class="dialog_title">Most Discussed</div>');
-writeln('<div class="dialog_body">');
+writeln('<div class="dialog-title">Most Discussed</div>');
+writeln('<div class="dialog-body">');
 $row = sql("select * from (select * from (select story_id, title, slug, story.publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.root_id where type = 'story' group by story_id order by story.publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
 writeln('	<ul class="popular">');
 for ($i = 0; $i < count($row); $i++) {
 	writeln('		<li>');
-	writeln('			<div><div class="popular_count">' . $row[$i]["comments"] . '</div></div>');
-	writeln('			<div class="popular_title"><a href="/story/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
+	writeln('			<div><div class="popular-count">' . $row[$i]["comments"] . '</div></div>');
+	writeln('			<div class="popular-title"><a href="/story/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
 	writeln('		</li>');
 }
 writeln('	</ul>');

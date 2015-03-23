@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -22,7 +22,7 @@ include("pipe.php");
 include("story.php");
 include("diff.php");
 
-$pipe = find_rec("pipe");
+$pipe = item_request("pipe");
 $status = "Voting";
 $story_id = "";
 if ($pipe["closed"]) {
@@ -30,8 +30,8 @@ if ($pipe["closed"]) {
 	if (db_has_rec("story", array("pipe_id" => $pipe["pipe_id"]))) {
 		$story = db_get_rec("story", array("pipe_id" => $pipe["pipe_id"]));
 		$story_id = $story["story_id"];
-		$story_short_code = crypt_crockford_encode($story["short_id"]);
-		$status = "<a href=\"/story/$story_short_code\">Published</a>";
+		$story_code = crypt_crockford_encode($story_id);
+		$status = "<a href=\"/story/$story_code\">Published</a>";
 	}
 }
 if ($pipe["reason"] == "") {
@@ -69,12 +69,12 @@ if ($story_id > 0) {
 		}
 		$diff = diff($old_body, $new_body);
 
-		writeln('<div class="edit_title">');
+		writeln('<div class="edit-title">');
 		writeln('	<div>' . date("Y-m-d H:i", $edit_time) . '</div>');
 		writeln('	<div>' . $title . '</div>');
 		writeln('	<div>' . $edit_zid . '</div>');
 		writeln('</div>');
-		writeln('<div class="edit_body">' . $diff . '</div>');
+		writeln('<div class="edit-body">' . $diff . '</div>');
 	}
 }
 
@@ -83,23 +83,18 @@ print_comments("pipe", $pipe);
 end_main();
 
 writeln('<aside>');
-writeln('<div class="dialog_title">Status</div>');
-writeln('<div class="dialog_body">');
-writeln('	<div class="pipe_status">' . $status . $reason . '</div>');
+writeln('<div class="dialog-title">Status</div>');
+writeln('<div class="dialog-body">');
+writeln('	<div class="pipe-status">' . $status . $reason . '</div>');
 writeln('</div>');
 
 if (!$pipe["closed"]) {
 	if ($auth_user["editor"]) {
-		writeln('<div class="dialog_title">Editor</div>');
-		writeln('<div class="dialog_body">');
-		writeln('	<div class="pipe_editor"><a href="/pipe/' . $pipe["short_code"] . '/publish">Publish</a> | <a href="/pipe/' . $pipe["short_code"] . '/close">Close</a></div>');
+		writeln('<div class="dialog-title">Editor</div>');
+		writeln('<div class="dialog-body">');
+		writeln('	<div class="pipe-editor"><a href="/pipe/' . $pipe["short_code"] . '/publish">Publish</a> | <a href="/pipe/' . $pipe["short_code"] . '/close">Close</a></div>');
 		writeln('</div>');
 	}
-//} else {
-//	writeln('<div class="dialog_title">Editor</div>');
-//	writeln('<div class="dialog_body">');
-//	writeln('	<div class="pipe_editor"><a href="' . user_page_link($pipe["editor"]) . '"><b>' . $pipe["editor"] . '</b></a></div>');
-//	writeln('</div>');
 }
 writeln('</aside>');
 

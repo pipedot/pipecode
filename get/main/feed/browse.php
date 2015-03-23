@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -43,7 +43,7 @@ for ($i = 0; $i < count($row); $i++) {
 	}
 
 	writeln('	<tr>');
-	writeln('		<td><a class="favicon_16"' . $icon . ' href="/feed/' . $row[$i]["slug"] . '">' . $title . '</a></td>');
+	writeln('		<td><a class="favicon-16"' . $icon . ' href="/feed/' . $row[$i]["slug"] . '">' . $title . '</a></td>');
 	writeln('		<td class="right">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 	writeln('	</tr>');
 }

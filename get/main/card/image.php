@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -22,7 +22,7 @@ set_time_limit(15 * 60);
 include("image.php");
 
 clean_tmp_images();
-$card = find_rec("card");
+$card = item_request("card");
 $link_url = $card["link_url"];
 
 $images = build_preview_images("<a href=\"$link_url\">link</a>");
@@ -68,7 +68,7 @@ for ($i = 0; $i < count($images); $i++) {
 	writeln('</label>');
 }
 
-right_box("Save");
+box_right("Save");
 
 end_form();
 end_main();

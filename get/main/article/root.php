@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,20 +19,17 @@
 
 include("story.php");
 
-$article = find_rec("article");
+$article = item_request("article");
+$article["type"] = "article";
 $short_code = crypt_crockford_encode($article["article_id"]);
 
 print_header($article["title"]);
 beg_main();
 
-//writeln('<h1>' . $article["title"] . '</h1>');
-//writeln('<article>');
-//writeln($article["body"]);
-//writeln('</article>');
 print_article($article);
 
-writeln('<div class="external_title">External Content</div>');
-writeln('<table class="external_table">');
+writeln('<div class="external-title">External Content</div>');
+writeln('<table class="external-table">');
 if ($article["feed_id"] > 0) {
 	$feed = db_get_rec("feed", $article["feed_id"]);
 
@@ -60,19 +57,6 @@ if ($article["feed_id"] > 0) {
 	}
 }
 writeln('</table>');
-
-//writeln('<div class="external_title">External Content</div>');
-//if ($article["feed_id"] > 0) {
-//	writeln("<div class=\"external_body\">This article comes from a RSS or Atom feed and is not part of $server_title.</div>");
-//}
-//writeln("<div class=\"external_body\">Copyright 2015 AnandTech</div>");
-
-//writeln('<div class="balloon">');
-//writeln('<h1>External Content</h1>');
-//if ($article["feed_id"] > 0) {
-//	writeln("<p>This article comes from a RSS or Atom feed and is not part of $server_title.</p>");
-//}
-//writeln('</div>');
 
 end_main();
 print_footer();

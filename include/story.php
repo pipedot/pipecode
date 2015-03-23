@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -50,6 +50,7 @@ function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_bod
 	beg_form();
 	writeln('<h1>Preview</h1>');
 	$a = array();
+	$a["type"] = "story";
 	$a["title"] = $title;
 	$a["time"] = $story["publish_time"];
 	$a["pipe_id"] = $story["pipe_id"];
@@ -74,7 +75,7 @@ function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_bod
 	writeln('		<td style="text-align: right"><input name="publish" type="submit" value="Publish"/> <input name="preview" type="submit" value="Preview"/></td>');
 	writeln('	</tr>');
 	writeln('</table>');
-	//right_box("Publish,Preview");
+	//box_right("Publish,Preview");
 
 	end_form();
 	end_main();
@@ -94,12 +95,11 @@ function print_story($story)
 	$topic = db_get_rec("topic", $story["tid"]);
 	$pipe = db_get_rec("pipe", $story["pipe_id"]);
 
+	$a["type"] = "story";
 	$a["body"] = $story["body"];
 	$a["icon"] = $story["icon"];
 	$a["image_id"] = $story["image_id"];
 	$a["pipe_id"] = $story["pipe_id"];
-	$a["pipe_short_id"] = $pipe["short_id"];
-	$a["short_id"] = $story["short_id"];
 	$a["story_id"] = $story["story_id"];
 	$a["time"] = $story["publish_time"];
 	$a["title"] = $story["title"];
@@ -121,9 +121,9 @@ function print_journal($journal_id)
 	$body = $journal["body"];
 	$body = make_photo_links($body);
 
+	$a["type"] = "journal";
 	$a["body"] = $body;
 	$a["photo_id"] = $journal["photo_id"];
-	$a["short_id"] = $journal["short_id"];
 	$a["journal_id"] = $journal_id;
 	$a["time"] = $journal["publish_time"];
 	$a["title"] = $journal["title"];
@@ -151,7 +151,7 @@ function print_article($a)
 	}
 	if (array_key_exists("zid", $a)) {
 		$zid = $a["zid"];
-		$by = user_page_link($zid, true, true, true);
+		$by = user_link($zid, ["tag" => true, "author" => true]);
 	} else {
 		$zid = "";
 		$by = "";
@@ -177,28 +177,23 @@ function print_article($a)
 	if (array_key_exists("story_id", $a)) {
 		$story_id = $a["story_id"];
 	} else {
-		$story_id = "";
+		$story_id = 0;
 	}
 	if (array_key_exists("pipe_id", $a)) {
 		$pipe_id = $a["pipe_id"];
 	} else {
-		$pipe_id = "";
-	}
-	if (array_key_exists("pipe_short_id", $a)) {
-		$pipe_short_id = $a["pipe_short_id"];
-	} else {
-		$pipe_short_id = 0;
+		$pipe_id = 0;
 	}
 	if (array_key_exists("journal_id", $a)) {
 		$journal_id = $a["journal_id"];
 	} else {
-		$journal_id = "";
+		$journal_id = 0;
 	}
 	if (array_key_exists("bug_id", $a)) {
 		$bug_id = $a["bug_id"];
 		$labels = $a["labels"];
 	} else {
-		$bug_id = "";
+		$bug_id = 0;
 	}
 	if (array_key_exists("pipe_id", $a)) {
 		$pipe_id = $a["pipe_id"];
@@ -225,13 +220,14 @@ function print_article($a)
 	} else {
 		$tweet_id = 0;
 	}
-	if (array_key_exists("short_id", $a)) {
-		$short_code = crypt_crockford_encode($a["short_id"]);
-		$short = " (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)";
-	} else if (array_key_exists("article_id", $a)) {
-		$short_code = crypt_crockford_encode($a["article_id"]);
+
+	$short_name = $a["type"] . "_id";
+	if (array_key_exists($short_name, $a)) {
+		$short_id = $a[$short_name];
+		$short_code = crypt_crockford_encode($short_id);
 		$short = " (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)";
 	} else {
+		$short_id = 0;
 		$short_code = "";
 		$short = "";
 	}
@@ -262,8 +258,8 @@ function print_article($a)
 		$date_value = "<time datetime=\"" .  date("c", $time) . "\">" . date("Y-m-d H:i", $time) . "</time>";
 		$day = gmdate("Y-m-d", $time);
 	}
-	if ($pipe_short_id > 0) {
-		$date = "$date_label <a href=\"/pipe/" . crypt_crockford_encode($pipe_short_id) . "\">$date_value</a>";
+	if ($pipe_id > 0) {
+		$date = "$date_label <a href=\"/pipe/" . crypt_crockford_encode($pipe_id) . "\">$date_value</a>";
 	} else {
 		$date = "$date_label $date_value";
 	}
@@ -318,45 +314,47 @@ function print_article($a)
 	} else {
 		$title_link = "";
 	}
+	writeln("	<header>");
 	if ($title_link == "") {
 		// schema.org is ugly
 		//writeln("	<h1><span itemprop=\"name\">$title</span></h1>");
 
-		writeln("	<h1>$title</h1>");
+		writeln("		<h1>$title</h1>");
 	} else {
 		// schema.org is ugly
 		//writeln("	<h1><a href=\"$title_link\"><span itemprop=\"name\">$title</span></a></h1>");
 
-		writeln("	<h1><a href=\"$title_link\">$title</a></h1>");
+		writeln("		<h1><a href=\"$title_link\">$title</a></h1>");
 	}
 
 	if ($journal_id == "") {
 		$topic_link = "$protocol://$server_name/topic/$topic_slug";
 	} else {
-		$topic_link = user_page_link($zid) . "topic/$topic_slug";
+		$topic_link = user_link($zid) . "topic/$topic_slug";
 	}
 
 	if ($feed_title != "") {
 		if ($by == "") {
-			writeln("	<h2>from <a href=\"$feed_link\"><b>$feed_title</b></a> $date$short</h2>");
+			writeln("		<div>from <a href=\"$feed_link\"><b>$feed_title</b></a> $date$short</div>");
 		} else {
-			writeln("	<h2>by <address>$by</address> from <a href=\"$feed_link\"><b>$feed_title</b></a> $date$short</h2>");
+			writeln("		<div>by <address>$by</address> from <a href=\"$feed_link\"><b>$feed_title</b></a> $date$short</div>");
 		}
 	} else if ($topic == "") {
-		writeln("	<h2>by <address>$by</address> $date$short</h2>");
+		writeln("		<div>by <address>$by</address> $date$short</div>");
 	} else {
 		// schema.org is ugly
 		//writeln("	<h2>by <address>$by</address> in <a href=\"$topic_link\"><b itemprop=\"articleSection\">$topic</b></a> $date$short</h2>");
 
-		writeln("	<h2>by <address>$by</address> in <a href=\"$topic_link\"><b>$topic</b></a> $date$short</h2>");
+		writeln("		<div>by <address>$by</address> in <a href=\"$topic_link\"><b>$topic</b></a> $date$short</div>");
 	}
+	writeln("	</header>");
 
 	if ($image_path != "") {
 		if ($image_url != "") {
 			// schema.org is ugly
-			//writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story_image_128\" itemprop=\"image\" src=\"$image_path\"/></a>$story</div>");
+			//writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" itemprop=\"image\" src=\"$image_path\"/></a>$story</div>");
 
-			writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story_image_128\" src=\"$image_path\"/></a>$story</div>");
+			writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"/></a>$story</div>");
 		} else {
 			writeln("	<div><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\"/>$story</div>");
 		}
@@ -368,18 +366,18 @@ function print_article($a)
 		writeln("		<div><a href=\"/story/$day/$slug\">{$a["comments"]["tag"]}</a></div>");
 		writeln("		<div class=\"right\">");
 		if ($accounting_enabled) {
-			writeln("			<a href=\"/story/$short_code/tip\" class=\"icon_16 coins_16\">Tip</a> | ");
+			writeln("			<a href=\"/story/$short_code/tip\" class=\"icon-16 coins-16\">Tip</a> | ");
 		}
 		if (@$auth_user["editor"]) {
 			if ($tweet_id == 0) {
 				if (is_file("$doc_root/www/images/tweet-16.png")) {
-					writeln("			<a href=\"/story/$short_code/tweet\" class=\"icon_16 tweet_16\">Tweet</a> | ");
+					writeln("			<a href=\"/story/$short_code/tweet\" class=\"icon-16 tweet-16\">Tweet</a> | ");
 				} else {
-					writeln("			<a href=\"/story/$short_code/tweet\" class=\"icon_16 music_16\">Tweet</a> | ");
+					writeln("			<a href=\"/story/$short_code/tweet\" class=\"icon-16 music-16\">Tweet</a> | ");
 				}
 			}
-			writeln("			<a href=\"/story/$short_code/image\" class=\"icon_16 picture_16\">Image</a> | ");
-			writeln("			<a href=\"/story/$short_code/edit\" class=\"icon_16 notepad_16\">Edit</a>");
+			writeln("			<a href=\"/story/$short_code/image\" class=\"icon-16 picture-16\">Image</a> | ");
+			writeln("			<a href=\"/story/$short_code/edit\" class=\"icon-16 notepad-16\">Edit</a>");
 		}
 		writeln("		</div>");
 	} else if ($pipe_id != "") {
@@ -393,11 +391,11 @@ function print_article($a)
 		}
 		if ($zid == $auth_zid) {
 			writeln("		<div class=\"right\">");
-			//writeln("			<a href=\"/journal/$short_code/image\" class=\"icon_16 picture_16\">Image</a> | ");
-			writeln("			<a href=\"/journal/$short_code/edit\" class=\"icon_16 notepad_16\">Edit</a> | ");
-			writeln("			<a href=\"/journal/$short_code/media\" class=\"icon_16 clip_16\">Media</a>" . ($time == 0 ? ' | ' : ''));
+			//writeln("			<a href=\"/journal/$short_code/image\" class=\"icon-16 picture-16\">Image</a> | ");
+			writeln("			<a href=\"/journal/$short_code/edit\" class=\"icon-16 notepad-16\">Edit</a> | ");
+			writeln("			<a href=\"/journal/$short_code/media\" class=\"icon-16 clip-16\">Media</a>" . ($time == 0 ? ' | ' : ''));
 			if ($time == 0) {
-				writeln("			<a href=\"/journal/$short_code/publish\" class=\"icon_16 certificate_16\">Publish</a>");
+				writeln("			<a href=\"/journal/$short_code/publish\" class=\"icon-16 certificate-16\">Publish</a>");
 			}
 			writeln("		</div>");
 		}
@@ -405,17 +403,19 @@ function print_article($a)
 		writeln("		<div>{$a["comments"]["tag"]}</div>");
 		writeln("		<div class=\"right\">");
 		if ($auth_user["editor"] || $auth_user["admin"]) {
-			writeln("			<a href=\"/bug/$short_code/edit\" class=\"icon_16 notepad_16\">Edit</a> | ");
+			writeln("			<a href=\"/bug/$short_code/edit\" class=\"icon-16 notepad-16\">Edit</a> | ");
 			if (!$a["closed"]) {
-				writeln("			<a href=\"/bug/$short_code/close\" class=\"icon_16 close_16\">Close</a>");
+				writeln("			<a href=\"/bug/$short_code/close\" class=\"icon-16 close-16\">Close</a>");
 			}
 		}
 		if ($auth_zid !== "" && $a["closed"]) {
-			writeln("			<a href=\"/bug/$short_code/open\" class=\"icon_16 undo_16\">Open</a>");
+			writeln("			<a href=\"/bug/$short_code/open\" class=\"icon-16 undo-16\">Open</a>");
 		}
 		writeln("		</div>");
 	} else if ($article_id > 0) {
-		writeln("		<a class=\"icon_16 globe_16\" href=\"{$a["link"]}\">View Site</a>");
+		writeln("		<a class=\"icon-16 globe-16\" href=\"{$a["link"]}\">View Site</a>");
+	} else {
+		writeln("		<div><b>0</b> comments</div>");
 	}
 	writeln("	</footer>");
 	writeln("</article>");

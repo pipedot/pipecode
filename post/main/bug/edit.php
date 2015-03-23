@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,7 +19,7 @@
 
 include("clean.php");
 
-$bug = find_rec("bug");
+$bug = item_request("bug");
 $title = clean_subject();
 $priority = http_post_string("priority", array("valid" => "[a-z]"));
 $priorities = array("informational", "normal", "important", "critical");
@@ -46,13 +46,13 @@ for ($i = 0; $i < count($keys); $i++) {
 //var_dump($labels);
 //die("here");
 
-sql("delete from bug_label where bug_short_id = ?", $bug["short_id"]);
+sql("delete from bug_label where bug_id = ?", $bug["bug_id"]);
 for ($i = 0; $i < count($labels); $i++) {
 	//$bug_label = db_new_rec("bug_label");
-	//$bug_label["bug_short_id"] = $bug["short_id"];
+	//$bug_label["bug_id"] = $bug["bug_id"];
 	//$bug_label["label_id"] = $labels[$i];
 	//db_set_rec("bug_label", $bug_label);
-	sql("insert into bug_label (bug_short_id, label_id) values (?, ?)", $bug["short_id"], $labels[$i]);
+	sql("insert into bug_label (bug_id, label_id) values (?, ?)", $bug["bug_id"], $labels[$i]);
 }
 
-header("Location: /bug/" . crypt_crockford_encode($bug["short_id"]));
+header("Location: /bug/" . crypt_crockford_encode($bug["bug_id"]));

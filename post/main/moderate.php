@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,33 +19,33 @@
 
 include("render.php");
 
-$comment_id = $s2;
-if (!string_uses($comment_id, "[a-z][0-9]_")) {
-	die("invalid comment_id [$comment_id]");
-}
+//$comment_id = $s2;
+//if (!string_uses($comment_id, "[a-z][0-9]_")) {
+//	die("invalid comment_id [$comment_id]");
+//}
 if ($auth_zid === "") {
 	die("error: sign in to moderate");
 }
 
-if (!db_has_rec("comment", $comment_id)) {
-	die("error: comment not found [$comment_id]");
-}
+$comment = item_request("comment");
+//if (!db_has_rec("comment", $comment_id)) {
+//	die("error: comment not found [$comment_id]");
+//}
 
-if (db_has_rec("comment_vote", array("comment_id" => $comment_id, "zid" => $auth_zid))) {
-	db_del_rec("comment_vote", array("comment_id" => $comment_id, "zid" => $auth_zid));
+if (db_has_rec("comment_vote", array("comment_id" => $comment["comment_id"], "zid" => $auth_zid))) {
+	db_del_rec("comment_vote", array("comment_id" => $comment["comment_id"], "zid" => $auth_zid));
 }
 
 $reason = http_post_string("reason", array("len" => 20, "valid" => "[a-z][A-Z]"));
 
-$keys = array_keys($reasons);
-if (!in_array($reason, $keys)) {
-	die("unknown reason [$reason]");
+if (!array_key_exists($reason, $reasons)) {
+	die("error: unknown reason [$reason]");
 }
 $value = $reasons[$reason];
 
 if ($reason != "Normal") {
-	$comment_vote = array();
-	$comment_vote["comment_id"] = $comment_id;
+	$comment_vote = db_new_rec("comment_vote");
+	$comment_vote["comment_id"] = $comment["comment_id"];
 	$comment_vote["zid"] = $auth_zid;
 	$comment_vote["reason"] = $reason;
 	$comment_vote["time"] = time();
@@ -53,6 +53,10 @@ if ($reason != "Normal") {
 	db_set_rec("comment_vote", $comment_vote);
 }
 
-list($score, $reason) = get_comment_score($comment_id);
+list($score, $reason) = get_comment_score($comment["comment_id"]);
 
-writeln("$comment_id $score $reason");
+writeln('{');
+writeln('	"code": "' . $comment["short_code"] . '",');
+writeln('	"score": ' . $score . ',');
+writeln('	"reason": "' . $reason . '"');
+writeln('}');

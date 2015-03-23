@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -22,13 +22,13 @@ function vote_box($poll_id, $vote)
 	global $auth_zid;
 
 	$poll = db_get_rec("poll", $poll_id);
-	$short_code = crypt_crockford_encode($poll["short_id"]);
+	$poll_code = crypt_crockford_encode($poll_id);
 	$clean = clean_url($poll["question"]);
 	$type_id = $poll["type_id"];
 	$time = $poll["publish_time"];
 	$day = gmdate("Y-m-d", $time);
-	writeln('<div class="dialog_title">Poll</div>');
-	writeln('<div class="dialog_body">');
+	writeln('<div class="dialog-title">Poll</div>');
+	writeln('<div class="dialog-body">');
 
 	$poll_answer = db_get_list("poll_answer", "position", array("poll_id" => $poll["poll_id"]));
 	$k = array_keys($poll_answer);
@@ -36,10 +36,10 @@ function vote_box($poll_id, $vote)
 	$comments = count_comments("poll", $poll_id);
 
 	if ($vote) {
-		beg_form("/poll/$short_code/vote");
-		writeln('	<div class="poll_question">' . $poll["question"] . '</div>');
+		beg_form("/poll/$poll_code/vote");
+		writeln('	<div class="poll-question">' . $poll["question"] . '</div>');
 
-		writeln('	<table class="poll_table">');
+		writeln('	<table class="poll-table">');
 		for ($i = 0; $i < count($poll_answer); $i++) {
 			$answer = $poll_answer[$k[$i]];
 			$aid = str_replace(".", "_", $answer["answer_id"]);
@@ -84,7 +84,7 @@ function vote_box($poll_id, $vote)
 		$votes = array();
 		writeln('	<table style="width: 100%">');
 		writeln('		<tr>');
-		writeln('			<td class="poll_question">' . $poll["question"] . '</td>');
+		writeln('			<td class="poll-question">' . $poll["question"] . '</td>');
 		writeln('		</tr>');
 		if ($type_id == 1 || $type_id == 2) {
 			for ($i = 0; $i < count($poll_answer); $i++) {
@@ -123,23 +123,23 @@ function vote_box($poll_id, $vote)
 			}
 
 			writeln('		<tr>');
-			writeln('			<td class="poll_answer">' . $answer["answer"] . '</td>');
+			writeln('			<td class="poll-answer">' . $answer["answer"] . '</td>');
 			writeln('		</tr>');
 			writeln('		<tr>');
-			writeln('			<td><table class="poll_result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $votes[$i] . " $units ($percent%)" . '</td></tr></table></td>');
+			writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $votes[$i] . " $units ($percent%)" . '</td></tr></table></td>');
 			writeln('		</tr>');
 		}
 		writeln('	</table>');
 
-		$short_code = crypt_crockford_encode($poll["short_id"]);
+		//$poll_code = crypt_crockford_encode($poll["poll_id"]);
 
-		writeln('	<div class="poll_footer">');
+		writeln('	<div class="poll-footer">');
 		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></div>');
-		writeln('		<div class="poll_short">(<a href="/' . $short_code . '">#' . $short_code . '</a>)</div>');
+		writeln('		<div class="poll-short">(<a href="/' . $poll_code . '">#' . $poll_code . '</a>)</div>');
 		if ($auth_zid === "") {
 			writeln('		<div class="right"><b>' . $total . '</b> ' . $units . '</div>');
 		} else {
-			writeln('		<div class="right"><a href="/poll/' . $poll_id . '/vote"><b>' . $total . '</b> ' . $units . '</a></div>');
+			writeln('		<div class="right"><a href="/poll/' . $poll_code . '/vote"><b>' . $total . '</b> ' . $units . '</a></div>');
 		}
 		writeln('	</div>');
 	}

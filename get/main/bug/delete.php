@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,7 +23,7 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");
 }
 
-$bug_file = find_rec("bug_file");
+$bug_file = item_request("bug_file");
 
 print_header("Delete File", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
@@ -34,10 +34,10 @@ writeln('<h1>Delete File</h1>');
 writeln('<p>Are you sure you want to delete this file?</p>');
 
 beg_tab();
-writeln('<tr><td><a class="icon_16 ' . file_icon($bug_file["type"]) . '" href="/pub/bug/' . $bug_file["short_code"] . '.' . $bug_file["type"] . '">' . $bug_file["name"] . '</a></td></tr>');
+writeln('<tr><td><a class="icon-16 ' . file_icon($bug_file["type"]) . '" href="/pub/bug/' . $bug_file["short_code"] . '.' . $bug_file["type"] . '">' . $bug_file["name"] . '</a></td></tr>');
 end_tab();
 
-left_box("Delete");
+box_left("Delete");
 
 end_form();
 end_main();

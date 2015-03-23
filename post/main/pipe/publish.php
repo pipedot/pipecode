@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -25,7 +25,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$pipe = find_rec("pipe");
+$pipe = item_request("pipe");
 $zid = $pipe["author_zid"];
 
 $title = clean_subject();
@@ -42,8 +42,8 @@ if (http_post("publish")) {
 	$pipe["edit_zid"] = $auth_zid;
 	db_set_rec("pipe", $pipe);
 
-	$story = array();
-	$story["story_id"] = create_id($pipe["author_zid"], $time);
+	$story = db_new_rec("story");
+	$story["story_id"] = create_short("story");
 	$story["author_zid"] = $pipe["author_zid"];
 	$story["body"] = $clean_body;
 	$story["edit_time"] = $time;
@@ -52,7 +52,6 @@ if (http_post("publish")) {
 	$story["image_id"] = 0;
 	$story["pipe_id"] = $pipe["pipe_id"];
 	$story["publish_time"] = $time;
-	$story["short_id"] = create_short("story", $story["story_id"]);
 	$story["slug"] = clean_url($title);
 	$story["tid"] = $tid;
 	$story["title"] = $title;

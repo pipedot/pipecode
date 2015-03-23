@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,10 +21,6 @@ include("render.php");
 
 header_text();
 
-$pipe_id = $s2;
-if (!string_uses($pipe_id, "[a-z][0-9]_")) {
-	die("invalid pipe_id [$pipe_id]");
-}
-
+$pipe = item_request("pipe");
 $can_moderate = true;
-render_page("pipe", $pipe_id, true);
+render_page("pipe", $pipe["pipe_id"], true);

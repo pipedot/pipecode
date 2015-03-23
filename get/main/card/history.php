@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@
 include("stream.php");
 include("diff.php");
 
-$card = find_rec("card");
+$card = item_request("card");
 
 print_header("Card History");
 beg_main();
@@ -28,7 +28,7 @@ beg_form();
 
 writeln('<h1>Card</h1>');
 
-print_card($card["short_id"], "large");
+print_card($card["card_id"], "large");
 
 $row = sql("select * from card_edit where card_id = ? order by edit_time", $card["card_id"]);
 if (count($row) > 0) {
@@ -42,8 +42,8 @@ if (count($row) > 0) {
 		}
 		$diff = diff($old_body, $new_body);
 
-		writeln('<div class="edit_title">' . date("Y-m-d H:i", $row[$i]["edit_time"]) . '</div>');
-		writeln('<div class="edit_body">' . $diff . '</div>');
+		writeln('<div class="edit-title">' . date("Y-m-d H:i", $row[$i]["edit_time"]) . '</div>');
+		writeln('<div class="edit-body">' . $diff . '</div>');
 	}
 }
 

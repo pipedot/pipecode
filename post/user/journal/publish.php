@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = find_rec("journal");
+$journal = item_request("journal");
 $journal["publish_time"] = time();
 $journal["published"] = 1;
 db_set_rec("journal", $journal);

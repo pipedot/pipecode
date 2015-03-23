@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if (!$auth_user["admin"]) {
 	die("you are not an admin");
 }
 
-$feed = find_rec("feed");
+$feed = item_request("feed");
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
 if (http_post("delete")) {
@@ -30,7 +30,7 @@ if (http_post("delete")) {
 	beg_form();
 	writeln('<h1>Delete Feed</h1>');
 	writeln("<p>Are you sure you want to delete the [<b>" . $feed["title"] . "</b>] feed and all of its articles?</p>");
-	left_box("Sure");
+	box_left("Sure");
 	end_form();
 	end_main();
 	print_footer();

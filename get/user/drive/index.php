@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -43,7 +43,7 @@ print_drive_crumbs($path, $auth_zid);
 
 print_drive_folder($path, $auth_zid);
 
-right_box('<a class="icon_16 folder_new_16" href="?mkdir">Create Folder</a>');
+box_right('<a class="icon-16 folder_new-16" href="?mkdir">Create Folder</a>');
 
 end_main();
 print_footer();

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -28,7 +28,7 @@ $hash = http_post_string("hash", array("valid" => "[a-z][A-Z][0-9]~#%&()-_+=[];:
 if (!string_uses($hash, "[0-9]abcdef")) {
 	$hash = crypt_sha256($hash);
 }
-$cache = db_find_rec("cache", $hash);
+$cache = item_request("cache", $hash);
 
 if ($cache === false) {
 	die("cache item not found");

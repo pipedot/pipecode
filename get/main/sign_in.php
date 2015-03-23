@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -46,7 +46,7 @@ writeln('		<td style="padding-bottom: 8px"><input name="password" type="password
 writeln('	</tr>');
 writeln('</table>');
 
-left_box('<input type="submit" value="Sign In"/> <a href="/forgot">Forgot Password?</a>');
+box_left('<input type="submit" value="Sign In"/> <a href="/forgot">Forgot Password?</a>');
 
 end_form();
 end_main();

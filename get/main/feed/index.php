@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -28,9 +28,9 @@ $zid = "bryan@$server_name";
 print_feed_page($zid);
 
 if ($auth_zid === "") {
-	writeln('<div style="margin-bottom: 8px; text-align: center">This is a sample feed page. Login to create your own.</div>');
+	box_center("This is a sample feed page. <a href=\"" . ($https_enabled ? "https" : $protocol ) . "://$server_name/login\">Login</a> to create your own.");
 } else {
-	writeln('<div style="margin-bottom: 8px; text-align: center">This is a sample feed page. <a href="' . user_page_link($auth_zid) . 'feed/edit">Create</a> your own <a href="' . user_page_link($auth_zid) . '">homepage</a>.</div>');
+	box_center("This is a sample feed page. <a href=\"" . user_link($auth_zid) . "feed/edit\">Create</a> your own <a href=\"" . user_link($auth_zid) . "\">feed page</a>.");
 }
 
 end_main();

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -19,12 +19,12 @@
 
 include("image.php");
 
-$photo = find_rec("photo");
+$photo = item_request("photo");
 
 if ($auth_zid === "") {
 	print_header("Photo");
 } else {
-	print_header("Photo", array("Share"), array("share"), array(user_page_link($auth_zid) . "stream/share"));
+	print_header("Photo", array("Share"), array("share"), array(user_link($auth_zid) . "stream/share"));
 }
 beg_main();
 
@@ -40,29 +40,17 @@ if ($photo["has_large"]) {
 	$res[] = "<a href=\"" . $info["large_link"] . "\">Large ({$info["large_width"]}x{$info["large_height"]})</a>";
 }
 
-writeln('<div class="photo_frame">');
+writeln('<div class="photo-frame">');
 writeln('	<img alt="photo" class="' . $info["largest_retina"] . '" src="' . $info["largest_link"] . '"/>');
 writeln('	<div>' . implode(" | ", $res) . '</div>');
 writeln('</div>');
 
-beg_tab();
-writeln('	<tr>');
-writeln('		<td>Author</td>');
-writeln('		<td class="right">' . user_page_link($photo["zid"], true) . '</td>');
-writeln('	</tr>');
-writeln('	<tr>');
-writeln('		<td>File</td>');
-writeln('		<td class="right">' . $photo["original_name"] . '</td>');
-writeln('	</tr>');
-writeln('	<tr>');
-writeln('		<td>Time</td>');
-writeln('		<td class="right">' . date("Y-m-d H:i", $photo["time"]) . '</td>');
-writeln('	</tr>');
-writeln('	<tr>');
-writeln('		<td>License</td>');
-writeln('		<td class="right"><a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></td>');
-writeln('	</tr>');
-end_tab();
+dict_beg();
+dict_row("Author", user_link($photo["zid"], ["tag" => true]));
+dict_row("File", $photo["original_name"]);
+dict_row("Time", date("Y-m-d H:i", $photo["time"]));
+dict_row("License", '<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>');
+dict_end();
 
 end_main();
 print_footer();

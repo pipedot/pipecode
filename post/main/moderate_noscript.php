@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -23,9 +23,9 @@ if ($auth_zid === "") {
 	die("error: sign in to moderate");
 }
 
-$root_id = http_post_string("root_id", array("required" => false, "valid" => "[a-z][0-9]_"));
-$type = http_post_string("type");
-check_article_type($type);
+$root_code = http_post_string("root_code", array("valid" => "[A-Z][0-9]"));
+$root_id = crypt_crockford_decode($root_code);
+
 
 function moderate($comment_id, $zid, $reason)
 {
@@ -55,7 +55,7 @@ function moderate($comment_id, $zid, $reason)
 	if ($reason == "Normal") {
 		return;
 	}
-	$comment_vote = array();
+	$comment_vote = db_new_rec("comment_vote");
 	$comment_vote["comment_id"] = $comment_id;
 	$comment_vote["reason"] = $reason;
 	$comment_vote["time"] = time();
@@ -64,14 +64,22 @@ function moderate($comment_id, $zid, $reason)
 	db_set_rec("comment_vote", $comment_vote);
 }
 
+
 $k = array_keys($_POST);
 for ($i = 0; $i < count($k); $i++) {
 	if (substr($k[$i], 0, 8) == "comment_") {
-		$comment_id = substr($k[$i], 8);
+		$comment_code = substr($k[$i], 8);
+		if (!string_uses($comment_code, "[A-Z][0-9]")) {
+			die("invalid comment code [$comment_code]");
+		}
+		$comment_id = crypt_crockford_decode($comment_code);
 		$reason = $_POST[$k[$i]];
+		if (!array_key_exists($reason, $reasons)) {
+			die("invaid reason [$reason]");
+		}
 
 		moderate($comment_id, $auth_zid, $reason);
 	}
 }
 
-header("Location: " . item_link($type, $root_id));
+item_redirect("", $root_id);

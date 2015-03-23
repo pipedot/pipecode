@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@
 include("render.php");
 include("diff.php");
 
-$comment = find_rec("comment");
+$comment = item_request("comment");
 $comment_body = $comment["body"];
 $can_moderate = false;
 $a = article_info($comment);
@@ -39,20 +39,20 @@ if ($type == "poll") {
 } else {
 	$icon = "news";
 }
-writeln('<a class="icon_16 ' . $icon . '_16" href="' . $a["link"] . '">' . $a["title"] . '</a>');
+writeln('<a class="icon-16 ' . $icon . '-16" href="' . $a["link"] . '">' . $a["title"] . '</a>');
 
 writeln('<h2>Preview</h2>');
 
 $list = array($comment);
 $c = $comment;
-while ($c["parent_id"] != "") {
+while ($c["parent_id"] != 0) {
 	$c = db_get_rec("comment", $c["parent_id"]);
 	$list[] = $c;
 }
 
 $s = "";
 for ($i = count($list) - 1; $i >= 0; $i--) {
-	$s .= render_comment($list[$i]["subject"], $list[$i]["zid"], $list[$i]["publish_time"], $list[$i]["comment_id"], $list[$i]["body"], 0, $list[$i]["short_id"], "", "", $list[$i]["junk_status"]);
+	$s .= render_comment($list[$i]["subject"], $list[$i]["zid"], $list[$i]["publish_time"], $list[$i]["comment_id"], $list[$i]["body"], 0, "", "", $list[$i]["junk_status"]);
 }
 $s .= str_repeat("</div>\n</article>\n", count($list));
 writeln($s);
@@ -69,8 +69,8 @@ if (count($row) > 0) {
 		}
 		$diff = diff($old_body, $new_body);
 
-		writeln('<div class="edit_title">' . date("Y-m-d H:i", $row[$i]["edit_time"]) . '</div>');
-		writeln('<div class="edit_body">' . $diff . '</div>');
+		writeln('<div class="edit-title">' . date("Y-m-d H:i", $row[$i]["edit_time"]) . '</div>');
+		writeln('<div class="edit-body">' . $diff . '</div>');
 	}
 }
 
@@ -94,7 +94,7 @@ if (count($row) > 0) {
 		writeln('		<td>' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 		writeln('		<td>' . $row[$i]["reason"] . '</td>');
 		writeln('		<td>' . $value . '</td>');
-		writeln('		<td>' . user_page_link($row[$i]["zid"], true) . '</td>');
+		writeln('		<td>' . user_link($row[$i]["zid"], ["tag" => true]) . '</td>');
 		writeln('	</tr>');
 	}
 	end_tab();
@@ -103,11 +103,11 @@ if (count($row) > 0) {
 writeln('<h2>Junk Status</h2>');
 
 if ($comment["junk_status"] == -1) {
-	writeln("<p>Marked as [<b>Not Junk</b>] by " . user_page_link($comment["junk_zid"], true) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");
+	writeln("<p>Marked as [<b>Not Junk</b>] by " . user_link($comment["junk_zid"], ["tag" => true]) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");
 } else if ($comment["junk_status"] == 0) {
 	writeln("<p>Not marked as junk</p>");
 } else if ($comment["junk_status"] == 1) {
-	writeln("<p>Marked as [<b>Spam</b>] by " . user_page_link($comment["junk_zid"], true) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");
+	writeln("<p>Marked as [<b>Spam</b>] by " . user_link($comment["junk_zid"], ["tag" => true]) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");
 }
 if ($auth_user["admin"] || $auth_user["editor"]) {
 	beg_form();
@@ -115,7 +115,7 @@ if ($auth_user["admin"] || $auth_user["editor"]) {
 	writeln('<label><input name="junk" type="radio" value="spam"' . ($comment["junk_status"] == 1 ? ' checked="checked"' : '') . '/>Spam</label>');
 	writeln('<label><input name="junk" type="radio" value="not-junk"' . ($comment["junk_status"] != 1 ? ' checked="checked"' : '') . '/>Not Junk</label>');
 	writeln('</p>');
-	left_box("Save");
+	box_left("Save");
 	end_form();
 }
 

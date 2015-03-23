@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,14 +17,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_card($short_id, $size = "small")
+function print_card($card_id, $size = "small")
 {
 	global $protocol;
 	global $server_name;
 	global $doc_root;
 
 	$a = array();
-	$card = db_get_rec("card", $short_id);
+	$card = db_get_rec("card", $card_id);
 //	$article = db_get_rec("article", $card["article_id"]);
 	if ($card["link_url"] != "") {
 //		$link = db_get_rec("link", $card["link_id"]);
@@ -39,23 +39,22 @@ function print_card($short_id, $size = "small")
 	}
 
 	$tags = array();
-	$row = sql("select tag from card_tags where short_id = ? order by tag", $short_id);
+	$row = sql("select tag from card_tags where card_id = ? order by tag", $card_id);
 	for ($i = 0; $i < count($row); $i++) {
 		$tags[] = $row[$i]["tag"];
 	}
 
-	$a["short_id"] = $short_id;
-	$a["card_id"] = $card["card_id"];
+	$a["card_id"] = $card_id;
 	$a["zid"] = $card["zid"];
 	$a["time"] = $card["edit_time"];
 	$a["votes"] = 0;
 	$a["body"] = $card["body"];
 
-	$photo_short_id = $card["photo_short_id"];
-	if ($photo_short_id > 0) {
-		$photo = db_get_rec("photo", $photo_short_id);
+	$photo_id = $card["photo_id"];
+	if ($photo_id > 0) {
+		$photo = db_get_rec("photo", $photo_id);
 		$info = photo_info($photo);
-		$a["photo_short_code"] = crypt_crockford_encode($photo["short_id"]);
+		$a["photo_code"] = crypt_crockford_encode($photo_id);
 		$a["photo_class"] = $info["small_class"];
 		/*$a["photo_id"] = $photo_id;
 		$photo = db_get_rec("photo", $photo_id);
@@ -99,7 +98,7 @@ function print_card($short_id, $size = "small")
 				$width = 640;
 				$height = 360;
 			}
-			$a["photo_class"] = "card_photo_16x9";
+			$a["photo_class"] = "card_photo-16x9";
 		}
 		$path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
 		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");*/
@@ -131,12 +130,11 @@ function print_card_small($a)
 	global $server_name;
 	global $protocol;
 
-	$short_id = $a["short_id"];
-	$short_code = crypt_crockford_encode($short_id);
 	$card_id = $a["card_id"];
+	$card_code = crypt_crockford_encode($card_id);
 	$zid = $a["zid"];
 	list($user, $host) = explode("@", $zid);
-	$user_page_link = user_page_link($zid);
+	$user_link = user_link($zid);
 	$profile_picture = profile_picture($zid, 64);
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
@@ -155,69 +153,70 @@ function print_card_small($a)
 	} else {
 		$link_url = "";
 	}
-	if (array_key_exists("photo_short_code", $a)) {
-		$photo_short_code = $a["photo_short_code"];
+	if (array_key_exists("photo_code", $a)) {
+		$photo_code = $a["photo_code"];
 		$photo_link = $a["photo_link"];
 		$photo_class = $a["photo_class"];
 	} else {
-		$photo_short_code = "";
+		$photo_code = "";
 		$photo_link = "";
 		$photo_class = "";
 	}
+	//die("photo_code [$photo_code]");
 	$tag_links = "";
 	if (array_key_exists("tags", $a)) {
 		for ($i = 0; $i < count($a["tags"]); $i++) {
 			$tag = $a["tags"][$i];
-			$tag_links .= "<a class=\"card_tag\" href=\"$protocol://$server_name/tag/$tag\">#$tag</a> ";
+			$tag_links .= "<a class=\"card-tag\" href=\"$protocol://$server_name/tag/$tag\">#$tag</a> ";
 		}
 		$tag_links = trim($tag_links);
 	}
 
 	writeln("<table class=\"card\">");
 	writeln("	<tr>");
-	writeln("		<td class=\"card_row\">");
-	writeln("			<a href=\"$user_page_link\"><img class=\"card_profile\" src=\"$profile_picture\"/></a>");
-	writeln("			<div class=\"card_by_box\">");
-	writeln("				<a class=\"card_by\" href=\"$user_page_link\">$zid</a>");
-	writeln("				<div class=\"card_time\">$date</div>");
+	writeln("		<td class=\"card-row\">");
+	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"/></a>");
+	writeln("			<div class=\"card-by-box\">");
+	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
+	writeln("				<div class=\"card-time\">$date</div>");
 	writeln("			</div>");
-	writeln("			<div class=\"card_vote\">");
-	writeln("				<div class=\"card_vote_box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card_button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
-	writeln("					<div class=\"card_vote_count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card_button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
+	writeln("			<div class=\"card-vote\">");
+	writeln("				<div class=\"card-vote-box\">");
+	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
+	writeln("					<div class=\"card-vote-count\">$votes</div>");
+	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
 	writeln("				</div>");
 	writeln("			</div>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	if ($body != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row\">$body</td>");
+		writeln("		<td class=\"card-row\">$body</td>");
 		writeln("	</tr>");
 	}
-	if ($photo_link != "") {
+	if ($photo_code != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/photo/$photo_short_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
+		writeln("		<td class=\"card-row\"><a href=\"$protocol://$server_name/photo/$photo_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
 		writeln("	</tr>");
 	}
 	if ($link_url != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row_link\">");
+		writeln("		<td class=\"card-row-link\">");
 		if ($image_url != "") {
-			writeln("			<a href=\"$link_url\"><img class=\"card_story_image\" src=\"$image_url\"/></a>");
+			writeln("			<a href=\"$link_url\"><img class=\"card-story-image\" src=\"$image_url\"/></a>");
 		}
-		writeln("			<div class=\"card_story_box\">");
-		writeln("				<a class=\"card_story_link\" href=\"$link_url\">$link_subject</a>");
-		writeln("				<a class=\"card_story_site\" href=\"$link_url\">$link_site</a>");
+		writeln("			<div class=\"card-story-box\">");
+		writeln("				<a class=\"card-story-link\" href=\"$link_url\">$link_subject</a>");
+		writeln("				<a class=\"card-story-site\" href=\"$link_url\">$link_site</a>");
 		writeln("			</div>");
 		writeln("		</td>");
 		writeln("	</tr>");
 	}
 	writeln("	<tr>");
-	writeln("		<td class=\"card_footer\">");
-	writeln("			<a class=\"card_comments\" href=\"$protocol://$server_name/card/$short_code\">{$a["comments"]["tag"]}</a>");
-	writeln("			<div class=\"card_tags\">$tag_links</div>");
-	//writeln("			<img alt=\"Options\" class=\"card_button\" src=\"/images/gear-16.png\" title=\"Options\"/>");
+	writeln("		<td class=\"card-footer\">");
+	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$card_code\">{$a["comments"]["tag"]}</a>");
+	writeln("			<div class=\"card-tags\">$tag_links</div>");
+	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\"/>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	writeln('</table>');
@@ -230,12 +229,11 @@ function print_card_large($a)
 	global $protocol;
 	global $auth_zid;
 
-	$short_id = $a["short_id"];
-	$short_code = crypt_crockford_encode($short_id);
 	$card_id = $a["card_id"];
+	$card_code = crypt_crockford_encode($card_id);
 	$zid = $a["zid"];
 	list($user, $host) = explode("@", $zid);
-	$user_page_link = user_page_link($zid);
+	$user_link = user_link($zid);
 	$profile_picture = profile_picture($zid, 64);
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
@@ -254,12 +252,12 @@ function print_card_large($a)
 	} else {
 		$link_url = "";
 	}
-	if (array_key_exists("photo_short_code", $a)) {
-		$photo_short_code = $a["photo_short_code"];
+	if (array_key_exists("photo_code", $a)) {
+		$photo_code = $a["photo_code"];
 		$photo_link = $a["photo_link"];
 		$photo_class = $a["photo_class"];
 	} else {
-		$photo_short_code = "";
+		$photo_code = "";
 		$photo_link = "";
 		$photo_class = "";
 	}
@@ -267,7 +265,7 @@ function print_card_large($a)
 	if (array_key_exists("tags", $a)) {
 		for ($i = 0; $i < count($a["tags"]); $i++) {
 			$tag = $a["tags"][$i];
-			$tag_links .= "<a class=\"card_tag\" href=\"$protocol://$server_name/tag/$tag\">#$tag</a> ";
+			$tag_links .= "<a class=\"card-tag\" href=\"$protocol://$server_name/tag/$tag\">#$tag</a> ";
 		}
 		$tag_links = trim($tag_links);
 	}
@@ -277,60 +275,60 @@ function print_card_large($a)
 		$history = false;
 	}
 
-	writeln("<table class=\"card_large\">");
+	writeln("<table class=\"card-large\">");
 	writeln("	<tr>");
-	writeln("		<td class=\"card_row\">");
-	writeln("			<a href=\"$user_page_link\"><img class=\"card_profile\" src=\"$profile_picture\"/></a>");
-	writeln("			<div class=\"card_by_box\">");
-	writeln("				<a class=\"card_by\" href=\"$user_page_link\">$zid</a>");
-	writeln("				<div class=\"card_time\">$date</div>");
+	writeln("		<td class=\"card-row\">");
+	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"/></a>");
+	writeln("			<div class=\"card-by-box\">");
+	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
+	writeln("				<div class=\"card-time\">$date</div>");
 	writeln("			</div>");
-	writeln("			<div class=\"card_vote\">");
-	writeln("				<div class=\"card_vote_box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card_button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
-	writeln("					<div class=\"card_vote_count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card_button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
+	writeln("			<div class=\"card-vote\">");
+	writeln("				<div class=\"card-vote-box\">");
+	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
+	writeln("					<div class=\"card-vote-count\">$votes</div>");
+	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
 	writeln("				</div>");
 	writeln("			</div>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	if ($body != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row\">$body</td>");
+		writeln("		<td class=\"card-row\">$body</td>");
 		writeln("	</tr>");
 	}
 	if ($photo_link != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row\"><a href=\"$protocol://$server_name/photo/$photo_short_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
+		writeln("		<td class=\"card-row\"><a href=\"$protocol://$server_name/photo/$photo_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
 		writeln("	</tr>");
 	}
 	if ($link_url != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card_row_link\">");
+		writeln("		<td class=\"card-row-link\">");
 		if ($image_url != "") {
-			writeln("			<a href=\"$link_url\"><img class=\"card_story_image\" src=\"$image_url\"/></a>");
+			writeln("			<a href=\"$link_url\"><img class=\"card-story-image\" src=\"$image_url\"/></a>");
 		}
-		writeln("			<div class=\"card_story_box\">");
-		writeln("				<a class=\"card_story_link\" href=\"$link_url\">$link_subject</a>");
-		writeln("				<a class=\"card_story_site\" href=\"$link_url\">$link_site</a>");
+		writeln("			<div class=\"card-story-box\">");
+		writeln("				<a class=\"card-story-link\" href=\"$link_url\">$link_subject</a>");
+		writeln("				<a class=\"card-story-site\" href=\"$link_url\">$link_site</a>");
 		writeln("			</div>");
 		writeln("		</td>");
 		writeln("	</tr>");
 	}
 	writeln("	<tr>");
-	writeln("		<td class=\"card_footer\">");
-	writeln("			<a class=\"card_comments\" href=\"$protocol://$server_name/card/$short_code\">{$a["comments"]["tag"]}</a>");
-	writeln("			<div class=\"card_tags\">$tag_links</div>");
-	//writeln("			<img alt=\"Options\" class=\"card_button\" src=\"/images/gear-16.png\" title=\"Options\"/>"); <a class=\"icon_16 picture_16\" href=\"/card/$short_code/image\">Image</a> |
+	writeln("		<td class=\"card-footer\">");
+	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$card_code\">{$a["comments"]["tag"]}</a>");
+	writeln("			<div class=\"card-tags\">$tag_links</div>");
+	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\"/>"); <a class=\"icon-16 picture-16\" href=\"/card/$card_code/image\">Image</a> |
 	$options = array();
 	if ($history) {
-		$options[] = "<a class=\"icon_16 calendar_16\" href=\"/card/$short_code/history\">History</a>";
+		$options[] = "<a class=\"icon-16 calendar-16\" href=\"/card/$card_code/history\">History</a>";
 	}
 	if ($zid === $auth_zid) {
-		$options[] = "<a class=\"icon_16 notepad_16\" href=\"/card/$short_code/edit\">Edit</a>";
-		//$options[] = "<a class=\"icon_16 tag_16\" href=\"/card/$short_code/tag\">Tag</a>";
+		$options[] = "<a class=\"icon-16 notepad-16\" href=\"/card/$card_code/edit\">Edit</a>";
+		//$options[] = "<a class=\"icon-16 tag-16\" href=\"/card/$short_code/tag\">Tag</a>";
 	}
-	writeln("			<div class=\"card_options\">" . implode(" | ", $options) . "</div>");
+	writeln("			<div class=\"card-options\">" . implode(" | ", $options) . "</div>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	writeln('</table>');
@@ -346,7 +344,7 @@ function print_card_medium($a)
 	writeln('				<tr>');
 	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"/></td>');
 	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px"><a href="https://bryan.pipedot.org/">Bryan Beicker</a></div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
-	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
+	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row-button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row-button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');

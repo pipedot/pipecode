@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -24,7 +24,7 @@ writeln("<h1>Pipe History</h1>");
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("pipe", $items_per_page);
 
-$row = sql("select pipe.short_id as pipe_short_id, pipe.time, pipe.title, pipe.author_zid, pipe.edit_zid, closed, reason, story.short_id as story_short_id from pipe left join story on pipe.pipe_id = story.pipe_id order by time desc limit $item_start, $items_per_page");
+$row = sql("select pipe.pipe_id, pipe.time, pipe.title, pipe.author_zid, pipe.edit_zid, closed, reason, story_id from pipe left join story on pipe.pipe_id = story.pipe_id order by time desc limit $item_start, $items_per_page");
 beg_tab();
 writeln('	<tr>');
 writeln('		<th>Date</th>');
@@ -34,12 +34,12 @@ writeln('		<th>Editor</th>');
 writeln('		<th>Status</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
-	$pipe_short_code = crypt_crockford_encode($row[$i]["pipe_short_id"]);
-	$story_short_code = crypt_crockford_encode($row[$i]["story_short_id"]);
-	$author = user_page_link($row[$i]["author_zid"], true);
-	$editor = user_page_link($row[$i]["edit_zid"], true, false);
-	if ($story_short_code > 0) {
-		$status = '<a href="/story/' . $story_short_code . '">Published</a>';
+	$pipe_code = crypt_crockford_encode($row[$i]["pipe_id"]);
+	$story_code = crypt_crockford_encode($row[$i]["story_id"]);
+	$author = user_link($row[$i]["author_zid"], ["tag" => true]);
+	$editor = user_link($row[$i]["edit_zid"], ["tag" => true, "ac" => false]);
+	if ($story_code > 0) {
+		$status = '<a href="/story/' . $story_code . '">Published</a>';
 	} else if ($row[$i]["closed"] == 1) {
 		$status = "Closed (" . ($row[$i]["reason"] == "" ? "no reason" : $row[$i]["reason"]) . ")";
 	} else {
@@ -48,7 +48,7 @@ for ($i = 0; $i < count($row); $i++) {
 
 	writeln('	<tr>');
 	writeln('		<td style="white-space: nowrap">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('		<td><a href="/pipe/' . $pipe_short_code . '">' . $row[$i]["title"] . '</a></td>');
+	writeln('		<td><a href="/pipe/' . $pipe_code . '">' . $row[$i]["title"] . '</a></td>');
 	writeln('		<td>' . $author . '</td>');
 	writeln('		<td>' . $editor . '</td>');
 	writeln('		<td>' . $status . '</td>');

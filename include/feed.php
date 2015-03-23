@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -128,9 +128,8 @@ function save_feed($feed_id, $data)
 			if (db_has_rec("article", array("guid" => $item_guid))) {
 				$article = db_get_rec("article", array("guid" => $item_guid));
 			} else {
-				$fake_id = create_id("");
 				$article = db_new_rec("article");
-				$article["article_id"] = create_short("article", $fake_id);
+				$article["article_id"] = create_short("article");
 			}
 			$article_html = http_cache($item_link);
 
@@ -215,14 +214,13 @@ function add_feed($uri)
 		//die("unable to parse feed [$uri] data [$data]");
 	}
 
+	$feed_id = create_short("feed");
+	$feed_code = crypt_crockford_encode($feed_id);
+
 	$feed = db_new_rec("feed");
-	$item_id = create_id("");
-	$short_id = create_short("feed", $item_id);
-	$short_code = crypt_crockford_encode($short_id);
-	//die("short_id [$short_id] short_code [$short_code]");
+	$feed["feed_id"] = $feed_id;
 	$feed["copyright"] = $copyright;
 	$feed["decription"] = $description;
-	$feed["feed_id"] = $short_id;
 	$feed["time"] = time();
 	$feed["uri"] = $uri;
 	$feed["title"] = $title;
@@ -230,8 +228,7 @@ function add_feed($uri)
 	$feed["slug"] = make_feed_slug($feed);
 	db_set_rec("feed", $feed);
 
-	//$feed = db_get_rec("feed", array("uri" => $uri));
-	save_feed($short_id, $data);
+	save_feed($feed_id, $data);
 
 	$favicon = find_favicon($link);
 	save_favicon($short_code, $favicon);
@@ -239,7 +236,7 @@ function add_feed($uri)
 
 	make_feed_slug($feed);
 
-	return $short_id;
+	return $feed_id;
 }
 
 
@@ -331,19 +328,19 @@ function print_feed_page($zid)
 
 	for ($c = 0; $c < 3; $c++) {
 		if ($c == 0) {
-			writeln('<div class="tri_left">');
+			writeln('<div class="tri-left">');
 		} else if ($c == 1) {
-			writeln('<div class="tri_center">');
+			writeln('<div class="tri-center">');
 		} else {
-			writeln('<div class="tri_right">');
+			writeln('<div class="tri-right">');
 		}
 
 		$row = sql("select feed_id from feed_user where zid = ? and col = ? order by pos", $zid, $c);
 		for ($f = 0; $f < count($row); $f++) {
 			$feed = db_get_rec("feed", $row[$f]["feed_id"]);
 
-			writeln('	<div class="feed_title"><a href="' . $feed["link"] . '">' . $feed["title"] . '</a></div>');
-			writeln('	<ul class="feed_body">');
+			writeln('	<div class="feed-title"><a href="' . $feed["link"] . '">' . $feed["title"] . '</a></div>');
+			writeln('	<ul class="feed-body">');
 			//$items = db_get_list("article", "publish_time desc", array("feed_id" => $feed["feed_id"]));
 			$row2 = sql("select link, title from article where feed_id = ? order by publish_time desc limit 0, 8", $feed["feed_id"]);
 			//$item_keys = array_keys($items);

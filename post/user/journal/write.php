@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -31,18 +31,17 @@ $topic = clean_topic();
 list($clean_body, $dirty_body) = clean_body(false, "journal");
 $time = time();
 
-$journal = array();
-$journal["journal_id"] = create_id($auth_zid, $time);
+$journal = db_new_rec("journal");
+$journal["journal_id"] = create_short("journal");
 $journal["body"] = $clean_body;
 $journal["edit_time"] = $time;
 $journal["photo_id"] = 0;
 $journal["publish_time"] = 0;
 $journal["published"] = 0;
-$journal["short_id"] = create_short("journal", $journal["journal_id"]);
 $journal["slug"] = clean_url($title);
 $journal["title"] = $title;
 $journal["topic"] = $topic;
 $journal["zid"] = $auth_zid;
 db_set_rec("journal", $journal);
 
-header("Location: /journal/" . crypt_crockford_encode($journal["short_id"]));
+header("Location: /journal/" . crypt_crockford_encode($journal["journal_id"]));

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$pipe = find_rec("pipe");
+$pipe = item_request("pipe");
 
 print_header("Close Submission");
 beg_main();
@@ -33,7 +33,7 @@ writeln('<h2>Reason</h2>');
 writeln('<p>Give a short reason for closing the article.</p>');
 writeln('<input name="reason" type="text" len="50" required="required"/>');
 
-left_box("Close");
+box_left("Close");
 
 end_form();
 end_main();

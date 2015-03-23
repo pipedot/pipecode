@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -120,13 +120,13 @@ end_tab();
 
 beg_form();
 if ($message["location"] == "Junk") {
-	right_box("Restore,Delete,Expunge");
+	box_right("Restore,Delete,Expunge");
 } else if ($message["location"] == "Trash") {
-	right_box("Restore,Junk,Expunge");
+	box_right("Restore,Junk,Expunge");
 } else if ($message["location"] == "Sent") {
-	right_box("Delete");
+	box_right("Delete");
 } else {
-	right_box("Junk,Delete");
+	box_right("Junk,Delete");
 }
 end_form();
 end_main();

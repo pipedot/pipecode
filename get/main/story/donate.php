@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if ($auth_zid === "") {
 	die("sign in to donate");
 }
 
-$story = find_rec("story");
+$story = item_request("story");
 $link = item_link("story", $story_id);
 
 print_header("Donate - " . $story["title"]);
@@ -30,7 +30,7 @@ beg_main("cell");
 beg_form();
 
 writeln('<h1>Story</h1>');
-writeln('<a class="icon_16 news_16" href="' . $link . '" style="margin-bottom: 8px;">' . $story["title"] . '</a>');
+box_left('<a class="icon-16 news-16" href="' . $link . '">' . $story["title"] . '</a>');
 
 writeln('<h2>Your Balance</h2>');
 $row = sql("select sum(amount) as balance from accounting.posting where zid = ?", $auth_zid);
@@ -42,7 +42,7 @@ beg_tab();
 print_row(array("caption" => "Amount", "text_key" => "amount", "text_value" => ($balance < 100 ? format_money($balance) : "1.00")));
 end_tab();
 
-right_box("Continue");
+box_right("Continue");
 
 end_form();
 end_main();

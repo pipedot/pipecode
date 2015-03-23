@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@ if (!$auth_user["admin"] && !$auth_user["editor"]) {
 	die("not an editor or admin");
 }
 
-$comment = find_rec("comment");
+$comment = item_request("comment");
 if ($_POST["junk"] == "not-junk") {
 	$comment["junk_status"] = -1;
 } else if ($_POST["junk"] == "spam") {
@@ -33,6 +33,6 @@ $comment["junk_time"] = $now;
 $comment["junk_zid"] = $auth_zid;
 db_set_rec("comment", $comment);
 
-print "setting junk of [{$comment["short_id"]}] to [" . $_POST["junk"] . "]";
+print "setting junk of [{$comment["card_id"]}] to [" . $_POST["junk"] . "]";
 
-header("Location: $protocol://$server_name/comment/" . crypt_crockford_encode($comment["short_id"]));
+header("Location: $protocol://$server_name/comment/" . crypt_crockford_encode($comment["card_id"]));

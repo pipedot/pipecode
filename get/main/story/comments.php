@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -21,10 +21,7 @@ include("render.php");
 
 header_text();
 
-$story_id = $s2;
-if (!string_uses($story_id, "[a-z][0-9]_")) {
-	die("invalid story_id [$story_id]");
-}
-
+$story = item_request("story");
 $can_moderate = true;
-render_page("story", $story_id, true);
+//die("story_id [" . $story["story_id"] . "]");
+render_page("story", $story["story_id"], true);

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -48,6 +48,7 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 
 	writeln('<h1>Preview</h1>');
 	$a = array();
+	$a["type"] = "pipe";
 	$a["title"] = $title;
 	$a["pipe_id"] = $pipe_id;
 	$a["zid"] = $zid;
@@ -65,7 +66,7 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 	print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 	end_tab();
 
-	left_right_box('<a href="/icons">Icons</a>', "Publish,Preview");
+	box_two('<a href="/icons">Icons</a>', "Publish,Preview");
 
 	end_form();
 	end_main();

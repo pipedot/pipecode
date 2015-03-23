@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -25,7 +25,7 @@ function make_atom($topic)
 	global $cache_enabled;
 	global $protocol;
 
-	$row = sql("select story_id, pipe.author_zid, story.publish_time, story.title, story.short_id, story.slug, story.body from story inner join pipe on story.pipe_id = pipe.pipe_id order by publish_time desc limit 10");
+	$row = sql("select story_id, pipe.author_zid, story.publish_time, story.title, story.slug, story.body from story inner join pipe on story.pipe_id = pipe.pipe_id order by publish_time desc limit 10");
 	if (count($row) > 0) {
 		$updated = $row[0]["publish_time"];
 	} else {
@@ -44,10 +44,10 @@ function make_atom($topic)
 	$body .= "	<logo>$protocol://$server_name/images/logo-feed.png</logo>\n";
 
 	for ($i = 0; $i < count($row); $i++) {
-		$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+		$story_code = crypt_crockford_encode($row[$i]["story_id"]);
 
 		$body .= "	<entry>\n";
-		$body .= "		<id>$protocol://$server_name/story/$short_code</id>\n";
+		$body .= "		<id>$protocol://$server_name/story/$story_code</id>\n";
 		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
 		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
@@ -56,7 +56,7 @@ function make_atom($topic)
 			$body .= "			<name>Anonymous Coward</name>\n";
 		} else {
 			$body .= "			<name>" . $row[$i]["author_zid"] . "</name>\n";
-			$body .= "			<uri>" . user_page_link($row[$i]["author_zid"]) . "</uri>\n";
+			$body .= "			<uri>" . user_link($row[$i]["author_zid"]) . "</uri>\n";
 		}
 		$body .= "		</author>\n";
 		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
@@ -89,9 +89,9 @@ function make_comment_atom($topic)
 	global $auth_user;
 
 	if ($auth_user["show_junk_enabled"]) {
-		$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body, zid from comment order by edit_time desc limit 50");
+		$row = sql("select comment_id, root_id, subject, type, edit_time, body, zid from comment order by edit_time desc limit 50");
 	} else {
-		$row = sql("select comment_id, root_id, short_id, subject, type, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit 50");
+		$row = sql("select comment_id, root_id, subject, type, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit 50");
 	}
 	if (count($row) > 0) {
 		$updated = $row[0]["edit_time"];
@@ -111,19 +111,19 @@ function make_comment_atom($topic)
 	$body .= "	<logo>$protocol://$server_name/images/logo-feed.png</logo>\n";
 
 	for ($i = 0; $i < count($row); $i++) {
-		$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+		$comment_code = crypt_crockford_encode($row[$i]["comment_id"]);
 
 		$body .= "	<entry>\n";
-		$body .= "		<id>$protocol://$server_name/comment/$short_code</id>\n";
+		$body .= "		<id>$protocol://$server_name/comment/$comment_code</id>\n";
 		$body .= "		<title>" . $row[$i]["subject"] . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["edit_time"]) . "</updated>\n";
-		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/comment/$short_code\"/>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/comment/$comment_code\"/>\n";
 		$body .= "		<author>\n";
 		if ($row[$i]["zid"] == "") {
 			$body .= "			<name>Anonymous Coward</name>\n";
 		} else {
 			$body .= "			<name>" . $row[$i]["zid"] . "</name>\n";
-			$body .= "			<uri>" . user_page_link($row[$i]["zid"]) . "</uri>\n";
+			$body .= "			<uri>" . user_link($row[$i]["zid"]) . "</uri>\n";
 		}
 		$body .= "		</author>\n";
 		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
@@ -154,7 +154,7 @@ function make_journal_atom($zid)
 	global $cache_enabled;
 	global $protocol;
 
-	$row = sql("select body, publish_time, short_id, slug, title from journal where zid = ? and published = 1 order by publish_time desc limit 10", $zid);
+	$row = sql("select body, publish_time, slug, title from journal where zid = ? and published = 1 order by publish_time desc limit 10", $zid);
 	if (count($row) > 0) {
 		$updated = $row[0]["publish_time"];
 	} else {
@@ -167,22 +167,22 @@ function make_journal_atom($zid)
 	$body .= "	<subtitle type=\"text\">Journal</subtitle>\n";
 	$body .= "	<updated>" . gmdate(DATE_ATOM, $updated) . "</updated>\n";
 	$body .= "	<id>$protocol://$server_name/atom</id>\n";
-	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"" . user_page_link($zid) . "journal/\"/>\n";
-	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"" . user_page_link($zid) . "journal/atom\"/>\n";
+	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"" . user_link($zid) . "journal/\"/>\n";
+	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"" . user_link($zid) . "journal/atom\"/>\n";
 	$body .= "	<icon>$protocol://$server_name/favicon.ico</icon>\n";
 	$body .= "	<logo>" . profile_picture($zid, 256) . "</logo>\n";
 
 	for ($i = 0; $i < count($row); $i++) {
-		$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+		$journal_code = crypt_crockford_encode($row[$i]["journal_id"]);
 
 		$body .= "	<entry>\n";
-		$body .= "		<id>" . user_page_link($zid) . "journal/$short_code</id>\n";
+		$body .= "		<id>" . user_link($zid) . "journal/$journal_code</id>\n";
 		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
-		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"" . user_page_link($zid) . "journal/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
+		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"" . user_link($zid) . "journal/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
 		$body .= "		<author>\n";
 		$body .= "			<name>$zid</name>\n";
-		$body .= "			<uri>" . user_page_link($zid) . "</uri>\n";
+		$body .= "			<uri>" . user_link($zid) . "</uri>\n";
 		$body .= "		</author>\n";
 		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
 		$body .= "	</entry>\n";

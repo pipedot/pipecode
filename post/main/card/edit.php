@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@
 include("render.php");
 include("clean.php");
 
-$card = find_rec("card");
+$card = item_request("card");
 $tags = clean_tags();
 list($clean_body, $dirty_body) = clean_body();
 
@@ -28,10 +28,10 @@ if ($card["zid"] !== $auth_zid) {
 	die("not your card");
 }
 
-sql("delete from card_tags where short_id = ?", $card["short_id"]);
+sql("delete from card_tags where card_id = ?", $card["card_id"]);
 for ($i = 0; $i < count($tags); $i++) {
 	$card_tags = db_new_rec("card_tags");
-	$card_tags["short_id"] = $card["short_id"];
+	$card_tags["card_id"] = $card["card_id"];
 	$card_tags["tag"] = $tags[$i];
 	db_set_rec("card_tags", $card_tags);
 }

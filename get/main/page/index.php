@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -36,13 +36,13 @@ if (count($keys) == 0) {
 for ($i = 0; $i < count($keys); $i++) {
 	$page = $list[$keys[$i]];
 	writeln('	<tr>');
-	writeln('		<td><a href="edit?slug=' . $page["slug"] . '" class="icon_16 notepad_16">' . $page["title"] . '</a></td>');
-	writeln('		<td class="right"><a href="remove?slug=' . $page["slug"] . '" class="icon_16 minus_16">Remove</a></td>');
+	writeln('		<td><a href="edit?slug=' . $page["slug"] . '" class="icon-16 notepad-16">' . $page["title"] . '</a></td>');
+	writeln('		<td class="right"><a href="remove?slug=' . $page["slug"] . '" class="icon-16 minus-16">Remove</a></td>');
 	writeln('	</tr>');
 }
 end_tab();
 
-right_box('<a href="add" class="icon_16 plus_16">Add</a>');
+box_right('<a class="icon-16 plus-16" href="add">Add</a>');
 
 end_main();
 print_footer();

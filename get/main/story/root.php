@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -44,8 +44,8 @@ if (string_has($s2, "-") && $s3 === "") {
 	end_main();
 	print_footer();
 } else {
-	$story = find_rec("story");
-	$short_code = crypt_crockford_encode($story["short_id"]);
+	$story = item_request("story");
+	$short_code = crypt_crockford_encode($story["story_id"]);
 
 	if ($story["image_id"] > 0) {
 		$image = db_get_rec("image", $story["image_id"]);

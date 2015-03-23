@@ -1,6 +1,6 @@
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,6 +20,7 @@ var comments;
 var reasons = new Array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated", "Spam");
 var protocol = get_protocol();
 var server_name = get_server_name();
+var current;
 
 
 // jquery checkbox toggle on table row click
@@ -59,9 +60,6 @@ function get_server_name()
 
 function moderate(e, comment_id)
 {
-	var a;
-	var score;
-	var reason;
 	var s;
 
 	data = "reason=" + e.value;
@@ -69,15 +67,85 @@ function moderate(e, comment_id)
 		if (data.indexOf("error:") != -1) {
 			alert(data);
 		} else {
-			a = data.split(" ");
-			comment_id = a[0];
-			score = a[1].trim();
-			reason = a[2].trim();
-			s = score;
-			if (reason != "") {
-				s += ", " + reason;
+			var json = $.parseJSON(data);
+			s = json.score;
+			if (json.reason != "") {
+				s += ", " + json.reason;
 			}
-			$("#score_" + comment_id).html(s);
+			$("#score_" + json.code).html(s);
+		}
+	});
+}
+
+
+function reply(comment_code)
+{
+	var s;
+
+	if ($("#reply_" + comment_code).is(":visible")) {
+		$("#reply_" + comment_code).hide();
+	} else {
+		if ($("#reply_" + comment_code).html() == "") {
+			s = "<div class=\"dialog-title\">Post Comment</div>\n";
+			s += "<div class=\"dialog-body\">\n";
+			s += "<table>\n";
+			s += "	<tr>\n";
+			s += "		<td>Subject</td>\n";
+			s += "		<td colspan=\"2\"><input id=\"reply_subject_" + comment_code + "\" type=\"text\"/></td>\n";
+			s += "	</tr>\n";
+			s += "	<tr>\n";
+			s += "		<td>Comment</td>\n";
+			s += "		<td colspan=\"2\"><textarea id=\"reply_body_" + comment_code + "\"></textarea></td>\n";
+			s += "	</tr>\n";
+			s += "	<tr>\n";
+			s += "		<td></td>\n";
+			s += "		<td><label><input id=\"reply_coward_" + comment_code + "\" type=\"checkbox\"/>Post Anonymously</label></td>\n";
+			s += "		<td><input type=\"button\" value=\"Post\" onclick=\"post_reply('" + comment_code + "')\"/></td>";
+			s += "	</tr>\n";
+			s += "</table>\n";
+			s += "</div>\n"
+
+			$("#reply_" + comment_code).html(s);
+		}
+		$("#reply_" + comment_code).show();
+	}
+}
+
+
+function post_reply(comment_code)
+{
+	var subject;
+	var body;
+	var coward;
+	var data;
+	var s;
+
+	current = comment_code;
+	subject = $("#reply_subject_" + comment_code).val();
+	subject = encodeURIComponent(subject);
+	subject = subject.replace("%20", "+");
+	body = $("#reply_body_" + comment_code).val();
+	body = encodeURIComponent(body);
+	body = body.replace("%20", "+");
+	coward = $("#reply_coward_" + comment_code).is(':checked');
+
+	//alert("subject [" + subject + "] body [" + body + "] coward [" + coward + "]");
+	//return;
+
+	data = "subject=" + subject + "&body=" + body + "&coward=" + coward;
+	$.post("/reply/" + comment_code, data, function(json) {
+		if (data.indexOf("error:") != -1) {
+			alert(data);
+		} else {
+			//alert(json);
+			json = $.parseJSON(json);
+			s = render(json);
+			//alert("code [" + json.code + "] html [" + s + "]");
+			//$("#reply_" + current).html(s);
+			$("#reply_" + current).before(s);
+			$("#reply_" + current).html("");
+			$("#reply_" + current).hide();
+			//alert(s);
 		}
 	});
 }
@@ -109,11 +177,11 @@ function update_expand_slider()
 }
 
 
-function get_comments(type, root_id)
+function get_comments(type, short_code)
 {
 	var uri;
 
-	uri = "/" + type + "/" + root_id + "/comments";
+	uri = "/" + type + "/" + short_code + "/comments";
 	$.getJSON(uri, function(json) {
 		comments = json;
 		render_page();
@@ -168,8 +236,7 @@ function render(c)
 				collapse = true;
 			}
 		}
-		//console.log("comment_id [" + c.comment_id + "] score [" + c.score + "] hide [" + hide + "] collapse [" + collapse + "] hide_value [" + hide_value + "] expand_value [" + expand_value + "]");
-		user_page = protocol + "://" + c.zid.replace("@", ".") + "/";
+		//console.log("code [" + c.code + "] score [" + c.score + "] hide [" + hide + "] collapse [" + collapse + "] hide_value [" + hide_value + "] expand_value [" + expand_value + "]");
 		if (c.zid == "") {
 			by = "Anonymous Coward";
 		} else {
@@ -180,45 +247,47 @@ function render(c)
 			s += "<div>";
 		} else {
 			if (c.junk > 0) {
-				seen = "h3 class=\"color_junk\"";
+				seen = "h3 class=\"color-junk\"";
 			} else if (c.time > last_seen) {
-				seen = "h3 class=\"color_new\"";
+				seen = "h3 class=\"color-new\"";
 			} else {
-				seen = "h3 class=\"color_old\"";
+				seen = "h3 class=\"color-old\"";
 			}
 			s += "<article class=\"comment\">";
 			if (collapse) {
-				s += "<h5 id=\"collapse_" + c.comment_id + "\" onclick=\"show_comment('" + c.comment_id + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
+				s += "<h5 id=\"collapse_" + c.code + "\" onclick=\"show_comment('" + c.code + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
 
-				s += "<" + seen + " id=\"subject_" + c.comment_id + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h4 id=\"subtitle_" + c.comment_id + "\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
-				s += "<div class=\"comment_outline\">";
-				s += "<div id=\"body_" + c.comment_id + "\" style=\"display: none\">";
+				s += "<" + seen + " id=\"subject_" + c.code + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
+				s += "<h4 id=\"subtitle_" + c.code + "\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
+				s += "<div class=\"comment-outline\">";
+				s += "<div id=\"body_" + c.code + "\" style=\"display: none\">";
 			} else {
-				s += "<" + seen + " id=\"subject_" + c.comment_id + "\">" + c.subject + " (Score: <span id=\"score_" + c.comment_id + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h4 id=\"subtitle_" + c.comment_id + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.short + "\">#" + c.short + "</a>)</h3>";
-				s += "<div class=\"comment_outline\">";
-				s += "<div id=\"body_" + c.comment_id + "\">";
+				s += "<" + seen + " id=\"subject_" + c.code + "\">" + c.subject + " (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
+				s += "<h4 id=\"subtitle_" + c.code + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
+				s += "<div class=\"comment-outline\">";
+				s += "<div id=\"body_" + c.code + "\">";
 			}
-			s += "<div class=\"comment_body\">" + c.body + "</div>";
-			s += "<footer><div><a rel=\"nofollow\" href=\"" + protocol + "://" + server_name + "/post?comment_id=" + c.comment_id + "\">Reply</a>";
+			s += "<div class=\"comment-body\">" + c.body + "</div>";
+			if (inline_reply) {
+				s += "<footer><div><a href=\"javascript:reply('" + c.code + "')\">Reply</a>";
+			} else {
+				s += "<footer><div><a rel=\"nofollow\" href=\"" + protocol + "://" + server_name + "/post/" + c.code + "\">Reply</a>";
+			}
 			if (c.zid != auth_zid) {
-				s += "<select name=\"s_" + c.comment_id + "\" onchange=\"moderate(this, '" + c.comment_id + "')\">";
+				s += "<select name=\"s_" + c.code + "\" onchange=\"moderate(this, '" + c.code + "')\">";
 
 				for (i = 0; i < reasons.length; i++) {
 					if (reasons[i] == c.vote) {
-						//s += "<option value=\"" + i + "\" selected=\"selected\">" + reasons[i] + "</option>";
 						s += "<option selected=\"selected\">" + reasons[i] + "</option>";
 					} else {
-						//s += "<option value=\"" + i + "\">" + reasons[i] + "</option>";
 						s += "<option>" + reasons[i] + "</option>";
 					}
 				}
 				s += "</select>";
 			} else {
 				s += "</div>";
-				s += "<div class=\"right\">";
-				s += "<a class=\"icon_16 notepad_16\" href=\"" + protocol + "://" + server_name + "/comment/" + c.short + "/edit\">Edit</a>";
+				s += "<div>";
+				s += "<a class=\"icon-16 notepad-16\" href=\"" + protocol + "://" + server_name + "/comment/" + c.code + "/edit\">Edit</a>";
 			}
 			s += "</div>";
 			s += "</footer>";
@@ -231,6 +300,7 @@ function render(c)
 	}
 
 	if (c.zid !== undefined) {
+		s += "<div id=\"reply_" + c.code + "\" class=\"reply\" style=\"display: none\"></div>";
 		s += "</div>";
 		s += "</article>";
 	}

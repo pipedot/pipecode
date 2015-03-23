@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -24,7 +24,7 @@ writeln("<h1>Closed Bugs</h1>");
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 1));
 
-$row = sql("select bug_id, author_zid, body, publish_time, short_id, title from bug where closed = 1 order by publish_time desc limit $item_start, $items_per_page");
+$row = sql("select bug_id, author_zid, body, publish_time, title from bug where closed = 1 order by publish_time desc limit $item_start, $items_per_page");
 beg_tab();
 writeln('	<tr>');
 writeln('		<th>Bug</th>');
@@ -34,12 +34,12 @@ writeln('		<th>Labels</th>');
 writeln('		<th>Date</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
-	$author_zid = user_page_link($row[$i]["author_zid"], true);
-	$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+	$author_zid = user_link($row[$i]["author_zid"], ["tag" => true]);
+	$bug_code = crypt_crockford_encode($row[$i]["bug_id"]);
 	$labels = "";
 
 	writeln('	<tr>');
-	writeln('		<td><a href="' . $short_code . '">' . $short_code . '</a></td>');
+	writeln('		<td><a href="' . $bug_code . '">' . $bug_code . '</a></td>');
 	writeln('		<td>' . $row[$i]["title"] . '</td>');
 	writeln('		<td>' . $author_zid . '</td>');
 	writeln('		<td>' . $labels . '</td>');
@@ -49,7 +49,7 @@ for ($i = 0; $i < count($row); $i++) {
 end_tab();
 
 writeln($page_footer);
-writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a class="icon_16 calendar_16" href="history">History</a></div>');
+box_center('<a class="icon-16 calendar-16" href="history">History</a>');
 
 end_main();
 print_footer();

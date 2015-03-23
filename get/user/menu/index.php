@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -22,9 +22,9 @@ if ($zid !== $auth_zid) {
 }
 
 print_header("Menu");
-beg_main("dual_table");
+beg_main("dual-table");
 
-writeln('<div class="dual_left">');
+writeln('<div class="dual-left">');
 
 beg_tab();
 print_row(array("caption" => "Journal", "description" => "View your journal", "icon" => "notepad", "link" => "/journal/"));
@@ -35,13 +35,13 @@ print_row(array("caption" => "Comments", "description" => "View your past commen
 end_tab();
 
 writeln('</div>');
-writeln('<div class="dual_right">');
+writeln('<div class="dual-right">');
 
 beg_tab();
 print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
 print_row(array("caption" => "Profile Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/"));
 print_row(array("caption" => "Profile Picture", "description" => "Upload a new profile image", "icon" => "picture", "link" => "/profile/picture"));
-print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "face_smile", "link" => "/karma/"));
+print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "face-smile", "link" => "/karma/"));
 end_tab();
 
 writeln('</div>');

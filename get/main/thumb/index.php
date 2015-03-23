@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -28,13 +28,12 @@ $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("thumb", $items_per_page);
 
 $row = sql("select * from thumb order by time desc limit $item_start, $items_per_page");
+writeln('<div class="gallery">');
 for ($i = 0; $i < count($row); $i++) {
 	$short_code = crypt_crockford_encode($row[$i]["thumb_id"]);
-	//writeln('<div class="photo_frame">');
-	writeln('	<a href="' . $short_code . '"><img alt="photo" class="thumb" src="' . $short_code . '.jpg"/></a>');
-	//writeln('	<div><a href="' . $short_code . '.jpg">' . $size . '</a></div>');
-	//writeln('</div>');
+	writeln('	<a href="' . $short_code . '"><img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg"/></a>');
 }
+writeln('</div>');
 
 writeln($page_footer);
 

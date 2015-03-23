@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -17,10 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$bug = find_rec("bug");
+$bug = item_request("bug");
 
 $labels = array();
-$row = sql("select label_id from bug_label where bug_short_id = ?", $bug["short_id"]);
+$row = sql("select label_id from bug_label where bug_id = ?", $bug["bug_id"]);
 for ($i = 0; $i < count($row); $i++) {
 	$labels[] = $row[$i]["label_id"];
 }
@@ -48,7 +48,7 @@ for ($i = 0; $i < count($list); $i++) {
 }
 end_tab();
 
-right_box("Save");
+box_right("Save");
 
 end_form();
 end_main();

@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -29,7 +29,7 @@ writeln('<table class="fill">');
 writeln('	<tr>');
 
 for ($c = 0; $c < 3; $c++) {
-	writeln('		<td class="feed_box">');
+	writeln('		<td class="feed-box">');
 	writeln('			<table class="zebra">');
 	$row = sql("select feed_user.feed_id, title from feed_user inner join feed on feed_user.feed_id = feed.feed_id where zid = ? and col = ? order by pos", $auth_zid, $c);
 	if (count($row) == 0) {
@@ -38,11 +38,11 @@ for ($c = 0; $c < 3; $c++) {
 	for ($i = 0; $i < count($row); $i++) {
 		writeln('				<tr>');
 		writeln('					<td>' . $row[$i]["title"] . '</td>');
-		writeln('					<td class="right"><a href="remove?feed_id=' . $row[$i]["feed_id"] . '" class="icon_16 minus_16">Remove</a></td>');
+		writeln('					<td class="right"><a href="remove?feed_id=' . $row[$i]["feed_id"] . '" class="icon-16 minus-16">Remove</a></td>');
 		writeln('				</tr>');
 	}
 	writeln('			</table>');
-	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon_16 plus_16">Add</a></div>');
+	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon-16 plus-16">Add</a></div>');
 	writeln('		</td>');
 }
 writeln('	</tr>');

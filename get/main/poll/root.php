@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -20,7 +20,7 @@
 include("render.php");
 include("poll.php");
 
-$poll = find_rec("poll");
+$poll = item_request("poll");
 /*$date = $s2;
 $slug = $s3;
 $time_beg = strtotime("$date GMT");

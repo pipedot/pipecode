@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -24,19 +24,19 @@ $description = karma_description($karma);
 $page = http_get_int("page", array("default" => 1, "required" => false));
 switch ($description) {
 	case "Excellent":
-		$icon = "face_grin";
+		$icon = "face-grin";
 		break;
 	case "Good":
-		$icon = "face_smile";
+		$icon = "face-smile";
 		break;
 	case "Neutral":
-		$icon = "face_plain";
+		$icon = "face-plain";
 		break;
 	case "Bad":
-		$icon = "face_sad";
+		$icon = "face-sad";
 		break;
 	case "Terrible":
-		$icon = "face_crying";
+		$icon = "face-crying";
 		break;
 }
 //$rows_per_page = 10;
@@ -53,7 +53,7 @@ print_left_bar("user", "karma");
 beg_main("cell");
 
 writeln('<h1>Karma</h1>');
-writeln('<div class="icon_32 ' . $icon . '_32">' . $description . ' (' . $karma . ')</div>');
+writeln('<div class="icon-32 ' . $icon . '-32">' . $description . ' (' . $karma . ')</div>');
 
 //writeln('<table>');
 //writeln('	<tr>');
@@ -63,7 +63,7 @@ writeln('<div class="icon_32 ' . $icon . '_32">' . $description . ' (' . $karma 
 //writeln('</table>');
 
 //$row = sql("select time, karma_log.value, karma_log.type_id, type, id from karma_log inner join karma_type on karma_log.type_id = karma_type.type_id where zid = ? order by time desc limit $row_start, $rows_per_page", $zid);
-$row = sql("select comment_vote.time, value, comment.comment_id, short_id, comment_vote.zid from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0 order by comment_vote.time desc limit $item_start, $items_per_page", $zid);
+$row = sql("select comment_vote.time, value, comment.comment_id, comment_vote.zid from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0 order by comment_vote.time desc limit $item_start, $items_per_page", $zid);
 writeln('<h2>Log</h2>');
 writeln('<table class="zebra">');
 writeln('	<tr>');
@@ -83,17 +83,17 @@ for ($i = 0; $i < count($row); $i++) {
 	//} else {
 	//	$link = " (<a href=\"http://$server_name/pipe/" . $row[$i]["id"] . '">#' . $row[$i]["comment_id"] . '</a>';
 	//}
-	$short_code = crypt_crockford_encode($row[$i]["short_id"]);
+	$comment_code = crypt_crockford_encode($row[$i]["comment_id"]);
 	$link = item_link("comment", $row[$i]["comment_id"]);
 	$value = (int) $row[$i]["value"];
 	if ($value > 0) {
 		$value = "+$value";
 	}
-	$voter = user_page_link($row[$i]["zid"], true);
+	$voter = user_link($row[$i]["zid"], ["tag" => true]);
 	writeln('	<tr>');
 	writeln('		<td>' . gmdate("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 	writeln('		<td class="center">' . $value . '</td>');
-	writeln('		<td><a href="' . $protocol . '://' . $server_name . '/' . $short_code . '">#' . $short_code . '</a></td>');
+	writeln('		<td><a href="' . $protocol . '://' . $server_name . '/' . $comment_code . '">#' . $comment_code . '</a></td>');
 	writeln('		<td>' . $voter . '</td>');
 	writeln('	</tr>');
 }

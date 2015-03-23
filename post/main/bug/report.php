@@ -1,7 +1,7 @@
 <?
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
@@ -39,8 +39,7 @@ for ($i = 0; $i < count($_POST); $i++) {
 }
 
 $bug = db_new_rec("bug");
-$bug["bug_id"] = create_id($auth_zid, $now);
-$bug["short_id"] = create_short("bug", $bug["bug_id"]);
+$bug["bug_id"] = create_short("bug");
 $bug["author_zid"] = $auth_zid;
 $bug["body"] = $clean_body;
 $bug["priority"] = $priority;
@@ -49,9 +48,9 @@ db_set_rec("bug", $bug);
 
 for ($i = 0; $i < count($labels); $i++) {
 	$bug_label = db_new_rec("bug_label");
-	$bug_label["bug_short_id"] = $bug["short_id"];
+	$bug_label["bug_id"] = $bug["bug_id"];
 	$bug_label["label_id"] = $labels[$i];
 	db_set_rec("bug_label");
 }
 
-header("Location: /bug/" . crypt_crockford_encode($bug["short_id"]));
+header("Location: /bug/" . crypt_crockford_encode($bug["bug_id"]));
