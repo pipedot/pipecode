@@ -1781,7 +1781,7 @@ function box_three($left, $center, $right)
 
 function box_buttons($buttons)
 {
-	if (string_has($buttons, "<")) {
+	if (string_has($buttons, "<") || string_has($buttons, ".")) {
 		return $buttons;
 	} else {
 		$a = explode(",", $buttons);

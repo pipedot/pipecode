@@ -30,6 +30,8 @@ $zid = $story["author_zid"];
 $title = clean_subject();
 list($clean_body, $dirty_body) = clean_body(true, "story");
 $icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
+$keywords = http_post_string("keywords", ["required" => false, "len" => 100, "valid" => "[A-Z][a-z][0-9]-_+ "]);
+$keywords = strtolower($keywords);
 $tid = http_post_int("tid");
 $time = time();
 
@@ -40,6 +42,7 @@ if (http_post("publish")) {
 	$story["edit_time"] = $time;
 	$story["edit_zid"] = $auth_zid;
 	$story["icon"] = $icon;
+	$story["keywords"] = $keywords;
 	$story["slug"] = clean_url($title);
 	$story["tid"] = $tid;
 	$story["title"] = $title;

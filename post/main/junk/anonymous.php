@@ -54,7 +54,7 @@ for ($i = 0; $i < count($keys); $i++) {
 				print "spam [$comment_code]\n";
 				$comment["junk_status"] = 1;
 			} else if ($value == "not-junk") {
-				print "not junk [$short_code]\n";
+				print "not junk [$comment_code]\n";
 				$comment["junk_status"] = -1;
 			}
 			db_set_rec("comment", $comment);

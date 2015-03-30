@@ -435,6 +435,11 @@ article address {
 	font-style: normal;
 	font-weight: bolder;
 }
+article.story footer div:nth-child(2) {
+	xbackground-color: green;
+	text-align: right;
+
+}
 .news-text {
 	border: 1px solid #9f9f9f;
 	border-radius: 10px;

@@ -81,17 +81,29 @@ function moderate(e, comment_id)
 function reply(comment_code)
 {
 	var s;
+	var subject;
+	var re = false;
 
 	if ($("#reply_" + comment_code).is(":visible")) {
 		$("#reply_" + comment_code).hide();
 	} else {
 		if ($("#reply_" + comment_code).html() == "") {
+			subject = $("#subject_" + comment_code).html();
+			if (subject.length >= 4) {
+				if (subject.substring(0, 4) == "Re: ") {
+					re = true;
+				}
+			}
+			if (!re) {
+				subject = "Re: " + $("#subject_" + comment_code).html();
+			}
+
 			s = "<div class=\"dialog-title\">Post Comment</div>\n";
 			s += "<div class=\"dialog-body\">\n";
 			s += "<table>\n";
 			s += "	<tr>\n";
 			s += "		<td>Subject</td>\n";
-			s += "		<td colspan=\"2\"><input id=\"reply_subject_" + comment_code + "\" type=\"text\"/></td>\n";
+			s += "		<td colspan=\"2\"><input id=\"reply_subject_" + comment_code + "\" type=\"text\" value=\"" + subject + "\"/></td>\n";
 			s += "	</tr>\n";
 			s += "	<tr>\n";
 			s += "		<td>Comment</td>\n";
@@ -108,6 +120,25 @@ function reply(comment_code)
 			$("#reply_" + comment_code).html(s);
 		}
 		$("#reply_" + comment_code).show();
+
+		if (wysiwyg_enabled) {
+			var editor = CKEDITOR.replace("reply_body_" + comment_code,
+			{
+				resize_enabled: false,
+				enterMode: CKEDITOR.ENTER_BR,
+				toolbar :
+				[
+					["Bold","Italic","Underline","Strike","Subscript","Superscript"],
+					["NumberedList","BulletedList","Blockquote"],
+					["Link","Unlink"]
+				]
+			});
+			editor.on('change', function(evt) {
+				editor.updateElement();
+			});
+		}
+
+		$('#reply_' + comment_code)[0].scrollIntoView(false);
 	}
 }
 
@@ -129,23 +160,16 @@ function post_reply(comment_code)
 	body = body.replace("%20", "+");
 	coward = $("#reply_coward_" + comment_code).is(':checked');
 
-	//alert("subject [" + subject + "] body [" + body + "] coward [" + coward + "]");
-	//return;
-
 	data = "subject=" + subject + "&body=" + body + "&coward=" + coward;
 	$.post("/reply/" + comment_code, data, function(json) {
 		if (data.indexOf("error:") != -1) {
 			alert(data);
 		} else {
-			//alert(json);
 			json = $.parseJSON(json);
 			s = render(json);
-			//alert("code [" + json.code + "] html [" + s + "]");
-			//$("#reply_" + current).html(s);
 			$("#reply_" + current).before(s);
 			$("#reply_" + current).html("");
 			$("#reply_" + current).hide();
-			//alert(s);
 		}
 	});
 }
@@ -199,7 +223,7 @@ function render_page()
 function show_comment(comment_id)
 {
 	$('#collapse_' + comment_id).hide();
-	$('#subject_' + comment_id).show();
+	$('#title_' + comment_id).show();
 	$('#subtitle_' + comment_id).show();
 	$('#body_' + comment_id).show();
 }
@@ -257,12 +281,12 @@ function render(c)
 			if (collapse) {
 				s += "<h5 id=\"collapse_" + c.code + "\" onclick=\"show_comment('" + c.code + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
 
-				s += "<" + seen + " id=\"subject_" + c.code + "\" style=\"display: none\">" + c.subject + " (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
+				s += "<" + seen + " id=\"title_" + c.code + "\" style=\"display: none\"><span id=\"subject_" + c.code + "\">" + c.subject + "</span> (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
 				s += "<h4 id=\"subtitle_" + c.code + "\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
 				s += "<div class=\"comment-outline\">";
 				s += "<div id=\"body_" + c.code + "\" style=\"display: none\">";
 			} else {
-				s += "<" + seen + " id=\"subject_" + c.code + "\">" + c.subject + " (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
+				s += "<" + seen + " id=\"title_" + c.code + "\"><span id=\"subject_" + c.code + "\">" + c.subject + "</span> (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
 				s += "<h4 id=\"subtitle_" + c.code + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
 				s += "<div class=\"comment-outline\">";
 				s += "<div id=\"body_" + c.code + "\">";

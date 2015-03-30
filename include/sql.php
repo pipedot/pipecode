@@ -379,6 +379,7 @@ $db_table["story"] = array(
 	array("name" => "edit_zid"),
 	array("name" => "icon"),
 	array("name" => "image_id", "default" => 0),
+	array("name" => "keywords"),
 	array("name" => "pipe_id"),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "slug"),

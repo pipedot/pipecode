@@ -726,17 +726,20 @@ function print_comments($type, $rec)
 	global $can_moderate;
 	global $hide_value;
 	global $expand_value;
+	global $doc_root;
 
 	if ($auth_zid !== "") {
 		$can_moderate = true;
 		$hide_value = $auth_user["hide_threshold"];
 		$expand_value = $auth_user["expand_threshold"];
 		$inline_reply = $auth_user["inline_reply_enabled"];
+		$wysiwyg_enabled = $auth_user["wysiwyg_enabled"];
 	} else {
 		$can_moderate = false;
 		$hide_value = -1;
 		$expand_value = 0;
 		$inline_reply = false;
+		$wysiwyg_enabled = false;
 	}
 
 	if ($auth_user["javascript_enabled"]) {
@@ -749,6 +752,9 @@ function print_comments($type, $rec)
 	$last_seen = update_view_time($type, $rec["{$type}_id"]);
 
 	if ($auth_user["javascript_enabled"]) {
+		if ($wysiwyg_enabled && $inline_reply) {
+			writeln('<script src="/lib/ckeditor/ckeditor.js"></script>');
+		}
 		writeln('<script>');
 		writeln();
 		writeln('var hide_value = ' . $hide_value . ';');
@@ -756,11 +762,16 @@ function print_comments($type, $rec)
 		writeln('var auth_zid = "' . $auth_zid . '";');
 		writeln('var last_seen = ' . $last_seen . ';');
 		writeln('var inline_reply = ' . ($inline_reply ? "true" : "false") . ';');
+		writeln('var wysiwyg_enabled = ' . ($wysiwyg_enabled ? "true" : "false") . ';');
 		writeln();
 		//writeln('get_comments("' . $type . '", "' . $rec["{$type}_id"] . '");');
 		writeln('get_comments("' . $type . '", "' . crypt_crockford_encode($rec["{$type}_id"]) . '");');
 		writeln('render_page();');
 		writeln();
+		if ($wysiwyg_enabled && $inline_reply) {
+			writeln('CKEDITOR.timestamp = "' . fs_time("$doc_root/www/lib/ckeditor/config.js") . '";');
+			writeln();
+		}
 		writeln('</script>');
 	}
 }
@@ -853,6 +864,25 @@ function make_photo_links($text)
 	//var_dump($matches);
 
 	return $text;
+}
+
+
+function similar_count($story)
+{
+	global $server_feed_id;
+
+	$keywords = $story["keywords"];
+	if (array_key_exists("publish_time", $story)) {
+		$publish_time = $story["publish_time"];
+	} else {
+		$publish_time = $story["time"];
+	}
+	$beg_time = $publish_time - 86400 * 15;
+	$end_time = $publish_time + 86400 * 15;
+
+	$row = sql("select count(*) as item_count from article where match (title) against (? in boolean mode) and publish_time > ? and publish_time < ? and article.feed_id <> $server_feed_id", $keywords, $beg_time, $end_time);
+
+	return $row[0]["item_count"];
 }
 
 

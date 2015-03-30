@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+include("story.php");
 include("drive.php");
 
 $ext = fs_ext($s2);
@@ -64,11 +65,13 @@ writeln('</div>');
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("select count(*) as item_count from article where thumb_id = ?", $items_per_page, array($thumb["thumb_id"]));
 
-$row = sql("select article_id, author_name, author_link, article.description, publish_time, article.title, feed.slug, feed.title as feed_title from article inner join feed on article.feed_id = feed.feed_id where thumb_id = ? limit $item_start, $items_per_page", $thumb["thumb_id"]);
+$row = sql("select article_id, author_name, author_link, article.description, publish_time, article.title, feed.slug as feed_slug, feed.title as feed_title from article inner join feed on article.feed_id = feed.feed_id where thumb_id = ? limit $item_start, $items_per_page", $thumb["thumb_id"]);
 if (count($row) > 0) {
 	writeln('<h2>Articles</h2>');
 
 	for ($i = 0; $i < count($row); $i++) {
+		print_news($row[$i]);
+		/*
 		$info = "in <b><a href=\"/feed/" . $row[$i]["slug"] . "\">" . $row[$i]["feed_title"] . "</a></b> on " . date("Y-m-d H:i", $row[$i]["publish_time"]);
 		if ($row[$i]["author_name"] != "") {
 			$by = $row[$i]["author_name"];
@@ -93,6 +96,7 @@ if (count($row) > 0) {
 		writeln('	</tr>');
 		writeln('</table>');
 		writeln('</article>');
+		*/
 	}
 
 	writeln($page_footer);

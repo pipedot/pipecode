@@ -112,6 +112,24 @@ function make_comment_atom($topic)
 
 	for ($i = 0; $i < count($row); $i++) {
 		$comment_code = crypt_crockford_encode($row[$i]["comment_id"]);
+		$comment_type = $row[$i]["type"];
+		$article = db_get_rec($comment_type, $row[$i]["root_id"]);
+		if ($comment_type == "poll") {
+			$article_title = $article["question"];
+		} else {
+			$article_title = $article["title"];
+		}
+		if ($comment_type == "pipe") {
+			$artitle_time = gmdate(DATE_ATOM, $article["time"]);
+		} else {
+			$article_time = gmdate(DATE_ATOM, $article["publish_time"]);
+		}
+		$article_link = item_link($comment_type, $article[$comment_type . "_id"], $article);
+
+		$subtitle = "by " . user_link($row[$i]["zid"], ["tag" => true]);
+		$subtitle .= " in <a href=\"$article_link\"><b>$article_title</b></a>";
+		$subtitle .= " on <time datetime=\"" .  gmdate("c", $row[$i]["edit_time"]) . "\">" . gmdate("Y-m-d H:i", $row[$i]["edit_time"]) . "</time>";
+		$subtitle .= " (<a href=\"$protocol://$server_name/$comment_code\">#$comment_code</a>)";
 
 		$body .= "	<entry>\n";
 		$body .= "		<id>$protocol://$server_name/comment/$comment_code</id>\n";
@@ -126,7 +144,13 @@ function make_comment_atom($topic)
 			$body .= "			<uri>" . user_link($row[$i]["zid"]) . "</uri>\n";
 		}
 		$body .= "		</author>\n";
-		$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
+		$body .= "		<source>\n";
+		$body .= "			<id>$article_title</id>\n";
+		$body .= "			<title>$article_title</title>\n";
+		$body .= "			<updated>$article_time</updated>\n";
+		$body .= "		</source>\n";
+		//$body .= "		<content type=\"html\">" . htmlspecialchars($row[$i]["body"]) . "</content>\n";
+		$body .= "		<content type=\"html\">" . htmlspecialchars("<p>$subtitle</p><p>" . $row[$i]["body"] . "</p>") . "</content>\n";
 		$body .= "	</entry>\n";
 	}
 
@@ -154,7 +178,7 @@ function make_journal_atom($zid)
 	global $cache_enabled;
 	global $protocol;
 
-	$row = sql("select body, publish_time, slug, title from journal where zid = ? and published = 1 order by publish_time desc limit 10", $zid);
+	$row = sql("select journal_id, body, publish_time, slug, title from journal where zid = ? and published = 1 order by publish_time desc limit 10", $zid);
 	if (count($row) > 0) {
 		$updated = $row[0]["publish_time"];
 	} else {

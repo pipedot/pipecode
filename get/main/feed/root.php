@@ -17,6 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+include("story.php");
+
 $feed = item_request("feed");
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
@@ -71,6 +73,8 @@ end_tab();
 */
 
 for ($i = 0; $i < count($row); $i++) {
+	print_news($row[$i]);
+	/*
 	$short_code = crypt_crockford_encode($row[$i]["article_id"]);
 	//if ($row[$i]["image_id"] > 0) {
 	//	$image_id = $row[$i]["image_id"];
@@ -125,6 +129,7 @@ for ($i = 0; $i < count($row); $i++) {
 		writeln('</table>');
 		writeln('</article>');
 	}
+	*/
 }
 
 writeln($page_footer);

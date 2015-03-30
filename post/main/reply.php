@@ -56,6 +56,7 @@ db_set_rec("comment", $comment);
 
 send_notifications($comment);
 
+//writeln("clean_body [$clean_body] dirty_body [$dirty_body] raw_body [" . $_POST["body"] . "]");
 //$s = "{\n";
 //$s .= "	\"reply\": [\n";
 $s = render_comment_json($subject, $zid, $time, $comment["comment_id"], $clean_body, 0);
