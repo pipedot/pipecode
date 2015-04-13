@@ -20,7 +20,7 @@
 include("render.php");
 
 print_header("Comments");
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 
 writeln('<h1>Recent Comments</h1>');

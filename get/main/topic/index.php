@@ -18,7 +18,7 @@
 //
 
 print_header("Topics");
-print_left_bar("main", "topics");
+print_main_nav("topics");
 beg_main("cell");
 
 writeln('<h1>Topics</h1>');

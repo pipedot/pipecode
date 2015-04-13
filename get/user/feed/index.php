@@ -20,7 +20,7 @@
 include("feed.php");
 
 if ($zid == $auth_zid) {
-	print_header("", array("Edit"), array("news"), array("/feed/edit"));
+	print_header("", ["Edit"], ["news"], ["/feed/edit"]);
 } else {
 	print_header("Feed");
 }

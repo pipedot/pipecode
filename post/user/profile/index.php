@@ -22,12 +22,15 @@ if ($zid !== $auth_zid) {
 }
 
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+$langs = ["en", "eo", "ja", "es"];
 
 $javascript_enabled = http_post_bool("javascript_enabled", array("numeric" => true));
 $wysiwyg_enabled = http_post_bool("wysiwyg_enabled", array("numeric" => true));
 $inline_reply_enabled = http_post_bool("inline_reply_enabled", array("numeric" => true));
 $time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
 $large_text_enabled = http_post_bool("large_text_enabled", array("numeric" => true));
+$lang = http_post_string("lang", array("len" => 2, "valid" => "[a-z]"));
+$story_image_style = http_post_int("story_image_style");
 $hide_threshold = http_post_string("hide_threshold", array("valid" => "[0-9]-"));
 $expand_threshold = http_post_string("expand_threshold", array("valid" => "[0-9]-"));
 $show_junk_enabled = http_post_bool("show_junk_enabled", array("numeric" => true));
@@ -35,10 +38,12 @@ $gravatar_enabled = http_post_bool("gravatar_enabled", array("numeric" => true))
 $real_name = http_post_string("real_name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z]- "));
 $email = http_post_string("email", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
 //$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
-$story_image_style = http_post_int("story_image_style");
 
 if (!in_array($time_zone, $zones)) {
 	die("invalid time zone [$time_zone]");
+}
+if (!in_array($lang, $langs)) {
+	die("invalid lang [$lang]");
 }
 
 $user_conf["javascript_enabled"] = $javascript_enabled;
@@ -46,6 +51,7 @@ $user_conf["wysiwyg_enabled"] = $wysiwyg_enabled;
 $user_conf["inline_reply_enabled"] = $inline_reply_enabled;
 $user_conf["time_zone"] = $time_zone;
 $user_conf["large_text_enabled"] = $large_text_enabled;
+$user_conf["lang"] = $lang;
 $user_conf["story_image_style"] = $story_image_style;
 $user_conf["hide_threshold"] = $hide_threshold;
 $user_conf["expand_threshold"] = $expand_threshold;

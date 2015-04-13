@@ -20,7 +20,7 @@
 include("render.php");
 
 print_header("Comments");
-print_left_bar("user", "comments");
+print_user_nav("comments");
 beg_main("cell");
 
 writeln('<h1>Comments</h1>');

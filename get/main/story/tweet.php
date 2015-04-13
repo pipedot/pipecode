@@ -31,7 +31,7 @@ $day = gmdate("Y-m-d", $story["publish_time"]);
 $slug = $story["slug"];
 
 print_header();
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 beg_form();
 writeln('<h1>Send Tweet</h1>');

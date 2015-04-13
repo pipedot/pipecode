@@ -39,7 +39,7 @@ print_header("Edit Comment");
 beg_main();
 beg_form();
 
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 
 writeln('<h1>Edit Comment</h1>');

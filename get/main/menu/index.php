@@ -43,7 +43,8 @@ print_row(array("caption" => "Pages", "description" => "Manage static pages", "i
 print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Settings", "description" => "Configure the server settings", "icon" => "tools", "link" => "settings"));
-	print_row(array("caption" => "Topics", "description" => "Add and remove topics", "icon" => "chat", "link" => "/topic/list"));
+	print_row(array("caption" => "Story Topics", "description" => "Add and remove story topics", "icon" => "chat", "link" => "/topic/list"));
+	print_row(array("caption" => "Feed Topics", "description" => "Add and remove feed topics", "icon" => "news", "link" => "/feed/topic/list"));
 }
 end_tab();
 

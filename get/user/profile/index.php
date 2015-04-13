@@ -35,6 +35,9 @@ print_row(array("caption" => "Inline Reply", "check_key" => "inline_reply_enable
 end_tab();
 
 beg_tab("Display");
+$lang_keys = ["en", "eo", "ja", "es"];
+$lang_names = ["English", "Esperanto", "Japanese", "Spanish"];
+print_row(array("caption" => "Language", "option_key" => "lang", "option_keys" => $lang_keys, "option_list" => $lang_names, "option_value" => $user_conf["lang"]));
 $row = sql("select image_style_id, description from image_style order by image_style_id");
 $image_styles = array();
 $image_descriptions = array();

@@ -25,7 +25,7 @@ include("gravatar.php");
 //	print_feed_page($zid);
 //} else {
 	print_header();
-	print_left_bar("user", "overview");
+	print_user_nav("overview");
 	beg_main("cell");
 
 	writeln('<h1>' . $zid . '</h1>');

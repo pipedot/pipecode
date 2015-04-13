@@ -27,10 +27,11 @@ beg_main("dual-table");
 writeln('<div class="dual-left">');
 
 beg_tab();
+print_row(array("caption" => "Feed", "description" => "View news page", "icon" => "news", "link" => "/feed/"));
 print_row(array("caption" => "Journal", "description" => "View your journal", "icon" => "notepad", "link" => "/journal/"));
-print_row(array("caption" => "Feed", "description" => "View news feeds", "icon" => "news", "link" => "/feed/"));
+print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
+print_row(array("caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/"));
 print_row(array("caption" => "Stream", "description" => "View news stream", "icon" => "internet", "link" => "/stream/"));
-print_row(array("caption" => "Comments", "description" => "View your past comments", "icon" => "chat", "link" => "/comments"));
 //print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
 end_tab();
 
@@ -38,10 +39,10 @@ writeln('</div>');
 writeln('<div class="dual-right">');
 
 beg_tab();
-print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
+print_row(array("caption" => "Comments", "description" => "View your past comments", "icon" => "chat", "link" => "/comments"));
+print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "face-smile", "link" => "/karma/"));
 print_row(array("caption" => "Profile Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/"));
 print_row(array("caption" => "Profile Picture", "description" => "Upload a new profile image", "icon" => "picture", "link" => "/profile/picture"));
-print_row(array("caption" => "Karma", "description" => "Monitor your karma rating", "icon" => "face-smile", "link" => "/karma/"));
 end_tab();
 
 writeln('</div>');

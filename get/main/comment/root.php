@@ -27,8 +27,7 @@ $a = article_info($comment);
 $type = $a["type"];
 
 print_header($comment["subject"]);
-
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 
 writeln('<h1>' . ucwords($type) . '</h1>');

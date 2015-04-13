@@ -23,8 +23,7 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	global $auth_user;
 
 	print_header("Submit Story");
-
-	print_left_bar("main", "pipe");
+	print_main_nav("pipe");
 	beg_main("cell");
 
 	if ($preview) {

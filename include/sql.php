@@ -146,6 +146,7 @@ $db_table["comment"] = array(
 	array("name" => "junk_status", "default" => 0),
 	array("name" => "junk_time", "default" => 0),
 	array("name" => "junk_zid"),
+	array("name" => "lang", "default" => "en"),
 	array("name" => "parent_id", "default" => 0),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "remote_ip"),
@@ -207,7 +208,15 @@ $db_table["feed"] = array(
 	array("name" => "slug"),
 	array("name" => "time", "default" => $now),
 	array("name" => "title"),
+	array("name" => "topic_id", "default" => 0),
 	array("name" => "uri")
+);
+
+$db_table["feed_topic"] = array(
+	array("name" => "topic_id", "key" => true, "auto" => true),
+	array("name" => "icon"),
+	array("name" => "name"),
+	array("name" => "slug")
 );
 
 $db_table["feed_user"] = array(
@@ -252,6 +261,19 @@ $db_table["journal_view"] = array(
 	array("name" => "zid", "key" => true),
 	array("name" => "time", "default" => 0),
 	array("name" => "last_time", "default" => 0)
+);
+
+$db_table["lang_string"] = array(
+	array("name" => "hash", "key" => true),
+	array("name" => "body")
+);
+
+$db_table["lang_translation"] = array(
+	array("name" => "src_hash", "key" => true),
+	array("name" => "dst_lang", "key" => true),
+	array("name" => "dst_hash"),
+	array("name" => "src_lang"),
+	array("name" => "time", "default" => $now)
 );
 
 $db_table["mail"] = array(
@@ -351,6 +373,22 @@ $db_table["poll_vote"] = array(
 	array("name" => "points", "default" => 0)
 );
 
+$db_table["reader_topic"] = array(
+	array("name" => "topic_id", "auto" => true, "key" => true),
+	array("name" => "icon"),
+	array("name" => "name"),
+	array("name" => "slug"),
+	array("name" => "zid")
+);
+
+$db_table["reader_user"] = array(
+	array("name" => "zid", "key" => true),
+	array("name" => "feed_id", "key" => true),
+	array("name" => "name"),
+	array("name" => "slug"),
+	array("name" => "topic_id", "default" => 0)
+);
+
 $db_table["server_conf"] = array(
 	array("name" => "name"),
 	array("name" => "value")
@@ -380,6 +418,7 @@ $db_table["story"] = array(
 	array("name" => "icon"),
 	array("name" => "image_id", "default" => 0),
 	array("name" => "keywords"),
+	array("name" => "lang", "default" => "en"),
 	array("name" => "pipe_id"),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "slug"),

@@ -40,8 +40,20 @@ if ($feed["copyright"] != "") {
 dict_row("Updated", date("Y-m-d H:i", $feed["time"]));
 dict_end();
 
+$topic_keys = [0];
+$topic_names = ["(none)"];
+
+$list = db_get_list("feed_topic", "name");
+$k = array_keys($list);
+for ($i = 0; $i < count($list); $i++) {
+	$topic = $list[$k[$i]];
+	$topic_keys[] = $topic["topic_id"];
+	$topic_names[] = $topic["name"];
+}
+
 beg_tab();
 print_row(array("caption" => "Slug", "text_key" => "slug", "text_value" => $feed["slug"]));
+print_row(array("caption" => "Topic", "option_key" => "topic_id", "option_keys" => $topic_keys, "option_list" => $topic_names, "option_value" => $feed["topic_id"]));
 end_tab();
 
 box_right("Delete,Save");

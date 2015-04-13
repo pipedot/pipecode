@@ -21,7 +21,7 @@ include("render.php");
 include("story.php");
 
 print_header();
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 
 $items_per_page = 10;

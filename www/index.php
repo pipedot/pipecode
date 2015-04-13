@@ -93,6 +93,27 @@ if (fs_is_dir("$root/$s1")) {
 			die();
 		}
 	} else {
+		if (fs_is_dir("$root/$s1/$s2")) {
+			if ($s3 === "") {
+				if (fs_is_file("$root/$s1/$s2/index.php")) {
+					include("$root/$s1/$s2/index.php");
+					die();
+				}
+			} else {
+				if (fs_is_file("$root/$s1/$s2/$s3.php")) {
+					include("$root/$s1/$s2/$s3.php");
+					die();
+				}
+				if ($s4 !== "" && fs_is_file("$root/$s1/$s2/$s4.php")) {
+					include("$root/$s1/$s2/$s4.php");
+					die();
+				}
+				if (fs_is_file("$root/$s1/$s2/root.php")) {
+					include("$root/$s1/$s2/root.php");
+					die();
+				}
+			}
+		}
 		if (fs_is_file("$root/$s1/$s2.php")) {
 			include("$root/$s1/$s2.php");
 			die();
@@ -103,27 +124,6 @@ if (fs_is_dir("$root/$s1")) {
 		}
 		if (fs_is_file("$root/$s1/root.php")) {
 			include("$root/$s1/root.php");
-			die();
-		}
-	}
-}
-if (fs_is_dir("$root/$s1/$s2")) {
-	if ($s3 === "") {
-		if (fs_is_file("$root/$s1/$s2/index.php")) {
-			include("$root/$s1/$s2/index.php");
-			die();
-		}
-	} else {
-		if (fs_is_file("$root/$s1/$s2/$s3.php")) {
-			include("$root/$s1/$s2/$s3.php");
-			die();
-		}
-		if ($s4 !== "" && fs_is_file("$root/$s1/$s2/$s4.php")) {
-			include("$root/$s1/$s2/$s4.php");
-			die();
-		}
-		if (fs_is_file("$root/$s1/$s2/root.php")) {
-			include("$root/$s1/$s2/root.php");
 			die();
 		}
 	}

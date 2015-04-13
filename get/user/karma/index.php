@@ -49,7 +49,7 @@ $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("select count(*) as item_count from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0", $items_per_page, $zid);
 
 print_header("Karma");
-print_left_bar("user", "karma");
+print_user_nav("karma");
 beg_main("cell");
 
 writeln('<h1>Karma</h1>');

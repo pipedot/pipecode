@@ -26,7 +26,7 @@ if ($auth_zid === $zid) {
 } else {
 	print_header("Journal");
 }
-print_left_bar("user", "journal");
+print_user_nav("journal");
 beg_main("cell");
 
 $items_per_page = 20;

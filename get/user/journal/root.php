@@ -32,7 +32,7 @@ if ($auth_zid === $zid) {
 } else {
 	print_header("Journal");
 }
-print_left_bar("user", "journal");
+print_user_nav("journal");
 beg_main("cell");
 
 print_journal($journal["journal_id"]);

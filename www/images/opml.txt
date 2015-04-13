@@ -1,0 +1,7 @@
+designer: OPML Icon Project
+icon-pack: OPML Icon
+website: http://www.opmlicons.com/
+license: Creative Commons Attribution-ShareAlike 3.0 Unported
+free: 1
+commercial: 1
+trademark: 0

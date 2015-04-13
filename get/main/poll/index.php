@@ -18,8 +18,7 @@
 //
 
 print_header("Polls");
-
-print_left_bar("main", "poll");
+print_main_nav("poll");
 beg_main("cell");
 
 writeln('<h1>Polls</h1>');

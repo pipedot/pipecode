@@ -20,8 +20,7 @@
 include("feed.php");
 
 print_header();
-
-print_left_bar("main", "feed");
+print_main_nav("feed");
 beg_main("cell");
 
 $zid = "bryan@$server_name";

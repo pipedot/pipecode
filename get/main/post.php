@@ -33,8 +33,7 @@ $item = item_request();
 //$root_id = http_get_string("root_id", array("required" => false, "valid" => "[a-z][0-9]_"));
 
 print_header("Post Comment");
-
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 
 //if ($comment_id != "") {

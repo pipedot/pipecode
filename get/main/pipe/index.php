@@ -20,8 +20,7 @@
 include("pipe.php");
 
 print_header("Pipe");
-
-print_left_bar("main", "pipe");
+print_main_nav("pipe");
 beg_main("cell");
 
 writeln('<h1>Stories in the Pipe</h1>');

@@ -47,8 +47,7 @@ if ($needle != "") {
 	}
 
 	print_header("$needle - Search");
-
-	print_left_bar("main", "search");
+	print_main_nav("search");
 
 	beg_main("search");
 	search_box($needle, $haystack);
@@ -105,7 +104,7 @@ if ($needle != "") {
 }
 
 print_header("Search");
-print_left_bar("main", "search");
+print_main_nav("search");
 beg_main("search");
 search_box();
 end_main();

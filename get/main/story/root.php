@@ -30,7 +30,7 @@ if (string_has($s2, "-") && $s3 === "") {
 	$time_end = $time_beg + 86400;
 
 	print_header();
-	print_left_bar("main", "stories");
+	print_main_nav("stories");
 	beg_main("cell");
 
 	$row = sql("select story_id from story where publish_time > ? and publish_time < ? order by publish_time desc", $time_beg, $time_end);
@@ -69,7 +69,7 @@ if (string_has($s2, "-") && $s3 === "") {
 	$meta .= "<link rel=\"image_src\" href=\"http://$server_name$image_path\" type=\"$image_type\"/>\n";
 
 	print_header($story["title"]);
-	print_left_bar("main", "stories");
+	print_main_nav("stories");
 	beg_main("cell");
 
 	print_story($story);

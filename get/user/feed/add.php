@@ -29,7 +29,7 @@ if ($col < 0 || $col > 2) {
 }
 
 print_header();
-print_left_bar("user", "feed");
+print_user_nav("feed");
 beg_main("cell");
 beg_form();
 

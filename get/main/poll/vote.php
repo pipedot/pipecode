@@ -28,7 +28,7 @@ $poll = item_request("poll");
 //$type_id = $poll["type_id"];
 
 print_header("Poll");
-print_left_bar("main", "poll");
+print_main_nav("poll");
 beg_main("cell");
 
 vote_box($poll["poll_id"], true);

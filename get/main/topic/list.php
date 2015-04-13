@@ -22,8 +22,6 @@ if (!$auth_user["admin"]) {
 }
 
 print_header("Topics");
-//print_left_bar("main", "topics");
-//beg_main("cell");
 beg_main();
 
 writeln('<h1>Topics</h1>');
@@ -32,22 +30,9 @@ $list = db_get_list("topic", "topic");
 $k = array_keys($list);
 for ($i = 0; $i < count($list); $i++) {
 	$topic = $list[$k[$i]];
-	//writeln('<a href="/topic/' . $topic["slug"] . '"><div class="topic-box ' . $topic["icon"] . '-64">' . $topic["topic"] . '</div></a>');
 	writeln('<a class="topic-box ' . $topic["icon"] . '-64" href="/topic/' . $topic["slug"] . '/edit">' . $topic["topic"] . '</a>');
 }
 
-/*
-$list = db_get_list("topic", "topic");
-$k = array_keys($list);
-beg_tab();
-for ($i = 0; $i < count($list); $i++) {
-	$topic = $list[$k[$i]];
-	writeln('	<tr>');
-	writeln('		<td><a class="icon-64 ' . $topic["icon"] . '-64" href="' . $topic["topic"] . '/edit">' . $topic["topic"] . '</a></td><td class="right"><a class="icon-16 minus-16" href="">Remove</a></td>');
-	writeln('	</tr>');
-}
-end_tab();
-*/
 box_left('<a class="icon-16 plus-16" href="edit">Add</a>');
 
 end_main();

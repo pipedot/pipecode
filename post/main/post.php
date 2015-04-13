@@ -59,8 +59,7 @@ if (http_post("preview")) {
 	$zid = $auth_zid;
 
 	print_header("Post Comment");
-
-	print_left_bar("main", "stories");
+	print_main_nav("stories");
 	beg_main("cell");
 
 	writeln('<h1>Preview</h1>');
@@ -84,10 +83,17 @@ if ($auth_zid === "" || $zid === "") {
 	}
 }
 
+if ($translate_enabled) {
+	$lang = lang_detect($clean_body);
+} else {
+	$lang = "en";
+}
+
 $comment = db_new_rec("comment");
 $comment["comment_id"] = create_short("comment");
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
+$comment["lang"] = $lang;
 $comment["parent_id"] = $parent_id;
 $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;

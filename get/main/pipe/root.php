@@ -41,7 +41,7 @@ if ($pipe["reason"] == "") {
 }
 
 print_header($pipe["title"]);
-print_left_bar("main", "pipe");
+print_main_nav("pipe");
 beg_main("cell");
 
 print_pipe($pipe["pipe_id"]);

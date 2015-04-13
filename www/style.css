@@ -1754,7 +1754,7 @@ del {
 	.logo-small {
 		display: inline-block;
 	}
-	nav {
+	nav.sections {
 		border-top: 1px solid #d3d3d3;
 		border-bottom: 1px solid #d3d3d3;
 		font-weight: bolder;
@@ -1765,12 +1765,12 @@ del {
 		padding-top: 8px;
 		text-align: center;
 	}
-	nav a {
+	nav.sections a {
 		display: inline-block;
 		padding: 4px;
 		width: 6rem;
 	}
-	nav a.active {
+	nav.sections a.active {
 		background-color: #d3d3d3;
 		border: 1px solid #888888;
 		border-top-left-radius: 12px;
@@ -1782,6 +1782,16 @@ del {
 		display: inline-block;
 		padding: 4px;
 		width: 6rem;
+	}
+	nav.reader {
+		border-top: 1px solid #d3d3d3;
+		border-bottom: 1px solid #d3d3d3;
+		margin-bottom: 8px;
+		padding-bottom: 8px;
+		padding-left: 8px;
+		padding-right: 8px;
+		padding-top: 8px;
+		text-align: center;
 	}
 	.topics {
 		display: none;
@@ -1828,7 +1838,7 @@ del {
 	.logo-small {
 		display: none;
 	}
-	nav {
+	nav.sections {
 		display: table-cell;
 		font-weight: bolder;
 		padding-bottom: 8px;
@@ -1838,13 +1848,13 @@ del {
 		width: 92px;
 		vertical-align: top;
 	}
-	nav a {
+	nav.sections a {
 		display: block;
 		padding: 4px;
 		xwidth: 80px;
 		width: 8rem;
 	}
-	nav a.active {
+	nav.sections a.active {
 		background-color: #d3d3d3;
 		border: 1px solid #888888;
 		border-top-left-radius: 2px;
@@ -1856,6 +1866,17 @@ del {
 		display: block;
 		padding: 4px;
 		width: 8rem;
+	}
+	nav.reader {
+		display: table-cell;
+		padding-bottom: 8px;
+		padding-left: 8px;
+		padding-right: 0px;
+		padding-top: 0px;
+		vertical-align: top;
+	}
+	nav.reader a {
+		white-space: nowrap;
 	}
 	aside {
 		display: table-cell;
@@ -2282,8 +2303,20 @@ del {
 .apple-64 {
 	background-image: url(/images/apple-64.png);
 }
+.beakers-16 {
+	background-image: url(/images/beakers-16.png);
+}
+.beakers-32 {
+	background-image: url(/images/beakers-32.png);
+}
 .beakers-64 {
 	background-image: url(/images/beakers-64.png);
+}
+.binder-16 {
+	background-image: url(/images/binder-16.png);
+}
+.binder-32 {
+	background-image: url(/images/binder-32.png);
 }
 .binder-64 {
 	background-image: url(/images/binder-64.png);
@@ -2296,6 +2329,15 @@ del {
 }
 .certificate-16 {
 	background-image: url(/images/certificate-16.png);
+}
+.chalkboard-16 {
+	background-image: url(/images/chalkboard-16.png);
+}
+.chalkboard-32 {
+	background-image: url(/images/chalkboard-32.png);
+}
+.chalkboard-64 {
+	background-image: url(/images/chalkboard-64.png);
 }
 .chat-16 {
 	background-image: url(/images/chat-16.png);
@@ -2317,6 +2359,9 @@ del {
 }
 .coins-32 {
 	background-image: url(/images/coins-32.png);
+}
+.coins-64 {
+	background-image: url(/images/coins-64.png);
 }
 .computers-64 {
 	background-image: url(/images/computers-64.png);
@@ -2372,11 +2417,29 @@ del {
 .folder-new-16 {
 	background-image: url(/images/folder-new-16.png);
 }
+.gavel-16 {
+	background-image: url(/images/gavel-16.png);
+}
+.gavel-32 {
+	background-image: url(/images/gavel-32.png);
+}
 .gavel-64 {
 	background-image: url(/images/gavel-64.png);
 }
+.gear-16 {
+	background-image: url(/images/gear-16.png);
+}
+.gear-32 {
+	background-image: url(/images/gear-32.png);
+}
+.gear-64 {
+	background-image: url(/images/gear-64.png);
+}
 .globe-16 {
 	background-image: url(/images/globe-16.png);
+}
+.globe-32 {
+	background-image: url(/images/globe-32.png);
 }
 .globe-64 {
 	background-image: url(/images/globe-64.png);
@@ -2392,6 +2455,9 @@ del {
 }
 .home-16 {
 	background-image: url(/images/home-16.png);
+}
+.home-32 {
+	background-image: url(/images/home-32.png);
 }
 .html-32 {
 	background-image: url(/images/html-32.png);
@@ -2450,6 +2516,12 @@ del {
 .moon-64 {
 	background-image: url(/images/moon-64.png);
 }
+.movies-16 {
+	background-image: url(/images/movies-16.png);
+}
+.movies-32 {
+	background-image: url(/images/movies-32.png);
+}
 .movies-64 {
 	background-image: url(/images/movies-64.png);
 }
@@ -2468,6 +2540,15 @@ del {
 .notepad-32 {
 	background-image: url(/images/notepad-32.png);
 }
+.opml-16 {
+	background-image: url(/images/opml-16.png);
+}
+.opml-32 {
+	background-image: url(/images/opml-32.png);
+}
+.opml-64 {
+	background-image: url(/images/opml-64.png);
+}
 .package-16 {
 	background-image: url(/images/package-16.png);
 }
@@ -2485,6 +2566,12 @@ del {
 }
 .plus-32 {
 	background-image: url(/images/plus-32.png);
+}
+.reader-16 {
+	background-image: url(/images/reader-16.png);
+}
+.reader-32 {
+	background-image: url(/images/reader-32.png);
 }
 .robot-desktop-64 {
 	background-image: url(/images/robot-desktop-64.png);
@@ -2522,6 +2609,12 @@ del {
 .tux-64 {
 	background-image: url(/images/tux-64.png);
 }
+.ubunchu-16 {
+	background-image: url(/images/ubunchu-16.png);
+}
+.ubunchu-32 {
+	background-image: url(/images/ubunchu-32.png);
+}
 .ubunchu-64 {
 	background-image: url(/images/ubunchu-64.png);
 }
@@ -2540,6 +2633,9 @@ del {
 .users-32 {
 	background-image: url(/images/users-32.png);
 }
+.users-64 {
+	background-image: url(/images/users-64.png);
+}
 .vsort-16 {
 	background-image: url(/images/vsort-16.png);
 }
@@ -2556,8 +2652,20 @@ del {
 	.apple-64 {
 		background-image: url(/images/apple-128.png);
 	}
+	.beakers-16 {
+		background-image: url(/images/beakers-32.png);
+	}
+	.beakers-32 {
+		background-image: url(/images/beakers-64.png);
+	}
 	.beakers-64 {
 		background-image: url(/images/beakers-128.png);
+	}
+	.binder-16 {
+		background-image: url(/images/binder-32.png);
+	}
+	.binder-32 {
+		background-image: url(/images/binder-64.png);
 	}
 	.binder-64 {
 		background-image: url(/images/binder-128.png);
@@ -2570,6 +2678,15 @@ del {
 	}
 	.certificate-16 {
 		background-image: url(/images/certificate-32.png);
+	}
+	.chalkboard-16 {
+		background-image: url(/images/chalkboard-32.png);
+	}
+	.chalkboard-32 {
+		background-image: url(/images/chalkboard-64.png);
+	}
+	.chalkboard-64 {
+		background-image: url(/images/chalkboard-128.png);
 	}
 	.chat-16 {
 		background-image: url(/images/chat-32.png);
@@ -2591,6 +2708,9 @@ del {
 	}
 	.coins-32 {
 		background-image: url(/images/coins-64.png);
+	}
+	.coins-64 {
+		background-image: url(/images/coins-128.png);
 	}
 	.computers-64 {
 		background-image: url(/images/computers-128.png);
@@ -2649,11 +2769,29 @@ del {
 	.folder-new-16 {
 		background-image: url(/images/folder-new-32.png);
 	}
+	.gavel-16 {
+		background-image: url(/images/gavel-32.png);
+	}
+	.gavel-32 {
+		background-image: url(/images/gavel-64.png);
+	}
 	.gavel-64 {
 		background-image: url(/images/gavel-128.png);
 	}
+	.gear-16 {
+		background-image: url(/images/gear-32.png);
+	}
+	.gear-32 {
+		background-image: url(/images/gear-64.png);
+	}
+	.gear-64 {
+		background-image: url(/images/gear-128.png);
+	}
 	.globe-16 {
 		background-image: url(/images/globe-32.png);
+	}
+	.globe-32 {
+		background-image: url(/images/globe-64.png);
 	}
 	.globe-64 {
 		background-image: url(/images/globe-128.png);
@@ -2669,6 +2807,9 @@ del {
 	}
 	.home-16 {
 		background-image: url(/images/home-32.png);
+	}
+	.home-32 {
+		background-image: url(/images/home-64.png);
 	}
 	.html-32 {
 		background-image: url(/images/html-64.png);
@@ -2727,6 +2868,12 @@ del {
 	.moon-64 {
 		background-image: url(/images/moon-128.png);
 	}
+	.movies-16 {
+		background-image: url(/images/movies-32.png);
+	}
+	.movies-32 {
+		background-image: url(/images/movies-64.png);
+	}
 	.movies-64 {
 		background-image: url(/images/movies-128.png);
 	}
@@ -2745,6 +2892,15 @@ del {
 	.notepad-32 {
 		background-image: url(/images/notepad-64.png);
 	}
+	.opml-16 {
+		background-image: url(/images/opml-32.png);
+	}
+	.opml-32 {
+		background-image: url(/images/opml-64.png);
+	}
+	.opml-64 {
+		background-image: url(/images/opml-128.png);
+	}
 	.package-16 {
 		background-image: url(/images/package-32.png);
 	}
@@ -2762,6 +2918,12 @@ del {
 	}
 	.plus-32 {
 		background-image: url(/images/plus-64.png);
+	}
+	.reader-16 {
+		background-image: url(/images/reader-32.png);
+	}
+	.reader-32 {
+		background-image: url(/images/reader-64.png);
 	}
 	.robot-desktop-64 {
 		background-image: url(/images/robot-desktop-128.png);
@@ -2799,6 +2961,12 @@ del {
 	.tweet-16 {
 		background-image: url(/images/tweet-32.png);
 	}
+	.ubunchu-16 {
+		background-image: url(/images/ubunchu-32.png);
+	}
+	.ubunchu-32 {
+		background-image: url(/images/ubunchu-64.png);
+	}
 	.ubunchu-64 {
 		background-image: url(/images/ubunchu-128.png);
 	}
@@ -2813,6 +2981,9 @@ del {
 	}
 	.users-32 {
 		background-image: url(/images/users-64.png);
+	}
+	.users-64 {
+		background-image: url(/images/users-128.png);
 	}
 	.usb-32 {
 		background-image: url(/images/usb-64.png);

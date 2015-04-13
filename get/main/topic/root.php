@@ -26,7 +26,7 @@ $topic = $s2;
 $topic = db_get_rec("topic", array("slug" => $topic));
 
 print_header("Topics");
-print_left_bar("main", $topic);
+print_main_nav($topic);
 beg_main("cell");
 
 $items_per_page = 10;

@@ -1,0 +1,7 @@
+designer: Loki Starb
+icon-pack: Google Reader Icons
+website: http://lopagof.deviantart.com/art/Google-reader-icon-scalable-85016383
+license: Creative Commons Attribution-Share Alike 3.0
+free: 1
+commercial: 1
+trademark: 0

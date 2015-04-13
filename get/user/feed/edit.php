@@ -22,7 +22,7 @@ if ($zid !== $auth_zid) {
 }
 
 print_header();
-print_left_bar("user", "feed");
+print_user_nav("feed");
 beg_main("cell");
 
 writeln('<table class="fill">');

@@ -32,9 +32,9 @@ if ($topic == "") {
 }
 
 if ($topic == "") {
-	print_left_bar("user", "topics");
+	print_user_nav("topics");
 } else {
-	print_left_bar("user", $topic);
+	print_user_nav($topic);
 }
 
 beg_main("cell");

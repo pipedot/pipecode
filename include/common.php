@@ -33,6 +33,7 @@ $now = time();
 $year = gmdate("Y");
 
 include("sql.php");
+include("lang.php");
 
 $reasons["Normal"] = 0;
 $reasons["Offtopic"] = -1;
@@ -48,7 +49,7 @@ $reasons["Underrated"] = 1;
 $reasons["Spam"] = -1;
 
 
-function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array(), $logo = "")
+function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array())
 {
 	global $request_script;
 	global $auth_zid;
@@ -84,11 +85,8 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	writeln('<meta name="viewport" content="width=device-width, initial-scale=1"/>');
 	print $meta;
 	writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon"/>');
-	//$theme = $server_conf["theme"];
 	writeln('<link rel="stylesheet" href="/style.css?t=' . fs_time("$doc_root/www/style.css") . '"/>');
-	//writeln('<link rel="stylesheet" href="/theme/text.css?t=' . fs_time("$doc_root/www/theme/text.css") . '"/>');
 	if ($auth_user["large_text_enabled"]) {
-		//die("[" . $user_conf["large_text_enabled"] . "]");
 		writeln('<style>');
 		writeln('html { font-size: 80%; }');
 		writeln('</style>');
@@ -178,52 +176,84 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 }
 
 
-function print_left_bar($type = "main", $selected = "stories")
+function print_main_nav($selected)
 {
 	global $auth_zid;
 	global $auth_user;
 	global $server_name;
 	global $zid;
 
-	if ($type === "main") {
-		if ($auth_zid === "") {
-			$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
-			$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "feed/", "stream/");
-		} else {
-			$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
-			$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "stream/");
-		}
-	} else if ($type === "user") {
-		if ($auth_zid === $zid) {
-			$section_name = array("overview", "journal", "topics", "stream", "comments", "feed", "karma");
-			$section_link = array("", "journal/", "topic", "stream/", "comments", "feed/", "karma/");
-		} else {
-			//$section_name = array("blog", "feed", "submissions", "comments", "achievements");
-			//$section_link = array("blog", "feed", "submissions", "comments", "achievements");
-			$section_name = array("overview", "journal", "stream", "comments", "feed", "karma");
-			$section_link = array("", "journal/", "stream/", "comments", "feed/", "karma/");
-		}
+	if ($auth_zid === "") {
+		$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
+		$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "feed/", "stream/");
+	} else {
+		//$section_name = array("stories", "pipe", "poll", "search", "topics", "reader", "stream");
+		//$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "reader/", "stream/");
+		$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
+		$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "stream/");
 	}
 
-	writeln('<nav>');
+	writeln('<nav class="sections">');
+
 	for ($i = 0; $i < count($section_name); $i++) {
 		$link = "/" . $section_link[$i];
 		if ($selected == $section_name[$i]) {
-			//writeln('	<a class="nav-active" href="' . $link . '">' . $section_name[$i] . '</a>');
 			writeln('	<a class="active" href="' . $link . '">' . $section_name[$i] . '</a>');
 		} else {
-			//writeln('	<a class="nav-inactive" href="' . $link . '">' . $section_name[$i] . '</a>');
 			writeln('	<a href="' . $link . '">' . $section_name[$i] . '</a>');
 		}
 	}
 
-	if ($type == "main") {
+	writeln('	<div class="topics">');
+	writeln('	<hr/>');
+	$list = db_get_list("topic", "topic", array("promoted" => 1));
+	$keys = array_keys($list);
+	for ($i = 0; $i < count($keys); $i++) {
+		$topic = $list[$keys[$i]]["topic"];
+		if ($topic == $selected) {
+			writeln('	<a class="active" href="/topic/' . $topic . '">' . $topic . '</a>');
+		} else {
+			writeln('	<a href="/topic/' . $topic . '">' . $topic . '</a>');
+		}
+	}
+	writeln('	</div>');
+
+	writeln('</nav>');
+}
+
+
+function print_user_nav($selected)
+{
+	global $auth_zid;
+	global $auth_user;
+	global $server_name;
+	global $zid;
+
+	if ($auth_zid === $zid) {
+		$section_name = array("overview", "karma", "comments", "journal", "topics", "feed", "reader", "stream");
+		$section_link = array("", "karma/", "comments", "journal/", "topic", "feed/", "reader/", "stream/");
+	} else {
+		$section_name = array("overview", "journal", "stream", "comments", "feed", "karma");
+		$section_link = array("", "journal/", "stream/", "comments", "feed/", "karma/");
+	}
+
+	writeln('<nav class="sections">');
+
+	for ($i = 0; $i < count($section_name); $i++) {
+		$link = "/" . $section_link[$i];
+		if ($selected == $section_name[$i]) {
+			writeln('	<a class="active" href="' . $link . '">' . $section_name[$i] . '</a>');
+		} else {
+			writeln('	<a href="' . $link . '">' . $section_name[$i] . '</a>');
+		}
+	}
+
+	$row = sql("select distinct topic from journal where zid = ? order by topic", $zid);
+	if (count($row) > 0) {
 		writeln('	<div class="topics">');
 		writeln('	<hr/>');
-		$list = db_get_list("topic", "topic", array("promoted" => 1));
-		$keys = array_keys($list);
-		for ($i = 0; $i < count($keys); $i++) {
-			$topic = $list[$keys[$i]]["topic"];
+		for ($i = 0; $i < count($row); $i++) {
+			$topic = $row[$i]["topic"];
 			if ($topic == $selected) {
 				writeln('	<a class="active" href="/topic/' . $topic . '">' . $topic . '</a>');
 			} else {
@@ -231,22 +261,8 @@ function print_left_bar($type = "main", $selected = "stories")
 			}
 		}
 		writeln('	</div>');
-	} else if ($type == "user") {
-		$row = sql("select distinct topic from journal where zid = ? order by topic", $zid);
-		if (count($row) > 0) {
-			writeln('	<div class="topics">');
-			writeln('	<hr/>');
-			for ($i = 0; $i < count($row); $i++) {
-				$topic = $row[$i]["topic"];
-				if ($topic == $selected) {
-					writeln('	<a class="active" href="/topic/' . $topic . '">' . $topic . '</a>');
-				} else {
-					writeln('	<a href="/topic/' . $topic . '">' . $topic . '</a>');
-				}
-			}
-			writeln('	</div>');
-		}
 	}
+
 	writeln('</nav>');
 }
 
@@ -281,14 +297,15 @@ function print_user_box()
 //	writeln('	</tr>');
 //	writeln('	<tr>');
 //	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'comments"><div class="user-box-icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
+//	writeln('		<td><a class="icon-32 news-32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user-box-icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
 //	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td><a class="icon-32 mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
 	writeln('		<td><a class="icon-32 tools-32" href="' . $link . 'profile/">Settings</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'stream/"><div class="internet-32">Stream</div></a></td>');
-//	writeln('		<td><a class="icon-32 news-32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user-box-icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
+//	writeln('		<td><a class="icon-32 reader-32" href="' . $link . 'reader/">Reader</a></td>');
+//	writeln('		<td><a class="icon-32 internet-32" href="' . $link . 'stream/">Stream</a></td>');
 //	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
@@ -943,6 +960,69 @@ function public_path($time)
 function format_money($cents)
 {
 	return number_format((int) $cents / 100, 2);
+}
+
+
+function icon_list($require_16, $require_32, $require_64)
+{
+	global $doc_root;
+
+	$data = fs_slurp("$doc_root/www/style.css");
+	$icons = [];
+
+	if ($require_16) {
+		preg_match_all("/\.([a-z-]+)-16 {/", $data, $out);
+		for ($i = 0; $i < count($out[1]); $i++) {
+			$icon = $out[1][$i];
+			if ($icon != "icon") {
+				$icons[$icon]["16"] = true;
+			}
+		}
+	}
+	if ($require_32) {
+		preg_match_all("/\.([a-z-]+)-32 {/", $data, $out);
+		for ($i = 0; $i < count($out[1]); $i++) {
+			$icon = $out[1][$i];
+			if ($icon != "icon") {
+				$icons[$icon]["32"] = true;
+			}
+		}
+	}
+	if ($require_64) {
+		preg_match_all("/\.([a-z-]+)-64 {/", $data, $out);
+		for ($i = 0; $i < count($out[1]); $i++) {
+			$icon = $out[1][$i];
+			if ($icon != "icon") {
+				$icons[$icon]["64"] = true;
+			}
+		}
+	}
+
+	$a = [];
+	$k = array_keys($icons);
+	for ($i = 0; $i < count($icons); $i++) {
+		$icon = $k[$i];
+		if ($require_16) {
+			$has_16 = array_key_exists("16", $icons[$icon]);
+		} else {
+			$has_16 = true;
+		}
+		if ($require_32) {
+			$has_32 = array_key_exists("32", $icons[$icon]);
+		} else {
+			$has_32 = true;
+		}
+		if ($require_64) {
+			$has_64 = array_key_exists("64", $icons[$icon]);
+		} else {
+			$has_64 = true;
+		}
+		if ($has_16 && $has_32 && $has_64) {
+			$a[] = $icon;
+		}
+	}
+
+	return $a;
 }
 
 

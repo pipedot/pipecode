@@ -47,7 +47,7 @@ if (http_post("confirm")) {
 }
 
 print_header("Confirm Donation");
-print_left_bar("main", "stories");
+print_main_nav("stories");
 beg_main("cell");
 beg_form();
 

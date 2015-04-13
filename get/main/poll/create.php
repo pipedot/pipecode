@@ -22,8 +22,7 @@ if (!$auth_user["admin"]) {
 }
 
 print_header("Create Poll");
-
-print_left_bar("main", "poll");
+print_main_nav("poll");
 beg_main("cell");
 
 writeln('<h1>Create Poll</h1>');

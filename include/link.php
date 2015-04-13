@@ -82,7 +82,7 @@ function item_user_based($type)
 
 function item_slug_based($type)
 {
-	return in_array($type, ["feed", "journal", "poll", "story"]);
+	return in_array($type, ["feed", "journal", "poll", "reader", "story"]);
 }
 
 
@@ -90,6 +90,7 @@ function item_request($type = "")
 {
 	global $s2;
 	global $s3;
+	global $auth_zid;
 
 	if (item_date_based($type) && string_uses($s2, "[0-9]-") && string_uses($s3, "[a-z][0-9]-") && string_has($s2, "-")) {
 		$date = $s2;
@@ -122,6 +123,15 @@ function item_request($type = "")
 		} else if (string_uses($s2, "[a-z][0-9]-")) {
 			$slug = $s2;
 			$feed = db_find_rec("feed", array("slug" => $slug));
+			//if ($feed === false) {
+			//	$feed = db_find_rec("feed_topic", ["slug" => $slug]);
+			//	if ($feed === false) {
+			//		die("unknown feed [$slug]");
+			//	}
+			//	$feed["short_type"] = "feed_topic";
+			//} else {
+			//	$feed["short_type"] = "feed";
+			//}
 		} else {
 			die("invalid request [$s2]");
 		}
@@ -130,6 +140,34 @@ function item_request($type = "")
 		}
 
 		return $feed;
+	} else if ($type == "reader") {
+		if (!string_uses($s2, "[a-z][0-9]-")) {
+			die("invalid slug [$s2]");
+		}
+		if ($auth_zid === "") {
+			die("please sign in");
+		}
+		$slug = $s2;
+		$reader_user = db_find_rec("reader_user", ["zid" => $auth_zid, "slug" => $slug]);
+		if ($reader_user === false) {
+			die("unknown feed [$slug]");
+		}
+
+		return $reader_user;
+	} else if ($type == "reader_topic") {
+		if (!string_uses($s2, "[a-z][0-9]-")) {
+			die("invalid slug [$s2]");
+		}
+		if ($auth_zid === "") {
+			die("please sign in");
+		}
+		$slug = $s3;
+		$reader_topic = db_find_rec("reader_topic", ["zid" => $auth_zid, "slug" => $slug]);
+		if ($reader_topic === false) {
+			die("unknown topic [$slug]");
+		}
+
+		return $reader_topic;
 	} else if ($type == "article" || $type == "thumb") {
 		$short_code = $s2;
 		if (!string_uses($short_code, "[A-Z][a-z][0-9]")) {

@@ -25,7 +25,7 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 	$topic = $topic["topic"];
 
 	print_header("Publish Submission");
-	print_left_bar("main", "pipe");
+	print_main_nav("pipe");
 	beg_main("cell");
 	beg_form();
 
