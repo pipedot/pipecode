@@ -26,14 +26,15 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
+$journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);
 $clean_body = $journal["body"];
 $dirty_body = dirty_html($clean_body);
 if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
-	$dirty_body = str_replace("\n", "<br/>", $dirty_body);
+	$dirty_body = str_replace("\n", "<br>", $dirty_body);
 }
 
-print_header("Edit");
+print_header("Edit", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"], "Edit"], ["/journal/", $journal_link, "/journal/" . $journal["short_code"] . "/edit"]);
 beg_main();
 beg_form();
 
@@ -46,7 +47,7 @@ print_row(array("caption" => "Topic", "text_key" => "topic", "text_value" => $jo
 //print_row(array("caption" => "Body", "textarea_key" => "body", "textarea_height" => "400"));
 end_tab();
 
-writeln('<div style="margin-bottom: 8px">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px">' . $dirty_body . '</textarea>');
 writeln('</div>');
 

@@ -21,8 +21,8 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$feed = item_request("reader");
+$feed = item_request(TYPE_READER);
 
 db_del_rec("reader_user", ["zid" => $auth_zid, "feed_id" => $feed["feed_id"]]);
 
-header("Location: /reader/edit");
+header("Location: /reader/");

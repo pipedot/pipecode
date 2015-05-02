@@ -25,7 +25,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$pipe = item_request("pipe");
+$pipe = item_request(TYPE_PIPE);
 $zid = $pipe["author_zid"];
 
 $title = clean_subject();

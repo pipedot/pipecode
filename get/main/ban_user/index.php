@@ -23,7 +23,7 @@ beg_main();
 writeln('<h1>Banned Users</h1>');
 
 $items_per_page = 50;
-list($item_start, $page_footer) = page_footer("ban_ip", $items_per_page);
+list($item_start, $page_footer) = page_footer("ban_user", $items_per_page);
 
 $row = sql("select zid, short_id, time, editor_zid from ban_user order by time desc limit $item_start, $items_per_page");
 

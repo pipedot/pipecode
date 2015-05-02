@@ -20,7 +20,7 @@
 include("stream.php");
 include("diff.php");
 
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 
 print_header("Card History");
 beg_main();

@@ -27,7 +27,7 @@ $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 0));
 
 $row = sql("select bug_id, author_zid, body, priority, publish_time, title from bug where closed = 0 order by publish_time desc limit $item_start, $items_per_page");
-$comments = count_comments("bug", $row[$i]["bug_id"]);
+$comments = count_comments(TYPE_BUG, $row[$i]["bug_id"]);
 beg_tab();
 for ($i = 0; $i < count($row); $i++) {
 	$author_zid = user_link($row[$i]["author_zid"], ["tag" => true]);

@@ -21,7 +21,7 @@ include("render.php");
 
 header_text();
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
 $can_moderate = true;
 render_page("journal", $journal["journal_id"], true);
 

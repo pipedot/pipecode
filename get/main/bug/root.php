@@ -23,7 +23,7 @@ include("bug.php");
 include("drive.php");
 
 if (string_uses($s2, "[A-Z][0-9]")) {
-	$bug = item_request("bug");
+	$bug = item_request(TYPE_BUG);
 
 	print_header("Bug", array("Report"), array("ladybug"), array("/bug/report"));
 	beg_main();
@@ -54,7 +54,7 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 		for ($i = 0; $i < count($row); $i++) {
 			$bug_file_short_code = crypt_crockford_encode($row[$i]["bug_id"]);
 			$path = public_path($row[$i]["time"]) . "/bug_file_" . $bug_file_short_code . "_256x256.jpg";
-			writeln('	<a href="/pub/bug/' . $bug_file_short_code . '.' . $row[$i]["type"] . '"><img alt="screenshot" src="' . $path . '"/></a>');
+			writeln('	<a href="/pub/bug/' . $bug_file_short_code . '.' . $row[$i]["type"] . '"><img alt="screenshot" src="' . $path . '"></a>');
 		}
 		writeln('</div>');
 	}
@@ -79,7 +79,7 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 	writeln('</aside>');
 	writeln('</div>');
 
-	print_comments("bug", $bug);
+	print_comments(TYPE_BUG, $bug);
 } else if (string_uses($s2, "[a-z][0-9]-")) {
 	$bug_label = db_get_rec("bug_label", array("label_tag" => $s2));
 

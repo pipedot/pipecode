@@ -19,18 +19,11 @@
 
 include("render.php");
 
-//$comment_id = $s2;
-//if (!string_uses($comment_id, "[a-z][0-9]_")) {
-//	die("invalid comment_id [$comment_id]");
-//}
 if ($auth_zid === "") {
 	die("error: sign in to moderate");
 }
 
-$comment = item_request("comment");
-//if (!db_has_rec("comment", $comment_id)) {
-//	die("error: comment not found [$comment_id]");
-//}
+$comment = item_request(TYPE_COMMENT);
 
 if (db_has_rec("comment_vote", array("comment_id" => $comment["comment_id"], "zid" => $auth_zid))) {
 	db_del_rec("comment_vote", array("comment_id" => $comment["comment_id"], "zid" => $auth_zid));

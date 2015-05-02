@@ -27,7 +27,7 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	beg_main("cell");
 
 	if ($preview) {
-		$a["type"] = "story";
+		$a["type_id"] = TYPE_STORY;
 		$a["zid"] = $auth_zid;
 		$topic = db_get_rec("topic", $tid);
 		$a["title"] = $title;
@@ -46,7 +46,7 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	writeln('<table class="fill" style="padding: 0px">');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px">Title</td>');
-	writeln('		<td colspan="2"><input name="title" type="text" value="' . $title . '" required="required"/></td>');
+	writeln('		<td colspan="2"><input name="title" type="text" value="' . $title . '" required></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px">Topic</td>');
@@ -67,16 +67,16 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Story</td>');
-	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required="required">' . $dirty_body . '</textarea></td>');
+	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required>' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid === "") {
 		$question = captcha_challenge();
 		writeln('		<td>Captcha</td>');
-		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"/></td></tr></table></td>');
-		writeln('		<td class="right"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
+		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"></td></tr></table></td>');
+		writeln('		<td class="right"><input type="submit" value="Submit"> <input name="preview" type="submit" value="Preview"></td>');
 	} else {
-		writeln('		<td colspan="3" class="right"><input type="submit" value="Submit"/> <input name="preview" type="submit" value="Preview"/></td>');
+		writeln('		<td colspan="3" class="right"><input type="submit" value="Submit"> <input name="preview" type="submit" value="Preview"></td>');
 	}
 	writeln('	</tr>');
 	writeln('</table>');

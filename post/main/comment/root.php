@@ -21,7 +21,7 @@ if (!$auth_user["admin"] && !$auth_user["editor"]) {
 	die("not an editor or admin");
 }
 
-$comment = item_request("comment");
+$comment = item_request(TYPE_COMMENT);
 if ($_POST["junk"] == "not-junk") {
 	$comment["junk_status"] = -1;
 } else if ($_POST["junk"] == "spam") {

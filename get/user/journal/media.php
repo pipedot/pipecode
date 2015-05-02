@@ -21,20 +21,22 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
+$journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);
 
-print_header("Media");
+print_header("Media", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"], "Media"], ["/journal/", $journal_link, "/journal/" . $journal["short_code"] . "/media"]);
 beg_main();
 beg_form("", "file");
 
-writeln('<h1>Journal</h1>');
-if ($journal["published"]) {
-	writeln('<p><a class="icon-16 notepad-16" href="/journal/' . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"] . '">' . $journal["title"] . '</a></p>');
-} else {
-	writeln('<p><a class="icon-16 notepad-16" href="/journal/' . $journal["short_code"] . '">' . $journal["title"] . '</a></p>');
-}
+//writeln('<h1>Journal</h1>');
+//if ($journal["published"]) {
+//	writeln('<p><a class="icon-16 notepad-16" href="/journal/' . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"] . '">' . $journal["title"] . '</a></p>');
+//} else {
+//	writeln('<p><a class="icon-16 notepad-16" href="/journal/' . $journal["short_code"] . '">' . $journal["title"] . '</a></p>');
+//}
 
-writeln('<h2>Photos</h2>');
+//writeln('<h2>Photos</h2>');
+writeln('<h1>Photos</h1>');
 
 beg_tab();
 writeln('	<tr>');
@@ -43,7 +45,7 @@ writeln('		<th class="center">Size</th>');
 writeln('		<th class="center">Date</th>');
 writeln('		<th></th>');
 writeln('	</tr>');
-$row = sql("select photo_id, original_name, size, time from journal_photo inner join photo on journal_photo.photo_id = photo.photo_id where journal_id = ? order by original_name", $journal["journal_id"]);
+$row = sql("select journal_photo.photo_id, original_name, size, time from journal_photo inner join photo on journal_photo.photo_id = photo.photo_id where journal_id = ? order by original_name", $journal["journal_id"]);
 if (count($row) == 0) {
 	writeln('	<tr>');
 	writeln('		<td colspan="4">(no photos)</th>');
@@ -60,7 +62,7 @@ for ($i = 0; $i < count($row); $i++) {
 }
 end_tab();
 
-box_two('<input name="upload" type="file"/>', "Upload");
+box_two('<input name="upload" type="file">', "Upload");
 
 end_form();
 end_main();

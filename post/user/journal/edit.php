@@ -23,7 +23,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
 $title = clean_subject();
 $topic = clean_topic();
 list($clean_body, $dirty_body) = clean_body(false, "journal");

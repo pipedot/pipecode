@@ -21,13 +21,13 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$reader_topic = item_request("reader_topic");
+$topic = item_request(TYPE_READER_TOPIC);
 
-print_header("Remove Topic");
+print_header("Remove Topic", [], [], [], ["Reader", "Topic", $topic["name"], "Remove"], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"], "/reader/topic/" . $topic["slug"] . "/remove"]);
 beg_main();
 beg_form();
 writeln('<h1>Remove Topic</h1>');
-writeln('<p>Are you sure you want to remove the [<b>' . $reader_topic["name"] . '</b>] topic?</p>');
+writeln('<p>Are you sure you want to remove the [<b>' . $topic["name"] . '</b>] topic?</p>');
 
 box_left("Remove");
 

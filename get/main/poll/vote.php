@@ -19,13 +19,7 @@
 
 include("poll.php");
 
-//$poll_id = $s2;
-//if (!string_uses($poll_id, "[a-z][0-9]_")) {
-//	die("invalid poll_id [$poll_id]");
-//}
-
-$poll = item_request("poll");
-//$type_id = $poll["type_id"];
+$poll = item_request(TYPE_POLL);
 
 print_header("Poll");
 print_main_nav("poll");

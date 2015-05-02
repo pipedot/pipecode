@@ -20,21 +20,7 @@
 include("render.php");
 include("poll.php");
 
-$poll = item_request("poll");
-/*$date = $s2;
-$slug = $s3;
-$time_beg = strtotime("$date GMT");
-if ($time_beg === false) {
-	die("invalid date [$date]");
-}
-$time_end = $time_beg + 86400;
-$row = sql("select poll_id from poll where time > ? and time < ? and slug = ? order by time", $time_beg, $time_end, $slug);
-if (count($row) == 0) {
-	die("poll not found - date [$date] title [$slug]");
-}
-$poll_id = $row[0]["poll_id"];
-
-$poll = db_get_rec("poll", $poll_id);*/
+$poll = item_request(TYPE_POLL);
 $clean = clean_url($poll["question"]);
 $type_id = $poll["type_id"];
 
@@ -43,7 +29,7 @@ print_main_nav("poll");
 beg_main("cell");
 
 vote_box($poll["poll_id"], false);
-print_comments("poll", $poll);
+print_comments(TYPE_POLL, $poll);
 
 end_main();
 print_footer();

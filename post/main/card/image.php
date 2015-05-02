@@ -19,7 +19,7 @@
 
 include("image.php");
 
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 
 $tmp_image_id = http_post_int("tmp_image_id");
 

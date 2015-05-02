@@ -31,7 +31,7 @@ if ($topic_id != 0) {
 	}
 }
 
-$reader_user = item_request("reader");
+$reader_user = item_request(TYPE_READER);
 $reader_user["name"] = $name;
 $reader_user["slug"] = $slug;
 $reader_user["topic_id"] = $topic_id;

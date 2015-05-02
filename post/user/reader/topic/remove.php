@@ -21,7 +21,7 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$reader_topic = item_request("reader_topic");
+$reader_topic = item_request(TYPE_READER_TOPIC);
 
 db_del_rec("reader_topic", $reader_topic["topic_id"]);
 sql("update reader_topic set topic_id = 0 where topic_id = ?", $reader_topic["topic_id"]);

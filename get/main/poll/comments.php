@@ -21,7 +21,7 @@ include("render.php");
 
 header_text();
 
-$poll = item_request("poll");
+$poll = item_request(TYPE_POLL);
 $can_moderate = true;
 render_page("poll", $poll["poll_id"], true);
 

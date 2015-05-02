@@ -20,20 +20,20 @@
 include("render.php");
 include("diff.php");
 
-$comment = item_request("comment");
+$comment = item_request(TYPE_COMMENT);
 $comment_body = $comment["body"];
 $can_moderate = false;
 $a = article_info($comment);
-$type = $a["type"];
+$type_id = $a["type_id"];
 
 print_header($comment["subject"]);
 print_main_nav("stories");
 beg_main("cell");
 
-writeln('<h1>' . ucwords($type) . '</h1>');
-if ($type == "poll") {
+writeln('<h1>' . ucwords(item_type($type_id)) . '</h1>');
+if ($type_id == TYPE_POLL) {
 	$icon = "heart";
-} else if ($type == "journal") {
+} else if ($type_id == TYPE_JOURNAL) {
 	$icon = "notepad";
 } else {
 	$icon = "news";
@@ -111,8 +111,8 @@ if ($comment["junk_status"] == -1) {
 if ($auth_user["admin"] || $auth_user["editor"]) {
 	beg_form();
 	writeln('<p>');
-	writeln('<label><input name="junk" type="radio" value="spam"' . ($comment["junk_status"] == 1 ? ' checked="checked"' : '') . '/>Spam</label>');
-	writeln('<label><input name="junk" type="radio" value="not-junk"' . ($comment["junk_status"] != 1 ? ' checked="checked"' : '') . '/>Not Junk</label>');
+	writeln('<label><input name="junk" type="radio" value="spam"' . ($comment["junk_status"] == 1 ? ' checked' : '') . '>Spam</label>');
+	writeln('<label><input name="junk" type="radio" value="not-junk"' . ($comment["junk_status"] != 1 ? ' checked' : '') . '>Not Junk</label>');
 	writeln('</p>');
 	box_left("Save");
 	end_form();

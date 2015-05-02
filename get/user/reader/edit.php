@@ -21,7 +21,7 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$feed = item_request("reader");
+$feed = item_request(TYPE_READER);
 
 $topic_keys = [0];
 $topic_names = ["(none)"];
@@ -33,10 +33,10 @@ for ($i = 0; $i < count($list); $i++) {
 	$topic_names[] = $topic["name"];
 }
 
-print_header("Edit Feed");
+print_header("Edit Feed", [], [], [], ["Reader", $feed["name"], "Edit Feed"], ["/reader/", "/reader/" . $feed["slug"], "/reader/" . $feed["slug"] . "/edit"]);
 beg_main();
 beg_form();
-writeln('<h1>Edit Feed</h1>');
+//writeln('<h1>Edit Feed</h1>');
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name", "text_value" => $feed["name"]));

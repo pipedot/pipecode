@@ -40,7 +40,7 @@ for ($i = 0; $i < count($list); $i++) {
 }
 end_tab();
 
-writeln('<div style="margin-bottom: 8px">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px"></textarea>');
 writeln('</div>');
 

@@ -20,9 +20,9 @@ include("stream.php");
 include("image.php");
 
 if ($auth_zid === $zid) {
-	print_header("Stream", array("Share"), array("share"), array("/stream/share"));
+	print_header("Stream", ["Share"], ["share"], ["/stream/share"], ["Stream"], ["/stream/"]);
 } else {
-	print_header("Stream");
+	print_header("Stream", [], [], [], ["Stream"], ["/stream/"]);
 }
 
 beg_main("stream");

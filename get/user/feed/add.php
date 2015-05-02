@@ -60,10 +60,10 @@ writeln('		</td>');
 writeln('	</tr>');
 writeln('	<tr>');
 writeln('		<td style="width: 120px">Or add new feed:</td>');
-writeln('		<td><input name="uri" type="text" style="width: 100%"/></td>');
+writeln('		<td><input name="uri" type="text" style="width: 100%"></td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td colspan="2" class="right"><input type="submit" value="Add"/></td>');
+writeln('		<td colspan="2" class="right"><input type="submit" value="Add"></td>');
 writeln('	</tr>');
 writeln('</table>');
 

@@ -112,14 +112,12 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$k = array_keys($reasons);
 		for ($i = 0; $i < count($reasons); $i++) {
 			if ($k[$i] == $selected) {
-				//$s .= "<option value=\"$i\" selected=\"selected\">" . $reason[$i] . "</option>";
-				$s .= "<option selected=\"selected\">" . $k[$i] . "</option>";
+				$s .= "<option selected>" . $k[$i] . "</option>";
 			} else {
-				//$s .= "<option value=\"$i\">" . $reason[$i] . "</option>";
 				$s .= "<option>" . $k[$i] . "</option>";
 			}
 		}
-		$s .= "</select> <input type=\"submit\" value=\"Moderate\"/></footer>\n";
+		$s .= "</select> <input type=\"submit\" value=\"Moderate\"></footer>\n";
 	} else if ($junk) {
 		if ($query == "default=spam") {
 			$junk_default = true;
@@ -129,23 +127,23 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$s .= "<footer>\n";
 		$s .= "<div>\n";
 		if ($junk_default) {
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\" checked=\"checked\"/>Spam</label>\n";
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\"/>Not Junk</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\" checked>Spam</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\">Not Junk</label>\n";
 		} else {
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\"/>Spam</label>\n";
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\" checked=\"checked\"/>Not Junk</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\">Spam</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\" checked>Not Junk</label>\n";
 		}
 		$s .= "</div>\n";
 		$s .= "<div class=\"right\">\n";
 		if ($junk_default) {
-			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\" checked=\"checked\"/>Ban IP</label>\n";
+			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\" checked>Ban IP</label>\n";
 		} else {
-			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\"/>Ban IP</label>\n";
+			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\">Ban IP</label>\n";
 		}
 		$s .= "</div>\n";
-		//$s .= "	<label><input type=\"radio\"/>Spam</label>\n";
-		//$s .= "	<label><input type=\"radio\"/>Abuse</label>\n";
-		//$s .= "	<label><input type=\"radio\"/>Inappropriate</label>\n";
+		//$s .= "	<label><input type=\"radio\">Spam</label>\n";
+		//$s .= "	<label><input type=\"radio\">Abuse</label>\n";
+		//$s .= "	<label><input type=\"radio\">Inappropriate</label>\n";
 		$s .= "</footer>\n";
 	} else {
 		$s .= "<footer>\n";
@@ -328,7 +326,7 @@ function render_page($type, $root_id, $json)
 			}
 			$s .= "</select>";
 			writeln('						<td>' . $s . '</td>');
-			writeln('						<td><input type="submit" value="Change"/></td>');
+			writeln('						<td><input type="submit" value="Change"></td>');
 			writeln('					</tr>');
 			writeln('				</table>');
 			writeln('			</td>');
@@ -346,7 +344,7 @@ function render_page($type, $root_id, $json)
 			}
 			$s .= "</select>";
 			writeln('						<td>' . $s . '</td>');
-			writeln('						<td><input type="submit" value="Change"/></td>');
+			writeln('						<td><input type="submit" value="Change"></td>');
 			writeln('					</tr>');
 			writeln('				</table>');
 			writeln('			</td>');
@@ -380,8 +378,8 @@ function render_page($type, $root_id, $json)
 
 	if (!$json && $can_moderate) {
 		beg_form("$protocol://$server_name/moderate_noscript");
-		writeln('<input type="hidden" name="type" value="' . $type . '"/>');
-		writeln('<input type="hidden" name="root_code" value="' . $root_code . '"/>');
+		//writeln('<input type="hidden" name="type" value="' . $type . '">');
+		writeln('<input type="hidden" name="root_code" value="' . $root_code . '">');
 	}
 	for ($i = 0; $i < $total; $i++) {
 		$comment = $comments[$keys[$i]];
@@ -411,14 +409,15 @@ function render_page($type, $root_id, $json)
 }
 
 
-function print_sliders($type, $root_id)
+function print_sliders($type_id, $root_id)
 {
 	global $protocol;
 	global $server_name;
 	global $hide_value;
 	global $expand_value;
 
-	$comments = count_comments($type, $root_id);
+	$type = item_type($type_id);
+	$comments = count_comments($type_id, $root_id);
 	$rec = db_get_rec($type, $root_id);
 	$root_code = crypt_crockford_encode($root_id);
 
@@ -431,7 +430,7 @@ function print_sliders($type, $root_id)
 	writeln('				<table>');
 	writeln('					<tr>');
 	writeln('						<td>Hide</td>');
-	writeln('						<td><input id="slider_hide" name="slider_hide" type="range" value="' . $hide_value . '" min="-1" max="5" onchange="update_hide_slider()"/></td>');
+	writeln('						<td><input id="slider_hide" name="slider_hide" type="range" value="' . $hide_value . '" min="-1" max="5" onchange="update_hide_slider()"></td>');
 	writeln('						<td id="label_hide">' . $hide_value . '</td>');
 	writeln('					</tr>');
 	writeln('				</table>');
@@ -440,7 +439,7 @@ function print_sliders($type, $root_id)
 	writeln('				<table>');
 	writeln('					<tr>');
 	writeln('						<td>Expand</td>');
-	writeln('						<td><input id="slider_expand" name="slider_expand" type="range" value="' . $expand_value . '" min="-1" max="5" onchange="update_expand_slider()"/></td>');
+	writeln('						<td><input id="slider_expand" name="slider_expand" type="range" value="' . $expand_value . '" min="-1" max="5" onchange="update_expand_slider()"></td>');
 	writeln('						<td id="label_expand">' . $expand_value . '</td>');
 	writeln('					</tr>');
 	writeln('				</table>');

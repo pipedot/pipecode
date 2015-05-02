@@ -27,7 +27,7 @@ beg_form("", "file");
 
 writeln('<h1>Attach File</h1>');
 
-box_two('<input name="upload" type="file"/>', "Upload");
+box_two('<input name="upload" type="file">', "Upload");
 
 end_form();
 end_main();

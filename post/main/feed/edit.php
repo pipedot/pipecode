@@ -21,7 +21,7 @@ if (!$auth_user["admin"]) {
 	die("you are not an admin");
 }
 
-$feed = item_request("feed");
+$feed = item_request(TYPE_FEED);
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
 if (http_post("delete")) {

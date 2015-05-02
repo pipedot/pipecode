@@ -23,7 +23,7 @@ if (!$auth_user["editor"]) {
 
 $reason = http_post_string("reason", array("len" => 50, "valid" => "[a-z][A-Z][0-9]~!@#$%^*()_+-=[]\{}|;',./? "));
 
-$pipe = item_request("pipe");
+$pipe = item_request(TYPE_PIPE);
 $pipe["closed"] = 1;
 $pipe["edit_zid"] = $auth_zid;
 $pipe["reason"] = $reason;

@@ -134,11 +134,8 @@ if (string_uses($slug, "[A-Z][a-z][0-9]-_.")) {
 	if (db_has_rec("page", $slug)) {
 		$page = db_get_rec("page", $slug);
 		print_header($page["title"]);
-		//writeln('<hr/>');
 		beg_main("static");
-		//writeln('<div style="padding-top: 4px; margin-bottom: 8px;">');
 		writeln($page["body"]);
-		//writeln('</div>');
 		end_main();
 		print_footer();
 		die();
@@ -152,7 +149,6 @@ if (string_uses($slug, "[A-Z][a-z][0-9]")) {
 if (substr($slug, -1) === "+") {
 	$slug = substr($slug, 0, -1);
 	if (string_uses($slug, "[A-Z][a-z][0-9]")) {
-		//short_info($slug);
 		include("$root/short.php");
 		die();
 	}

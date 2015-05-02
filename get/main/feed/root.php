@@ -19,7 +19,7 @@
 
 include("story.php");
 
-$feed = item_request("feed");
+$feed = item_request(TYPE_FEED);
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
 print_header($feed["title"]);
@@ -117,7 +117,7 @@ for ($i = 0; $i < count($row); $i++) {
 		writeln('<article class="news-image">');
 		writeln('<table>');
 		writeln('	<tr>');
-		writeln('		<td><a href="/article/' . $short_code . '"><img src="/thumb/' . $thumb_code . '.jpg"/></a></td>');
+		writeln('		<td><a href="/article/' . $short_code . '"><img src="/thumb/' . $thumb_code . '.jpg"></a></td>');
 		writeln('		<td>');
 		writeln('			<div class="article-preview">');
 		writeln('				<div class="article-link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');

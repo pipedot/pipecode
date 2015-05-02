@@ -21,7 +21,7 @@ include("render.php");
 include("stream.php");
 include("image.php");
 
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 
 if ($auth_zid === "") {
 	print_header("Card");
@@ -32,7 +32,7 @@ beg_main();
 writeln('<h1>Card</h1>');
 
 print_card($card["card_id"], "large");
-print_comments("card", $card);
+print_comments(TYPE_CARD, $card);
 
 end_main();
 print_footer();

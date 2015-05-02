@@ -25,10 +25,9 @@ if ($auth_zid === "") {
 	die("error: sign in to reply inline");
 }
 
-$item = item_request("comment");
+$item = item_request(TYPE_COMMENT);
 $root_id = $item["root_id"];
 $parent_id = $item["comment_id"];
-$type = $item["type"];
 
 $subject = clean_subject();
 list($clean_body, $dirty_body) = clean_body();
@@ -57,7 +56,6 @@ $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
 $comment["root_id"] = $root_id;
 $comment["subject"] = $subject;
-$comment["type"] = $type;
 $comment["zid"] = $zid;
 db_set_rec("comment", $comment);
 

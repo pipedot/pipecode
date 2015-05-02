@@ -21,6 +21,6 @@ include("render.php");
 
 header_text();
 
-$pipe = item_request("pipe");
+$pipe = item_request(TYPE_PIPE);
 $can_moderate = true;
 render_page("pipe", $pipe["pipe_id"], true);

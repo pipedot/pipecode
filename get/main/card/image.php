@@ -22,7 +22,7 @@ set_time_limit(15 * 60);
 include("image.php");
 
 clean_tmp_images();
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 $link_url = $card["link_url"];
 
 $images = build_preview_images("<a href=\"$link_url\">link</a>");
@@ -36,8 +36,8 @@ writeln('<h1>Select Image</h1>');
 writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
 writeln('	<table>');
 writeln('		<tr>');
-writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="0" type="radio"/></td>');
-writeln('			<td><img alt="thumbnail" src="/images/missing-128.png"/></td>');
+writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="0" type="radio"></td>');
+writeln('			<td><img alt="thumbnail" src="/images/missing-128.png"></td>');
 writeln('		</tr>');
 writeln('		<tr>');
 writeln('			<td colspan="2" style="padding-top: 4px; text-align: center">No Image</td>');
@@ -51,15 +51,15 @@ for ($i = 0; $i < count($images); $i++) {
 
 	writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
 	//writeln('	<div style="display: table;">');
-	//writeln('		<div style="display: table-cell; vertical-align: middle;"><input name="tmp_image_id" value="' . $images[$i] . '" type="radio"/></div>');
-	//writeln('		<img alt="thumbnail" src="' . $path . '/t' . $images[$i] . '.128x128.jpg" style="display: table-cell;"/>');
+	//writeln('		<div style="display: table-cell; vertical-align: middle;"><input name="tmp_image_id" value="' . $images[$i] . '" type="radio"></div>');
+	//writeln('		<img alt="thumbnail" src="' . $path . '/t' . $images[$i] . '.128x128.jpg" style="display: table-cell;">');
 	//writeln('		<div style="text-align: center">' . $tmp_image["original_width"] . ' x ' . $tmp_image["original_height"] . '</div>');
 	//writeln('	</div>');
 
 	writeln('	<table>');
 	writeln('		<tr>');
-	writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="' . $images[$i] . '" type="radio"/></td>');
-	writeln('			<td><img alt="thumbnail" src="' . $path . '/t' . $images[$i] . '.128x128.jpg"/></td>');
+	writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="' . $images[$i] . '" type="radio"></td>');
+	writeln('			<td><img alt="thumbnail" src="' . $path . '/t' . $images[$i] . '.128x128.jpg"></td>');
 	writeln('		</tr>');
 	writeln('		<tr>');
 	writeln('			<td colspan="2" style="padding-top: 4px; text-align: center">' . $tmp_image["original_width"] . ' x ' . $tmp_image["original_height"] . '</td>');

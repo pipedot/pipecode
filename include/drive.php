@@ -42,7 +42,7 @@ function resolve_path($path, $zid)
 			die("path not found [$path]");
 		}
 		$parent_id = $row[0]["file_id"];
-		//writeln("found [" . $a[$i] . "] file_id [$parent_id]<br/>\n");
+		//writeln("found [" . $a[$i] . "] file_id [$parent_id]<br>\n");
 	}
 
 	return $parent_id;
@@ -79,7 +79,7 @@ function print_drive_crumbs($path, $zid)
 		$link .= "/" . $clean_name;
 		//$crumbs .= ' / <a href="' . $link . '">' . $clean_name . '</a>';
 		$crumbs .= '<li><a href="' . $link . '">' . $clean_name . '</a></li>';
-		//writeln("found [" . $a[$i] . "] file_id [$parent_id]<br/>\n");
+		//writeln("found [" . $a[$i] . "] file_id [$parent_id]<br>\n");
 	}
 
 	//writeln('<div class="drive-crumbs">' . $crumbs . '</div>');
@@ -175,6 +175,18 @@ function drive_is_file($drive_file)
 function drive_is_dir($drive_file)
 {
 	return ($drive_file["type"] == 0);
+}
+
+
+function drive_link($hash, $item_id)
+{
+	$drive_link = db_find_rec("drive_link", ["hash" => $hash, "item_id" => $item_id]);
+	if ($drive_link === false) {
+		$drive_link = db_new_rec("drive_link");
+		$drive_link["hash"] = $hash;
+		$drive_link["item_id"] = $item_id;
+		db_set_rec("drive_link", $drive_link);
+	}
 }
 
 

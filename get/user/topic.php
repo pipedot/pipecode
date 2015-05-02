@@ -26,14 +26,14 @@ if (strlen($topic) > 0 && !string_uses($topic, "[a-z][0-9]-")) {
 }
 
 if ($topic == "") {
-	print_header("Topics");
+	print_header("Topics", [], [], [], ["Topic"], ["/topic/"]);
 } else {
-	print_header(ucwords($topic));
+	print_header(ucwords($topic), [], [], [], ["Topic", ucwords($topic)], ["/topic/", "/topic/$topic"]);
 }
 
-if ($topic == "") {
-	print_user_nav("topics");
-} else {
+if ($topic != "") {
+	//print_user_nav("topics");
+//} else {
 	print_user_nav($topic);
 }
 

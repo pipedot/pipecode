@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$photo = item_request("photo");
+$photo = item_request(TYPE_PHOTO);
 
 if ($photo["zid"] !== $auth_zid) {
 	die("not your photo");
@@ -35,7 +35,7 @@ writeln('<p>Are you sure you want to delete this photo?</p>');
 
 writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
 writeln('	<tr>');
-writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="width: 128px" src="' . $photo_url . '"/></td>');
+writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="width: 128px" src="' . $photo_url . '"></td>');
 writeln('	</tr>');
 writeln('</table>');
 

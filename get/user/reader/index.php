@@ -24,7 +24,7 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-print_header("Reader", ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"]);
+print_header("Reader", ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader"], ["/reader/"]);
 print_reader_nav();
 beg_main("cell");
 

@@ -19,20 +19,18 @@
 
 include("story.php");
 
-$story = item_request("story");
+$story = item_request(TYPE_STORY);
 
 $keywords = $story["keywords"];
-//$keywords = "linux bodhi";
-//$time = time() - 86400 * 30 * 12;
-$beg_time = $story["publish_time"] - 86400 * 15;
-$end_time = $story["publish_time"] + 86400 * 15;
+$beg_time = $story["publish_time"] - DAYS * 15;
+$end_time = $story["publish_time"] + DAYS * 15;
 
 print_header("Similar News");
 beg_main();
 
 writeln("<h1>Story</h1>");
 
-writeln('<a class="icon-16 news-16" href="' . item_link("story", $story["story_id"], $story) . '">' . $story["title"]  . '</a>');
+writeln('<a class="icon-16 news-16" href="' . item_link(TYPE_STORY, $story["story_id"], $story) . '">' . $story["title"]  . '</a>');
 
 writeln("<h2>Similar News</h2>");
 

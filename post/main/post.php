@@ -24,14 +24,14 @@ include("post.php");
 include("mail.php");
 
 $item = item_request();
-if ($item["short_type"] === "comment") {
+if ($item["short_type_id"] === TYPE_COMMENT) {
 	$root_id = $item["root_id"];
 	$parent_id = $item["comment_id"];
-	$type = $item["type"];
+	$type_id = $item["type_id"];
 } else {
 	$root_id = $item[$item["short_type"] . "_id"];
 	$parent_id = "";
-	$type = $item["short_type"];
+	$type_id = $item["short_type_id"];
 }
 
 $subject = clean_subject();
@@ -64,13 +64,13 @@ if (http_post("preview")) {
 
 	writeln('<h1>Preview</h1>');
 	writeln('<p>Check your links before you post!</p>');
-	writeln('<div style="margin-bottom: 8px">');
+	writeln('<div class="box">');
 	print render_comment($subject, ($coward ? "" : $zid), $time, "", $clean_body, 0, 0);
 	writeln('</div>');
 	writeln('</article>');
 	writeln('</div>');
 
-	print_post_box($type, $root_id, $subject, $dirty_body, $coward);
+	print_post_box($root_id, $subject, $dirty_body, $coward);
 
 	end_main();
 	print_footer();
@@ -99,11 +99,10 @@ $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
 $comment["root_id"] = $root_id;
 $comment["subject"] = $subject;
-$comment["type"] = $type;
 $comment["zid"] = $zid;
 db_set_rec("comment", $comment);
 
 send_notifications($comment);
 
-revert_view_time($type, $root_id);
-header("Location: " . item_link($type, $root_id));
+revert_view_time($item["short_type"], $root_id);
+header("Location: " . item_link($type_id, $root_id));

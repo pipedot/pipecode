@@ -21,9 +21,9 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
 
-print_header("Publish");
+print_header("Publish", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"], "Publish"], ["/journal/", "/journal/" . $journal["short_code"], "/journal/" . $journal["short_code"] . "/publish"]);
 beg_main();
 beg_form();
 

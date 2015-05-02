@@ -50,7 +50,7 @@ function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_bod
 	beg_form();
 	writeln('<h1>Preview</h1>');
 	$a = array();
-	$a["type"] = "story";
+	$a["type_id"] = TYPE_STORY;
 	$a["title"] = $title;
 	$a["time"] = $story["publish_time"];
 	$a["pipe_id"] = $story["pipe_id"];
@@ -58,7 +58,7 @@ function print_story_box($story_id, $tid, $icon, $title, $clean_body, $dirty_bod
 	$a["topic"] = $topic;
 	$a["icon"] = $icon;
 	$a["body"] = $clean_body;
-	$a["comments"] = count_comments("story", $story_id);
+	$a["comments"] = count_comments(TYPE_STORY, $story_id);
 	print_article($a);
 
 	writeln('<h1>Edit</h1>');
@@ -102,7 +102,7 @@ function print_story($story)
 		$body = $story["body"];
 	}
 
-	$a["type"] = "story";
+	$a["type_id"] = TYPE_STORY;
 	$a["body"] = $body;
 	$a["icon"] = $story["icon"];
 	$a["keywords"] = $story["keywords"];
@@ -117,7 +117,7 @@ function print_story($story)
 	$a["topic"] = $topic["topic"];
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["zid"] = $story["author_zid"];
-	$a["comments"] = count_comments("story", $story["story_id"]);
+	$a["comments"] = count_comments(TYPE_STORY, $story["story_id"]);
 
 	print_article($a);
 }
@@ -132,7 +132,7 @@ function print_journal($journal_id)
 	$body = $journal["body"];
 	$body = make_photo_links($body);
 
-	$a["type"] = "journal";
+	$a["type_id"] = TYPE_JOURNAL;
 	$a["body"] = $body;
 	$a["photo_id"] = $journal["photo_id"];
 	$a["journal_id"] = $journal_id;
@@ -140,7 +140,7 @@ function print_journal($journal_id)
 	$a["title"] = $journal["title"];
 	$a["topic"] = $journal["topic"];
 	$a["zid"] = $journal["zid"];
-	$a["comments"] = count_comments("journal", $journal_id);
+	$a["comments"] = count_comments(TYPE_JOURNAL, $journal_id);
 
 	print_article($a);
 }
@@ -185,7 +185,7 @@ function print_news($a)
 		writeln('<article class="news-image">');
 		writeln('<table>');
 		writeln('	<tr>');
-		writeln('		<td><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '"><img src="' . $protocol . '://' . $server_name . '/thumb/' . $thumb_code . '.jpg"/></a></td>');
+		writeln('		<td><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '"><img src="' . $protocol . '://' . $server_name . '/thumb/' . $thumb_code . '.jpg"></a></td>');
 		writeln('		<td>');
 		writeln('			<div class="article-preview">');
 		writeln('				<div class="article-link"><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $a["title"] . '</a></div>');
@@ -316,7 +316,8 @@ function print_article($a)
 		$dst_lang = "en";
 	}
 
-	$short_name = $a["type"] . "_id";
+	$type = item_type($a["type_id"]);
+	$short_name = $type . "_id";
 	if (array_key_exists($short_name, $a)) {
 		$short_id = $a[$short_name];
 		$short_code = crypt_crockford_encode($short_id);
@@ -440,9 +441,9 @@ function print_article($a)
 
 	if ($image_path != "") {
 		if ($image_url != "") {
-			writeln("	<div$lang><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"/></a>$story</div>");
+			writeln("	<div$lang><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"></a>$story</div>");
 		} else {
-			writeln("	<div$lang><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\"/>$story</div>");
+			writeln("	<div$lang><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\">$story</div>");
 		}
 	} else {
 		writeln("	<div$lang>$story</div>");

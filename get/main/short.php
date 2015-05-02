@@ -25,7 +25,8 @@ if ($short === false) {
 	die("unable to find record [$short_code]");
 }
 
-$link = item_link($short["type"], $short_id);
+$type_id = item_type($short["type_id"]);
+$link = item_link($type_id, $short_id);
 
 print_header();
 beg_main();
@@ -34,13 +35,13 @@ writeln('<h1>Short Link</h1>');
 
 dict_beg();
 dict_row("Code", $short_code);
-dict_row("Type", $short["type"]);
+dict_row("Type", $type);
 dict_row("URL", '<a href="' . $link . '">' . $link . '</a>');
 dict_end();
 
 beg_tab();
 writeln('	<tr>');
-writeln('		<td style="background-color: #ffffff; text-align: center"><img class="map" src="/map/' . $short_code . '"/></td>');
+writeln('		<td style="background-color: #ffffff; text-align: center"><img class="map" src="/map/' . $short_code . '"></td>');
 writeln('	</tr>');
 end_tab();
 

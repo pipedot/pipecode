@@ -33,7 +33,7 @@ function vote_box($poll_id, $vote)
 	$poll_answer = db_get_list("poll_answer", "position", array("poll_id" => $poll["poll_id"]));
 	$k = array_keys($poll_answer);
 
-	$comments = count_comments("poll", $poll_id);
+	$comments = count_comments(TYPE_POLL, $poll_id);
 
 	if ($vote) {
 		beg_form("/poll/$poll_code/vote");
@@ -47,13 +47,13 @@ function vote_box($poll_id, $vote)
 			writeln('		<tr>');
 			if ($type_id == 1) {
 				$units = "votes";
-				writeln('			<td><input id="a_' . $aid . '" name="answer_id" value="' . $answer["answer_id"] . '" type="radio"/></td>');
+				writeln('			<td><input id="a_' . $aid . '" name="answer_id" value="' . $answer["answer_id"] . '" type="radio"></td>');
 			} else if ($type_id == 2) {
 				$units = "votes";
-				writeln('			<td><input id="a_' . $aid . '" name="answer_id[]" value="' . $answer["answer_id"] . '" type="checkbox"/></td>');
+				writeln('			<td><input id="a_' . $aid . '" name="answer_id[]" value="' . $answer["answer_id"] . '" type="checkbox"></td>');
 			} else if ($type_id == 3) {
 				$units = "points";
-				writeln('			<td><input id="a_' . $aid . '" name="answer_id[' . $answer["answer_id"] . ']" type="text"/></td>');
+				writeln('			<td><input id="a_' . $aid . '" name="answer_id[' . $answer["answer_id"] . ']" type="text"></td>');
 			} else {
 				die("unknown poll type [$type_id]");
 			}
@@ -72,7 +72,7 @@ function vote_box($poll_id, $vote)
 
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
-		writeln('			<td style="width: 40px"><input type="submit" value="Vote"/></td>');
+		writeln('			<td style="width: 40px"><input type="submit" value="Vote"></td>');
 		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></td>');
 		writeln('			<td class="right" style="white-space: nowrap;"><b>' . $votes . '</b> ' . $units . '</td>');
 		writeln('		</tr>');

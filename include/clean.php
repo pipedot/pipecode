@@ -227,7 +227,8 @@ function clean_html($dirty, $definition = "comment")
 	$purifier = new HTMLPurifier($config);
 	$clean = $purifier->purify($dirty);
 
-	$clean = str_replace("<br />", "<br/>", $clean);
+	$clean = str_replace("<br />", "<br>", $clean);
+	$clean = str_replace("<br/>", "<br>", $clean);
 	$clean = clean_newlines("pre", $clean);
 	$clean = clean_newlines("ol", $clean);
 	$clean = clean_newlines("ul", $clean);
@@ -249,13 +250,13 @@ function clean_html($dirty, $definition = "comment")
 	$clean = string_replace_all("  ", " ", $clean);
 	$clean = trim($clean);
 
-	while (substr($clean, 0, 5) == "<br/>") {
+	while (substr($clean, 0, 4) == "<br>") {
 		$clean = trim(substr($clean, 5));
 	}
-	while (substr($clean, -5, 5) == "<br/>") {
+	while (substr($clean, -4, 4) == "<br>") {
 		$clean = trim(substr($clean, 0, -5));
 	}
-	$clean = string_replace_all("<br/><br/><br/>", "<br/><br/>", $clean);
+	$clean = string_replace_all("<br><br><br>", "<br><br>", $clean);
 
 	return $clean;
 }
@@ -263,7 +264,7 @@ function clean_html($dirty, $definition = "comment")
 
 function dirty_html($clean)
 {
-	$dirty = str_replace("<br/>", "\n", $clean);
+	$dirty = str_replace("<br>", "\n", $clean);
 	$dirty = str_replace("<blockquote>", "\n<blockquote>", $dirty);
 	$dirty = str_replace("</blockquote>", "</blockquote>\n", $dirty);
 	$dirty = str_replace("<ol>", "\n<ol>", $dirty);
@@ -287,10 +288,10 @@ function clean_newlines($tag, $text)
 	$beg_tag = "<$tag>";
 	$end_tag = "</$tag>";
 
-	$text = string_replace_all("$beg_tag<br/>", $beg_tag, $text);
-	$text = string_replace_all("<br/>$beg_tag", $beg_tag, $text);
-	$text = string_replace_all("$end_tag<br/>", $end_tag, $text);
-	$text = string_replace_all("<br/>$end_tag", $end_tag, $text);
+	$text = string_replace_all("$beg_tag<br>", $beg_tag, $text);
+	$text = string_replace_all("<br>$beg_tag", $beg_tag, $text);
+	$text = string_replace_all("$end_tag<br>", $end_tag, $text);
+	$text = string_replace_all("<br>$end_tag", $end_tag, $text);
 
 	return $text;
 }
@@ -769,8 +770,8 @@ function make_description($body)
 {
 	$desc = $body;
 
-	if (string_has($desc, "<br/>")) {
-		$desc = substr($desc, 0, strpos($desc, "<br/>"));
+	if (string_has($desc, "<br>")) {
+		$desc = substr($desc, 0, strpos($desc, "<br>"));
 	}
 	if (string_has($desc, "<blockquote>")) {
 		$desc = substr($desc, 0, strpos($desc, "<blockquote>"));

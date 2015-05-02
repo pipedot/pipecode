@@ -17,26 +17,52 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("image.php");
-
-if ($zid !== $auth_zid) {
-	die("not your page");
+print_header("Profile", [], [], [], ["Profile", "Picture"], ["/profile/", "/profile/picture"]);
+beg_main();
+if ($zid === $auth_zid) {
+	beg_form("", "file");
 }
 
-print_header("Profile");
-beg_main();
-beg_form("", "file");
-
-beg_tab("Profile Picture", array("colspan" => 2));
+beg_tab("Current");
 writeln('	<tr>');
-writeln('		<td colspan="2"><img style="width: 128px" src="/pub/profile/' . $server_name . "/" . $user_page . '-256.jpg?' . fs_time("$doc_root/www/pub/profile/$server_name/$user_page-256.jpg") . '"/></td>');
-writeln('	</tr>');
-writeln('	<tr>');
-writeln('		<td style="width: 100%"><input name="upload" type="file" style="width: 100%"/></td>');
-writeln('		<td style="width: 50px"><input type="submit" value="Upload"/></td>');
+writeln('		<td class="center"><img alt="Current Picture" class="thumb" src="' . profile_picture($zid, 256) . '"></td>');
 writeln('	</tr>');
 end_tab();
 
-end_form();
+if ($zid === $auth_zid) {
+	/*
+	//beg_tab();
+	dict_beg("Previous");
+	//writeln('	<tr>');
+	//writeln('		<td><img class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png"></td>');
+	//writeln('		<td width="15%"><a class="icon-16 delete-16" href="delete">Delete</a></td>');
+	//writeln('		<td width="15%"><a class="icon-16 check-16" href="select">Select</a></td>');
+	//writeln('	</tr>');
+	dict_row('<img alt="Profile Picture" class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png">', '<a class="icon-16 check-16" href="activate">Activate</a> | <a class="icon-16 delete-16" href="delete">Delete</a>');
+	dict_row('<img alt="Profile Picture" class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png">', '<a class="icon-16 check-16" href="activate">Activate</a> | <a class="icon-16 delete-16" href="delete">Delete</a>');
+	dict_row('<img alt="Profile Picture" class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png">', '<a class="icon-16 check-16" href="activate">Activate</a> | <a class="icon-16 delete-16" href="delete">Delete</a>');
+	//dict_row('<img alt="Profile Picture" class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png">', '<input type="submit" name="select_1234" value="Select"> <input type="submit" name="delete_1234" value="Delete">');
+	//dict_row('<img alt="Profile Picture" class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png">', '<input type="submit" name="select_1234" value="Select"> <input type="submit" name="delete_1234" value="Delete">');
+	//dict_row('<img alt="Profile Picture" class="avatar-32" src="http://pipedot.net/pub/profile/pipedot.net/bryan-64.png">', '<input type="submit" name="select_1234" value="Select"> <input type="submit" name="delete_1234" value="Delete">');
+	//end_tab();
+	dict_end();
+	*/
+
+	box_two('<input name="upload" type="file" style="width: 100%">', 'Upload');
+	end_form();
+
+	//beg_tab("Gravatar");
+	//print_row(array("caption" => "Use Gravatar (" . $user_conf["email"] . ")", "check_key" => "gravatar_enabled", "checked" => $user_conf["gravatar_enabled"]));
+	//end_tab();
+
+	beg_tab("Gravatar");
+	writeln('	<tr>');
+	writeln('		<td class="center"><img alt="Gravatar Picture" class="thumb" src="' . $protocol . '://www.gravatar.com/avatar/' . md5($user_conf["email"]) . '.jpg?d=mm&s=256"></td>');
+	writeln('	</tr>');
+	end_tab();
+
+	box_right("Update");
+}
+
 end_main();
 print_footer();

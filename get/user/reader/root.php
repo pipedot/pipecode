@@ -24,10 +24,10 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$feed = item_request("reader");
+$feed = item_request(TYPE_READER);
 //$feed_code = crypt_crockford_encode($feed["feed_id"]);
 
-print_header($feed["name"], ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"]);
+print_header($feed["name"], ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader", $feed["name"]], ["/reader/", "/reader/" . $feed["slug"]]);
 print_reader_nav();
 beg_main("cell");
 

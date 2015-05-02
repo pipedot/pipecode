@@ -28,7 +28,7 @@ $a = fs_dir("$doc_root/www/images");
 for ($i = 0; $i < count($a); $i++) {
 	if (fs_ext($a[$i]) == "png" && string_has($a[$i], "-64") && $a[$i] != "logo-top-64.png") {
 		writeln('<div class="tbox">');
-		writeln('	<img src="/images/' . $a[$i] . '"/>');
+		writeln('	<img alt="icon" src="/images/' . $a[$i] . '">');
 		writeln('	' . substr($a[$i], 0, -7));
 		writeln('</div>');
 	}

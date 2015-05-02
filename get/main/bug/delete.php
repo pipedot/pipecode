@@ -23,7 +23,7 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");
 }
 
-$bug_file = item_request("bug_file");
+$bug_file = item_request(TYPE_BUG_FILE);
 
 print_header("Delete File", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();

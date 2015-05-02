@@ -17,28 +17,36 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//include("feed.php");
-include("gravatar.php");
+print_header();
+beg_main("dual-table");
+writeln('<div class="dual-left">');
 
-//if ($zid == $auth_zid) {
-//	print_header("", array("Edit"), array("news"), array("/feed/edit"));
-//	print_feed_page($zid);
-//} else {
-	print_header();
-	print_user_nav("overview");
-	beg_main("cell");
+beg_tab();
+print_row(array("caption" => "Feed", "description" => "Show news page", "icon" => "news", "link" => "/feed/"));
+print_row(array("caption" => "Journal", "description" => "View journal entries", "icon" => "notepad", "link" => "/journal/"));
+if ($zid === $auth_zid) {
+	print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
+	print_row(array("caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/"));
+	//print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
+}
+print_row(array("caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"));
+end_tab();
 
-	writeln('<h1>' . $zid . '</h1>');
+writeln('</div>');
+writeln('<div class="dual-right">');
 
-	writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
-	writeln('	<tr>');
-	writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="width: 128px" src="' . profile_picture($zid, 256) . '"/></td>');
-	writeln('	</tr>');
-	writeln('</table>');
-	seen_gravatar($zid);
+beg_tab();
+print_row(array("caption" => "Comments", "description" => "View past comments", "icon" => "chat", "link" => "/comments"));
+print_row(array("caption" => "Karma", "description" => "Show karma rating", "icon" => "face-smile", "link" => "/karma/"));
+if ($zid === $auth_zid) {
+	print_row(array("caption" => "Profile Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/settings"));
+	print_row(array("caption" => "Profile Picture", "description" => "Upload a new profile image", "icon" => "picture", "link" => "/profile/picture"));
+} else {
+	print_row(array("caption" => "Profile", "description" => "View public profile", "icon" => "users", "link" => "/profile/"));
+}
+end_tab();
 
-	end_main();
-//}
-
+writeln('</div>');
+end_main();
 print_footer();
 

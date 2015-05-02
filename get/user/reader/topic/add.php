@@ -23,10 +23,10 @@ if ($zid !== $auth_zid) {
 
 $icons = icon_list(true, true, true);
 
-print_header("New Topic");
+print_header("Add Topic", [], [], [], ["Reader", "Topic", "Add Topic"], ["/reader/", "/reader/topic/", "/reader/topic/add"]);
 beg_main();
 beg_form();
-writeln('<h1>New Topic</h1>');
+//writeln('<h1>Add Topic</h1>');
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name"));

@@ -34,7 +34,7 @@ beg_form("", "file");
 
 writeln('<h1>Share</h1>');
 
-writeln('<div style="margin-bottom: 8px">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px"></textarea>');
 writeln('</div>');
 
@@ -70,7 +70,7 @@ writeln('	<tr>');
 writeln('		<td>');
 writeln('			<div class="row-tab">');
 writeln('				<div class="row-caption">Photo</div>');
-writeln('				<div><input name="upload" type="file" style="width: 100%"/></div></div>');
+writeln('				<div><input name="upload" type="file" style="width: 100%"></div></div>');
 writeln('			</div>');
 writeln('		</td>');
 writeln('	</tr>');

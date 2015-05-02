@@ -23,9 +23,9 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-print_header("Edit Reader");
+print_header("Topic", [], [], [], ["Reader", "Topic"], ["/reader/", "/reader/topic/"]);
 beg_main();
-writeln('<h1>Edit Reader</h1>');
+writeln('<h1>Edit Topics</h1>');
 
 dict_beg();
 $feed_row = sql("select feed_id, name, slug from reader_user where zid = ? and topic_id = 0 order by name", $auth_zid);

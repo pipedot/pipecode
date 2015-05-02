@@ -22,7 +22,7 @@ include("pipe.php");
 include("story.php");
 include("diff.php");
 
-$pipe = item_request("pipe");
+$pipe = item_request(TYPE_PIPE);
 $status = "Voting";
 $story_id = "";
 if ($pipe["closed"]) {
@@ -78,7 +78,7 @@ if ($story_id > 0) {
 	}
 }
 
-print_comments("pipe", $pipe);
+print_comments(TYPE_PIPE, $pipe);
 
 end_main();
 

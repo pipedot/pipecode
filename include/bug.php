@@ -77,7 +77,7 @@ function print_bug($bug)
 	$a["zid"] = $bug["author_zid"];
 	$a["labels"] = make_bug_labels($bug["bug_id"]);
 	$a["closed"] = $bug["closed"];
-	$a["comments"] = count_comments("bug", $bug["bug_id"]);
+	$a["comments"] = count_comments(TYPE_BUG, $bug["bug_id"]);
 
 	print_article($a);
 }

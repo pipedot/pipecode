@@ -103,7 +103,7 @@ function reply(comment_code)
 			s += "<table>\n";
 			s += "	<tr>\n";
 			s += "		<td>Subject</td>\n";
-			s += "		<td colspan=\"2\"><input id=\"reply_subject_" + comment_code + "\" type=\"text\" value=\"" + subject + "\"/></td>\n";
+			s += "		<td colspan=\"2\"><input id=\"reply_subject_" + comment_code + "\" type=\"text\" value=\"" + subject + "\"></td>\n";
 			s += "	</tr>\n";
 			s += "	<tr>\n";
 			s += "		<td>Comment</td>\n";
@@ -111,8 +111,8 @@ function reply(comment_code)
 			s += "	</tr>\n";
 			s += "	<tr>\n";
 			s += "		<td></td>\n";
-			s += "		<td><label><input id=\"reply_coward_" + comment_code + "\" type=\"checkbox\"/>Post Anonymously</label></td>\n";
-			s += "		<td><input type=\"button\" value=\"Post\" onclick=\"post_reply('" + comment_code + "')\"/></td>";
+			s += "		<td><label><input id=\"reply_coward_" + comment_code + "\" type=\"checkbox\">Post Anonymously</label></td>\n";
+			s += "		<td><input type=\"button\" value=\"Post\" onclick=\"post_reply('" + comment_code + "')\"></td>";
 			s += "	</tr>\n";
 			s += "</table>\n";
 			s += "</div>\n"

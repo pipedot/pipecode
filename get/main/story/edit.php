@@ -24,7 +24,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$story = item_request("story");
+$story = item_request(TYPE_STORY);
 $zid = $story["author_zid"];
 $title = $story["title"];
 $tid = $story["tid"];

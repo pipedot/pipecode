@@ -24,11 +24,11 @@ if ($auth_zid === "") {
 	die("sign in to edit");
 }
 
-$comment = item_request("comment");
+$comment = item_request(TYPE_COMMENT);
 $clean_body = $comment["body"];
 $dirty_body = dirty_html($clean_body);
 if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
-	$dirty_body = str_replace("\n", "<br/>", $dirty_body);
+	$dirty_body = str_replace("\n", "<br>", $dirty_body);
 }
 
 if ($comment["zid"] != $auth_zid) {
@@ -48,7 +48,7 @@ beg_tab();
 print_row(array("caption" => "Subject", "text_key" => "subject", "text_value" => $comment["subject"]));
 end_tab();
 
-writeln('<div style="margin-bottom: 8px">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px">' . $dirty_body . '</textarea>');
 writeln('</div>');
 

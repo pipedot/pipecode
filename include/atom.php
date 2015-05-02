@@ -89,9 +89,9 @@ function make_comment_atom($topic)
 	global $auth_user;
 
 	if ($auth_user["show_junk_enabled"]) {
-		$row = sql("select comment_id, root_id, subject, type, edit_time, body, zid from comment order by edit_time desc limit 50");
+		$row = sql("select comment_id, root_id, subject, type_id, edit_time, body, zid from comment inner join short on comment.root_id = short.short_id order by edit_time desc limit 50");
 	} else {
-		$row = sql("select comment_id, root_id, subject, type, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit 50");
+		$row = sql("select comment_id, root_id, subject, type_id, edit_time, body, zid from comment inner join short on comment.root_id = short.short_id where junk_status <= 0 order by edit_time desc limit 50");
 	}
 	if (count($row) > 0) {
 		$updated = $row[0]["edit_time"];
@@ -112,19 +112,20 @@ function make_comment_atom($topic)
 
 	for ($i = 0; $i < count($row); $i++) {
 		$comment_code = crypt_crockford_encode($row[$i]["comment_id"]);
-		$comment_type = $row[$i]["type"];
-		$article = db_get_rec($comment_type, $row[$i]["root_id"]);
-		if ($comment_type == "poll") {
+		$type_id = $row[$i]["type_id"];
+		$type = item_type($type_id);
+		$article = db_get_rec($type, $row[$i]["root_id"]);
+		if ($type_id == TYPE_POLL) {
 			$article_title = $article["question"];
 		} else {
 			$article_title = $article["title"];
 		}
-		if ($comment_type == "pipe") {
+		if ($type_id == TYPE_PIPE) {
 			$artitle_time = gmdate(DATE_ATOM, $article["time"]);
 		} else {
 			$article_time = gmdate(DATE_ATOM, $article["publish_time"]);
 		}
-		$article_link = item_link($comment_type, $article[$comment_type . "_id"], $article);
+		$article_link = item_link($type_id, $article[$type . "_id"], $article);
 
 		$subtitle = "by " . user_link($row[$i]["zid"], ["tag" => true]);
 		$subtitle .= " in <a href=\"$article_link\"><b>$article_title</b></a>";

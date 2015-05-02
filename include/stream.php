@@ -110,7 +110,7 @@ function print_card($card_id, $size = "small")
 		}
 	}
 
-	$a["comments"] = count_comments("card", $card["card_id"]);
+	$a["comments"] = count_comments(TYPE_CARD, $card["card_id"]);
 	$a["tags"] = $tags;
 
 	if ($size == "small") {
@@ -175,16 +175,16 @@ function print_card_small($a)
 	writeln("<table class=\"card\">");
 	writeln("	<tr>");
 	writeln("		<td class=\"card-row\">");
-	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"/></a>");
+	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"></a>");
 	writeln("			<div class=\"card-by-box\">");
 	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
 	writeln("				<div class=\"card-time\">$date</div>");
 	writeln("			</div>");
 	writeln("			<div class=\"card-vote\">");
 	writeln("				<div class=\"card-vote-box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
+	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\">");
 	writeln("					<div class=\"card-vote-count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
+	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\">");
 	writeln("				</div>");
 	writeln("			</div>");
 	writeln("		</td>");
@@ -196,14 +196,14 @@ function print_card_small($a)
 	}
 	if ($photo_code != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card-row\"><a href=\"$protocol://$server_name/photo/$photo_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
+		writeln("		<td class=\"card-row\"><a href=\"$protocol://$server_name/photo/$photo_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"></a></td>");
 		writeln("	</tr>");
 	}
 	if ($link_url != "") {
 		writeln("	<tr>");
 		writeln("		<td class=\"card-row-link\">");
 		if ($image_url != "") {
-			writeln("			<a href=\"$link_url\"><img class=\"card-story-image\" src=\"$image_url\"/></a>");
+			writeln("			<a href=\"$link_url\"><img class=\"card-story-image\" src=\"$image_url\"></a>");
 		}
 		writeln("			<div class=\"card-story-box\">");
 		writeln("				<a class=\"card-story-link\" href=\"$link_url\">$link_subject</a>");
@@ -216,7 +216,7 @@ function print_card_small($a)
 	writeln("		<td class=\"card-footer\">");
 	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$card_code\">{$a["comments"]["tag"]}</a>");
 	writeln("			<div class=\"card-tags\">$tag_links</div>");
-	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\"/>");
+	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\">");
 	writeln("		</td>");
 	writeln("	</tr>");
 	writeln('</table>');
@@ -278,16 +278,16 @@ function print_card_large($a)
 	writeln("<table class=\"card-large\">");
 	writeln("	<tr>");
 	writeln("		<td class=\"card-row\">");
-	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"/></a>");
+	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"></a>");
 	writeln("			<div class=\"card-by-box\">");
 	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
 	writeln("				<div class=\"card-time\">$date</div>");
 	writeln("			</div>");
 	writeln("			<div class=\"card-vote\">");
 	writeln("				<div class=\"card-vote-box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\"/>");
+	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\">");
 	writeln("					<div class=\"card-vote-count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\"/>");
+	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\">");
 	writeln("				</div>");
 	writeln("			</div>");
 	writeln("		</td>");
@@ -299,14 +299,14 @@ function print_card_large($a)
 	}
 	if ($photo_link != "") {
 		writeln("	<tr>");
-		writeln("		<td class=\"card-row\"><a href=\"$protocol://$server_name/photo/$photo_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"/></a></td>");
+		writeln("		<td class=\"card-row\"><a href=\"$protocol://$server_name/photo/$photo_code\"><img alt=\"photo\" class=\"$photo_class\" src=\"$photo_link\"></a></td>");
 		writeln("	</tr>");
 	}
 	if ($link_url != "") {
 		writeln("	<tr>");
 		writeln("		<td class=\"card-row-link\">");
 		if ($image_url != "") {
-			writeln("			<a href=\"$link_url\"><img class=\"card-story-image\" src=\"$image_url\"/></a>");
+			writeln("			<a href=\"$link_url\"><img class=\"card-story-image\" src=\"$image_url\"></a>");
 		}
 		writeln("			<div class=\"card-story-box\">");
 		writeln("				<a class=\"card-story-link\" href=\"$link_url\">$link_subject</a>");
@@ -319,7 +319,7 @@ function print_card_large($a)
 	writeln("		<td class=\"card-footer\">");
 	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$card_code\">{$a["comments"]["tag"]}</a>");
 	writeln("			<div class=\"card-tags\">$tag_links</div>");
-	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\"/>"); <a class=\"icon-16 picture-16\" href=\"/card/$card_code/image\">Image</a> |
+	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\">"); <a class=\"icon-16 picture-16\" href=\"/card/$card_code/image\">Image</a> |
 	$options = array();
 	if ($history) {
 		$options[] = "<a class=\"icon-16 calendar-16\" href=\"/card/$card_code/history\">History</a>";
@@ -342,7 +342,7 @@ function print_card_medium($a)
 	writeln('		<td style="padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 2px;">');
 	writeln('			<table style="width: 100%">');
 	writeln('				<tr>');
-	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"/></td>');
+	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"></td>');
 	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px"><a href="https://bryan.pipedot.org/">Bryan Beicker</a></div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
 	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row-button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row-button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
 	writeln('				</tr>');
@@ -353,7 +353,7 @@ function print_card_medium($a)
 	writeln('		<td style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;">Pipecode is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td style="padding-left: 21px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;"><img src="/pub/2014/05/31/i29.640x360.jpg"/></td>');
+	writeln('		<td style="padding-left: 21px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;"><img src="/pub/2014/05/31/i29.640x360.jpg"></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td style="padding-left: 10px; padding-right: 8px; padding-top: 4px; padding-bottom: 8px;"><table style="width: 100%"><tr><td style="font-weight: bolder; padding: 0px;"><a href="">123 comments</a></td><td style="padding: 0px; font-size: 8pt; color: #666666; text-align: right">#pizza</td><td style="width: 24px; padding: 0px; padding-left: 4px;"><div class="row_button" style="background-image: url(/images/gear-16.png)" title="Reset"></div></td></tr></table></td>');
@@ -369,7 +369,7 @@ function print_card_large($a)
 	writeln('		<td style="padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 2px;">');
 	writeln('			<table style="width: 100%">');
 	writeln('				<tr>');
-	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"/></td>');
+	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"></td>');
 	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px">Bryan Beicker</div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
 	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
 	writeln('				</tr>');
@@ -380,7 +380,7 @@ function print_card_large($a)
 	writeln('		<td style="padding-left: 10px; padding-right: 10px; padding-top: 4px; padding-bottom: 8px;">');
 	writeln('			<table style="width: 100%">');
 	writeln('				<tr>');
-	writeln('					<td style="padding-left: 0px; padding-right: 4px; padding-top: 0px; padding-bottom: 0px;"><img src="/pub/2014/05/31/i29.640x360.jpg"/></td>');
+	writeln('					<td style="padding-left: 0px; padding-right: 4px; padding-top: 0px; padding-bottom: 0px;"><img src="/pub/2014/05/31/i29.640x360.jpg"></td>');
 	writeln('					<td style="padding-left: 4px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px; vertical-align: top;">Pipecode is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</td>');
 	writeln('				</tr>');
 	writeln('			</table>');

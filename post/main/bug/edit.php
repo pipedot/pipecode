@@ -19,7 +19,7 @@
 
 include("clean.php");
 
-$bug = item_request("bug");
+$bug = item_request(TYPE_BUG);
 $title = clean_subject();
 $priority = http_post_string("priority", array("valid" => "[a-z]"));
 $priorities = array("informational", "normal", "important", "critical");

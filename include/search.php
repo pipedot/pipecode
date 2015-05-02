@@ -22,31 +22,31 @@ function search_box($needle = "", $haystack = "comments")
 	beg_form("", "get");
 	writeln('<table class="round">');
 	writeln('	<tr>');
-	writeln('		<td rowspan="2" style="width: 64px"><img alt="Search" src="/images/magnifier-64.png"/></td>');
-	writeln('		<td style="width: 100%; vertical-align: bottom"><input type="search" name="needle" value="' . $needle . '" required="required"/></td>');
-	writeln('		<td style="width: 64px; vertical-align: bottom"><input type="submit" value="Search"/></td>');
+	writeln('		<td rowspan="2" style="width: 64px"><img alt="Search" src="/images/magnifier-64.png"></td>');
+	writeln('		<td style="width: 100%; vertical-align: bottom"><input type="search" name="needle" value="' . $needle . '" required></td>');
+	writeln('		<td style="width: 64px; vertical-align: bottom"><input type="submit" value="Search"></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td colspan="2" style="vertical-align: top">');
 	if ($haystack == "comments") {
-		writeln('			<label><input type="radio" name="haystack" value="comments" checked="checked"/>Comments</label>');
+		writeln('			<label><input type="radio" name="haystack" value="comments" checked>Comments</label>');
 	} else {
-		writeln('			<label><input type="radio" name="haystack" value="comments"/>Comments</label>');
+		writeln('			<label><input type="radio" name="haystack" value="comments">Comments</label>');
 	}
 	if ($haystack == "stories") {
-		writeln('			<label><input type="radio" name="haystack" value="stories" checked="checked"/>Stories</label>');
+		writeln('			<label><input type="radio" name="haystack" value="stories" checked>Stories</label>');
 	} else {
-		writeln('			<label><input type="radio" name="haystack" value="stories"/>Stories</label>');
+		writeln('			<label><input type="radio" name="haystack" value="stories">Stories</label>');
 	}
 	if ($haystack == "pipe") {
-		writeln('			<label><input type="radio" name="haystack" value="pipe" checked="checked"/>Pipe</label>');
+		writeln('			<label><input type="radio" name="haystack" value="pipe" checked>Pipe</label>');
 	} else {
-		writeln('			<label><input type="radio" name="haystack" value="pipe"/>Pipe</label>');
+		writeln('			<label><input type="radio" name="haystack" value="pipe">Pipe</label>');
 	}
 	if ($haystack == "polls") {
-		writeln('			<label><input type="radio" name="haystack" value="polls" checked="checked"/>Polls</label>');
+		writeln('			<label><input type="radio" name="haystack" value="polls" checked>Polls</label>');
 	} else {
-		writeln('			<label><input type="radio" name="haystack" value="polls"/>Polls</label>');
+		writeln('			<label><input type="radio" name="haystack" value="polls">Polls</label>');
 	}
 	writeln('		</td>');
 	writeln('	</tr>');

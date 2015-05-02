@@ -23,7 +23,7 @@ if ($auth_zid === "") {
 	die("sign in to attach");
 }
 
-$bug = item_request("bug");
+$bug = item_request(TYPE_BUG);
 
 if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$bug_file["name"] = string_clean($_FILES["upload"]["name"], "[A-Z][a-z][0-9].-_", 100);

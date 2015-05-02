@@ -19,7 +19,7 @@
 
 include("render.php");
 
-$comment = item_request("comment");
+$comment = item_request(TYPE_COMMENT);
 $src_hash = crypt_sha256($comment["body"]);
 
 print_header("Translate");
@@ -28,11 +28,12 @@ beg_main();
 writeln('<h1>Original Language</h1>');
 writeln('<h2>' . lang_name($comment["lang"]) . '</h2>');
 
+writeln('<div class="box">');
 print render_comment($comment["subject"], $comment["zid"], $comment["publish_time"], $comment["comment_id"], $comment["body"], 0, "", "", $comment["junk_status"], $comment["lang"]);
 writeln('</div>');
 writeln('</article>');
+writeln('</div>');
 
-writeln('<br/>');
 writeln('<h1>Machine Translated</h1>');
 
 $row = sql("select dst_lang from lang_translation where src_hash = ?", $src_hash);
@@ -43,7 +44,7 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('</article>');
 }
 
-box_center('<a href="https://translate.google.com/"><img alt="Powered by Google Translate" src="/images/google-translate.png"/></a>');
+box_center('<a href="https://translate.google.com/"><img alt="Powered by Google Translate" src="/images/google-translate.png"></a>');
 
 end_main();
 print_footer();

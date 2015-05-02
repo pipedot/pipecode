@@ -19,7 +19,7 @@
 
 include("poll.php");
 
-$poll = item_request("poll");
+$poll = item_request(TYPE_POLL);
 $type_id = $poll["type_id"];
 
 if ($auth_zid === "") {

@@ -19,7 +19,8 @@
 
 include("story.php");
 
-$article = item_request("article");
+$article = item_request(TYPE_ARTICLE);
+$article["type_id"] = TYPE_ARTICLE;
 $article["type"] = "article";
 $short_code = crypt_crockford_encode($article["article_id"]);
 

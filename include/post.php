@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_post_box($type, $root_id, $subject, $dirty_body, $coward)
+function print_post_box($root_id, $subject, $dirty_body, $coward)
 {
 	global $auth_zid;
 	global $auth_user;
@@ -45,34 +45,34 @@ function print_post_box($type, $root_id, $subject, $dirty_body, $coward)
 	}
 
 	beg_form();
-	writeln('<input type="hidden" name="type" value="' . $type . '"/>');
-	writeln('<input type="hidden" name="root_id" value="' . $root_id . '"/>');
+	//writeln('<input type="hidden" name="type" value="' . $type . '">');
+	writeln('<input type="hidden" name="root_id" value="' . $root_id . '">');
 	writeln('<div class="reply">');
 	writeln('<div class="dialog-title">Post Comment</div>');
 	writeln('<div class="dialog-body">');
 	writeln('<table>');
 	writeln('	<tr>');
 	writeln('		<td>Subject</td>');
-	writeln('		<td colspan="2"><input name="subject" type="text" value="' . $subject . '" required="required"/></td>');
+	writeln('		<td colspan="2"><input name="subject" type="text" value="' . $subject . '" required></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td>Comment</td>');
-	writeln('		<td colspan="2"><textarea name="comment" required="required">' . $dirty_body . '</textarea></td>');
+	writeln('		<td colspan="2"><textarea name="comment" required>' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid === "") {
 		$question = captcha_challenge();
 		writeln('		<td>Captcha</td>');
-		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"/></td></tr></table></td>');
+		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"></td></tr></table></td>');
 	} else {
 		writeln('		<td></td>');
 		if ($banned) {
 			writeln('		<td></td>');
 		} else {
-			writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked="checked"' : '') . '/>Post Anonymously</label></td>');
+			writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked' : '') . '>Post Anonymously</label></td>');
 		}
 	}
-	writeln('		<td><input name="post" type="submit" value="Post"/> <input name="preview" type="submit" value="Preview"/></td>');
+	writeln('		<td><input name="post" type="submit" value="Post"> <input name="preview" type="submit" value="Preview"></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');

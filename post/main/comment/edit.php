@@ -27,7 +27,7 @@ if ($auth_zid === "") {
 $subject = clean_subject();
 list($clean_body, $dirty_body) = clean_body();
 
-$comment = item_request("comment");
+$comment = item_request(TYPE_COMMENT);
 
 if ($comment["zid"] !== $auth_zid) {
 	die("not your comment");
@@ -44,4 +44,6 @@ if ($comment["body"] !== $clean_body || $comment["subject"] !== $subject) {
 	sql("delete from comment_vote where comment_id = ? and value > 0", $comment["comment_id"]);
 }
 
-header("Location: " . item_link($comment["type"], $comment["root_id"]));
+$short = db_get_rec("short", $comment["root_id"]);
+
+header("Location: " . item_link($short["type_id"], $comment["root_id"]));

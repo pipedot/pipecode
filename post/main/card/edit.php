@@ -20,7 +20,7 @@
 include("render.php");
 include("clean.php");
 
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 $tags = clean_tags();
 list($clean_body, $dirty_body) = clean_body();
 

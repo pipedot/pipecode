@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$feed = item_request("feed");
+$feed = item_request(TYPE_FEED);
 
 if (db_has_rec("reader_user", ["zid" => $auth_zid, "feed_id" => $feed["feed_id"]])) {
 	die("feed already added");

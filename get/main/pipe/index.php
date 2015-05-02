@@ -39,7 +39,7 @@ for ($i = 0; $i < count($pipes); $i++) {
 }
 
 if (count($pipes) > 0) {
-	writeln('<div style="margin-top: 8px; margin-bottom: 8px; text-align: center"><a class="icon-16 calendar-16" href="history">History</a></div>');
+	box_center('<a class="icon-16 calendar-16" href="history">History</a>');
 }
 end_main();
 

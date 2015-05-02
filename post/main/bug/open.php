@@ -21,7 +21,7 @@ if ($auth_zid === "") {
 	die("sign in to open this bug");
 }
 
-$bug = item_request("bug");
+$bug = item_request(TYPE_BUG);
 $bug["closed"] = 0;
 $bug["closed_zid"] = $auth_zid;
 db_set_rec("bug", $bug);

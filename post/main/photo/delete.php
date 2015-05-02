@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$photo = item_request("photo");
+$photo = item_request(TYPE_PHOTO);
 $photo_code = $photo["short_code"];
 $photo_id = $photo["photo_id"];
 if ($photo["zid"] !== $auth_zid) {

@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$bug = item_request("bug");
+$bug = item_request(TYPE_BUG);
 
 $labels = array();
 $row = sql("select label_id from bug_label where bug_id = ?", $bug["bug_id"]);

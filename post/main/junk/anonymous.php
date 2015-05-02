@@ -21,7 +21,7 @@ if (!$auth_user["admin"] && !$auth_user["editor"]) {
 	die("not an editor or admin");
 }
 
-header_text();
+//header_text();
 
 $keys = array_keys($_POST);
 for ($i = 0; $i < count($keys); $i++) {
@@ -42,7 +42,7 @@ for ($i = 0; $i < count($keys); $i++) {
 					$ban_ip["short_id"] = $comment_id;
 					$ban_ip["zid"] = $auth_zid;
 
-					print "banning [$comment_code] [{$comment["remote_ip"]}]\n";
+					//print "banning [$comment_code] [{$comment["remote_ip"]}]\n";
 					db_set_rec("ban_ip", $ban_ip);
 				}
 			}
@@ -51,10 +51,10 @@ for ($i = 0; $i < count($keys); $i++) {
 			$comment["junk_time"] = $now;
 
 			if ($value == "spam") {
-				print "spam [$comment_code]\n";
+				//print "spam [$comment_code]\n";
 				$comment["junk_status"] = 1;
 			} else if ($value == "not-junk") {
-				print "not junk [$comment_code]\n";
+				//print "not junk [$comment_code]\n";
 				$comment["junk_status"] = -1;
 			}
 			db_set_rec("comment", $comment);
@@ -62,3 +62,4 @@ for ($i = 0; $i < count($keys); $i++) {
 	}
 }
 
+header("Location: /junk/anonymous");

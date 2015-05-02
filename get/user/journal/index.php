@@ -22,7 +22,7 @@ include("story.php");
 include("image.php");
 
 if ($auth_zid === $zid) {
-	print_header("Journal", array("Write"), array("notepad"), array("/journal/write"));
+	print_header("Journal", array("Write"), array("notepad"), array("/journal/write"), ["Journal"], ["/journal/"]);
 } else {
 	print_header("Journal");
 }
@@ -50,7 +50,7 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-writeln('<div style="text-align: center; margin-bottom: 8px;"><a class="icon-16 feed-16" href="atom">Journal Feed</a></div>');
+box_center('<a class="icon-16 feed-16" href="atom">Journal Feed</a>');
 
 end_main();
 print_footer();

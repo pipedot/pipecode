@@ -19,7 +19,7 @@
 
 include("image.php");
 
-$photo = item_request("photo");
+$photo = item_request(TYPE_PHOTO);
 
 if ($auth_zid === "") {
 	print_header("Photo");
@@ -41,7 +41,7 @@ if ($photo["has_large"]) {
 }
 
 writeln('<div class="photo-frame">');
-writeln('	<img alt="photo" class="' . $info["largest_retina"] . '" src="' . $info["largest_link"] . '"/>');
+writeln('	<img alt="photo" class="' . $info["largest_retina"] . '" src="' . $info["largest_link"] . '">');
 writeln('	<div>' . implode(" | ", $res) . '</div>');
 writeln('</div>');
 

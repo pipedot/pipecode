@@ -39,7 +39,9 @@ writeln('</div>');
 writeln('<div class="dual_right">');
 
 beg_tab();
-print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
+if ($auth_user["admin"]) {
+	print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
+}
 print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Settings", "description" => "Configure the server settings", "icon" => "tools", "link" => "settings"));

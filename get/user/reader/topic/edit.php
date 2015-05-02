@@ -21,10 +21,10 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$topic = item_request("reader_topic");
+$topic = item_request(TYPE_READER_TOPIC);
 $icons = icon_list(true, true, true);
 
-print_header("Edit Topic");
+print_header("Edit Topic", [], [], [], ["Reader", "Topic", $topic["name"], "Edit"], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"], "/reader/topic/" . $topic["slug"] . "/edit"]);
 beg_main();
 beg_form();
 writeln('<h1>Edit Topic</h1>');

@@ -23,10 +23,10 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-print_header("Add Feed");
+print_header("Add Feed", [], [], [], ["Reader", "Add Feed"], ["/reader/", "/reader/add"]);
 beg_main();
 beg_form();
-writeln('<h1>Add Feed</h1>');
+writeln('<h1>New Feed</h1>');
 
 beg_tab();
 print_row(array("caption" => "Feed URL", "text_key" => "feed_url"));

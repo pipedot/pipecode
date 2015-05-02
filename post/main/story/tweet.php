@@ -23,7 +23,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$story = item_request("story");
+$story = item_request(TYPE_STORY);
 $topic = db_get_rec("topic", $story["tid"]);
 $topic = $topic["topic"];
 if ($story["tweet_id"] > 0) {

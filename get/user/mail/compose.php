@@ -36,10 +36,10 @@ if ($mid > 0) {
 	$subject = "";
 }
 
-print_header("Mail", array("Inbox"), array("inbox"), array("/mail/"));
+print_header("Compose", [], [], [], ["Mail", "Compose"], ["/mail/", "/mail/compose"]);
 beg_main();
 beg_form();
-writeln('<input name="in_reply_to" type="hidden" value="' . $in_reply_to . '"/>');
+writeln('<input name="in_reply_to" type="hidden" value="' . $in_reply_to . '">');
 
 beg_tab();
 print_row(array("caption" => "To", "text_key" => "to", "text_value" => $to));

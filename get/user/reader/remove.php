@@ -21,9 +21,9 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$feed = item_request("reader");
+$feed = item_request(TYPE_READER);
 
-print_header("Remove Feed");
+print_header("Remove Feed", [], [], [], ["Reader", $feed["name"], "Remove Feed"], ["/reader/", "/reader/" . $feed["slug"], "/reader/" . $feed["slug"] . "/remove"]);
 beg_main();
 beg_form();
 writeln('<h1>Remove Feed</h1>');

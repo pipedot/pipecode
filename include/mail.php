@@ -162,7 +162,7 @@ function print_mail_dir($location)
 {
 	global $auth_zid;
 
-	print_header($location, array("Compose"), array("mail-compose"), array("/mail/compose"));
+	print_header($location, ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $location], ["/mail/", ($location == "Inbox" ? "/mail/" : strtolower("/mail/$location"))]);
 
 	beg_main();
 	writeln('<table class="fill">');
@@ -241,7 +241,7 @@ function format_text_mail($body)
 {
 	$body = htmlentities($body);
 	$body = str_replace("\r", "", $body);
-	$body = str_replace("\n", "<br/>", $body);
+	$body = str_replace("\n", "<br>", $body);
 	$body = preg_replace('@(https?://([-\w\.]+[-\w])+(:\d+)?(/([\w/_\.#-]*(\?\S+)?[^\.\s<])?)?)@', '<a href="$1">$1</a>', $body);
 
 	return $body;
@@ -273,7 +273,7 @@ function send_notifications($comment)
 			$subject = 'Reply to "' . $comment["subject"] . '" by ' . $new_zid;
 			$body = "Your comment has a new reply.\n";
 			$body .= "\n";
-			$body .= "In the " . $a["type"] . ":\n";
+			$body .= "In the " . $a["type_id"] . ":\n";
 			$body .= htmlspecialchars_decode($a["title"]) . "\n";
 			$body .= $a["link"] . "\n";
 			$body .= "\n";

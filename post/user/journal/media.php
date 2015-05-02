@@ -23,7 +23,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
 
 if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$data = fs_slurp($_FILES["upload"]["tmp_name"]);

@@ -23,7 +23,7 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");
 }
 
-$bug = item_request("bug");
+$bug = item_request(TYPE_BUG);
 
 print_header("Attachments", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();

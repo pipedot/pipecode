@@ -31,7 +31,7 @@ $row = sql("select * from thumb order by time desc limit $item_start, $items_per
 writeln('<div class="gallery">');
 for ($i = 0; $i < count($row); $i++) {
 	$short_code = crypt_crockford_encode($row[$i]["thumb_id"]);
-	writeln('	<a href="' . $short_code . '"><img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg"/></a>');
+	writeln('	<a href="' . $short_code . '"><img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg"></a>');
 }
 writeln('</div>');
 

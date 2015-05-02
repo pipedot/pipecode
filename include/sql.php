@@ -17,6 +17,145 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+// article
+const TYPE_ARTICLE = 1;
+const TYPE_BODY = 2;
+const TYPE_COMMENT = 3;
+const TYPE_COMMENT_VOTE = 4;
+const TYPE_VOTE = 5;
+
+// ask
+const TYPE_ANSWER = 10;
+const TYPE_QUESTION = 11;
+
+// bug
+const TYPE_BUG = 20;
+const TYPE_BUG_FILE = 21;
+
+// calendar
+const TYPE_APPOINTMENT = 30;
+const TYPE_CALENDAR = 31;
+
+// drive
+const TYPE_CACHE = 40;
+const TYPE_DRIVE_DIR = 41;
+const TYPE_DRIVE_FILE = 42;
+
+// feed
+const TYPE_FEED = 50;
+const TYPE_FEED_TOPIC = 51;
+
+// image
+const TYPE_GALLERY = 60;
+const TYPE_IMAGE = 61;
+const TYPE_PHOTO = 62;
+const TYPE_SCREENSHOT = 63;
+const TYPE_THUMB = 64;
+
+// journal
+const TYPE_JOURNAL = 70;
+const TYPE_JOURNAL_TOPIC = 71;
+
+// mail
+const TYPE_ADDRESS_BOOK = 80;
+const TYPE_CONTACT = 81;
+const TYPE_LIST = 82;
+const TYPE_MAIL = 83;
+const TYPE_MAIL_ATTACHMENT = 84;
+const TYPE_MAIL_BODY = 85;
+const TYPE_MAIL_SIGNATURE = 86;
+
+// music
+const TYPE_ALBUM = 90;
+const TYPE_COVER = 91;
+const TYPE_GENRE = 92;
+const TYPE_PLAYLIST = 93;
+const TYPE_SONG = 94;
+
+// news
+const TYPE_NEWS = 100;
+const TYPE_NEWS_GROUP = 101;
+
+// organization
+const TYPE_ORGANIZATION = 110;
+
+// poll
+const TYPE_POLL = 120;
+const TYPE_POLL_ANSWER = 121;
+
+// project
+const TYPE_PROJECT = 130;
+const TYPE_PROJECT_FILE = 131;
+const TYPE_PROJECT_MILESTONE = 132;
+const TYPE_PROJECT_RELEASE = 133;
+
+// reader
+const TYPE_READER = 140;
+const TYPE_READER_TOPIC = 141;
+
+// store
+const TYPE_STORE_ANSWER = 150;
+const TYPE_STORE_CART = 151;
+const TYPE_STORE_CATEGORY = 152;
+const TYPE_STORE_FEATURE = 153;
+const TYPE_STORE_GALLERY = 154;
+const TYPE_STORE_ITEM = 155;
+const TYPE_STORE_QUESTION = 156;
+const TYPE_STORE_REVIEW = 157;
+
+// story
+const TYPE_PIPE = 160;
+const TYPE_STORY = 161;
+const TYPE_STORY_TOPIC = 162;
+
+// stream
+const TYPE_CARD = 170;
+
+// user
+const TYPE_AVATAR = 180;
+const TYPE_PRIVATE_KEY = 181;
+const TYPE_PUBLIC_KEY = 182;
+const TYPE_USER = 183;
+
+// video
+const TYPE_VIDEO = 190;
+
+
+$default_conf["server_conf"] = [
+	"register_enabled" => "1",
+	"submit_enabled" => "1"
+];
+
+$default_conf["user_conf"] = [
+	"admin" => "0",
+	"birthday" => "0",
+	"editor" => "0",
+	"email" => "",
+	"expand_threshold" => "1",
+	"gravatar_enabled" => "1",
+	"gravatar_seen" => "0",
+	"gravatar_sync" => "0",
+	"hide_threshold" => "0",
+	"inline_reply_enabled" => "0",
+	"javascript_enabled" => "1",
+	"joined" => "0",
+	"lang" => "en",
+	"large_text_enabled" => "0",
+	"list_enabled" => "0",
+	"password" => "",
+	"real_name" => "",
+	"salt" => "",
+	"show_birthday_enabled" => "0",
+	"show_email_enabled" => "0",
+	"show_junk_enabled" => "0",
+	"show_name_enabled" => "0",
+	"story_image_style" => "3",
+	"time_zone" => "UTC",
+	"wysiwyg_enabled" => "1"
+];
+
+
+
 $db_table["article"] = array(
 	array("name" => "article_id", "key" => true, "default" => 0),
 	array("name" => "author_link"),
@@ -86,10 +225,11 @@ $db_table["bug_view"] = array(
 );
 
 $db_table["cache"] = array(
-	array("name" => "cache_id", "key" => true),
-	array("name" => "hash"),
+	array("name" => "cache_id", "key" => true, "auto" => true),
+	array("name" => "data_hash"),
 	array("name" => "time", "default" => $now),
-	array("name" => "url")
+	array("name" => "url"),
+	array("name" => "url_hash")
 );
 
 $db_table["captcha"] = array(
@@ -152,7 +292,6 @@ $db_table["comment"] = array(
 	array("name" => "remote_ip"),
 	array("name" => "root_id", "default" => 0),
 	array("name" => "subject"),
-	array("name" => "type"),
 	array("name" => "zid")
 );
 
@@ -193,11 +332,16 @@ $db_table["drive_file"] = array(
 	array("name" => "zid")
 );
 
+$db_table["drive_link"] = array(
+	array("name" => "hash", "key" => true),
+	array("name" => "item_id")
+);
+
 $db_table["email_challenge"] = array(
-	array("name" => "challenge", "key" => true),
-	array("name" => "username"),
+	array("name" => "code", "key" => true, "default" => 0),
 	array("name" => "email"),
-	array("name" => "expires", "default" => $now + 86400 * 3)
+	array("name" => "expires", "default" => $now + DAYS * 3),
+	array("name" => "username")
 );
 
 $db_table["feed"] = array(
@@ -396,7 +540,7 @@ $db_table["server_conf"] = array(
 
 $db_table["short"] = array(
 	array("name" => "short_id", "auto" => true, "key" => true),
-	array("name" => "type")
+	array("name" => "type_id")
 );
 
 $db_table["short_view"] = array(

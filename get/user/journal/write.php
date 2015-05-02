@@ -24,7 +24,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-print_header("Write");
+print_header("Write", [], [], [], ["Journal", "Write"], ["/journal/", "/journal/write"]);
 beg_main();
 beg_form();
 
@@ -37,7 +37,7 @@ print_row(array("caption" => "Topic", "text_key" => "topic"));
 //print_row(array("caption" => "Body", "textarea_key" => "body", "textarea_height" => "400"));
 end_tab();
 
-writeln('<div style="margin-bottom: 8px">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px"></textarea>');
 writeln('</div>');
 

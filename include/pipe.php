@@ -24,7 +24,7 @@ function print_pipe($pipe_id)
 	$pipe = db_get_rec("pipe", $pipe_id);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$topic = db_get_rec("topic", $pipe["tid"]);
-	$a["type"] = "story";
+	$a["type_id"] = TYPE_STORY;
 	$a["pipe_id"] = $pipe["pipe_id"];
 	$a["body"] = $pipe["body"];
 	$a["icon"] = $pipe["icon"];
@@ -32,7 +32,7 @@ function print_pipe($pipe_id)
 	$a["title"] = $pipe["title"];
 	$a["topic"] = $topic["topic"];
 	$a["zid"] = $pipe["author_zid"];
-	$a["comments"] = count_comments("pipe", $pipe_id);
+	$a["comments"] = count_comments(TYPE_PIPE, $pipe_id);
 
 	$row = sql("select sum(value) as score from pipe_vote where pipe_id = ?", $pipe_id);
 	$a["score"] = (int) $row[0]["score"];
@@ -62,7 +62,7 @@ function print_pipe_small($pipe_id, $full)
 		$by = "<b>$zid</b>";
 	}
 
-	$comments = count_comments("pipe", $pipe_id);
+	$comments = count_comments(TYPE_PIPE, $pipe_id);
 
 	$row = sql("select value from pipe_vote where pipe_id = ? and zid = ?", $pipe_id, $auth_zid);
 	if (count($row) == 0) {
@@ -99,14 +99,14 @@ function print_pipe_small($pipe_id, $full)
 			}
 		} else {
 			if ($value < 0) {
-				writeln('		<td style="width: 32px"><img alt="You Voted Down" title="You Voted Down" src="/images/down-64.png" style="width: 32px"/></td>');
-				writeln('		<td style="width: 32px"><input type="image" name="undo" alt="Undo Vote" title="Undo Vote" src="/images/undo-64.png" style="width: 32px"/></td>');
+				writeln('		<td style="width: 32px"><img alt="You Voted Down" title="You Voted Down" src="/images/down-64.png" style="width: 32px"></td>');
+				writeln('		<td style="width: 32px"><input type="image" name="undo" alt="Undo Vote" title="Undo Vote" src="/images/undo-64.png" style="width: 32px"></td>');
 			} else if ($value == 0) {
-				writeln('		<td style="width: 32px"><input type="image" name="up" alt="Vote Up" title="Vote Up" src="/images/plus-64.png" style="width: 32px"/></td>');
-				writeln('		<td style="width: 32px"><input type="image" name="down" alt="Vote Down" title="Vote Down" src="/images/minus-64.png" style="width: 32px"/></td>');
+				writeln('		<td style="width: 32px"><input type="image" name="up" alt="Vote Up" title="Vote Up" src="/images/plus-64.png" style="width: 32px"></td>');
+				writeln('		<td style="width: 32px"><input type="image" name="down" alt="Vote Down" title="Vote Down" src="/images/minus-64.png" style="width: 32px"></td>');
 			} else if ($value > 0) {
-				writeln('		<td style="width: 32px"><img alt="You Voted Up" title="You Voted Up" src="/images/up-64.png" style="width: 32px"/></td>');
-				writeln('		<td style="width: 32px"><input type="image" name="undo" alt="Undo Vote" title="Undo Vote" src="/images/undo-64.png" style="width: 32px"/></td>');
+				writeln('		<td style="width: 32px"><img alt="You Voted Up" title="You Voted Up" src="/images/up-64.png" style="width: 32px"></td>');
+				writeln('		<td style="width: 32px"><input type="image" name="undo" alt="Undo Vote" title="Undo Vote" src="/images/undo-64.png" style="width: 32px"></td>');
 			}
 		}
 	}

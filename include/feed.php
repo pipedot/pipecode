@@ -72,8 +72,8 @@ function save_feed($feed_id, $data)
 
 	//print "title [$title] link [$link] ";
 
-	//writeln("link [" . $link . "]<br/>");
-	//writeln("title [" . $title . "]<br/>");
+	//writeln("link [" . $link . "]<br>");
+	//writeln("title [" . $title . "]<br>");
 	//sql("delete from article where feed_id = ?", $feed_id);
 	$count = 0;
 
@@ -122,8 +122,8 @@ function save_feed($feed_id, $data)
 		}
 
 		if (!empty($item_title)) {
-			//writeln("link [$item_link] title [$item_title] description [$item_description]<br/>");
-			//writeln("link [$item_link] title [$item_title] time [$item_time]<br/>");
+			//writeln("link [$item_link] title [$item_title] description [$item_description]<br>");
+			//writeln("link [$item_link] title [$item_title] time [$item_time]<br>");
 
 			if (db_has_rec("article", array("guid" => $item_guid))) {
 				$article = db_get_rec("article", array("guid" => $item_guid));

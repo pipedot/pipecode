@@ -23,7 +23,7 @@ if (!@$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$story = item_request("story");
+$story = item_request(TYPE_STORY);
 $tmp_image_id = http_post_int("tmp_image_id");
 
 if ($tmp_image_id > 0) {

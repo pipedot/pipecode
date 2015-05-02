@@ -21,14 +21,15 @@ include("render.php");
 include("story.php");
 include("image.php");
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
+$journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);
 
 if (!$journal["published"] && $zid != $auth_zid) {
 	die("not published");
 }
 
 if ($auth_zid === $zid) {
-	print_header("Journal", array("Write"), array("notepad"), array("/journal/write"));
+	print_header("Journal", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"]], ["/journal/", $journal_link]);
 } else {
 	print_header("Journal");
 }
@@ -36,7 +37,7 @@ print_user_nav("journal");
 beg_main("cell");
 
 print_journal($journal["journal_id"]);
-print_comments("journal", $journal);
+print_comments(TYPE_JOURNAL, $journal);
 
 end_main();
 print_footer();

@@ -34,7 +34,7 @@ print_row(array("caption" => "Question", "text_key" => "question"));
 print_row(array("caption" => "Type", "option_key" => "type_id", "option_keys" => array(1, 2, 3), "option_list" => array("Multiple Choice", "Approval Voting", "Borda Count")));
 end_tab();
 
-$li = '<li><div class="icon-16 vsort-16" title="Drag to Reorder"></div><div><input type="text" name="answer[]" value=""/></div><div><a class="icon-16 minus-16" href="javascript:remove_answer()">Remove</a></div></li>';
+$li = '<li><div class="icon-16 vsort-16" title="Drag to Reorder"></div><div><input type="text" name="answer[]" value=""></div><div><a class="icon-16 minus-16" href="javascript:remove_answer()">Remove</a></div></li>';
 
 writeln('<h2>Answers</h2>');
 writeln('<ul id="sortable" class="poll-sortable">');

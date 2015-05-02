@@ -23,7 +23,7 @@ if (!$auth_user["editor"] && !$auth_user["admin"]) {
 	die("not an editor or an admin");
 }
 
-$bug_file = item_request("bug_file");
+$bug_file = item_request(TYPE_BUG_FILE);
 
 if ($bug_file["type"] == "jpg" || $bug_file["type"] == "png") {
 	$path = $doc_root . "/www" . public_path($bug_file["time"]);

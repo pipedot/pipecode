@@ -28,7 +28,7 @@ $hash = http_post_string("hash", array("valid" => "[a-z][A-Z][0-9]~#%&()-_+=[];:
 if (!string_uses($hash, "[0-9]abcdef")) {
 	$hash = crypt_sha256($hash);
 }
-$cache = item_request("cache", $hash);
+$cache = item_request(TYPE_CACHE, $hash);
 
 if ($cache === false) {
 	die("cache item not found");

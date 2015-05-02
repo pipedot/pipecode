@@ -21,7 +21,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$pipe = item_request("pipe");
+$pipe = item_request(TYPE_PIPE);
 
 print_header("Close Submission");
 beg_main();
@@ -31,7 +31,7 @@ writeln("<h1>Close Submission</h1>");
 writeln('<p>Are you sure you want to close this submission? The article will no longer show in the pipe, voting will be disabled, and comments will be locked.</p>');
 writeln('<h2>Reason</h2>');
 writeln('<p>Give a short reason for closing the article.</p>');
-writeln('<input name="reason" type="text" len="50" required="required"/>');
+writeln('<input name="reason" type="text" len="50" required>');
 
 box_left("Close");
 

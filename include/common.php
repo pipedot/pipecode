@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-$doc_root = substr(dirname(__FILE__), 0, -8);
+$doc_root = dirname(dirname(__FILE__));
 
 set_include_path("$doc_root/include");
 
@@ -49,7 +49,7 @@ $reasons["Underrated"] = 1;
 $reasons["Spam"] = -1;
 
 
-function print_header($title = "", $link_name = array(), $link_icon = array(), $link_url = array())
+function print_header($title = "", $link_name = [], $link_icon = [], $link_url = [], $spin_name = [], $spin_link = [])
 {
 	global $request_script;
 	global $auth_zid;
@@ -64,6 +64,7 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 	global $doc_root;
 	global $server_conf;
 	global $meta;
+	global $zid;
 
 	header_expires();
 	header_html();
@@ -79,42 +80,68 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 		$title .= $server_title;
 	} else {
 		$title .= $user_page . '.' . $server_name;
+		$picture = profile_picture($zid, 128);
 	}
 	writeln('<title>' . $title . '</title>');
-	writeln('<meta charset="utf-8"/>');
-	writeln('<meta name="viewport" content="width=device-width, initial-scale=1"/>');
+	writeln('<meta charset="utf-8">');
+	writeln('<meta name="viewport" content="width=device-width, initial-scale=1">');
 	print $meta;
-	writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon"/>');
-	writeln('<link rel="stylesheet" href="/style.css?t=' . fs_time("$doc_root/www/style.css") . '"/>');
+
+//	if ($user_page === "") {
+		writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon">');
+//	} else {
+//		writeln('<link rel="icon" href="/favicon-64.png" sizes="64x64" type="image/png">');
+//	}
+
+	writeln('<link rel="stylesheet" href="' . $protocol . '://' . $server_name . '/style.css?t=' . fs_time("$doc_root/www/style.css") . '">');
 	if ($auth_user["large_text_enabled"]) {
 		writeln('<style>');
 		writeln('html { font-size: 80%; }');
 		writeln('</style>');
 	}
-	if ($request_script == "/") {
+	if ($user_page === "" && $request_script == "/") {
 		writeln('<link rel="alternate" href="/atom" type="application/atom+xml" title="Stories">');
 	}
 	if ($auth_user["javascript_enabled"]) {
-		writeln('<script src="/lib/jquery/jquery.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery.js") . '"></script>');
-		writeln('<script src="/lib/jquery/jquery-ui.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery-ui.js") . '"></script>');
-		writeln('<script src="/common.js?t=' . fs_time("$doc_root/www/common.js") . '"></script>');
+		writeln('<script src="' . $protocol . '://' . $server_name . '/lib/jquery/jquery.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery.js") . '"></script>');
+		writeln('<script src="' . $protocol . '://' . $server_name . '/lib/jquery/jquery-ui.js?t=' . fs_time("$doc_root/www/lib/jquery/jquery-ui.js") . '"></script>');
+		writeln('<script src="' . $protocol . '://' . $server_name . '/common.js?t=' . fs_time("$doc_root/www/common.js") . '"></script>');
 	}
 
 	writeln('</head>');
 	writeln('<body>');
 
 	writeln('<header class="title">');
-	writeln('	<div><a class="logo-big" href="' . $protocol . '://' . $server_name . '/"></a><a class="logo-small" href="' . $protocol . '://' . $server_name . '/"></a></div>');
+
+	if ($user_page === "") {
+		writeln('	<div><a class="logo-big" href="' . $protocol . '://' . $server_name . '/"></a><a class="logo-small" href="' . $protocol . '://' . $server_name . '/"></a></div>');
+	} elseif (count($spin_name) == 0) {
+		writeln('	<div class="spinner">');
+		writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="top"></div></a>');
+		writeln('		<a class="txt" href="/">' . $zid . '</a>');
+		writeln('	</div>');
+	} else {
+		writeln('	<div class="spinner">');
+		writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="beg"></div></a>');
+		for ($i = 0; $i < count($spin_name); $i++) {
+			writeln('		<a class="bar" href="' . $spin_link[$i] . '">' . $spin_name[$i] . '</a>');
+			if ($i < count($spin_name) - 1) {
+				writeln('		<a class="sep" href="' . $spin_link[$i] . '"></a>');
+			}
+		}
+		writeln('		<a class="end" href="' . $spin_link[$i - 1] . '"></a>');
+		writeln('	</div>');
+	}
 
 	if ($user_page === "") {
 		if ($auth_zid === "") {
 			if ($server_conf["submit_enabled"]) {
 				$link_name[] = "Submit";
 			}
-			if ($server_conf["sign_up_enabled"]) {
-				$link_name[] = "Sign Up";
+			if ($server_conf["register_enabled"]) {
+				$link_name[] = "Register";
 			}
-			$link_name[] = "Sign In";
+			$link_name[] = "Login";
 		} else {
 			if ($server_conf["submit_enabled"]) {
 				$link_name[] = "Submit";
@@ -123,16 +150,17 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			if (($auth_user["admin"] || $auth_user["editor"]) && $request_script != "/menu/") {
 				$link_name[] = "Tools";
 			}
-			$link_name[] = "Sign Out";
+			$link_name[] = "Logout";
 		}
 	} else {
 		if ($auth_zid === "") {
-			$link_name[] = "Sign In";
+			$link_name[] = "Login";
 		} else {
-			if ($request_script != "/menu/") {
-				$link_name[] = "Home";
-			}
-			$link_name[] = "Sign Out";
+			//if ($request_script != "/menu/") {
+			//	$link_name[] = "Home";
+			//}
+			$link_name[] = "Server";
+			$link_name[] = "Logout";
 		}
 	}
 
@@ -147,19 +175,23 @@ function print_header($title = "", $link_name = array(), $link_icon = array(), $
 			$link = "/submit";
 		} else if ($name == "Home") {
 			$icon = "home";
-			$link = user_link($auth_zid) . "menu/";
+			$link = user_link($auth_zid);
+		} else if ($name == "Server") {
+			$name = $server_title;
+			$icon = "logo";
+			$link = "$protocol://$server_name/";
 		} else if ($name == "Tools") {
 			$icon = "tools";
 			$link = "/menu/";
-		} else if ($name == "Sign Up") {
+		} else if ($name == "Register") {
 			$icon = "contact-new";
-			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/sign_up";
-		} else if ($name == "Sign In") {
+			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/register";
+		} else if ($name == "Login") {
 			$icon = "users";
-			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/sign_in";
-		} else if ($name == "Sign Out") {
+			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/login";
+		} else if ($name == "Logout") {
 			$icon = "exit";
-			$link = "$protocol://$server_name/sign_out";
+			$link = "$protocol://$server_name/logout";
 		}
 
 		if ($icon == "") {
@@ -205,7 +237,7 @@ function print_main_nav($selected)
 	}
 
 	writeln('	<div class="topics">');
-	writeln('	<hr/>');
+	writeln('	<hr>');
 	$list = db_get_list("topic", "topic", array("promoted" => 1));
 	$keys = array_keys($list);
 	for ($i = 0; $i < count($keys); $i++) {
@@ -229,13 +261,15 @@ function print_user_nav($selected)
 	global $server_name;
 	global $zid;
 
-	if ($auth_zid === $zid) {
-		$section_name = array("overview", "karma", "comments", "journal", "topics", "feed", "reader", "stream");
-		$section_link = array("", "karma/", "comments", "journal/", "topic", "feed/", "reader/", "stream/");
-	} else {
-		$section_name = array("overview", "journal", "stream", "comments", "feed", "karma");
-		$section_link = array("", "journal/", "stream/", "comments", "feed/", "karma/");
-	}
+//	if ($auth_zid === $zid) {
+//		$section_name = array("overview", "karma", "comments", "journal", "topics", "feed", "reader", "stream");
+//		$section_link = array("", "karma/", "comments", "journal/", "topic", "feed/", "reader/", "stream/");
+//	} else {
+//		$section_name = array("overview", "journal", "stream", "comments", "feed", "karma");
+//		$section_link = array("", "journal/", "stream/", "comments", "feed/", "karma/");
+//	}
+	$section_name = array("journal");
+	$section_link = array("journal/");
 
 	writeln('<nav class="sections">');
 
@@ -251,7 +285,7 @@ function print_user_nav($selected)
 	$row = sql("select distinct topic from journal where zid = ? order by topic", $zid);
 	if (count($row) > 0) {
 		writeln('	<div class="topics">');
-		writeln('	<hr/>');
+		writeln('	<hr>');
 		for ($i = 0; $i < count($row); $i++) {
 			$topic = $row[$i]["topic"];
 			if ($topic == $selected) {
@@ -301,7 +335,7 @@ function print_user_box()
 //	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td><a class="icon-32 mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
-	writeln('		<td><a class="icon-32 tools-32" href="' . $link . 'profile/">Settings</a></td>');
+	writeln('		<td><a class="icon-32 tools-32" href="' . $link . 'profile/settings">Settings</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
 //	writeln('		<td><a class="icon-32 reader-32" href="' . $link . 'reader/">Reader</a></td>');
@@ -538,35 +572,34 @@ function article_info($comment, $force_https = true)
 	} else {
 		$p = $protocol;
 	}
+	$short = db_get_rec("short", $comment["root_id"]);
+	$type_id = $short["type_id"];
 	$a = array();
-	if ($comment["type"] == "story") {
+	$a["type_id"] = $type_id;
+	$a["type"] = item_type($type_id);
+	if ($type_id == TYPE_STORY) {
 		$story = db_get_rec("story", $comment["root_id"]);
-		$a["type"] = "story";
 		$a["title"] = $story["title"];
 		$date = gmdate("Y-m-d", $story["publish_time"]);
 		$a["link"] = "$p://$server_name/story/$date/" . $story["slug"];
-	} else if ($comment["type"] == "pipe") {
+	} else if ($type_id == TYPE_PIPE) {
 		$pipe = db_get_rec("pipe", $comment["root_id"]);
-		$a["type"] = "pipe";
 		$a["title"] = $pipe["title"];
 		$a["link"] = "$p://$server_name/pipe/" . crypt_crockford_encode($pipe["pipe_id"]);
-	} else if ($comment["type"] == "poll") {
+	} else if ($type_id == TYPE_POLL) {
 		$poll = db_get_rec("poll", $comment["root_id"]);
-		$a["type"] = "poll";
 		$a["title"] = $poll["question"];
 		$a["link"] = "$p://$server_name/poll/" . gmdate("Y-m-d", $poll["publish_time"]) . "/" . $poll["slug"];
-	} else if ($comment["type"] == "journal") {
+	} else if ($type_id == TYPE_JOURNAL) {
 		$journal = db_get_rec("journal", $comment["root_id"]);
-		$a["type"] = "journal";
 		$a["title"] = $journal["title"];
 		if ($journal["published"]) {
 			$a["link"] = user_link($journal["zid"]) . "journal/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
 		} else {
 			$a["link"] = user_link($journal["zid"]) . "journal/" . crypt_crockford_encode($journal["journal_id"]);
 		}
-	} else if ($comment["type"] == "card") {
+	} else if ($type_id == TYPE_CARD) {
 		$card = db_get_rec("card", array("card_id" => $comment["root_id"]));
-		$a["type"] = "card";
 		$a["title"] = "#" . crypt_crockford_encode($card["card_id"]);
 		$a["link"] = "$p://$server_name/card/" . crypt_crockford_encode($card["card_id"]);
 	}
@@ -624,10 +657,10 @@ function karma_description($karma)
 }
 
 
-function create_short($type)
+function create_short($type_id)
 {
 	$short = db_new_rec("short");
-	$short["type"] = $type;
+	$short["type_id"] = $type_id;
 	db_set_rec("short", $short);
 
 	return db_last();
@@ -683,24 +716,25 @@ function revert_view_time($type, $root_id)
 }
 
 
-function count_comments($type = "", $root_id = "")
+function count_comments($type_id = 0, $root_id = "")
 {
 	global $auth_zid;
 	global $auth_user;
 
-	if ($type === "" && $root_id === "") {
+	if ($type_id == 0 && $root_id === "") {
 		$comments["count"] = 0;
 		$comments["label"] = " comments";
 		$comments["new"] = 0;
 		$comments["tag"] = "<b>0</b> comments";
 		return;
 	}
+	$type = item_type($type_id);
 
 	$comments = array();
 	if ($auth_user["show_junk_enabled"]) {
-		$row = sql("select count(*) as comments from comment where type = ? and root_id = ?", $type, $root_id);
+		$row = sql("select count(*) as comments from comment where root_id = ?", $root_id);
 	} else {
-		$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and junk_status <= 0", $type, $root_id);
+		$row = sql("select count(*) as comments from comment where root_id = ? and junk_status <= 0", $root_id);
 	}
 	$comments["count"] = $row[0]["comments"];
 	if ($comments["count"] == 1) {
@@ -718,9 +752,9 @@ function count_comments($type = "", $root_id = "")
 			//$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
 			$time = $row[0]["time"];
 			if ($auth_user["show_junk_enabled"]) {
-				$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and edit_time > ?", $type, $root_id, $time);
+				$row = sql("select count(*) as comments from comment where root_id = ? and edit_time > ?", $root_id, $time);
 			} else {
-				$row = sql("select count(*) as comments from comment where type = ? and root_id = ? and edit_time > ? and junk_status <= 0", $type, $root_id, $time);
+				$row = sql("select count(*) as comments from comment where root_id = ? and edit_time > ? and junk_status <= 0", $root_id, $time);
 			}
 			$comments["new"] = $row[0]["comments"];
 		} else {
@@ -736,7 +770,7 @@ function count_comments($type = "", $root_id = "")
 }
 
 
-function print_comments($type, $rec)
+function print_comments($type_id, $rec)
 {
 	global $auth_zid;
 	global $auth_user;
@@ -759,11 +793,12 @@ function print_comments($type, $rec)
 		$wysiwyg_enabled = false;
 	}
 
+	$type = item_type($type_id);
 	if ($auth_user["javascript_enabled"]) {
-		print_sliders($type, $rec["{$type}_id"]);
+		print_sliders($type_id, $rec["{$type}_id"]);
 		print_noscript();
 	} else {
-		render_page($type, $rec["{$type}_id"], false);
+		render_page($type_id, $rec["{$type}_id"], false);
 	}
 
 	$last_seen = update_view_time($type, $rec["{$type}_id"]);
@@ -842,27 +877,27 @@ function make_photo_links($text)
 			if (in_array("thumb", $a)) {
 				$frame = true;
 				if ($retina) {
-					$tag = "<img class=\"{$info["thumb_small_class"]}\" src=\"{$info["thumb_large_link"]}\"/>";
+					$tag = "<img class=\"{$info["thumb_small_class"]}\" src=\"{$info["thumb_large_link"]}\">";
 				} else {
-					$tag = "<img class=\"{$info["thumb_small_class"]}\" src=\"{$info["thumb_small_link"]}\"/>";
+					$tag = "<img class=\"{$info["thumb_small_class"]}\" src=\"{$info["thumb_small_link"]}\">";
 				}
 			} else if ($photo["has_medium"] && in_array("medium", $a)) {
 				if ($retina) {
-					$tag = "<img class=\"{$info["small_class"]}\" src=\"{$info["medium_link"]}\"/>";
+					$tag = "<img class=\"{$info["small_class"]}\" src=\"{$info["medium_link"]}\">";
 				} else {
-					$tag = "<img class=\"{$info["medium_class"]}\" src=\"{$info["medium_link"]}\"/>";
+					$tag = "<img class=\"{$info["medium_class"]}\" src=\"{$info["medium_link"]}\">";
 				}
 			} else if ($photo["has_large"] && in_array("large", $a)) {
 				if ($retina) {
-					$tag = "<img class=\"{$info["big_class"]}\" src=\"{$info["large_link"]}\"/>";
+					$tag = "<img class=\"{$info["big_class"]}\" src=\"{$info["large_link"]}\">";
 				} else {
-					$tag = "<img class=\"{$info["large_class"]}\" src=\"{$info["large_link"]}\"/>";
+					$tag = "<img class=\"{$info["large_class"]}\" src=\"{$info["large_link"]}\">";
 				}
 			} else {
 				if ($retina) {
-					$tag = "<img class=\"{$info["tiny_class"]}\" src=\"{$info["small_link"]}\"/>";
+					$tag = "<img class=\"{$info["tiny_class"]}\" src=\"{$info["small_link"]}\">";
 				} else {
-					$tag = "<img class=\"{$info["small_class"]}\" src=\"{$info["small_link"]}\"/>";
+					$tag = "<img class=\"{$info["small_class"]}\" src=\"{$info["small_link"]}\">";
 				}
 			}
 			$tag = "<a href=\"$protocol://$server_name/photo/$short_code\">$tag</a>";
@@ -894,8 +929,8 @@ function similar_count($story)
 	} else {
 		$publish_time = $story["time"];
 	}
-	$beg_time = $publish_time - 86400 * 15;
-	$end_time = $publish_time + 86400 * 15;
+	$beg_time = $publish_time - DAYS * 15;
+	$end_time = $publish_time + DAYS * 15;
 
 	$row = sql("select count(*) as item_count from article where match (title) against (? in boolean mode) and publish_time > ? and publish_time < ? and article.feed_id <> $server_feed_id", $keywords, $beg_time, $end_time);
 
@@ -1059,13 +1094,15 @@ if (array_key_exists("HTTP_HOST", $_SERVER)) {
 }
 $user_page = "";
 $meta = "";
+$a = explode(".", $server_name);
+$server_level = count($a);
 $a = explode(".", $http_host);
-if (count($a) == 2) {
+if (count($a) == $server_level) {
 	if ($http_host != $server_name) {
 		header("Location: $protocol://$server_name$request_uri");
 		die();
 	}
-} else if (count($a) == 3) {
+} else if (count($a) == $server_level + 1) {
 	if ($a[1] . "." . $a[2] != $server_name) {
 		header("Location: $protocol://" . $a[0] . ".$server_name$request_uri");
 		die();

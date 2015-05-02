@@ -25,7 +25,7 @@ if (!$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$pipe = item_request("pipe");
+$pipe = item_request(TYPE_PIPE);
 $clean_body = $pipe["body"];
 $dirty_body = dirty_html($clean_body);
 

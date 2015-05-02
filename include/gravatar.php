@@ -63,7 +63,7 @@ function update_gravatar($zid)
 function seen_gravatar($zid)
 {
 	$now = time();
-	$yesterday = $now - 86400;
+	$yesterday = $now - DAYS;
 	$user_conf = db_get_conf("user_conf", $zid);
 
 	if (!$user_conf["gravatar_enabled"]) {
@@ -81,7 +81,7 @@ function seen_gravatar($zid)
 function update_gravatars()
 {
 	$now = time();
-	$yesterday = $now - 86400;
+	$yesterday = $now - DAYS;
 
 	$row = sql("select distinct zid from user_conf");
 	for ($i = 0; $i < count($row); $i++) {

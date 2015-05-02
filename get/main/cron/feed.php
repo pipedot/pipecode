@@ -22,7 +22,7 @@ include("clean.php");
 include("image.php");
 include("drive.php");
 
-set_time_limit(14 * 60);
+set_time_limit(14 * MINUTES);
 header_text();
 header_expires();
 

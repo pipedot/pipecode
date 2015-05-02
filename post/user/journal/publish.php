@@ -21,7 +21,7 @@ if ($zid !== $auth_zid) {
 	die("not your journal");
 }
 
-$journal = item_request("journal");
+$journal = item_request(TYPE_JOURNAL);
 $journal["publish_time"] = time();
 $journal["published"] = 1;
 db_set_rec("journal", $journal);

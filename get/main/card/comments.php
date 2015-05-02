@@ -21,7 +21,7 @@ include("render.php");
 
 header_text();
 
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 $can_moderate = true;
 render_page("card", $card["card_id"], true);
 

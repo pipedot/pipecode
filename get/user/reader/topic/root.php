@@ -24,9 +24,9 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$topic = item_request("reader_topic");
+$topic = item_request(TYPE_READER_TOPIC);
 
-print_header($topic["name"], ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"]);
+print_header($topic["name"], ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader", "Topic", $topic["name"]], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"]]);
 print_reader_nav();
 beg_main("cell");
 

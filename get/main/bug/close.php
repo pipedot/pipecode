@@ -21,7 +21,7 @@ if (!$auth_user["admin"] || !$auth_user["editor"]) {
 	die("you are not an editor");
 }
 
-$bug = item_request("bug");
+$bug = item_request(TYPE_BUG);
 
 print_header("Close Bug");
 beg_main();

@@ -1,0 +1,44 @@
+<?
+//
+// Pipecode - distributed social network
+// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as
+// published by the Free Software Foundation, either version 3 of the
+// License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+
+expire_auth();
+require_https($https_enabled);
+
+print_header("Login");
+writeln('<hr>');
+beg_main();
+beg_form("/login");
+writeln('<h1>Login</h1>');
+
+writeln('<table class="login">');
+writeln('	<tr>');
+writeln('		<td>Username</td>');
+writeln('		<td><input name="username" type="text" autofocus required></td>');
+writeln('	</tr>');
+writeln('	<tr>');
+writeln('		<td>Password</td>');
+writeln('		<td><input name="password" type="password" required></td>');
+writeln('	</tr>');
+writeln('</table>');
+
+box_left('<input type="submit" value="Login"> <a href="/forgot">Forgot Password?</a>');
+
+end_form();
+end_main();
+print_footer();

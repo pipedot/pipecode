@@ -33,7 +33,7 @@ print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $pa
 print_row(array("caption" => "Slug", "text_key" => "slug", "text_value" => $page["slug"]));
 end_tab();
 
-writeln('<div style="margin-bottom: 8px;">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 600px;">' . $page["body"] . '</textarea>');
 writeln('</div>');
 writeln('<script type="text/javascript" src="/lib/ckeditor/ckeditor.js"></script>');

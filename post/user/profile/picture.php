@@ -53,4 +53,4 @@ $auth_user["gravatar_seen"] = 0;
 $auth_user["gravatar_sync"] = 0;
 db_set_conf("user_conf", $auth_user, $auth_zid);
 
-header("Location: /menu/");
+header("Location: /profile/");

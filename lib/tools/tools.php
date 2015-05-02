@@ -17,6 +17,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+const SECONDS = 1;
+const MINUTES = 60;
+const HOURS = 3600;
+const DAYS = 86400;
+const WEEKS = 604800;
+const YEARS = 31536000;
+
+
 function assert_equal($x, $y)
 {
 	if ($x != $y) {
@@ -174,6 +182,53 @@ function beg_tab($caption = "", $a = array())
 		}
 		writeln('	</tr>');
 	}
+}
+
+
+function cache_beg($key)
+{
+	global $writeln_cache;
+	global $writeln_key;
+	global $writeln_buffer;
+	global $cache_enabled;
+
+	$cache_enabled = true;
+
+	$s = cache_get($key);
+	if ($s !== false) {
+		print "cache hit [$key]\n";
+		print "$s\n";
+		return false;
+	}
+
+	$writeln_cache = true;
+	$writeln_key = $key;
+	$writeln_buffer = [];
+
+	$cache_enabled = false;
+
+	return true;
+}
+
+
+function cache_end($expire = -1)
+{
+	global $writeln_cache;
+	global $writeln_key;
+	global $writeln_buffer;
+	global $cache_enabled;
+
+	$cache_enabled = true;
+
+	$writeln_cache = false;
+	$s = implode("\n", $writeln_buffer);
+	$writeln_buffer = [];
+	cache_set($writeln_key, $s, $expire);
+	$writeln_key = "";
+
+	$cache_enabled = false;
+
+	return $s;
 }
 
 
@@ -619,6 +674,7 @@ function db_del_rec($table, $id)
 function db_get_conf($table, $id = false)
 {
 	global $db_table;
+	global $default_conf;
 	global $cache_enabled;
 
 	if ($id !== false) {
@@ -638,9 +694,15 @@ function db_get_conf($table, $id = false)
 	}
 
 	$map = array();
-	$row = sql("select name, value from default_conf where conf = ?", $table);
-	for ($i = 0; $i < count($row); $i++) {
-		$map[$row[$i]["name"]] = $row[$i]["value"];
+//	$row = sql("select name, value from default_conf where conf = ?", $table);
+//	for ($i = 0; $i < count($row); $i++) {
+//		$map[$row[$i]["name"]] = $row[$i]["value"];
+//	}
+	if (array_key_exists($table, $default_conf)) {
+		$keys = array_keys($default_conf[$table]);
+		for ($i = 0; $i < count($keys); $i++) {
+			$map[$keys[$i]] = $default_conf[$table][$keys[$i]];
+		}
 	}
 
 	if ($id === false) {
@@ -1790,7 +1852,7 @@ function box_buttons($buttons)
 			$value = trim($a[$i]);
 			$name = strtolower($value);
 			$name = str_replace(" ", "_", $name);
-			$s .= '<input type="submit" name="' . $name . '" value="' . $value .'"/> ';
+			$s .= '<input type="submit" name="' . $name . '" value="' . $value .'"> ';
 		}
 		return trim($s);
 	}
@@ -1971,7 +2033,7 @@ function print_row($a)
 		$indent_width = "";
 	}
 	if (array_key_exists("required", $a)) {
-		$required = ' required="required"';
+		$required = ' required';
 	} else {
 		$required = '';
 	}
@@ -1986,7 +2048,7 @@ function print_row($a)
 	if (array_key_exists("text_key", $a)) {
 		writeln('			<div class="row-tab">');
 		writeln('				<div' . $indent_width . ' class="row-caption">' . $a["caption"] . '</div>');
-		writeln('				<div><div class="row-outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . @$a["text_value"] . '"/></div></div>');
+		writeln('				<div><div class="row-outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . @$a["text_value"] . '"></div></div>');
 		if (array_key_exists("text_default", $a)) {
 			writeln('				<div class="row-action"><div class="row-button undo-16" title="Reset" onclick="$(\'#' . $a["text_key"] . '\').val(\'' . addcslashes($a["text_default"], "\\") .'\')"></div></div>');
 		}
@@ -1997,7 +2059,7 @@ function print_row($a)
 	} else if (array_key_exists("password_key", $a)) {
 		writeln('			<div class="row-tab">');
 		writeln('				<div' . $indent_width . ' class="row-caption">' . $a["caption"] . '</div>');
-		writeln('				<div><div class="row-outline"><input id="' . $a["password_key"] . '" name="' . $a["password_key"] . '" type="password" value="' . @$a["password_value"] . '"/></div></div>');
+		writeln('				<div><div class="row-outline"><input id="' . $a["password_key"] . '" name="' . $a["password_key"] . '" type="password" value="' . @$a["password_value"] . '"></div></div>');
 		writeln('			</div>');
 	} else if (array_key_exists("textarea_key", $a)) {
 		if (array_key_exists("textarea_height", $a)) {
@@ -2058,7 +2120,6 @@ function print_row($a)
 	} else {
 		if (array_key_exists("check_key", $a)) {
 			if (array_key_exists("check_show", $a) || array_key_exists("check_hide", $a)) {
-				//$on_click = ' onchange="alert(this.checked)" onclick="this.focus(); document.getElementById(\'location\').focus()"';
 				$show_id = @$a["check_show"];
 				$hide_id = @$a["check_hide"];
 				if (ie()) {
@@ -2074,10 +2135,10 @@ function print_row($a)
 			} else {
 				$check_value = '';
 			}
-			writeln('			<input name="' . $a["check_key"] . '" class="row-check" type="checkbox"' . $check_value . ( $checked ? ' checked="true"' : '' ) . $event . '/>');
+			writeln('			<input name="' . $a["check_key"] . '" class="row-check" type="checkbox"' . $check_value . ( $checked ? ' checked' : '' ) . $event . '>');
 		}
 		if (array_key_exists("icon", $a)) {
-			writeln('			<img src="/images/' . $a["icon"] . '.png" style="vertical-align: middle; margin-right: 8px"/>');
+			writeln('			<img src="/images/' . $a["icon"] . '.png" style="vertical-align: middle; margin-right: 8px">');
 		}
 		if (array_key_exists("caption", $a)) {
 			writeln('			' . $a["caption"]);
@@ -2091,6 +2152,22 @@ function print_row($a)
 function random_hash()
 {
 	return crypt_sha256(time() . getmypid() . rand());
+}
+
+
+function require_https($force = true)
+{
+	if (!$force) {
+		return;
+	}
+	if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == 1) || isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {
+		return;
+	}
+	$http_host = $_SERVER["HTTP_HOST"];
+	$request_uri = $_SERVER["REQUEST_URI"];
+
+	header("Location: https://$http_host$request_uri");
+	die();
 }
 
 
@@ -2299,9 +2376,12 @@ function sys_format_size($bytes, $binary = false)
 
 function writeln($s = "")
 {
-	if (defined("DOS_NEW_LINES")) {
-		print $s . "\r\n";
-	} else {
-		print $s . "\n";
+	global $writeln_cache;
+	global $writeln_buffer;
+
+	print "$s\n";
+
+	if ($writeln_cache) {
+		$writeln_buffer[] = $s;
 	}
 }

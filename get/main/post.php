@@ -23,26 +23,13 @@ include("captcha.php");
 include("post.php");
 
 $item = item_request();
-//if ($item["type"] !== "comment") {
-//	$article = $comment;
-//var_dump($item);
-//die();
-
-//$type = http_get_string("type", array("required" => false, "valid" => "[a-z]"));
-//$comment_id = http_get_string("comment_id", array("required" => false, "valid" => "[a-z][0-9]_"));
-//$root_id = http_get_string("root_id", array("required" => false, "valid" => "[a-z][0-9]_"));
 
 print_header("Post Comment");
 print_main_nav("stories");
 beg_main("cell");
 
-//if ($comment_id != "") {
 if ($item["short_type"] === "comment") {
-	//$comment = db_get_rec("comment", $comment_id);
-	//$type = $comment["type"];
-	//$subject = $comment["subject"];
 	$subject = $item["subject"];
-	//$zid = $comment["zid"];
 	$root_id = $item["root_id"];
 
 	$re = false;
@@ -52,11 +39,10 @@ if ($item["short_type"] === "comment") {
 		}
 	}
 	if (!$re) {
-		//$subject = "Re: " . $comment["subject"];
 		$subject = "Re: " . $item["subject"];
 	}
 
-	writeln('<div style="margin-bottom: 8px">');
+	writeln('<div class="box">');
 	print render_comment($item["subject"], $item["zid"], $item["edit_time"], $item["comment_id"], $item["body"], 0);
 	writeln('</div>');
 	writeln('</article>');
@@ -66,10 +52,8 @@ if ($item["short_type"] === "comment") {
 	$subject = "";
 	$root_id = $item[$item["short_type"] . "_id"];
 }
-//check_article_type($type);
 
-//print_post_box($type, $root_id, $subject, "", false);
-print_post_box($item["short_type"], $root_id, $subject, "", false);
+print_post_box($root_id, $subject, "", false);
 
 end_main();
 print_footer();

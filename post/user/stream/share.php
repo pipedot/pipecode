@@ -61,7 +61,7 @@ if ($clean_body == "" && $link_url == "" && $photo_id == 0) {
 $card = db_new_rec("card");
 $card["card_id"] = create_short("card");
 $card["image_id"] = 0;
-$card["archive"] = $time + 86400 * 90;
+$card["archive"] = $time + DAYS * 90;
 $card["body"] = $clean_body;
 $card["link_subject"] = $link_subject;
 $card["link_url"] = $link_url;

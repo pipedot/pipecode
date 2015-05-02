@@ -47,7 +47,7 @@ if ($ext == "jpg") {
 print_header("Thumbnail");
 beg_main();
 
-$thumb = item_request("thumb");
+$thumb = item_request(TYPE_THUMB);
 $short_code = crypt_crockford_encode($thumb["thumb_id"]);
 
 if ($thumb["low_res"]) {
@@ -58,7 +58,7 @@ if ($thumb["low_res"]) {
 
 writeln('<h1>Thumbnail</h1>');
 writeln('<div class="photo-frame">');
-writeln('	<img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg"/>');
+writeln('	<img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg">');
 writeln('	<div><a href="' . $short_code . '.jpg">' . $size . '</a></div>');
 writeln('</div>');
 

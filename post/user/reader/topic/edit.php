@@ -21,7 +21,7 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-$reader_topic = item_request("reader_topic");
+$reader_topic = item_request(TYPE_READER_TOPIC);
 
 $icon = http_post_string("icon", array("valid" => "[a-z]-", "len" => 20));
 $name = http_post_string("name", array("valid" => "[A-Z][a-z][0-9]`~!@#$%^&*()_+-=[]\{}|;':\",./? ", "len" => 50));

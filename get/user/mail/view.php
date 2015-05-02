@@ -82,9 +82,9 @@ if ($message["zid"] != $auth_zid) {
 
 //print_header($message["subject"], $name, $icon, $link);
 if (string_has($message["mail_from"], "no-reply@")) {
-	print_header($message["subject"], array("Inbox"), array("inbox"), array("/mail/"));
+	print_header($message["subject"], ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view?mid=$mail_id"]);
 } else {
-	print_header($message["subject"], array("Reply", "Inbox"), array("mail_reply", "inbox"), array("/mail/compose?mid=$mail_id", "/mail/"));
+	print_header($message["subject"], ["Reply", "Compose"], ["mail-reply", "mail-compose"], ["/mail/compose?mid=$mail_id", "/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view?mid=$mail_id"]);
 }
 beg_main();
 

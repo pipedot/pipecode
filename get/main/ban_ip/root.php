@@ -49,7 +49,7 @@ writeln('<h2>Example Comment</h2>');
 
 $comment = db_get_rec("comment", $ban_ip["short_id"]);
 
-print render_comment($comment["subject"], $comment["zid"], $comment["publish_time"], $comment["comment_id"], $comment["body"], 0, $comment["short_id"], "", "", $comment["junk_status"]);
+print render_comment($comment["subject"], $comment["zid"], $comment["publish_time"], $comment["comment_id"], $comment["body"], 0, "", "", $comment["junk_status"]);
 writeln('</div>');
 writeln('</article>');
 

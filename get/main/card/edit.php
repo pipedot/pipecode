@@ -19,7 +19,7 @@
 
 include("clean.php");
 
-$card = item_request("card");
+$card = item_request(TYPE_CARD);
 
 if ($card["zid"] !== $auth_zid) {
 	die("not your card");
@@ -28,7 +28,7 @@ if ($card["zid"] !== $auth_zid) {
 $clean_body = $card["body"];
 $dirty_body = dirty_html($clean_body);
 if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
-	$dirty_body = str_replace("\n", "<br/>", $dirty_body);
+	$dirty_body = str_replace("\n", "<br>", $dirty_body);
 }
 
 print_header("Edit Card");
@@ -49,7 +49,7 @@ beg_tab();
 print_row(array("caption" => "Tags", "text_key" => "tags", "text_value" => $tags));
 end_tab();
 
-writeln('<div style="margin-bottom: 8px">');
+writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px">' . $dirty_body . '</textarea>');
 writeln('</div>');
 

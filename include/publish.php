@@ -48,7 +48,7 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 
 	writeln('<h1>Preview</h1>');
 	$a = array();
-	$a["type"] = "pipe";
+	$a["type_id"] = TYPE_PIPE;
 	$a["title"] = $title;
 	$a["pipe_id"] = $pipe_id;
 	$a["zid"] = $zid;
