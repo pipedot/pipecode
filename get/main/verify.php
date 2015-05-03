@@ -19,23 +19,76 @@
 
 require_https($https_enabled);
 
-print_header("Verification Code");
+$code = http_get_string("code", array("required" => false, "len" => 6, "valid" => "[A-Z][a-z][0-9]"));
+if ($code == "") {
+	$code = $s2;
+}
+if ($code == "") {
+	print_header("Verification Code");
+	writeln('<hr>');
+	beg_main();
+	beg_form("/verify", "get");
+	writeln('<h1>Verification Code</h1>');
+
+	writeln('<table class="login">');
+	writeln('	<tr>');
+	writeln('		<td>Code</td>');
+	writeln('		<td><input name="code" type="text" autofocus required></td>');
+	writeln('	</tr>');
+	writeln('</table>');
+
+	box_left("Verify");
+
+	end_form();
+	end_main();
+	print_footer();
+	die();
+}
+if (strlen($code) != 6 || !string_uses($code, "[A-Z][a-z][0-9]")) {
+	die("invalid verification code");
+}
+$id = crypt_crockford_decode($code);
+
+if (!db_has_rec("email_challenge", $id)) {
+	die("wrong verification code");
+}
+$email_challenge = db_find_rec("email_challenge", $id);
+if ($email_challenge === false) {
+	die("wrong verification code");
+}
+
+$zid = strtolower($email_challenge["username"]) . "@$server_name";
+$new = !is_local_user($zid);
+
+if ($new) {
+	print_header("Set Password");
+} else {
+	print_header("Reset Password");
+}
 writeln('<hr>');
 beg_main();
-beg_form("/reset", "get");
-writeln('<h1>Verification Code</h1>');
+beg_form();
+if ($new) {
+	writeln('<h1>Set Password</h1>');
+} else {
+	writeln('<h1>Reset Password</h1>');
+}
 
+writeln('<input type="hidden" name="code" value="' . $code . '">');
+writeln('<p>Please choose a password.</p>');
 writeln('<table class="login">');
 writeln('	<tr>');
-writeln('		<td>Code</td>');
-writeln('		<td><input name="code" type="text" autofocus required></td>');
+writeln('		<td>Password</td>');
+writeln('		<td><input name="password_1" type="password" autofocus required></td>');
+writeln('	</tr>');
+writeln('	<tr>');
+writeln('		<td>Password (again)</td>');
+writeln('		<td><input name="password_2" type="password" required></td>');
 writeln('	</tr>');
 writeln('</table>');
 
-box_left("Verify");
+box_left("Save");
 
 end_form();
 end_main();
 print_footer();
-
-

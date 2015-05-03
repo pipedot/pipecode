@@ -32,7 +32,7 @@ $code = string_pad(crypt_crockford_encode($id), 6);
 
 sql("delete from email_challenge where expires < ?", time());
 if (db_has_rec("email_challenge", ["username" => $username])) {
-	db_del_rec("email_challenge", ["username" => $username]);
+	sql("delete from email_challenge where username = ?", $username);
 }
 
 $email_challenge = db_new_rec("email_challenge");
@@ -51,7 +51,7 @@ $body .= "$code\n";
 $body .= "\n";
 $body .= "Or visit the following link:\n";
 $body .= "\n";
-$body .= "$protocol://$server_name/reset/$code\n";
+$body .= "$protocol://$server_name/verify/$code\n";
 $body .= "\n";
 $body .= "This code will expire in 3 days.\n";
 

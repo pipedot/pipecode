@@ -20,100 +20,51 @@
 include("captcha.php");
 include("mail.php");
 
+require_https($https_enabled);
+
 if (!$server_conf["register_enabled"]) {
 	die("register not enabled");
 }
 
-/*$verify = http_get_string("verify", array("required" => false, "len" => 64, "valid" => "[0-9]abcdef"));
-if (strlen($verify) != 0 && strlen($verify) != 64) {
-	die("invalid verify hash");
-}
-if ($verify != "") {
-	$email_challenge = db_get_rec("email_challenge", array("challenge" => $verify));
-	$zid = strtolower($email_challenge["username"]) . "@$server_name";
-	if (is_local_user($zid)) {
-		die("username already exists [$zid]");
-	}
-}
-
-if ($verify != "") {
-	print_header("Email Validated");
-	writeln('<hr>');
-	beg_main();
-	if ($https_enabled) {
-		beg_form("https://$server_name/sign_up?verify=$verify");
-	} else {
-		beg_form("/sign_up?verify=$verify");
-	}
-	writeln('<h1>Email Validated</h1>');
-	writeln('<table>');
-	writeln('	<tr>');
-	writeln('		<td colspan="2">Please choose a password.</td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-top: 8px; text-align: right">Password</td>');
-	writeln('		<td style="padding-top: 8px"><input name="password_1" type="password"></td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-bottom: 8px; text-align: right">Password (again)</td>');
-	writeln('		<td style="padding-bottom: 8px"><input name="password_2" type="password"></td>');
-	writeln('	</tr>');
-	writeln('</table>');
-	box_left("Finish");
-	end_form();
-	end_main();
-	print_footer();
-
-	die();
-}
-*/
-
 print_header("Register");
 writeln('<hr>');
 beg_main();
+beg_form();
 
-if ($https_enabled) {
-	beg_form("https://$server_name/register");
-} else {
-	beg_form("/register");
-}
-
-?>
-<h1>Create Account</h1>
-<table>
-	<tr>
-		<td class="top">
-			<table>
-				<tr>
-					<td colspan="2"><h3>Enter your information:</h3></td>
-				</tr>
-				<tr>
-					<td class="right">Username</td>
-					<td><input name="username" type="text" placeholder="Only a-z,0-9" autofocus required></td>
-				</tr>
-				<tr>
-					<td class="right">Email</td>
-					<td><input name="mail_1" type="email" size="40" required></td>
-				</tr>
-				<tr>
-					<td class="right">Email (again)</td>
-					<td><input name="mail_2" type="email" size="40" required></td>
-				</tr>
-			</table>
-		</td>
-		<td class="top">
-			<table>
-				<tr>
-					<td><h3>Prove yourself:</h3></td>
-				</tr>
-				<tr>
-					<td><table><tr><td><?= captcha_challenge(); ?></td><td><input name="answer" type="text"></td></tr></table></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-</table>
-<?
+writeln('<h1>Create Account</h1>');
+writeln('<table>');
+writeln('	<tr>');
+writeln('		<td class="top">');
+writeln('			<table>');
+writeln('				<tr>');
+writeln('					<td colspan="2"><h3>Enter your information:</h3></td>');
+writeln('				</tr>');
+writeln('				<tr>');
+writeln('					<td class="right">Username</td>');
+writeln('					<td><input name="username" type="text" placeholder="Only a-z,0-9" autofocus required></td>');
+writeln('				</tr>');
+writeln('				<tr>');
+writeln('					<td class="right">Email</td>');
+writeln('					<td><input name="mail_1" type="email" size="40" required></td>');
+writeln('				</tr>');
+writeln('				<tr>');
+writeln('					<td class="right">Email (again)</td>');
+writeln('					<td><input name="mail_2" type="email" size="40" required></td>');
+writeln('				</tr>');
+writeln('			</table>');
+writeln('		</td>');
+writeln('		<td class="top">');
+writeln('			<table>');
+writeln('				<tr>');
+writeln('					<td><h3>Prove yourself:</h3></td>');
+writeln('				</tr>');
+writeln('				<tr>');
+writeln('					<td><table><tr><td>' . captcha_challenge() . '</td><td><input name="answer" type="text"></td></tr></table></td>');
+writeln('				</tr>');
+writeln('			</table>');
+writeln('		</td>');
+writeln('	</tr>');
+writeln('</table>');
 
 box_left("Register");
 

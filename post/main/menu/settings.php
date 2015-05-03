@@ -21,12 +21,10 @@ if (!$auth_user["admin"]) {
 	die("not an admin");
 }
 
-//$theme = http_post_string("theme", array("len" => 50, "valid" => "[a-z][0-9]-_"));
-$sign_up_enabled = http_post_bool("sign_up_enabled", array("numeric" => true));
+$register_enabled = http_post_bool("register_enabled", array("numeric" => true));
 $submit_enabled = http_post_bool("submit_enabled", array("numeric" => true));
 
-//$server_conf["theme"] = $theme;
-$server_conf["sign_up_enabled"] = $sign_up_enabled;
+$server_conf["register_enabled"] = $register_enabled;
 $server_conf["submit_enabled"] = $submit_enabled;
 db_set_conf("server_conf", $server_conf);
 

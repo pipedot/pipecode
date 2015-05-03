@@ -17,14 +17,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (strlen($s2) != 6 || !string_uses($s2, "[A-Z][a-z][0-9]")) {
-	die("invalid verification code");
-}
-$id = crypt_crockford_decode($s2);
+//if (strlen($s2) != 6 || !string_uses($s2, "[A-Z][a-z][0-9]")) {
+//	die("invalid verification code");
+//}
 
-$password_1 = http_post_string("password_1", array("len" => 64, "valid" => "[KEYBOARD]"));
-$password_2 = http_post_string("password_2", array("len" => 64, "valid" => "[KEYBOARD]"));
+$code = http_post_string("code", ["len" => 6, "valid" => "[A-Z][a-z][0-9]"]);
+$password_1 = http_post_string("password_1", ["len" => 64, "valid" => "[KEYBOARD]"]);
+$password_2 = http_post_string("password_2", ["len" => 64, "valid" => "[KEYBOARD]"]);
 
+$id = crypt_crockford_decode($code);
 if ($password_1 != $password_2) {
 	die("passwords do not match");
 }
@@ -35,14 +36,18 @@ if ($email_challenge === false) {
 }
 
 $zid = strtolower($email_challenge["username"]) . "@$server_name";
-if (!is_local_user($zid)) {
-	die("no such user [$zid]");
-}
-
+$new = !is_local_user($zid);
 $salt = random_hash();
 $password = crypt_sha256("$password_1$salt");
 
-$user_conf = db_get_conf("user_conf", $zid);
+if ($new) {
+	$user_conf = [];
+	$user_conf["email"] = $email_challenge["email"];
+	$user_conf["joined"] = time();
+	$user_conf["zid"] = $zid;
+} else {
+	$user_conf = db_get_conf("user_conf", $zid);
+}
 $user_conf["password"] = $password;
 $user_conf["salt"] = $salt;
 db_set_conf("user_conf", $user_conf, $zid);

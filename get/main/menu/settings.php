@@ -21,25 +21,13 @@ if (!$auth_user["admin"]) {
 	die("not an admin");
 }
 
-$themes = array();
-$a = fs_dir("$doc_root/www/theme");
-for ($i = 0; $i < count($a); $i++) {
-	if (is_dir("$doc_root/www/theme/$a[$i]")) {
-		$themes[] = $a[$i];
-	}
-}
-
 print_header("Settings");
 beg_main();
 beg_form();
 writeln('<h1>Settings</h1>');
 
-//beg_tab("Appearance");
-//print_row(array("caption" => "Theme", "option_key" => "theme", "option_list" => $themes, "option_value" => $server_conf["theme"]));
-//end_tab();
-
 beg_tab("Features");
-print_row(array("caption" => "Allow Sign Up", "check_key" => "sign_up_enabled", "checked" => $server_conf["sign_up_enabled"]));
+print_row(array("caption" => "Allow Register", "check_key" => "register_enabled", "checked" => $server_conf["register_enabled"]));
 print_row(array("caption" => "Allow Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
 end_tab();
 

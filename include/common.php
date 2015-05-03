@@ -184,7 +184,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 			$icon = "tools";
 			$link = "/menu/";
 		} else if ($name == "Register") {
-			$icon = "contact-new";
+			$icon = "register";
 			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/register";
 		} else if ($name == "Login") {
 			$icon = "users";

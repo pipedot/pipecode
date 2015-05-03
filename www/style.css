@@ -2485,9 +2485,6 @@ del {
 .computers-64 {
 	background-image: url(/images/computers-64.png);
 }
-.contact-new-16 {
-	background-image: url(/images/contact-new-16.png);
-}
 .delete-16 {
 	background-image: url(/images/delete-16.png);
 }
@@ -2704,6 +2701,9 @@ del {
 .reader-32 {
 	background-image: url(/images/reader-32.png);
 }
+.register-16 {
+	background-image: url(/images/register-16.png);
+}
 .robot-desktop-64 {
 	background-image: url(/images/robot-desktop-64.png);
 }
@@ -2863,9 +2863,6 @@ del {
 	}
 	.computers-64 {
 		background-image: url(/images/computers-128.png);
-	}
-	.contact-new-16 {
-		background-image: url(/images/contact-new-32.png);
 	}
 	.delete-16 {
 		background-image: url(/images/delete-32.png);
@@ -3085,6 +3082,9 @@ del {
 	}
 	.reader-32 {
 		background-image: url(/images/reader-64.png);
+	}
+	.register-16 {
+		background-image: url(/images/register-32.png);
 	}
 	.robot-desktop-64 {
 		background-image: url(/images/robot-desktop-128.png);
