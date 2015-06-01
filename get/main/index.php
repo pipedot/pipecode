@@ -61,7 +61,7 @@ $row = sql("select publish_time, slug, title, zid from journal where published =
 for ($i = 0; $i < count($row); $i++) {
 	writeln('	<table class="recent-journal">');
 	writeln('		<tr>');
-	writeln('			<td><a href="' . user_link($row[$i]["zid"]) . '"><img src="' . profile_picture($row[$i]["zid"], 64) . '"></a></td>');
+	writeln('			<td><a href="' . user_link($row[$i]["zid"]) . '"><img src="' . avatar_picture($row[$i]["zid"], 64) . '"></a></td>');
 	writeln('			<td>');
 	writeln('				<div class="recent-journal-title"><a href="' . user_link($row[$i]["zid"]) . 'journal/' . gmdate("Y-m-d", $row[$i]["publish_time"]) . '/' . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></div>');
 	writeln('				<div class="recent-journal-author"><a href="' . user_link($row[$i]["zid"]) . '">' . $row[$i]["zid"] . '</a></div>');

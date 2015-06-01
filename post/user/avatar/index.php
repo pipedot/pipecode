@@ -18,10 +18,13 @@
 //
 
 include("image.php");
+include("drive.php");
+include("avatar.php");
 
 if ($zid !== $auth_zid) {
 	die("not your page");
 }
+list($user, $domain) = explode("@", $zid);
 
 if (!isset($_FILES["upload"])) {
 	die("unknown error in upload");
@@ -31,26 +34,11 @@ $src_img = @imagecreatefromstring($data);
 if ($src_img === false) {
 	die("unable to open uploaded file");
 }
-$original_width = imagesx($src_img);
-$original_height = imagesy($src_img);
-if ($original_width < 256 || $original_height < 256) {
-	die("profile image must be at least 256 x 256");
-}
+$avatar_id = create_image_avatar($auth_zid, $src_img);
+imagedestroy($src_img);
 
-$sizes = array(256, 128, 64, 32);
+$user_conf["avatar_id"] = $avatar_id;
+db_set_conf("user_conf", $user_conf, $auth_zid);
 
-for ($i = 0; $i < count($sizes); $i++) {
-	$tmp_img = resize_image($src_img, $sizes[$i], $sizes[$i]);
-	if (!is_dir("$doc_root/www/pub/profile/$server_name")) {
-		mkdir("$doc_root/www/pub/profile/$server_name", 0755, true);
-	}
-	imagejpeg($tmp_img, "$doc_root/www/pub/profile/$server_name/$user_page-$sizes[$i].jpg");
-	imagedestroy($tmp_img);
-}
+header("Location: /avatar/");
 
-$auth_user["gravatar_enabled"] = 0;
-$auth_user["gravatar_seen"] = 0;
-$auth_user["gravatar_sync"] = 0;
-db_set_conf("user_conf", $auth_user, $auth_zid);
-
-header("Location: /profile/");

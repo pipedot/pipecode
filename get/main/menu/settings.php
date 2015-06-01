@@ -21,14 +21,46 @@ if (!$auth_user["admin"]) {
 	die("not an admin");
 }
 
+require_https($https_enabled);
+$zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
+
 print_header("Settings");
 beg_main();
 beg_form();
 writeln('<h1>Settings</h1>');
 
+beg_tab("Name");
+print_row(array("caption" => "Domain", "text_key" => "server_name", "text_value" => $server_conf["server_name"]));
+print_row(array("caption" => "Title", "text_key" => "server_title", "text_value" => $server_conf["server_title"]));
+print_row(array("caption" => "Slogan", "text_key" => "server_slogan", "text_value" => $server_conf["server_slogan"]));
+print_row(array("caption" => "Redirect to official domain", "check_key" => "server_redirect_enabled", "checked" => $server_conf["server_redirect_enabled"]));
+end_tab();
+
+beg_tab("Captcha");
+print_row(array("caption" => "TextCaptcha.com Key", "text_key" => "captcha_key", "text_value" => $server_conf["captcha_key"]));
+end_tab();
+
+beg_tab("Display");
+print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $server_conf["time_zone"]));
+end_tab();
+
 beg_tab("Features");
-print_row(array("caption" => "Allow Register", "check_key" => "register_enabled", "checked" => $server_conf["register_enabled"]));
-print_row(array("caption" => "Allow Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
+print_row(array("caption" => "HTTPS Available", "check_key" => "https_enabled", "checked" => $server_conf["https_enabled"]));
+print_row(array("caption" => "User Registration", "check_key" => "register_enabled", "checked" => $server_conf["register_enabled"]));
+print_row(array("caption" => "Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
+end_tab();
+
+beg_tab("Translate");
+print_row(array("caption" => "Translate stories and comments", "check_key" => "translate_enabled", "checked" => $server_conf["translate_enabled"]));
+print_row(array("caption" => "Google Translate Key", "text_key" => "translate_key", "text_value" => $server_conf["translate_key"]));
+end_tab();
+
+beg_tab("Twitter");
+print_row(array("caption" => "Enable story tweets", "check_key" => "twitter_enabled", "checked" => $server_conf["twitter_enabled"]));
+print_row(array("caption" => "Consumer Key", "text_key" => "twitter_consumer_key", "text_value" => $server_conf["twitter_consumer_key"]));
+print_row(array("caption" => "Consumer Secret", "text_key" => "twitter_consumer_secret", "text_value" => $server_conf["twitter_consumer_secret"]));
+print_row(array("caption" => "OAuth Token", "text_key" => "twitter_oauth_token", "text_value" => $server_conf["twitter_oauth_token"]));
+print_row(array("caption" => "OAuth Secret", "text_key" => "twitter_oauth_secret", "text_value" => $server_conf["twitter_oauth_secret"]));
 end_tab();
 
 box_right("Save");

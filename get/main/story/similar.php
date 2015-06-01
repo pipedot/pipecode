@@ -29,21 +29,19 @@ print_header("Similar News");
 beg_main();
 
 writeln("<h1>Story</h1>");
-
 writeln('<a class="icon-16 news-16" href="' . item_link(TYPE_STORY, $story["story_id"], $story) . '">' . $story["title"]  . '</a>');
-
 writeln("<h2>Similar News</h2>");
+
+find_server_feed_id();
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("select count(*) as item_count from article where match (title) against (? in boolean mode) and publish_time > ? and publish_time < ? and article.feed_id <> $server_feed_id", $items_per_page, [$keywords, $beg_time, $end_time]);
 
 $row = sql("select article_id, author_link, author_name, article.description as description, publish_time, article.title as title, thumb_id, feed.title as feed_title, feed.slug as feed_slug from article left join feed on article.feed_id = feed.feed_id where match (article.title) against (? in boolean mode) and publish_time > ? and publish_time < ? and article.feed_id <> $server_feed_id order by publish_time desc limit $item_start, $items_per_page", $keywords, $beg_time, $end_time);
 if (count($row) == 0) {
-	//box_left("No articles found.");
 	writeln("<p>No articles found.</p>");
 } else {
 	for ($i = 0; $i < count($row); $i++) {
-		//writeln(date("Y-m-d", $row[$i]["publish_time"]) . " - " . $row[$i]["title"]);
 		print_news($row[$i]);
 	}
 

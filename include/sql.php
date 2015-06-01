@@ -18,6 +18,7 @@
 //
 
 // article
+const TYPE_UNKNOWN = 0;
 const TYPE_ARTICLE = 1;
 const TYPE_BODY = 2;
 const TYPE_COMMENT = 3;
@@ -122,13 +123,35 @@ const TYPE_VIDEO = 190;
 
 
 $default_conf["server_conf"] = [
+	"auth_key" => "",
+	"captcha_key" => "",
+	"https_enabled" => "0",
 	"register_enabled" => "1",
+	"server_name" => "example.com",
+	"server_redirect_enabled" => "0",
+	"server_slogan" => "News for nerds",
+	"server_title" => "Example",
+	"smtp_server" => "mail.example.com",
+	"smtp_port" => "587",
+	"smtp_address" => "mail@example.com",
+	"smtp_username" => "mail@example.com",
+	"smtp_password" => "",
+	"time_zone" => "UTC",
+	"translate_enabled" => "0",
+	"translate_key" => "",
+	"twitter_enabled" => "0",
+	"twitter_consumer_key" => "",
+	"twitter_consumer_secret" => "",
+	"twitter_oauth_token" => "",
+	"twitter_oauth_secret" => "",
 	"submit_enabled" => "1"
 ];
 
 $default_conf["user_conf"] = [
 	"admin" => "0",
+	"avatar_id" => "0",
 	"birthday" => "0",
+	"display_name" => "",
 	"editor" => "0",
 	"email" => "",
 	"expand_threshold" => "1",
@@ -143,7 +166,6 @@ $default_conf["user_conf"] = [
 	"large_text_enabled" => "0",
 	"list_enabled" => "0",
 	"password" => "",
-	"real_name" => "",
 	"salt" => "",
 	"show_birthday_enabled" => "0",
 	"show_email_enabled" => "0",
@@ -170,6 +192,15 @@ $db_table["article"] = array(
 	array("name" => "redirect_link"),
 	array("name" => "title"),
 	array("name" => "thumb_id", "default" => 0)
+);
+
+$db_table["avatar"] = array(
+	array("name" => "avatar_id", "key" => true, "default" => 0),
+	array("name" => "hash_64"),
+	array("name" => "hash_128"),
+	array("name" => "hash_256"),
+	array("name" => "time", "default" => $now),
+	array("name" => "zid")
 );
 
 $db_table["ban_ip"] = array(
@@ -334,7 +365,9 @@ $db_table["drive_file"] = array(
 
 $db_table["drive_link"] = array(
 	array("name" => "hash", "key" => true),
-	array("name" => "item_id")
+	array("name" => "item_id", "key" => true),
+	array("name" => "type_id", "default" => 0),
+	array("name" => "zid")
 );
 
 $db_table["email_challenge"] = array(

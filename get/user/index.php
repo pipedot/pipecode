@@ -22,12 +22,17 @@ beg_main("dual-table");
 writeln('<div class="dual-left">');
 
 beg_tab();
-print_row(array("caption" => "Feed", "description" => "Show news page", "icon" => "news", "link" => "/feed/"));
-print_row(array("caption" => "Journal", "description" => "View journal entries", "icon" => "notepad", "link" => "/journal/"));
 if ($zid === $auth_zid) {
-	print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
-	print_row(array("caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/"));
-	//print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
+	print_row(array("caption" => "Avatar", "description" => "Change your avatar", "icon" => "user", "link" => "/avatar/"));
+}
+if ($zid === $auth_zid) {
+	print_row(array("caption" => "Feed", "description" => "Show news page", "icon" => "news", "link" => "/feed/"));
+}
+print_row(array("caption" => "Karma", "description" => "Show karma rating", "icon" => "face-smile", "link" => "/karma/"));
+if ($zid === $auth_zid) {
+	print_row(array("caption" => "Profile Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/settings"));
+} else {
+	print_row(array("caption" => "Profile", "description" => "View public profile", "icon" => "users", "link" => "/profile/"));
 }
 print_row(array("caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"));
 end_tab();
@@ -37,12 +42,11 @@ writeln('<div class="dual-right">');
 
 beg_tab();
 print_row(array("caption" => "Comments", "description" => "View past comments", "icon" => "chat", "link" => "/comments"));
-print_row(array("caption" => "Karma", "description" => "Show karma rating", "icon" => "face-smile", "link" => "/karma/"));
+print_row(array("caption" => "Journal", "description" => "View journal entries", "icon" => "notepad", "link" => "/journal/"));
 if ($zid === $auth_zid) {
-	print_row(array("caption" => "Profile Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/settings"));
-	print_row(array("caption" => "Profile Picture", "description" => "Upload a new profile image", "icon" => "picture", "link" => "/profile/picture"));
-} else {
-	print_row(array("caption" => "Profile", "description" => "View public profile", "icon" => "users", "link" => "/profile/"));
+	print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
+	print_row(array("caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/"));
+	//print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
 }
 end_tab();
 

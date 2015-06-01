@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.41, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.5.43, for debian-linux-gnu (x86_64)
 --
 -- Host: yuzu.zenbi.net    Database: pipedot
 -- ------------------------------------------------------
--- Server version	5.5.40-0ubuntu0.14.04.1
+-- Server version	5.5.43-0ubuntu0.14.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -41,6 +41,25 @@ CREATE TABLE `article` (
   UNIQUE KEY `guid_UNIQUE` (`guid`),
   KEY `feed_id` (`feed_id`),
   FULLTEXT KEY `title_search` (`title`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `avatar`
+--
+
+DROP TABLE IF EXISTS `avatar`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `avatar` (
+  `avatar_id` int(11) NOT NULL,
+  `hash_64` varchar(64) NOT NULL,
+  `hash_128` varchar(64) NOT NULL,
+  `hash_256` varchar(64) NOT NULL,
+  `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`avatar_id`),
+  UNIQUE KEY `avatar_id_UNIQUE` (`avatar_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -439,6 +458,8 @@ DROP TABLE IF EXISTS `drive_link`;
 CREATE TABLE `drive_link` (
   `hash` varchar(64) NOT NULL,
   `item_id` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`hash`,`item_id`),
   UNIQUE KEY `drive_link_unique` (`hash`,`item_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -1384,4 +1405,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-02  0:59:16
+-- Dump completed on 2015-06-01  1:46:59

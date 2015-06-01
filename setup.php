@@ -59,7 +59,7 @@ if (http_post()) {
 	$s .= "\$memcache_server = \"\";\n";
 	$s .= "\n";
 	$s .= "\$auth_key = \"" . random_hash() . "\";\n";
-	$s .= "\$auth_expire = 86400 * 365;\n";
+	$s .= "\$auth_expire = DAYS * 365;\n";
 	$s .= "\n";
 	$s .= "\$captcha_key = \"$captcha_key\";\n";
 	$s .= "\n";
@@ -77,7 +77,7 @@ if (http_post()) {
 		sql("create database $sql_database");
 		sql("use $sql_database");
 		run_sql_file("$doc_root/schema.sql");
-		run_sql_file("$doc_root/default.sql");
+		//run_sql_file("$doc_root/default.sql");
 
 		$zid = "$admin_username@$server_name";
 		$salt = random_hash();
@@ -97,10 +97,10 @@ writeln('<html>');
 writeln('<head>');
 writeln('<title>Pipecode Setup</title>');
 writeln('<meta http-equiv="Content-type" content="text/html;charset=UTF-8">');
-writeln('<link rel="stylesheet" href="/style.css" type="text/css"/>');
+writeln('<link rel="stylesheet" href="/style.css" type="text/css">');
 writeln('</head>');
 writeln('<body>');
-writeln('<img alt="Pipecode" src="/images/logo-top.png" style="margin-bottom: 8px"/>');
+writeln('<img alt="Pipecode" class="box" src="/images/logo-top.png">');
 
 beg_form();
 

@@ -178,14 +178,26 @@ function drive_is_dir($drive_file)
 }
 
 
-function drive_link($hash, $item_id)
+function drive_link($hash, $item_id, $zid = "")
 {
 	$drive_link = db_find_rec("drive_link", ["hash" => $hash, "item_id" => $item_id]);
 	if ($drive_link === false) {
 		$drive_link = db_new_rec("drive_link");
 		$drive_link["hash"] = $hash;
 		$drive_link["item_id"] = $item_id;
+		$drive_link["zid"] = $zid;
 		db_set_rec("drive_link", $drive_link);
+	}
+}
+
+
+function drive_unlink($hash, $item_id)
+{
+	db_del_rec("drive_link", ["hash" => $hash, "item_id" => $item_id]);
+	$link_count = db_get_count("drive_link", ["hash" => $hash]);
+
+	if ($link_count == 0) {
+		drive_del($hash);
 	}
 }
 
@@ -261,7 +273,6 @@ function drive_get($hash)
 	global $server_id;
 
 	if (strlen($hash) != 64 || !string_uses($hash, "[0-9]abcdef")) {
-		//die("invalid hash [$hash]");
 		return false;
 	}
 
@@ -278,6 +289,33 @@ function drive_get($hash)
 	$path = "$doc_root/drive/" . substr($hash, 0, 3);
 	$file = substr($hash, 3) . ".gz";
 
-	//die("file [$path/$file]");
 	return gz_slurp("$path/$file");
+}
+
+
+function drive_del($hash)
+{
+	global $doc_root;
+	global $server_id;
+
+	if (strlen($hash) != 64 || !string_uses($hash, "[0-9]abcdef")) {
+		return false;
+	}
+
+	$drive_data = db_find_rec("drive_data", $hash);
+	if ($drive_data === false) {
+		return true;
+	}
+
+	if ($drive_data["server_id"] != $server_id) {
+		//die("wrong server [$server_id]");
+		return false;
+	}
+
+	db_del_rec("drive_data", $hash);
+
+	$path = "$doc_root/drive/" . substr($hash, 0, 3);
+	$file = substr($hash, 3) . ".gz";
+
+	return fs_unlink("$path/$file");
 }

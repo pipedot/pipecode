@@ -21,9 +21,8 @@ if ($zid !== $auth_zid) {
 	die("not your page");
 }
 
-print_header();
-print_user_nav("feed");
-beg_main("cell");
+print_header("Edit Feed", [], [], [], ["Feed", "Edit"], ["/feed/", "/feed/edit"]);
+beg_main();
 
 writeln('<table class="fill">');
 writeln('	<tr>');

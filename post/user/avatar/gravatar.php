@@ -17,14 +17,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
+include("drive.php");
+include("image.php");
+include("avatar.php");
 
-if ($zid == $auth_zid) {
-	print_header("", ["Edit"], ["news"], ["/feed/edit"], ["Feed"], ["/feed/"]);
-} else {
-	print_header("Feed", [], [], [], ["Feed"], ["/feed/"]);
+if ($zid !== $auth_zid) {
+	die("not your page");
 }
 
-print_feed_page($zid);
+$avatar_id = create_gravatar_avatar($zid);
+$user_conf["avatar_id"] = $avatar_id;
+db_set_conf("user_conf", $user_conf, $auth_zid);
 
-print_footer();
+header("Location: /avatar/");
+

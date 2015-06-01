@@ -324,7 +324,7 @@ function update_article_thumbnail($article_id)
 
 function print_feed_page($zid)
 {
-	beg_main("tri_table");
+	beg_main("tri-table");
 
 	for ($c = 0; $c < 3; $c++) {
 		if ($c == 0) {

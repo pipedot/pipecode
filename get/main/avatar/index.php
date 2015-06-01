@@ -17,14 +17,4 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
 
-if ($zid == $auth_zid) {
-	print_header("", ["Edit"], ["news"], ["/feed/edit"], ["Feed"], ["/feed/"]);
-} else {
-	print_header("Feed", [], [], [], ["Feed"], ["/feed/"]);
-}
-
-print_feed_page($zid);
-
-print_footer();

@@ -135,7 +135,7 @@ function print_card_small($a)
 	$zid = $a["zid"];
 	list($user, $host) = explode("@", $zid);
 	$user_link = user_link($zid);
-	$profile_picture = profile_picture($zid, 64);
+	$avatar_picture = avatar_picture($zid, 64);
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
 	$votes = $a["votes"];
@@ -175,7 +175,7 @@ function print_card_small($a)
 	writeln("<table class=\"card\">");
 	writeln("	<tr>");
 	writeln("		<td class=\"card-row\">");
-	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"></a>");
+	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$avatar_picture\"></a>");
 	writeln("			<div class=\"card-by-box\">");
 	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
 	writeln("				<div class=\"card-time\">$date</div>");
@@ -234,7 +234,7 @@ function print_card_large($a)
 	$zid = $a["zid"];
 	list($user, $host) = explode("@", $zid);
 	$user_link = user_link($zid);
-	$profile_picture = profile_picture($zid, 64);
+	$avatar_picture = avatar_picture($zid, 64);
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
 	$votes = $a["votes"];
@@ -278,7 +278,7 @@ function print_card_large($a)
 	writeln("<table class=\"card-large\">");
 	writeln("	<tr>");
 	writeln("		<td class=\"card-row\">");
-	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$profile_picture\"></a>");
+	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$avatar_picture\"></a>");
 	writeln("			<div class=\"card-by-box\">");
 	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
 	writeln("				<div class=\"card-time\">$date</div>");

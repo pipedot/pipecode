@@ -147,7 +147,7 @@ function download_document($url)
 }
 
 
-function resize_image($src_img, $dst_width, $dst_height)
+function resize_image($src_img, $dst_width, $dst_height, $transparent = false)
 {
 	$src_width = imagesx($src_img);
 	$src_height = imagesy($src_img);
@@ -170,6 +170,17 @@ function resize_image($src_img, $dst_width, $dst_height)
 
 	//print "src_aspect [$src_aspect] src_width [$src_width] src_height [$src_height] src_x [$src_x] src_y [$src_y] src_w [$src_w] src_h [$src_h] dst_aspect [$dst_aspect] dst_width [$dst_width] dst_height [$dst_height]\n";
 	$dst_img = imagecreatetruecolor($dst_width, $dst_height);
+
+	if ($transparent) {
+		imagealphablending($dst_img, false);
+		imagesavealpha($dst_img, true);
+		$transparent = imagecolorallocatealpha($dst_img, 255, 255, 255, 127);
+		imagefilledrectangle($dst_img, 0, 0, $dst_width, $dst_height, $transparent);
+	} else {
+		$white = imagecolorallocate($dst_img, 255, 255, 255);
+		imagefilledrectangle($dst_img, 0, 0, $dst_width, $dst_height, $white);
+	}
+
 	imagecopyresampled($dst_img, $src_img , 0, 0, $src_x, $src_y, $dst_width, $dst_height, $src_w, $src_h);
 
 	return $dst_img;

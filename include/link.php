@@ -207,6 +207,8 @@ function item_type($type_id)
 {
 	switch ($type_id) {
 		// article
+		case TYPE_UNKNOWN:
+			return "unknown";
 		case TYPE_ARTICLE:
 			return "article";
 		case TYPE_BODY:
@@ -393,7 +395,7 @@ function user_link($zid, $a = [])
 		$url = "";
 	} else {
 		$name = $zid;
-		$url = $protocol . "://" . str_replace("@", ".", $zid) . ($trail ? "/" : "");
+		$url = $protocol . "://" . zid_to_domain($zid) . ($trail ? "/" : "");
 	}
 	$text = $name;
 	if ($tag) {
@@ -409,6 +411,23 @@ function user_link($zid, $a = [])
 	} else {
 		return $url;
 	}
+}
+
+
+function zid_to_domain($zid)
+{
+	return str_replace("@", ".", $zid);
+}
+
+
+function domain_to_zid($domain)
+{
+	$pos = strpos($domain, ".");
+	if (!string_uses($domain, "[a-z][0-9].-") || $pos === false) {
+		die("invalid domain [$domain]");
+	}
+
+	return substr_replace($domain, "@", $pos, 1);
 }
 
 

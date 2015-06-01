@@ -80,18 +80,18 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 		$title .= $server_title;
 	} else {
 		$title .= $user_page . '.' . $server_name;
-		$picture = profile_picture($zid, 128);
+		$picture = avatar_picture($zid, 128);
 	}
 	writeln('<title>' . $title . '</title>');
 	writeln('<meta charset="utf-8">');
 	writeln('<meta name="viewport" content="width=device-width, initial-scale=1">');
 	print $meta;
 
-//	if ($user_page === "") {
+	if ($user_page === "") {
 		writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon">');
-//	} else {
-//		writeln('<link rel="icon" href="/favicon-64.png" sizes="64x64" type="image/png">');
-//	}
+	} else {
+		writeln('<link rel="icon" href="' . avatar_picture($zid, 64) . '" sizes="64x64" type="image/png">');
+	}
 
 	writeln('<link rel="stylesheet" href="' . $protocol . '://' . $server_name . '/style.css?t=' . fs_time("$doc_root/www/style.css") . '">');
 	if ($auth_user["large_text_enabled"]) {
@@ -114,7 +114,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 	writeln('<header class="title">');
 
 	if ($user_page === "") {
-		writeln('	<div><a class="logo-big" href="' . $protocol . '://' . $server_name . '/"></a><a class="logo-small" href="' . $protocol . '://' . $server_name . '/"></a></div>');
+		writeln('	<div><a class="logo" href="' . $protocol . '://' . $server_name . '/"></a></div>');
 	} elseif (count($spin_name) == 0) {
 		writeln('	<div class="spinner">');
 		writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="top"></div></a>');
@@ -154,6 +154,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 		}
 	} else {
 		if ($auth_zid === "") {
+			$link_name[] = "Server";
 			$link_name[] = "Login";
 		} else {
 			//if ($request_script != "/menu/") {
@@ -483,11 +484,15 @@ function print_footer()
 function expire_auth()
 {
 	global $server_name;
+	global $http_host;
 
-	setcookie("auth", "", time() - (5 * 365 * 24 * 60 * 60), "/", ".$server_name");
+	setcookie("auth", "", time() - (5 * YEARS), "/", ".$server_name");
 
-	// XXX: kill old cookie
-	setcookie("auth", "", time() - (5 * 365 * 24 * 60 * 60), "/");
+	// XXX: attempt to kill cookies on servers with a misconfigured $server_name
+	if ($server_name != $http_host) {
+		setcookie("auth", "", time() - (5 * YEARS), "/");
+		setcookie("auth", "", time() - (5 * YEARS), "/", ".$http_host");
+	}
 }
 
 
@@ -533,7 +538,6 @@ function check_auth()
 	}
 
 	$auth_zid = $zid;
-	//$auth_user = db_get_conf("user_conf", $auth_zid);
 }
 
 
@@ -829,17 +833,23 @@ function print_comments($type_id, $rec)
 }
 
 
-function profile_picture($zid, $size)
+function avatar_picture($zid, $size)
 {
 	global $protocol;
 	global $server_name;
-	global $doc_root;
 
-	list($user, $host) = explode("@", $zid);
-	$path = "/pub/profile/$host/$user-$size.jpg";
-	$time = fs_time("$doc_root/www$path");
+	$row = sql("select value from user_conf where name = 'avatar_id' and zid = ?", $zid);
+	if (count($row) == 0) {
+		return "";
+	}
+	$avatar_code = crypt_crockford_encode($row[0]["value"]);
+	if ($size == 64) {
+		$ext = "png";
+	} else {
+		$ext = "jpg";
+	}
 
-	return "$protocol://$server_name$path?$time";
+	return "$protocol://$server_name/avatar/$avatar_code-$size.$ext";
 }
 
 
@@ -919,9 +929,28 @@ function make_photo_links($text)
 }
 
 
+function find_server_feed_id()
+{
+	global $server_name;
+	global $server_feed_id;
+
+	$http = "http://$server_name/atom";
+	$https = "https://$server_name/atom";
+
+	$row = sql("select feed_id from feed where uri = ? or uri = ?", $http, $https);
+	if (count($row) > 0) {
+		$server_feed_id = $row[0]["feed_id"];
+	}
+}
+
+
 function similar_count($story)
 {
 	global $server_feed_id;
+
+	if ($server_feed_id == 0) {
+		find_server_feed_id();
+	}
 
 	$keywords = $story["keywords"];
 	if (array_key_exists("publish_time", $story)) {
@@ -1061,6 +1090,75 @@ function icon_list($require_16, $require_32, $require_64)
 }
 
 
+function load_server_conf()
+{
+	global $server_conf;
+	global $auth_key;
+	global $auth_expire;
+	global $captcha_key;
+	global $https_enabled;
+	global $http_host;
+	global $server_name;
+	global $server_redirect_enabled;
+	global $server_slogan;
+	global $server_title;
+	global $smtp_server;
+	global $smtp_port;
+	global $smtp_address;
+	global $smtp_username;
+	global $smtp_password;
+	global $translate_enabled;
+	global $translate_key;
+	global $translate_max;
+	global $twitter_enabled;
+	global $oauth_token;
+	global $oauth_token_secret;
+
+	$server_conf = db_get_conf("server_conf");
+
+	$auth_key = $server_conf["auth_key"];
+	if ($auth_key == "") {
+		$auth_key = random_hash();
+		$server_conf["auth_key"] = $auth_key;
+		db_set_conf("server_conf", $server_conf);
+	}
+	$auth_expire = 1 * YEARS;
+
+	$captcha_key = $server_conf["captcha_key"];
+
+	$https_enabled = (bool) $server_conf["https_enabled"];
+
+	$server_name = $server_conf["server_name"];
+	if ($server_name == "example.com" || $server_name == "") {
+		$server_name = $http_host;
+		$server_conf["server_name"] = $server_name;
+		db_set_conf("server_conf", $server_conf);
+	}
+	$server_redirect_enabled = (bool) $server_conf["server_redirect_enabled"];
+	$server_slogan = $server_conf["server_slogan"];
+	$server_title = $server_conf["server_title"];
+
+	$smtp_server = $server_conf["smtp_server"];
+	$smtp_port = $server_conf["smtp_port"];
+	$smtp_address = $server_conf["smtp_address"];
+	$smtp_username = $server_conf["smtp_username"];
+	$smtp_password = $server_conf["smtp_password"];
+
+	$translate_enabled = (bool) $server_conf["translate_enabled"];
+	$translate_key = $server_conf["translate_key"];
+	$translate_max = 5000;
+
+	$twitter_enabled = (bool) $server_conf["twitter_enabled"];
+	define('CONSUMER_KEY', $server_conf["twitter_consumer_key"]);
+	define('CONSUMER_SECRET', $server_conf["twitter_consumer_secret"]);
+	define('OAUTH_CALLBACK', '');
+	$oauth_token = $server_conf["twitter_oauth_token"];
+	$oauth_token_secret = $server_conf["twitter_oauth_secret"];
+
+	date_default_timezone_set($server_conf["time_zone"]);
+}
+
+
 $request_uri = $_SERVER["REQUEST_URI"];
 if (string_has($request_uri, "?")) {
 	$request_script = substr($request_uri, 0, strpos($request_uri, "?"));
@@ -1086,28 +1184,28 @@ if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
 	$remote_ip = $_SERVER["REMOTE_ADDR"];
 }
 
-$server_conf = db_get_conf("server_conf");
 if (array_key_exists("HTTP_HOST", $_SERVER)) {
 	$http_host = $_SERVER["HTTP_HOST"];
 } else {
-	$http_host = $server_name;
+	$http_host = gethostname();
 }
+load_server_conf();
 $user_page = "";
 $meta = "";
 $a = explode(".", $server_name);
 $server_level = count($a);
 $a = explode(".", $http_host);
 if (count($a) == $server_level) {
-	if ($http_host != $server_name) {
+	if ($server_redirect_enabled && $http_host != $server_name) {
 		header("Location: $protocol://$server_name$request_uri");
 		die();
 	}
 } else if (count($a) == $server_level + 1) {
-	if ($a[1] . "." . $a[2] != $server_name) {
+	if ($server_redirect_enabled && $a[1] . "." . $a[2] != $server_name) {
 		header("Location: $protocol://" . $a[0] . ".$server_name$request_uri");
 		die();
 	}
-	if ($a[0] == "www") {
+	if ($server_redirect_enabled && $a[0] == "www") {
 		header("Location: $protocol://$server_name$request_uri");
 		die();
 	}

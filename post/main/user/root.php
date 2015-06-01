@@ -17,14 +17,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-
-if ($zid == $auth_zid) {
-	print_header("", ["Edit"], ["news"], ["/feed/edit"], ["Feed"], ["/feed/"]);
-} else {
-	print_header("Feed", [], [], [], ["Feed"], ["/feed/"]);
+if (!$auth_user["admin"]) {
+	die("not an admin");
 }
 
-print_feed_page($zid);
+$zid = domain_to_zid($s2);
+if (!is_local_user($zid)) {
+	die("user not found [$zid]");
+}
+$conf = db_get_conf("user_conf", $zid);
 
-print_footer();
+$admin = http_post_bool("admin", array("numeric" => true));
+$editor = http_post_bool("editor", array("numeric" => true));
+
+$conf["admin"] = $admin;
+$conf["editor"] = $editor;
+db_set_conf("user_conf", $conf, $zid);
+
+header("Location: /user/");

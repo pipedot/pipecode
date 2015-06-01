@@ -106,10 +106,10 @@ function send_web_mail($to, $subject, $body, $in_reply_to = "", $sent = true)
 	global $server_name;
 	global $server_title;
 
-	if ($auth_user["real_name"] == "") {
+	if (!$auth_user["show_name_enabled"] || $auth_user["display_name"] == "") {
 		$from = "<$auth_zid>";
 	} else {
-		$from = $auth_user["real_name"] . " <$auth_zid>";
+		$from = $auth_user["display_name"] . " <$auth_zid>";
 	}
 	if (!$sent) {
 		$from = "$server_title <no-reply@$server_name>";

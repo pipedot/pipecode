@@ -17,14 +17,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-
-if ($zid == $auth_zid) {
-	print_header("", ["Edit"], ["news"], ["/feed/edit"], ["Feed"], ["/feed/"]);
-} else {
-	print_header("Feed", [], [], [], ["Feed"], ["/feed/"]);
+if ($zid !== $auth_zid) {
+	die("not your page");
 }
 
-print_feed_page($zid);
+$avatar = item_request(TYPE_AVATAR);
+$avatar_code = $avatar["short_code"];
 
+print_header("Delete Avatar", [], [], [], ["Avatar", $avatar_code, "Delete"], ["/avatar/", "/avatar/$avatar_code", "/activate/$avatar_code/delete"]);
+beg_main();
+beg_form();
+
+writeln("<h2>Delete this avatar?</h2>");
+writeln('<div class="box"><img alt="avatar" class="thumb" src="' . $protocol . '://' . $server_name . '/avatar/' . $avatar_code . '-256.jpg"></div>');
+
+box_left("Delete");
+
+end_form();
+end_main();
 print_footer();
+

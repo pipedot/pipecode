@@ -50,11 +50,7 @@ function get_server_name()
 	a = document.URL.split("/");
 	a = a[2].split(".");
 
-	if (a.length == 2) {
-		return a[0] + "." + a[1];
-	} else {
-		return a[1] + "." + a[2];
-	}
+	return a[a.length - 2] + "." + a[a.length - 1];
 }
 
 

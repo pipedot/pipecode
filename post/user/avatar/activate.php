@@ -17,14 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
-
-if ($zid == $auth_zid) {
-	print_header("", ["Edit"], ["news"], ["/feed/edit"], ["Feed"], ["/feed/"]);
-} else {
-	print_header("Feed", [], [], [], ["Feed"], ["/feed/"]);
+if ($zid !== $auth_zid) {
+	die("not your page");
 }
 
-print_feed_page($zid);
+$avatar = item_request(TYPE_AVATAR);
 
-print_footer();
+$auth_user["avatar_id"] = $avatar["avatar_id"];
+db_set_conf("user_conf", $auth_user, $auth_zid);
+
+header("Location: /avatar/");

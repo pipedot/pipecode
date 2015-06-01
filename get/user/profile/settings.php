@@ -28,24 +28,24 @@ beg_main();
 beg_form();
 //writeln('<h1>Profile Settings</h1>');
 
-beg_tab("JavaScript");
-print_row(array("caption" => "Enable JavaScript", "check_key" => "javascript_enabled", "checked" => $user_conf["javascript_enabled"]));
-print_row(array("caption" => "WYSIWYG Editor", "check_key" => "wysiwyg_enabled", "checked" => $user_conf["wysiwyg_enabled"]));
-print_row(array("caption" => "Inline Reply", "check_key" => "inline_reply_enabled", "checked" => $user_conf["inline_reply_enabled"]));
+beg_tab("Information");
+print_row(array("caption" => "Display Name", "text_key" => "display_name", "text_value" => $user_conf["display_name"]));
+print_row(array("caption" => "Birthday", "text_key" => "birthday", "text_value" => ($user_conf["birthday"] == 0 ? "" : gmdate("Y-m-d", $user_conf["birthday"]))));
+print_row(array("caption" => "External Email", "text_key" => "email", "text_value" => $user_conf["email"]));
 end_tab();
 
 beg_tab("Display");
 $lang_keys = ["en", "eo", "ja", "es"];
 $lang_names = ["English", "Esperanto", "Japanese", "Spanish"];
 print_row(array("caption" => "Language", "option_key" => "lang", "option_keys" => $lang_keys, "option_list" => $lang_names, "option_value" => $user_conf["lang"]));
-$row = sql("select image_style_id, description from image_style order by image_style_id");
-$image_styles = array();
-$image_descriptions = array();
-for ($i = 0; $i < count($row); $i++) {
-	$image_styles[] = $row[$i]["image_style_id"];
-	$image_descriptions[] = $row[$i]["description"];
-}
-print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
+//$row = sql("select image_style_id, description from image_style order by image_style_id");
+//$image_styles = array();
+//$image_descriptions = array();
+//for ($i = 0; $i < count($row); $i++) {
+//	$image_styles[] = $row[$i]["image_style_id"];
+//	$image_descriptions[] = $row[$i]["description"];
+//}
+//print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $user_conf["time_zone"]));
 print_row(array("caption" => "Large Text", "check_key" => "large_text_enabled", "checked" => $user_conf["large_text_enabled"]));
 end_tab();
@@ -57,18 +57,18 @@ print_row(array("caption" => "Expand Threshold", "option_key" => "expand_thresho
 print_row(array("caption" => "Show Junk Comments", "check_key" => "show_junk_enabled", "checked" => $user_conf["show_junk_enabled"]));
 end_tab();
 
-beg_tab("Gravatar");
-print_row(array("caption" => "Use Gravatar for profile picture", "check_key" => "gravatar_enabled", "checked" => $user_conf["gravatar_enabled"]));
-end_tab();
+//beg_tab("Gravatar");
+//print_row(array("caption" => "Use Gravatar for profile picture", "check_key" => "gravatar_enabled", "checked" => $user_conf["gravatar_enabled"]));
+//end_tab();
 
-beg_tab("Profile");
-print_row(array("caption" => "Real Name", "text_key" => "real_name", "text_value" => $user_conf["real_name"]));
-print_row(array("caption" => "Birthday", "text_key" => "birthday", "text_value" => ($user_conf["birthday"] == 0 ? "" : gmdate("Y-m-d", $user_conf["birthday"]))));
-print_row(array("caption" => "External Email", "text_key" => "email", "text_value" => $user_conf["email"]));
+beg_tab("Features");
+print_row(array("caption" => "Enable JavaScript", "check_key" => "javascript_enabled", "checked" => $user_conf["javascript_enabled"]));
+print_row(array("caption" => "WYSIWYG Editor", "check_key" => "wysiwyg_enabled", "checked" => $user_conf["wysiwyg_enabled"]));
+print_row(array("caption" => "Inline Reply", "check_key" => "inline_reply_enabled", "checked" => $user_conf["inline_reply_enabled"]));
 end_tab();
 
 beg_tab("Privacy");
-print_row(array("caption" => "Show Real Name", "check_key" => "show_name_enabled", "checked" => $user_conf["show_name_enabled"]));
+print_row(array("caption" => "Show Name", "check_key" => "show_name_enabled", "checked" => $user_conf["show_name_enabled"]));
 print_row(array("caption" => "Show Birthday", "check_key" => "show_birthday_enabled", "checked" => $user_conf["show_birthday_enabled"]));
 print_row(array("caption" => "Show Email", "check_key" => "show_email_enabled", "checked" => $user_conf["show_email_enabled"]));
 end_tab();

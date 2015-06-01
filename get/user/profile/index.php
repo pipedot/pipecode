@@ -24,8 +24,8 @@ beg_main("dual-table");
 writeln('<div class="dual-left">');
 
 dict_beg("Information");
-if ($user_conf["show_name_enabled"] && $user_conf["real_name"] != "") {
-	dict_row('<span class="icon-16 user-16">Name</span>', $user_conf["real_name"]);
+if ($user_conf["show_name_enabled"] && $user_conf["display_name"] != "") {
+	dict_row('<span class="icon-16 user-16">Name</span>', $user_conf["display_name"]);
 }
 if ($user_conf["show_birthday_enabled"] && $user_conf["birthday"] != 0) {
 	dict_row('<span class="icon-16 cake-16">Birthday</span>', gmdate("F j", $user_conf["birthday"]));
@@ -45,16 +45,16 @@ if ($zid === $auth_zid) {
 writeln('</div>');
 writeln('<div class="dual-right">');
 
-beg_tab("Picture");
+beg_tab("Avatar");
 writeln('	<tr>');
-writeln('		<td class="center"><a href="picture"><img alt="Profile Picture" class="thumb" src="' . profile_picture($zid, 256) . '"></a></td>');
+writeln('		<td class="center"><a href="/avatar/"><img alt="Avatar" class="thumb" src="' . avatar_picture($zid, 256) . '"></a></td>');
 writeln('	</tr>');
 writeln('</table>');
 seen_gravatar($zid);
 
-if ($zid === $auth_zid) {
-	box_right('<a class="icon-16 picture-16" href="picture">Picture</a>');
-}
+//if ($zid === $auth_zid) {
+//	box_right('<a class="icon-16 picture-16" href="/avatar/">Change</a>');
+//}
 
 writeln('</div>');
 end_main();

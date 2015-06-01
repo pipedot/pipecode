@@ -195,7 +195,7 @@ function make_journal_atom($zid)
 	$body .= "	<link rel=\"alternate\" type=\"text/html\" hreflang=\"en\" href=\"" . user_link($zid) . "journal/\"/>\n";
 	$body .= "	<link rel=\"self\" type=\"application/atom+xml\" href=\"" . user_link($zid) . "journal/atom\"/>\n";
 	$body .= "	<icon>$protocol://$server_name/favicon.ico</icon>\n";
-	$body .= "	<logo>" . profile_picture($zid, 256) . "</logo>\n";
+	$body .= "	<logo>" . avatar_picture($zid, 256) . "</logo>\n";
 
 	for ($i = 0; $i < count($row); $i++) {
 		$journal_code = crypt_crockford_encode($row[$i]["journal_id"]);

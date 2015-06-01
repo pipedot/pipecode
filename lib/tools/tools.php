@@ -980,6 +980,7 @@ function db_set_conf($table, $map, $id = false)
 {
 	global $db_table;
 	global $cache_enabled;
+	global $default_conf;
 
 	if ($id !== false) {
 		$key = db_key($table);
@@ -996,9 +997,16 @@ function db_set_conf($table, $map, $id = false)
 		$current[$row[$i]["name"]] = $row[$i]["value"];
 	}
 
-	$row = sql("select name, value from default_conf where conf = ?", $table);
-	for ($i = 0; $i < count($row); $i++) {
-		$default[$row[$i]["name"]] = $row[$i]["value"];
+	//$row = sql("select name, value from default_conf where conf = ?", $table);
+	//for ($i = 0; $i < count($row); $i++) {
+	//	$default[$row[$i]["name"]] = $row[$i]["value"];
+	//}
+	if (array_key_exists($table, $default_conf)) {
+		$default = $default_conf[$table];
+//		$keys = array_keys($default_conf[$table]);
+//		for ($i = 0; $i < count($keys); $i++) {
+//			$default[$keys[$i]] = $default_conf[$table][$keys[$i]];
+//		}
 	}
 
 	$k = array_keys($map);
@@ -2152,6 +2160,12 @@ function print_row($a)
 function random_hash()
 {
 	return crypt_sha256(time() . getmypid() . rand());
+}
+
+
+function readln()
+{
+	return stream_get_line(STDIN, 1024, PHP_EOL);
 }
 
 
