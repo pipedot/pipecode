@@ -51,19 +51,17 @@ $reasons["Spam"] = -1;
 
 function print_header($title = "", $link_name = [], $link_icon = [], $link_url = [], $spin_name = [], $spin_link = [])
 {
-	global $request_script;
-	global $auth_zid;
 	global $auth_user;
-	global $user_page;
-	global $server_title;
-	global $server_name;
+	global $auth_zid;
+	global $doc_root;
 	global $https_enabled;
-	global $request_script;
+	global $meta;
 	global $protocol;
 	global $request_script;
-	global $doc_root;
 	global $server_conf;
-	global $meta;
+	global $server_name;
+	global $server_title;
+	global $user_page;
 	global $zid;
 
 	header_expires();
@@ -486,12 +484,20 @@ function expire_auth()
 	global $server_name;
 	global $http_host;
 
-	setcookie("auth", "", time() - (5 * YEARS), "/", ".$server_name");
+	$auth = @$_COOKIE["auth"];
+	$map = map_from_url_string($auth);
+	$zid = @$map["zid"];
+	$key = @$map["key"];
+	if ($zid != "" && $key != "") {
+		db_del_rec("login", ["zid" => $zid, "login_key" => $key]);
+	}
+
+	setcookie("auth", "", time() - (5 * DAYS), "/", ".$server_name");
 
 	// XXX: attempt to kill cookies on servers with a misconfigured $server_name
 	if ($server_name != $http_host) {
-		setcookie("auth", "", time() - (5 * YEARS), "/");
-		setcookie("auth", "", time() - (5 * YEARS), "/", ".$http_host");
+		setcookie("auth", "", time() - (5 * DAYS), "/");
+		setcookie("auth", "", time() - (5 * DAYS), "/", ".$http_host");
 	}
 }
 
@@ -501,42 +507,38 @@ function check_auth()
 	global $auth_key;
 	global $auth_zid;
 	global $auth_user;
-	global $request_script;
+	global $now;
 
 	$auth_zid = "";
 
 	$auth = @$_COOKIE["auth"];
 	$map = map_from_url_string($auth);
-	$expire = @$map["expire"];
 	$zid = @$map["zid"];
-	$hash = @$map["hash"];
-
-	$auth_user = db_get_conf("user_conf", $zid);
+	$key = @$map["key"];
 
 	if ($zid == "") {
+		$auth_user = db_get_conf("user_conf", "");
 		$auth_user["javascript_enabled"] = 0;
 		return;
 	}
-	if (!string_uses($expire, "[0-9]")) {
+	if (!string_uses($key, "[0-9]abcdef") || strlen($key) != 64) {
 		expire_auth();
-		die("invalid expire");
-	}
-	if (time() > $expire) {
-		expire_auth();
-		die("auth expired");
+		die("invalid key [$key]");
 	}
 	if (!string_uses($zid, "[a-z][0-9]@.-")) {
 		expire_auth();
 		die("invalid zid [$zid]");
-
 	}
 
-	$test = crypt_sha256($auth_key . "expire=$expire&zid=$zid");
-	if ($hash != $test) {
+	$login = db_find_rec("login", ["zid" => $zid, "login_key" => $key]);
+	if ($login === false) {
 		expire_auth();
-		die("wrong auth hash");
+		die("login key not found [$zid]");
 	}
+	$login["last_time"] = $now;
+	db_set_rec("login", $login);
 
+	$auth_user = db_get_conf("user_conf", $zid);
 	$auth_zid = $zid;
 }
 
@@ -1087,6 +1089,135 @@ function icon_list($require_16, $require_32, $require_64)
 	}
 
 	return $a;
+}
+
+
+function get_os_id($user_agent = "")
+{
+	if ($user_agent == "") {
+		$user_agent = $_SERVER["HTTP_USER_AGENT"];
+	}
+
+	if (string_has($user_agent, "Android")) {
+		return TYPE_ANDROID;
+	} else if (string_has($user_agent, "CrOS")) {
+		return TYPE_CHROME_OS;
+	} else if (string_has($user_agent, "FreeBSD")) {
+		return TYPE_FREEBSD;
+	} else if (string_has($user_agent, "iPad")) {
+		return TYPE_IPAD;
+	} else if (string_has($user_agent, "iPhone")) {
+		return TYPE_IPHONE;
+	} else if (string_has($user_agent, "Linux")) {
+		return TYPE_LINUX;
+	} else if (string_has($user_agent, "Macintosh")) {
+		return TYPE_MAC;
+	} else if (string_has($user_agent, "Windows")) {
+		return TYPE_WINDOWS;
+	} else {
+		return TYPE_UNKNOWN;
+	}
+}
+
+
+function get_agent_id($user_agent = "")
+{
+	if ($user_agent == "") {
+		$user_agent = $_SERVER["HTTP_USER_AGENT"];
+	}
+
+	if (string_has($user_agent, "Chrome") || string_has($user_agent, "CriOS")) {
+		return TYPE_CHROME;
+	} else if (string_has($user_agent, "Firefox")) {
+		return TYPE_FIREFOX;
+	} else if (string_has($user_agent, "MSIE")) {
+		return TYPE_IE;
+	} else if (string_has($user_agent, "Pipecode")) {
+		return TYPE_PIPECODE;
+	} else if (string_has($user_agent, "Pipedot")) {
+		return TYPE_PIPEDOT;
+	} else if (string_has($user_agent, "Safari")) {
+		return TYPE_SAFARI;
+	} else {
+		return TYPE_UNKNOWN;
+	}
+}
+
+
+function get_country_id($country_code, $country_name = "")
+{
+	$country = db_find_rec("country", ["country_code" => $country_code]);
+	if ($country === false) {
+		$country = db_new_rec("country");
+		$country["country_code"] = $country_code;
+		$country["country_name"] = $country_name;
+		db_set_rec("country", $country);
+		return db_last();
+	}
+
+	return $country["country_id"];
+}
+
+
+function get_ip_id($remote_ip = "")
+{
+	if ($remote_ip == "") {
+		if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
+			$remote_ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+		} else {
+			$remote_ip = $_SERVER["REMOTE_ADDR"];
+		}
+	}
+
+	$ip = db_find_rec("ip", ["address" => $remote_ip]);
+	if ($ip === false) {
+		$geo = geo_ip($remote_ip);
+		$country_id = get_country_id($geo["country_code"], $geo["country"]);
+
+		$ip = db_new_rec("ip");
+		$ip["address"] = $remote_ip;
+		$ip["country_id"] = $country_id;
+		$ip["latitude"] = $geo["latitude"];
+		$ip["longitude"] = $geo["longitude"];
+		db_set_rec("ip", $ip);
+		return db_last();
+	}
+
+	return $ip["ip_id"];
+}
+
+
+function human_diff($diff, $full = false)
+{
+	if ($full) {
+		$n = abs($diff);
+
+		$seconds = $n % 60;
+		$minutes = round($n / 60) % 60;
+		$hours = round($n / (60 * 60)) % 24;
+		$days = round($n / (60 * 60 * 24));
+
+		return "$days day" . ($days == 1 ? "" : "s") . " $hours hour" . ($hours == 1 ? "" : "s") . " $minutes minute" . ($minutes == 1 ? "" : "s") . " $seconds second" . ($seconds == 1 ? "" : "s") . "";
+	}
+
+	$a = array("sec", "min", "hour", "day", "year");
+	$b = array(60, 60, 24, 365, 1);
+	$n = $diff;
+
+	if ($diff > 315360000) {
+		return "never";
+	}
+	for ($i = 0; $i < count($a); $i++) {
+		if ($n < $b[$i] || $i == 4) {
+			$n = floor($n);
+			if ($n == 1) {
+				return $n . " " . $a[$i];
+			} else {
+				return $n . " " . $a[$i] . "s";
+			}
+		}
+		$n /= $b[$i];
+	}
 }
 
 

@@ -29,7 +29,7 @@ $answer = $_POST["answer"];
 
 $time = time();
 $poll = db_new_rec("poll");
-$poll["poll_id"] = create_short("poll");
+$poll["poll_id"] = create_short(TYPE_POLL);
 $poll["promoted"] = 1;
 $poll["question"] = clean_text($question);
 $poll["slug"] = clean_url($question);
@@ -39,7 +39,7 @@ db_set_rec("poll", $poll);
 
 for ($i = 0; $i < count($answer); $i++) {
 	$poll_answer = db_new_rec("poll_answer");
-	$poll_answer["answer_id"] = create_short("poll_answer");
+	$poll_answer["answer_id"] = create_short(TYPE_POLL_ANSWER);
 	$poll_answer["poll_id"] = $poll["poll_id"];
 	$poll_answer["answer"] = clean_text($answer[$i]);
 	$poll_answer["position"] = $i;

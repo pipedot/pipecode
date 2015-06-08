@@ -129,7 +129,7 @@ function save_feed($feed_id, $data)
 				$article = db_get_rec("article", array("guid" => $item_guid));
 			} else {
 				$article = db_new_rec("article");
-				$article["article_id"] = create_short("article");
+				$article["article_id"] = create_short(TYPE_ARTICLE);
 			}
 			$article_html = http_cache($item_link);
 
@@ -214,7 +214,7 @@ function add_feed($uri)
 		//die("unable to parse feed [$uri] data [$data]");
 	}
 
-	$feed_id = create_short("feed");
+	$feed_id = create_short(TYPE_FEED);
 	$feed_code = crypt_crockford_encode($feed_id);
 
 	$feed = db_new_rec("feed");

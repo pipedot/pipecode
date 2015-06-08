@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("gravatar.php");
-
 print_header("Profile", [], [], [], ["Profile"], ["/profile/"]);
 beg_main("dual-table");
 writeln('<div class="dual-left">');
@@ -50,7 +48,6 @@ writeln('	<tr>');
 writeln('		<td class="center"><a href="/avatar/"><img alt="Avatar" class="thumb" src="' . avatar_picture($zid, 256) . '"></a></td>');
 writeln('	</tr>');
 writeln('</table>');
-seen_gravatar($zid);
 
 //if ($zid === $auth_zid) {
 //	box_right('<a class="icon-16 picture-16" href="/avatar/">Change</a>');

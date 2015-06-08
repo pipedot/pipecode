@@ -37,9 +37,9 @@ function create_avatar($zid, $data_64, $data_128, $data_256)
 	drive_set($data_128);
 	drive_set($data_256);
 
-	drive_link($hash_64, $avatar["avatar_id"], $zid);
-	drive_link($hash_128, $avatar["avatar_id"], $zid);
-	drive_link($hash_256, $avatar["avatar_id"], $zid);
+	drive_link($hash_64, $avatar["avatar_id"], TYPE_AVATAR, $zid);
+	drive_link($hash_128, $avatar["avatar_id"], TYPE_AVATAR, $zid);
+	drive_link($hash_256, $avatar["avatar_id"], TYPE_AVATAR, $zid);
 
 	return $avatar_id;
 }

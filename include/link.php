@@ -374,6 +374,38 @@ function item_type($type_id)
 		case TYPE_VIDEO:
 			return "video";
 
+		// os
+		case TYPE_ANDROID:
+			return "Android";
+		case TYPE_CHROME_OS:
+			return "Chrome OS";
+		case TYPE_FREEBSD:
+			return "FreeBSD";
+		case TYPE_IPAD:
+			return "iPad";
+		case TYPE_IPHONE:
+			return "iPhone";
+		case TYPE_LINUX:
+			return "Linux";
+		case TYPE_MAC:
+			return "Mac";
+		case TYPE_WINDOWS:
+			return "Windows";
+
+		// agent
+		case TYPE_CHROME:
+			return "Chrome";
+		case TYPE_FIREFOX:
+			return "Firefox";
+		case TYPE_IE:
+			return "Internet Explorer";
+		case TYPE_PIPECODE:
+			return "Pipecode Server";
+		case TYPE_PIPEDOT:
+			return "Pipedot App";
+		case TYPE_SAFARI:
+			return "Safari";
+
 		default:
 			die("unknown type [$type_id]");
 	}

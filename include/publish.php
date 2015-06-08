@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_body, $zid)
+function print_publish_box($pipe_id, $tid, $keywords, $title, $clean_body, $dirty_body, $zid)
 {
 	global $doc_root;
 
@@ -53,7 +53,8 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 	$a["pipe_id"] = $pipe_id;
 	$a["zid"] = $zid;
 	$a["topic"] = $topic;
-	$a["icon"] = $icon;
+	//$a["icon"] = $icon;
+	$a["keywords"] = $keywords;
 	$a["body"] = $clean_body;
 	$a["comments"] = count_comments();
 	print_article($a);
@@ -62,11 +63,13 @@ function print_publish_box($pipe_id, $tid, $icon, $title, $clean_body, $dirty_bo
 	beg_tab();
 	print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
 	print_row(array("caption" => "Topic", "option_key" => "tid", "option_value" => $tid, "option_list" => $topic_list, "option_keys" => $topic_keys));
-	print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $icon, "option_list" => $icon_list));
+	print_row(array("caption" => "Keywords", "text_key" => "keywords", "text_value" => $keywords));
+	//print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $icon, "option_list" => $icon_list));
 	print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 	end_tab();
 
-	box_two('<a href="/icons">Icons</a>', "Publish,Preview");
+	//box_two('<a href="/icons">Icons</a>', "Publish,Preview");
+	box_two('<a href="/similar">Keyword Search</a>', "Publish,Preview");
 
 	end_form();
 	end_main();

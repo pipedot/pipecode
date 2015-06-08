@@ -27,10 +27,17 @@ if ($user_conf["password"] != crypt_sha256($password . $user_conf["salt"])) {
 	die("wrong password");
 }
 
-$expire = time() + $auth_expire;
-$cookie = "expire=$expire&zid=$zid";
-$cookie .= "&hash=" . crypt_sha256($auth_key . $cookie);
-setcookie("auth", $cookie, time() + $auth_expire, "/", ".$server_name");
+$key = random_hash();
+$login = db_new_rec("login");
+$login["zid"] = $zid;
+$login["login_key"] = $key;
+$login["agent_id"] = get_agent_id();
+$login["ip_id"] = get_ip_id();
+$login["os_id"] = get_os_id();
+db_set_rec("login", $login);
+
+setcookie("auth", "zid=$zid&key=$key", time() + $auth_expire, "/", ".$server_name");
+
 if ($referer != "") {
 	header("Location: $referer");
 } else {

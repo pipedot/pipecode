@@ -30,12 +30,15 @@ $pipes = db_get_list("pipe", "time desc", array("closed" => 0));
 if (count($pipes) == 0) {
 	writeln('<h1>No stories in the pipe!</h1>');
 	writeln('<p><a href="/submit">Submit</a> one now or <a href="history">view the history</a>.</p>');
-}
-$k = array_keys($pipes);
-for ($i = 0; $i < count($pipes); $i++) {
-	$pipe = $pipes[$k[$i]];
+} else {
+	writeln('<div class="box">');
+	$k = array_keys($pipes);
+	for ($i = 0; $i < count($pipes); $i++) {
+		$pipe = $pipes[$k[$i]];
 
-	print_pipe_small($pipe["pipe_id"], false);
+		print_pipe_small($pipe["pipe_id"], false);
+	}
+	writeln('</div>');
 }
 
 if (count($pipes) > 0) {

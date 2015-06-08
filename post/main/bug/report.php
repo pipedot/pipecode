@@ -39,7 +39,7 @@ for ($i = 0; $i < count($_POST); $i++) {
 }
 
 $bug = db_new_rec("bug");
-$bug["bug_id"] = create_short("bug");
+$bug["bug_id"] = create_short(TYPE_BUG);
 $bug["author_zid"] = $auth_zid;
 $bug["body"] = $clean_body;
 $bug["priority"] = $priority;

@@ -17,31 +17,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("clean.php");
-
-if ($auth_zid === "") {
-	die("sign in to write");
-}
 if ($zid !== $auth_zid) {
-	die("not your journal");
+	die("not your page");
 }
 
-$title = clean_subject();
-$topic = clean_topic();
-list($clean_body, $dirty_body) = clean_body(false, "journal");
-$time = time();
+$auth = @$_COOKIE["auth"];
+$map = map_from_url_string($auth);
+$current_key = @$map["key"];
 
-$journal = db_new_rec("journal");
-$journal["journal_id"] = create_short(TYPE_JOURNAL);
-$journal["body"] = $clean_body;
-$journal["edit_time"] = $time;
-$journal["photo_id"] = 0;
-$journal["publish_time"] = 0;
-$journal["published"] = 0;
-$journal["slug"] = clean_url($title);
-$journal["title"] = $title;
-$journal["topic"] = $topic;
-$journal["zid"] = $auth_zid;
-db_set_rec("journal", $journal);
+sql("delete from login where zid = ? and login_key <> ?", $auth_zid, $current_key);
 
-header("Location: /journal/" . crypt_crockford_encode($journal["journal_id"]));
+header("Location: /login/");

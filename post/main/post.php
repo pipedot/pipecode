@@ -90,7 +90,7 @@ if ($translate_enabled) {
 }
 
 $comment = db_new_rec("comment");
-$comment["comment_id"] = create_short("comment");
+$comment["comment_id"] = create_short(TYPE_COMMENT);
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
 $comment["lang"] = $lang;

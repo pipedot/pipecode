@@ -29,6 +29,7 @@ writeln('<div class="dual-left">');
 beg_tab();
 print_row(array("caption" => "Ban IP", "description" => "Manage banned IP addresses", "icon" => "error", "link" => "/ban_ip/"));
 print_row(array("caption" => "Ban User", "description" => "Manage banned users", "icon" => "devil", "link" => "/ban_user/"));
+print_row(array("caption" => "Drive", "description" => "View storage information", "icon" => "drive", "link" => "/drive/"));
 print_row(array("caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/"));
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Users", "description" => "List local users", "icon" => "users", "link" => "/user/"));

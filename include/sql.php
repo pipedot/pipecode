@@ -121,6 +121,24 @@ const TYPE_USER = 183;
 // video
 const TYPE_VIDEO = 190;
 
+// os
+const TYPE_ANDROID = 200;
+const TYPE_CHROME_OS = 201;
+const TYPE_FREEBSD = 203;
+const TYPE_IPAD = 204;
+const TYPE_IPHONE = 205;
+const TYPE_LINUX = 206;
+const TYPE_MAC = 207;
+const TYPE_WINDOWS = 208;
+
+// agent
+const TYPE_CHROME = 210;
+const TYPE_FIREFOX = 211;
+const TYPE_IE = 212;
+const TYPE_PIPECODE = 213;
+const TYPE_PIPEDOT = 214;
+const TYPE_SAFARI = 215;
+
 
 $default_conf["server_conf"] = [
 	"auth_key" => "",
@@ -341,6 +359,12 @@ $db_table["comment_vote"] = array(
 	array("name" => "value", "default" => 0)
 );
 
+$db_table["country"] = array(
+	array("name" => "country_id", "key" => true, "auto" => true),
+	array("name" => "country_code"),
+	array("name" => "country_name")
+);
+
 $db_table["default_conf"] = array(
 	array("name" => "conf", "key" => true),
 	array("name" => "name", "key" => true),
@@ -371,7 +395,7 @@ $db_table["drive_link"] = array(
 );
 
 $db_table["email_challenge"] = array(
-	array("name" => "code", "key" => true, "default" => 0),
+	array("name" => "code", "key" => true),
 	array("name" => "email"),
 	array("name" => "expires", "default" => $now + DAYS * 3),
 	array("name" => "username")
@@ -415,6 +439,14 @@ $db_table["image"] = array(
 	array("name" => "zid")
 );
 
+$db_table["ip"] = array(
+	array("name" => "ip_id", "key" => true, "auto" => true),
+	array("name" => "address"),
+	array("name" => "country_id", "default" => 0),
+	array("name" => "latitude", "default" => 0),
+	array("name" => "longitude", "default" => 0)
+);
+
 $db_table["journal"] = array(
 	array("name" => "journal_id", "default" => 0, "key" => true),
 	array("name" => "body"),
@@ -451,6 +483,16 @@ $db_table["lang_translation"] = array(
 	array("name" => "dst_hash"),
 	array("name" => "src_lang"),
 	array("name" => "time", "default" => $now)
+);
+
+$db_table["login"] = array(
+	array("name" => "zid", "key" => true),
+	array("name" => "login_key", "key" => true),
+	array("name" => "agent_id", "default" => 0),
+	array("name" => "ip_id", "default" => 0),
+	array("name" => "last_time", "default" => $now),
+	array("name" => "login_time", "default" => $now),
+	array("name" => "os_id", "default" => 0)
 );
 
 $db_table["mail"] = array(
@@ -496,7 +538,8 @@ $db_table["pipe"] = array(
 	array("name" => "body"),
 	array("name" => "closed", "default" => 0),
 	array("name" => "edit_zid"),
-	array("name" => "icon"),
+	//array("name" => "icon"),
+	array("name" => "keywords"),
 	array("name" => "reason"),
 	array("name" => "slug"),
 	array("name" => "tid", "default" => 0),

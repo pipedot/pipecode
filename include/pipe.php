@@ -27,7 +27,8 @@ function print_pipe($pipe_id)
 	$a["type_id"] = TYPE_STORY;
 	$a["pipe_id"] = $pipe["pipe_id"];
 	$a["body"] = $pipe["body"];
-	$a["icon"] = $pipe["icon"];
+	//$a["icon"] = $pipe["icon"];
+	$a["keywords"] = $pipe["keywords"];
 	$a["time"] = $pipe["time"];
 	$a["title"] = $pipe["title"];
 	$a["topic"] = $topic["topic"];

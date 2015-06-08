@@ -19,7 +19,7 @@
 
 require_https($https_enabled);
 
-$code = http_get_string("code", array("required" => false, "len" => 6, "valid" => "[A-Z][a-z][0-9]"));
+$code = http_get_string("code", array("required" => false, "len" => 64, "valid" => "[0-9]abcdef"));
 if ($code == "") {
 	$code = $s2;
 }
@@ -44,15 +44,11 @@ if ($code == "") {
 	print_footer();
 	die();
 }
-if (strlen($code) != 6 || !string_uses($code, "[A-Z][a-z][0-9]")) {
-	die("invalid verification code");
-}
-$id = crypt_crockford_decode($code);
 
-if (!db_has_rec("email_challenge", $id)) {
+if (!db_has_rec("email_challenge", $code)) {
 	die("wrong verification code");
 }
-$email_challenge = db_find_rec("email_challenge", $id);
+$email_challenge = db_find_rec("email_challenge", $code);
 if ($email_challenge === false) {
 	die("wrong verification code");
 }

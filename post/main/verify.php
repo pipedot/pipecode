@@ -17,20 +17,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-//if (strlen($s2) != 6 || !string_uses($s2, "[A-Z][a-z][0-9]")) {
-//	die("invalid verification code");
-//}
-
-$code = http_post_string("code", ["len" => 6, "valid" => "[A-Z][a-z][0-9]"]);
+$code = http_post_string("code", ["len" => 64, "valid" => "[0-9]abcdef"]);
 $password_1 = http_post_string("password_1", ["len" => 64, "valid" => "[KEYBOARD]"]);
 $password_2 = http_post_string("password_2", ["len" => 64, "valid" => "[KEYBOARD]"]);
 
-$id = crypt_crockford_decode($code);
 if ($password_1 != $password_2) {
 	die("passwords do not match");
 }
 
-$email_challenge = db_find_rec("email_challenge", $id);
+$email_challenge = db_find_rec("email_challenge", $code);
 if ($email_challenge === false) {
 	die("wrong verification code");
 }
@@ -52,7 +47,7 @@ $user_conf["password"] = $password;
 $user_conf["salt"] = $salt;
 db_set_conf("user_conf", $user_conf, $zid);
 
-db_del_rec("email_challenge", $id);
+db_del_rec("email_challenge", $code);
 sql("delete from email_challenge where expires < ?", time());
 
 header("Location: /login");

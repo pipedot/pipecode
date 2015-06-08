@@ -66,11 +66,10 @@ if (!captcha_verify($answer)) {
 	die("captcha failed");
 }
 
-$id = rand(0, pow(32, 6));
-$code = string_pad(crypt_crockford_encode($id), 6);
+$code = random_hash();
 
 $email_challenge = db_new_rec("email_challenge");
-$email_challenge["code"] = $id;
+$email_challenge["code"] = $code;
 $email_challenge["email"] = $mail_1;
 $email_challenge["expires"] = time() + DAYS * 3;
 $email_challenge["username"] = $username;

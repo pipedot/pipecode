@@ -2449,6 +2449,9 @@ del {
 .check-16 {
 	background-image: url(/images/check-16.png);
 }
+.chrome-32 {
+	background-image: url(/images/chrome-32.png);
+}
 .chrome-64 {
 	background-image: url(/images/chrome-64.png);
 }
@@ -2515,6 +2518,9 @@ del {
 .feed-16 {
 	background-image: url(/images/feed-16.png);
 }
+.firefox-32 {
+	background-image: url(/images/firefox-32.png);
+}
 .folder-16 {
 	background-image: url(/images/folder-16.png);
 }
@@ -2569,6 +2575,9 @@ del {
 .html-32 {
 	background-image: url(/images/html-32.png);
 }
+.ie-32 {
+	background-image: url(/images/ie-32.png);
+}
 .important-32 {
 	background-image: url(/images/important-32.png);
 }
@@ -2592,6 +2601,9 @@ del {
 }
 .ladybug-16 {
 	background-image: url(/images/ladybug-16.png);
+}
+.lock-32 {
+	background-image: url(/images/lock-32.png);
 }
 .lock-64 {
 	background-image: url(/images/lock-64.png);
@@ -2677,6 +2689,9 @@ del {
 .picture-32 {
 	background-image: url(/images/picture-32.png);
 }
+.pipedot-32 {
+	background-image: url(/images/pipedot-32.png);
+}
 .pipedot-64 {
 	background-image: url(/images/pipedot-64.png);
 }
@@ -2697,6 +2712,12 @@ del {
 }
 .robot-desktop-64 {
 	background-image: url(/images/robot-desktop-64.png);
+}
+.safari-32 {
+	background-image: url(/images/safari-32.png);
+}
+.safari-64 {
+	background-image: url(/images/safari-64.png);
 }
 .sent-16 {
 	background-image: url(/images/sent-16.png);
@@ -2834,6 +2855,9 @@ del {
 	.check-16 {
 		background-image: url(/images/check-32.png);
 	}
+	.chrome-32 {
+		background-image: url(/images/chrome-64.png);
+	}
 	.chrome-64 {
 		background-image: url(/images/chrome-128.png);
 	}
@@ -2903,6 +2927,9 @@ del {
 	.feed-16 {
 		background-image: url(/images/feed-32.png);
 	}
+	.firefox-32 {
+		background-image: url(/images/firefox-64.png);
+	}
 	.folder-16 {
 		background-image: url(/images/folder-32.png);
 	}
@@ -2957,6 +2984,9 @@ del {
 	.html-32 {
 		background-image: url(/images/html-64.png);
 	}
+	.ie-32 {
+		background-image: url(/images/ie-64.png);
+	}
 	.important-32 {
 		background-image: url(/images/important-64.png);
 	}
@@ -2980,6 +3010,9 @@ del {
 	}
 	.ladybug-16 {
 		background-image: url(/images/ladybug-32.png);
+	}
+	.lock-32 {
+		background-image: url(/images/lock-64.png);
 	}
 	.lock-64 {
 		background-image: url(/images/lock-128.png);
@@ -3065,6 +3098,9 @@ del {
 	.picture-32 {
 		background-image: url(/images/picture-64.png);
 	}
+	.pipedot-32 {
+		background-image: url(/images/pipedot-64.png);
+	}
 	.pipedot-64 {
 		background-image: url(/images/pipedot-128.png);
 	}
@@ -3085,6 +3121,12 @@ del {
 	}
 	.robot-desktop-64 {
 		background-image: url(/images/robot-desktop-128.png);
+	}
+	.safari-32 {
+		background-image: url(/images/safari-64.png);
+	}
+	.safari-64 {
+		background-image: url(/images/safari-128.png);
 	}
 	.sent-16 {
 		background-image: url(/images/sent-32.png);

@@ -35,7 +35,7 @@ writeln('<h1>Short Link</h1>');
 
 dict_beg();
 dict_row("Code", $short_code);
-dict_row("Type", $type);
+dict_row("Type", item_type($type_id));
 dict_row("URL", '<a href="' . $link . '">' . $link . '</a>');
 dict_end();
 

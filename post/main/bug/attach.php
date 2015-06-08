@@ -38,7 +38,7 @@ if ($bug_file["type"] === "php") {
 }
 
 $bug_file = db_new_rec("bug_file");
-$bug_file["bug_file_id"] = create_short("bug_file");
+$bug_file["bug_file_id"] = create_short(TYPE_BUG_FILE);
 $bug_file["bug_id"] = $bug["bug_id"];
 $bug_file["remote_ip"] = $remote_ip;
 $bug_file["server"] = $server_name;

@@ -29,4 +29,4 @@ $pipe = item_request(TYPE_PIPE);
 $clean_body = $pipe["body"];
 $dirty_body = dirty_html($clean_body);
 
-print_publish_box($pipe["pipe_id"], $pipe["tid"], $pipe["icon"], $pipe["title"], $clean_body, $dirty_body, $pipe["author_zid"]);
+print_publish_box($pipe["pipe_id"], $pipe["tid"], $pipe["keywords"], $pipe["title"], $clean_body, $dirty_body, $pipe["author_zid"]);

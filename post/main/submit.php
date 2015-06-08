@@ -44,7 +44,7 @@ if (http_post("preview")) {
 }
 
 $pipe = db_new_rec("pipe");
-$pipe["pipe_id"] = create_short("pipe");
+$pipe["pipe_id"] = create_short(TYPE_PIPE);
 $pipe["author_zid"] = $auth_zid;
 $pipe["body"] = $clean_body;
 $pipe["closed"] = 0;

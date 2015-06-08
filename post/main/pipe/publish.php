@@ -30,7 +30,9 @@ $zid = $pipe["author_zid"];
 
 $title = clean_subject();
 list($clean_body, $dirty_body) = clean_body(true, "story");
-$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
+//$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
+$keywords = http_post_string("keywords", array("required" => false, "len" => 100, "valid" => "[A-Z][a-z][0-9]+-_. "));
+$keywords = strtolower($keywords);
 $tid = http_post_int("tid");
 $time = time();
 
@@ -43,12 +45,13 @@ if (http_post("publish")) {
 	db_set_rec("pipe", $pipe);
 
 	$story = db_new_rec("story");
-	$story["story_id"] = create_short("story");
+	$story["story_id"] = create_short(TYPE_STORY);
 	$story["author_zid"] = $pipe["author_zid"];
 	$story["body"] = $clean_body;
 	$story["edit_time"] = $time;
 	$story["edit_zid"] = $auth_zid;
-	$story["icon"] = $icon;
+	//$story["icon"] = $icon;
+	$story["keywords"] = $keywords;
 	$story["image_id"] = 0;
 	$story["pipe_id"] = $pipe["pipe_id"];
 	$story["publish_time"] = $time;
@@ -62,4 +65,4 @@ if (http_post("publish")) {
 	die();
 }
 
-print_publish_box($pipe["pipe_id"], $tid, $icon, $title, $clean_body, $dirty_body, $zid);
+print_publish_box($pipe["pipe_id"], $tid, $keywords, $title, $clean_body, $dirty_body, $zid);

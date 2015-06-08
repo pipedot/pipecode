@@ -355,7 +355,7 @@ function create_thumb($image_url)
 		}
 
 		$thumb = db_new_rec("thumb");
-		$thumb["thumb_id"] = create_short("thumb");
+		$thumb["thumb_id"] = create_short(TYPE_THUMB);
 		$thumb["hash"] = $hash;
 		$thumb["low_res"] = $low_res;
 		db_set_rec("thumb", $thumb);
@@ -463,7 +463,7 @@ function create_photo($src_img, $original_name, $hash)
 	list($aspect_width, $aspect_height) = find_aspect($original_width, $original_height);
 
 	$photo = db_new_rec("photo");
-	$photo["photo_id"] = create_short("photo");
+	$photo["photo_id"] = create_short(TYPE_PHOTO);
 	$photo["aspect_height"] = $aspect_height;
 	$photo["aspect_width"] = $aspect_width;
 	$photo["hash"] = $hash;

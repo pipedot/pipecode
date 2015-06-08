@@ -178,13 +178,14 @@ function drive_is_dir($drive_file)
 }
 
 
-function drive_link($hash, $item_id, $zid = "")
+function drive_link($hash, $item_id, $type_id, $zid = "")
 {
-	$drive_link = db_find_rec("drive_link", ["hash" => $hash, "item_id" => $item_id]);
+	$drive_link = db_find_rec("drive_link", ["hash" => $hash, "item_id" => $item_id, "type_id" => $type_id]);
 	if ($drive_link === false) {
 		$drive_link = db_new_rec("drive_link");
 		$drive_link["hash"] = $hash;
 		$drive_link["item_id"] = $item_id;
+		$drive_link["type_id"] = $type_id;
 		$drive_link["zid"] = $zid;
 		db_set_rec("drive_link", $drive_link);
 	}

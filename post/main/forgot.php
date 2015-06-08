@@ -27,8 +27,7 @@ if (!is_local_user($zid)) {
 }
 $user_conf = db_get_conf("user_conf", $zid);
 
-$id = rand(0, pow(32, 6));
-$code = string_pad(crypt_crockford_encode($id), 6);
+$code = random_hash();
 
 sql("delete from email_challenge where expires < ?", time());
 if (db_has_rec("email_challenge", ["username" => $username])) {
@@ -36,7 +35,7 @@ if (db_has_rec("email_challenge", ["username" => $username])) {
 }
 
 $email_challenge = db_new_rec("email_challenge");
-$email_challenge["code"] = $id;
+$email_challenge["code"] = $code;
 $email_challenge["email"] = $user_conf["email"];
 $email_challenge["expires"] = time() + DAYS * 3;
 $email_challenge["username"] = $username;
