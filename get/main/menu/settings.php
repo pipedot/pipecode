@@ -50,11 +50,6 @@ print_row(array("caption" => "User Registration", "check_key" => "register_enabl
 print_row(array("caption" => "Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
 end_tab();
 
-beg_tab("Translate");
-print_row(array("caption" => "Translate stories and comments", "check_key" => "translate_enabled", "checked" => $server_conf["translate_enabled"]));
-print_row(array("caption" => "Google Translate Key", "text_key" => "translate_key", "text_value" => $server_conf["translate_key"]));
-end_tab();
-
 beg_tab("Twitter");
 print_row(array("caption" => "Enable story tweets", "check_key" => "twitter_enabled", "checked" => $server_conf["twitter_enabled"]));
 print_row(array("caption" => "Consumer Key", "text_key" => "twitter_consumer_key", "text_value" => $server_conf["twitter_consumer_key"]));

@@ -84,7 +84,6 @@ function print_story($story)
 	global $auth_user;
 	global $auth_zid;
 	global $auth_user;
-	global $translate_enabled;
 
 	if (!is_array($story)) {
 		$story = db_get_rec("story", $story);
@@ -92,28 +91,16 @@ function print_story($story)
 	$topic = db_get_rec("topic", $story["tid"]);
 	$pipe = db_get_rec("pipe", $story["pipe_id"]);
 
-	$src_lang = $story["lang"];
-	$dst_lang = $auth_user["lang"];
-	if ($translate_enabled && $src_lang != $dst_lang) {
-		$title = translate($story["title"], $dst_lang, $src_lang);
-		$body = translate($story["body"], $dst_lang, $src_lang);
-	} else {
-		$title = $story["title"];
-		$body = $story["body"];
-	}
-
 	$a["type_id"] = TYPE_STORY;
-	$a["body"] = $body;
+	$a["body"] = $story["body"];
 	$a["icon"] = $story["icon"];
 	$a["keywords"] = $story["keywords"];
 	$a["image_id"] = $story["image_id"];
-	$a["src_lang"] = $src_lang;
-	$a["dst_lang"] = $dst_lang;
 	$a["pipe_id"] = $story["pipe_id"];
 	$a["slug"] = $story["slug"];
 	$a["story_id"] = $story["story_id"];
 	$a["time"] = $story["publish_time"];
-	$a["title"] = $title;
+	$a["title"] = $story["title"];
 	$a["topic"] = $topic["topic"];
 	$a["tweet_id"] = $story["tweet_id"];
 	$a["zid"] = $story["author_zid"];
@@ -221,7 +208,6 @@ function print_article($a)
 	global $auth_zid;
 	global $protocol;
 	global $doc_root;
-	global $translate_enabled;
 
 	if (array_key_exists("time", $a)) {
 		$time = $a["time"];
@@ -300,20 +286,6 @@ function print_article($a)
 		$tweet_id = $a["tweet_id"];
 	} else {
 		$tweet_id = 0;
-	}
-
-	$using = "";
-	$lang = "";
-	if ($translate_enabled && array_key_exists("src_lang", $a)) {
-		$src_lang = $a["src_lang"];
-		$dst_lang = $a["dst_lang"];
-		if ($src_lang != $dst_lang) {
-			$using = " using <span title=\"" . lang_name($src_lang) . " to " . lang_name($dst_lang) . "\"><b>Google Translate</b></a>";
-			$lang = " lang=\"$dst_lang-x-mtfrom-$src_lang\"";
-		}
-	} else {
-		$src_lang = "en";
-		$dst_lang = "en";
 	}
 
 	$type = item_type($a["type_id"]);
@@ -435,18 +407,18 @@ function print_article($a)
 	} else if ($topic == "") {
 		writeln("		<div>by <address>$by</address> $date$short</div>");
 	} else {
-		writeln("		<div>by <address>$by</address> in <a href=\"$topic_link\"><b>$topic</b></a>$using $date$short</div>");
+		writeln("		<div>by <address>$by</address> in <a href=\"$topic_link\"><b>$topic</b></a> $date$short</div>");
 	}
 	writeln("	</header>");
 
 	if ($image_path != "") {
 		if ($image_url != "") {
-			writeln("	<div$lang><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"></a>$story</div>");
+			writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"></a>$story</div>");
 		} else {
-			writeln("	<div$lang><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\">$story</div>");
+			writeln("	<div><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\">$story</div>");
 		}
 	} else {
-		writeln("	<div$lang>$story</div>");
+		writeln("	<div>$story</div>");
 	}
 
 	$link = "";

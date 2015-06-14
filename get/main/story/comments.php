@@ -23,5 +23,4 @@ header_text();
 
 $story = item_request(TYPE_STORY);
 $can_moderate = true;
-//die("story_id [" . $story["story_id"] . "]");
-render_page("story", $story["story_id"], true);
+render_page(TYPE_STORY, $story["story_id"], true);

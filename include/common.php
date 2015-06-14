@@ -33,7 +33,6 @@ $now = time();
 $year = gmdate("Y");
 
 include("sql.php");
-include("lang.php");
 
 $reasons["Normal"] = 0;
 $reasons["Offtopic"] = -1;
@@ -684,13 +683,14 @@ function is_local_user($zid)
 }
 
 
-function update_view_time($type, $root_id)
+function update_view_time($type_id, $root_id)
 {
 	global $auth_zid;
 
 	if ($auth_zid === "") {
 		$last_seen = 0;
 	} else {
+		$type = item_type($type_id);
 		if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
 			$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
 			$view["last_time"] = $view["time"];
@@ -710,10 +710,15 @@ function update_view_time($type, $root_id)
 }
 
 
-function revert_view_time($type, $root_id)
+function revert_view_time($type_id, $root_id)
 {
 	global $auth_zid;
 
+	if ($auth_zid === "") {
+		return;
+	}
+
+	$type = item_type($type_id);
 	if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
 		$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
 		$view["time"] = $view["last_time"];
@@ -807,7 +812,7 @@ function print_comments($type_id, $rec)
 		render_page($type_id, $rec["{$type}_id"], false);
 	}
 
-	$last_seen = update_view_time($type, $rec["{$type}_id"]);
+	$last_seen = update_view_time($type_id, $rec["{$type}_id"]);
 
 	if ($auth_user["javascript_enabled"]) {
 		if ($wysiwyg_enabled && $inline_reply) {
@@ -973,7 +978,7 @@ function http_cache($url)
 {
 	global $redirect_url;
 
-	$cache_id = crypt_sha256($url);
+	$url_hash = crypt_sha256($url);
 	$url = string_clean($url, "[a-z][A-Z][0-9]~#%&()-_+=[];:./?", 200);
 	$redirect_url = "";
 
@@ -981,7 +986,7 @@ function http_cache($url)
 		return false;
 	}
 
-	$cache = db_find_rec("cache", $cache_id);
+	$cache = db_find_rec("cache", ["url_hash" => $url_hash]);
 	if ($cache === false) {
 		$timeout = 5;
 		$ch = curl_init();
@@ -1003,14 +1008,14 @@ function http_cache($url)
 		}
 
 		$cache = db_new_rec("cache");
-		$cache["cache_id"] = $cache_id;
-		$cache["hash"] = $hash;
+		$cache["data_hash"] = $hash;
 		$cache["url"] = $url;
+		$cache["url_hash"] = $url_hash;
 		db_set_rec("cache", $cache);
 	} else {
 		//writeln("drive_get [" . $cache["hash"] . "]");
 		//var_dump($cache);
-		$data = drive_get($cache["hash"]);
+		$data = drive_get($cache["data_hash"]);
 	}
 
 	return $data;
@@ -1238,9 +1243,6 @@ function load_server_conf()
 	global $smtp_address;
 	global $smtp_username;
 	global $smtp_password;
-	global $translate_enabled;
-	global $translate_key;
-	global $translate_max;
 	global $twitter_enabled;
 	global $oauth_token;
 	global $oauth_token_secret;
@@ -1274,10 +1276,6 @@ function load_server_conf()
 	$smtp_address = $server_conf["smtp_address"];
 	$smtp_username = $server_conf["smtp_username"];
 	$smtp_password = $server_conf["smtp_password"];
-
-	$translate_enabled = (bool) $server_conf["translate_enabled"];
-	$translate_key = $server_conf["translate_key"];
-	$translate_max = 5000;
 
 	$twitter_enabled = (bool) $server_conf["twitter_enabled"];
 	define('CONSUMER_KEY', $server_conf["twitter_consumer_key"]);

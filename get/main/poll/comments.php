@@ -23,5 +23,5 @@ header_text();
 
 $poll = item_request(TYPE_POLL);
 $can_moderate = true;
-render_page("poll", $poll["poll_id"], true);
+render_page(TYPE_POLL, $poll["poll_id"], true);
 

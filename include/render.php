@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $article_link = "", $article_title = "", $junk_status = 0, $force_lang = "")
+function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $article_link = "", $article_title = "", $junk_status = 0)
 {
 	global $server_name;
 	global $can_moderate;
@@ -27,7 +27,6 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	global $auth_zid;
 	global $protocol;
 	global $reasons;
-	global $translate_enabled;
 
 	list($score, $reason) = get_comment_score($comment_id);
 	$score_reason = $score;
@@ -36,33 +35,6 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	}
 
 	$comment_code = crypt_crockford_encode($comment_id);
-
-	$using = "";
-	$dst_lang = "";
-	if ($translate_enabled && $junk_status == 0) {
-		if ($force_lang != "") {
-			$dst_lang = $force_lang;
-		} else {
-			$dst_lang = $auth_user["lang"];
-		}
-		if ($dst_lang != "") {
-			if ($comment_id == 0) {
-				$src_lang = $auth_user["lang"];
-			} else {
-				$comment = db_get_rec("comment", $comment_id);
-				$src_lang = $comment["lang"];
-			}
-
-			if ($src_lang != $dst_lang) {
-				$subject = translate($subject, $dst_lang, $src_lang);
-				$body = translate($body, $dst_lang, $src_lang);
-				$using = " using <a title=\"" . lang_name($src_lang) . " to " . lang_name($dst_lang) . "\" href=\"/comment/$comment_code/translate\"><b>Google Translate</b></a>";
-			}
-		}
-	} else {
-		$src_lang = "en";
-		$dst_lang = "en";
-	}
 
 	$body = make_clickable($body);
 
@@ -90,14 +62,10 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	} else {
 		$code = " (<a href=\"$protocol://$server_name/$comment_code\">#$comment_code</a>)";
 	}
-	$s .= "<h4>by " . user_link($zid, ["tag" => true]) . "$in$using on $date$code</h4>\n";
+	$s .= "<h4>by " . user_link($zid, ["tag" => true]) . "$in on $date$code</h4>\n";
 	$s .= "<div class=\"comment-outline\">\n";
 	$s .= "<div>";
-	if ($src_lang != $dst_lang) {
-		$s .= "<div class=\"comment-body\" lang=\"$dst_lang-x-mtfrom-$src_lang\">$body</div>\n";
-	} else {
-		$s .= "<div class=\"comment-body\">$body</div>\n";
-	}
+	$s .= "<div class=\"comment-body\">$body</div>\n";
 
 	//$reason = array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
 	if ($can_moderate && $auth_zid != "" && $zid != $auth_zid) {
@@ -162,12 +130,11 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 }
 
 
-function render_comment_json($subject, $zid, $time, $comment_id, $body, $junk_status, $src_lang)
+function render_comment_json($subject, $zid, $time, $comment_id, $body, $junk_status)
 {
 	global $can_moderate;
 	global $auth_zid;
 	global $auth_user;
-	global $translate_enabled;
 
 	list($score, $reason) = get_comment_score($comment_id);
 	$rid = -1;
@@ -182,16 +149,6 @@ function render_comment_json($subject, $zid, $time, $comment_id, $body, $junk_st
 		$vote = "";
 	}
 
-	if ($translate_enabled && $junk_status == 0) {
-		$dst_lang = $auth_user["lang"];
-		if ($src_lang != $dst_lang) {
-			$subject = translate($subject, $dst_lang, $src_lang);
-			$body = translate($body, $dst_lang, $src_lang);
-		}
-	} else {
-		$src_lang = "en";
-		$dst_lang = "en";
-	}
 	$body = make_clickable($body);
 
 	$s = "\$level{\n";
@@ -201,8 +158,6 @@ function render_comment_json($subject, $zid, $time, $comment_id, $body, $junk_st
 	$s .= "\$level	\"score\": $score,\n";
 	$s .= "\$level	\"reason\": \"$reason\",\n";
 	$s .= "\$level	\"junk\": $junk_status,\n";
-	$s .= "\$level	\"src_lang\": \"$src_lang\",\n";
-	$s .= "\$level	\"dst_lang\": \"$dst_lang\",\n";
 	$s .= "\$level	\"subject\": \"" . addcslashes($subject, "\\\"") . "\",\n";
 	$s .= "\$level	\"time\": $time,\n";
 	$s .= "\$level	\"vote\": \"$vote\",\n";
@@ -252,7 +207,7 @@ function recursive_render_json($render, $parent, $keys, $comment_id, $level)
 }
 
 
-function render_page($type, $root_id, $json)
+function render_page($type_id, $root_id, $json)
 {
 	global $protocol;
 	global $server_name;
@@ -285,7 +240,7 @@ function render_page($type, $root_id, $json)
 		//}
 		//$view["time"] = time();
 		//db_set_rec("{$type}_view", $view);
-		$last_seen = update_view_time($type, $root_id);
+		$last_seen = update_view_time($type_id, $root_id);
 	}
 
 	if ($auth_user["show_junk_enabled"]) {
@@ -364,9 +319,9 @@ function render_page($type, $root_id, $json)
 		$comments[$comment["comment_id"]] = $row[$i];
 		//$zid = $comment["zid"];
 		if ($json) {
-			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $comment["junk_status"], $comment["lang"]);
+			$render[$comment["comment_id"]] = render_comment_json($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $comment["junk_status"]);
 		} else {
-			$render[$comment["comment_id"]] = render_comment($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $last_seen, "", "", $comment["junk_status"], $auth_user["lang"]);
+			$render[$comment["comment_id"]] = render_comment($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $last_seen, "", "", $comment["junk_status"]);
 		}
 		$parent[$comment["comment_id"]] = $comment["parent_id"];
 	}

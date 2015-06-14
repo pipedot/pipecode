@@ -107,8 +107,8 @@ function save_feed($feed_id, $data)
 		$item_title = html_entity_decode($item_title);
 		$item_title = htmlentities($item_title, ENT_NOQUOTES);
 
-		$item_html = $item->get_content();
-		$item_description = $item->get_description();
+		$item_html = $item->get_content() . "";
+		$item_description = $item->get_description() . "";
 		if ($item_html === $item_description) {
 			$item_body = clean_html($item_html, "article");
 			$item_description = make_description($item_body);

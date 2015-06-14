@@ -47,12 +47,15 @@ function create_avatar($zid, $data_64, $data_128, $data_256)
 
 function create_image_avatar($zid, $src_img)
 {
+	global $doc_root;
+
 	$original_width = imagesx($src_img);
 	$original_height = imagesy($src_img);
 	if ($original_width < 256 || $original_height < 256) {
 		die("avatar must be at least 256 x 256");
 	}
 
+	list($user, $host) = explode("@", $zid);
 	$sizes = [64, 128, 256];
 	$data = [];
 	for ($i = 0; $i < count($sizes); $i++) {

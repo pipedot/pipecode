@@ -155,8 +155,6 @@ $default_conf["server_conf"] = [
 	"smtp_username" => "mail@example.com",
 	"smtp_password" => "",
 	"time_zone" => "UTC",
-	"translate_enabled" => "0",
-	"translate_key" => "",
 	"twitter_enabled" => "0",
 	"twitter_consumer_key" => "",
 	"twitter_consumer_secret" => "",
@@ -180,7 +178,6 @@ $default_conf["user_conf"] = [
 	"inline_reply_enabled" => "0",
 	"javascript_enabled" => "1",
 	"joined" => "0",
-	"lang" => "en",
 	"large_text_enabled" => "0",
 	"list_enabled" => "0",
 	"password" => "",
@@ -335,7 +332,6 @@ $db_table["comment"] = array(
 	array("name" => "junk_status", "default" => 0),
 	array("name" => "junk_time", "default" => 0),
 	array("name" => "junk_zid"),
-	array("name" => "lang", "default" => "en"),
 	array("name" => "parent_id", "default" => 0),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "remote_ip"),
@@ -389,8 +385,8 @@ $db_table["drive_file"] = array(
 
 $db_table["drive_link"] = array(
 	array("name" => "hash", "key" => true),
-	array("name" => "item_id", "key" => true),
-	array("name" => "type_id", "default" => 0),
+	array("name" => "item_id", "key" => true, "default" => 0),
+	array("name" => "type_id", "key" => true, "default" => 0),
 	array("name" => "zid")
 );
 
@@ -470,19 +466,6 @@ $db_table["journal_view"] = array(
 	array("name" => "zid", "key" => true),
 	array("name" => "time", "default" => 0),
 	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["lang_string"] = array(
-	array("name" => "hash", "key" => true),
-	array("name" => "body")
-);
-
-$db_table["lang_translation"] = array(
-	array("name" => "src_hash", "key" => true),
-	array("name" => "dst_lang", "key" => true),
-	array("name" => "dst_hash"),
-	array("name" => "src_lang"),
-	array("name" => "time", "default" => $now)
 );
 
 $db_table["login"] = array(
@@ -638,7 +621,6 @@ $db_table["story"] = array(
 	array("name" => "icon"),
 	array("name" => "image_id", "default" => 0),
 	array("name" => "keywords"),
-	array("name" => "lang", "default" => "en"),
 	array("name" => "pipe_id"),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "slug"),

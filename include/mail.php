@@ -161,6 +161,11 @@ function send_web_mail($to, $subject, $body, $in_reply_to = "", $sent = true)
 function print_mail_dir($location)
 {
 	global $auth_zid;
+	global $zid;
+
+	if ($zid !== $auth_zid) {
+		die("not your page");
+	}
 
 	print_header($location, ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $location], ["/mail/", ($location == "Inbox" ? "/mail/" : strtolower("/mail/$location"))]);
 

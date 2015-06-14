@@ -29,7 +29,9 @@ if ($zid === $auth_zid) {
 	print_row(array("caption" => "Feed", "description" => "Show news page", "icon" => "news", "link" => "/feed/"));
 }
 print_row(array("caption" => "Karma", "description" => "Show karma rating", "icon" => "face-smile", "link" => "/karma/"));
-print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
+if ($zid === $auth_zid) {
+	print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
+}
 print_row(array("caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"));
 end_tab();
 

@@ -23,5 +23,5 @@ header_text();
 
 $journal = item_request(TYPE_JOURNAL);
 $can_moderate = true;
-render_page("journal", $journal["journal_id"], true);
+render_page(TYPE_JOURNAL, $journal["journal_id"], true);
 

@@ -27,4 +27,4 @@ if (!string_uses($bug_id, "[a-z][0-9]_")) {
 }
 
 $can_moderate = true;
-render_page("bug", $bug_id, true);
+render_page(TYPE_BUG, $bug_id, true);

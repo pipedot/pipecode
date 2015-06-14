@@ -40,17 +40,10 @@ if ($coward) {
 }
 $time = time();
 
-if ($translate_enabled) {
-	$lang = lang_detect($clean_body);
-} else {
-	$lang = "en";
-}
-
 $comment = db_new_rec("comment");
 $comment["comment_id"] = create_short(TYPE_COMMENT);
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
-$comment["lang"] = $lang;
 $comment["parent_id"] = $parent_id;
 $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
@@ -64,7 +57,7 @@ send_notifications($comment);
 //writeln("clean_body [$clean_body] dirty_body [$dirty_body] raw_body [" . $_POST["body"] . "]");
 //$s = "{\n";
 //$s .= "	\"reply\": [\n";
-$s = render_comment_json($subject, $zid, $time, $comment["comment_id"], $clean_body, 0, $lang);
+$s = render_comment_json($subject, $zid, $time, $comment["comment_id"], $clean_body, 0);
 //$s .= "			]\n";
 //$s .= "		}\n";
 $s .= "	]\n";

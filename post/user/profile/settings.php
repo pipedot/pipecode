@@ -22,12 +22,10 @@ if ($zid !== $auth_zid) {
 }
 
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
-$langs = ["en", "eo", "ja", "es"];
 
 $display_name = http_post_string("display_name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z]- "));
 $birthday = http_post_string("birthday", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-,.: "));
 $email = http_post_string("email", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
-$lang = http_post_string("lang", array("len" => 2, "valid" => "[a-z]"));
 $time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
 $large_text_enabled = http_post_bool("large_text_enabled", array("numeric" => true));
 //$story_image_style = http_post_int("story_image_style");
@@ -46,9 +44,6 @@ $show_email_enabled = http_post_bool("show_email_enabled", array("numeric" => tr
 if (!in_array($time_zone, $zones)) {
 	die("invalid time zone [$time_zone]");
 }
-if (!in_array($lang, $langs)) {
-	die("invalid lang [$lang]");
-}
 $birthday = strtotime($birthday);
 if ($birthday === false) {
 	$birthday = 0;
@@ -57,7 +52,6 @@ if ($birthday === false) {
 $user_conf["display_name"] = $display_name;
 $user_conf["birthday"] = $birthday;
 $user_conf["email"] = $email;
-$user_conf["lang"] = $lang;
 $user_conf["time_zone"] = $time_zone;
 $user_conf["large_text_enabled"] = $large_text_enabled;
 //$user_conf["story_image_style"] = $story_image_style;

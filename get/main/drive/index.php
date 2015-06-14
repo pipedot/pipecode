@@ -28,7 +28,7 @@ $row = sql("select count(size) as thumb_count, sum(size) as thumb_total from thu
 $thumb_count = $row[0]["thumb_count"];
 $thumb_total = $row[0]["thumb_total"];
 
-$row = sql("select count(size) as cache_count, sum(size) as cache_total from cache inner join drive_data on cache.hash = drive_data.hash");
+$row = sql("select count(size) as cache_count, sum(size) as cache_total from cache inner join drive_data on cache.data_hash = drive_data.hash");
 $cache_count = $row[0]["cache_count"];
 $cache_total = $row[0]["cache_total"];
 
@@ -44,7 +44,7 @@ dict_beg();
 dict_row("Avatar Count", number_format($avatar_count));
 dict_row("Avatar Size (64 x 64)", sys_format_size($avatar_64_total));
 dict_row("Avatar Size (128 x 128)", sys_format_size($avatar_128_total));
-dict_row("Avatar Size (256 x 128)", sys_format_size($avatar_256_total));
+dict_row("Avatar Size (256 x 256)", sys_format_size($avatar_256_total));
 dict_end();
 
 dict_beg();

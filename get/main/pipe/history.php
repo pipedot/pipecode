@@ -35,10 +35,11 @@ writeln('		<th>Status</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
 	$pipe_code = crypt_crockford_encode($row[$i]["pipe_id"]);
-	$story_code = crypt_crockford_encode($row[$i]["story_id"]);
+	$story_id = $row[$i]["story_id"];
+	$story_code = crypt_crockford_encode($story_id);
 	$author = user_link($row[$i]["author_zid"], ["tag" => true]);
 	$editor = user_link($row[$i]["edit_zid"], ["tag" => true, "ac" => false]);
-	if ($story_code > 0) {
+	if ($story_id > 0) {
 		$status = '<a href="/story/' . $story_code . '">Published</a>';
 	} else if ($row[$i]["closed"] == 1) {
 		$status = "Closed (" . ($row[$i]["reason"] == "" ? "no reason" : $row[$i]["reason"]) . ")";

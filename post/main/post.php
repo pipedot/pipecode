@@ -24,15 +24,18 @@ include("post.php");
 include("mail.php");
 
 $item = item_request();
-if ($item["short_type_id"] === TYPE_COMMENT) {
+if ($item["short_type_id"] == TYPE_COMMENT) {
 	$root_id = $item["root_id"];
 	$parent_id = $item["comment_id"];
-	$type_id = $item["type_id"];
+	$type_id = $item["short_type_id"];
 } else {
 	$root_id = $item[$item["short_type"] . "_id"];
-	$parent_id = "";
+	$parent_id = 0;
 	$type_id = $item["short_type_id"];
 }
+
+$root_item = db_get_rec("short", $root_id);
+$root_type_id = $root_item["type_id"];
 
 $subject = clean_subject();
 list($clean_body, $dirty_body) = clean_body();
@@ -83,17 +86,10 @@ if ($auth_zid === "" || $zid === "") {
 	}
 }
 
-if ($translate_enabled) {
-	$lang = lang_detect($clean_body);
-} else {
-	$lang = "en";
-}
-
 $comment = db_new_rec("comment");
 $comment["comment_id"] = create_short(TYPE_COMMENT);
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
-$comment["lang"] = $lang;
 $comment["parent_id"] = $parent_id;
 $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
@@ -104,5 +100,5 @@ db_set_rec("comment", $comment);
 
 send_notifications($comment);
 
-revert_view_time($item["short_type"], $root_id);
-header("Location: " . item_link($type_id, $root_id));
+revert_view_time($root_type_id, $root_id);
+header("Location: " . item_link($root_type_id, $root_id));

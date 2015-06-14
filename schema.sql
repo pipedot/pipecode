@@ -332,13 +332,11 @@ CREATE TABLE `comment` (
   `junk_status` int(11) NOT NULL,
   `junk_time` int(11) NOT NULL,
   `junk_zid` varchar(50) NOT NULL,
-  `lang` varchar(2) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `publish_time` int(11) NOT NULL,
   `remote_ip` varchar(45) NOT NULL,
   `root_id` int(11) NOT NULL,
   `subject` varchar(100) NOT NULL,
-  `type_old` varchar(20) NOT NULL,
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`comment_id`),
   UNIQUE KEY `short_id_UNIQUE` (`comment_id`),
@@ -391,9 +389,11 @@ DROP TABLE IF EXISTS `country`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `country` (
   `country_id` int(11) NOT NULL AUTO_INCREMENT,
-  `country` varchar(50) NOT NULL,
+  `country_code` varchar(2) NOT NULL,
+  `country_name` varchar(50) NOT NULL,
   PRIMARY KEY (`country_id`),
-  UNIQUE KEY `country_id_UNIQUE` (`country_id`)
+  UNIQUE KEY `country_id_UNIQUE` (`country_id`),
+  UNIQUE KEY `country_code_unique` (`country_code`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -460,8 +460,8 @@ CREATE TABLE `drive_link` (
   `item_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
   `zid` varchar(50) NOT NULL,
-  PRIMARY KEY (`hash`,`item_id`),
-  UNIQUE KEY `drive_link_unique` (`hash`,`item_id`)
+  PRIMARY KEY (`hash`,`item_id`,`type_id`),
+  UNIQUE KEY `drive_link_unique` (`hash`,`item_id`,`type_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -522,7 +522,7 @@ DROP TABLE IF EXISTS `email_challenge`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `email_challenge` (
-  `code` int(11) NOT NULL,
+  `code` varchar(64) NOT NULL,
   `email` varchar(50) NOT NULL,
   `expires` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
@@ -727,73 +727,22 @@ CREATE TABLE `karma_type` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `lang_string`
+-- Table structure for table `login`
 --
 
-DROP TABLE IF EXISTS `lang_string`;
+DROP TABLE IF EXISTS `login`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lang_string` (
-  `hash` varchar(64) NOT NULL,
-  `body` text NOT NULL,
-  PRIMARY KEY (`hash`),
-  UNIQUE KEY `hash_UNIQUE` (`hash`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `lang_translation`
---
-
-DROP TABLE IF EXISTS `lang_translation`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `lang_translation` (
-  `src_hash` varchar(64) NOT NULL,
-  `dst_lang` varchar(2) NOT NULL,
-  `src_lang` varchar(2) NOT NULL,
-  `dst_hash` varchar(64) NOT NULL,
-  `time` int(11) NOT NULL,
-  PRIMARY KEY (`src_hash`,`dst_lang`),
-  UNIQUE KEY `trans_unique` (`src_hash`,`dst_lang`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ledger`
---
-
-DROP TABLE IF EXISTS `ledger`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ledger` (
-  `transaction_id` int(11) NOT NULL AUTO_INCREMENT,
-  `amount` int(11) NOT NULL,
-  `from_zid` varchar(50) NOT NULL,
-  `item_id` int(11) NOT NULL,
-  `time` int(11) NOT NULL,
-  `to_zid` varchar(50) NOT NULL,
-  PRIMARY KEY (`transaction_id`),
-  UNIQUE KEY `transaction_id_UNIQUE` (`transaction_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `list_log`
---
-
-DROP TABLE IF EXISTS `list_log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `list_log` (
-  `lid` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `login` (
   `zid` varchar(50) NOT NULL,
-  `time` int(11) NOT NULL,
-  `id` varchar(100) NOT NULL,
-  `reply` varchar(100) NOT NULL,
-  `subject` varchar(200) NOT NULL,
-  `body` text NOT NULL,
-  PRIMARY KEY (`lid`)
+  `login_key` varchar(64) NOT NULL,
+  `agent_id` int(11) NOT NULL,
+  `ip_id` int(11) NOT NULL,
+  `last_time` int(11) NOT NULL,
+  `login_time` int(11) NOT NULL,
+  `os_id` int(11) NOT NULL,
+  PRIMARY KEY (`login_key`,`zid`),
+  UNIQUE KEY `login_unique` (`zid`,`login_key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -876,6 +825,7 @@ CREATE TABLE `pipe` (
   `closed` tinyint(4) NOT NULL,
   `edit_zid` varchar(50) NOT NULL,
   `icon` varchar(20) NOT NULL,
+  `keywords` varchar(100) NOT NULL,
   `reason` varchar(50) NOT NULL,
   `slug` varchar(100) NOT NULL,
   `tid` int(11) NOT NULL,
@@ -1088,7 +1038,6 @@ DROP TABLE IF EXISTS `short`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `short` (
   `short_id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) NOT NULL,
   `type_id` int(11) NOT NULL,
   PRIMARY KEY (`short_id`),
   UNIQUE KEY `short_id_UNIQUE` (`short_id`)
@@ -1241,7 +1190,6 @@ CREATE TABLE `story` (
   `icon` varchar(20) NOT NULL,
   `image_id` int(11) NOT NULL,
   `keywords` varchar(100) NOT NULL,
-  `lang` varchar(2) NOT NULL,
   `pipe_id` int(11) NOT NULL,
   `publish_time` int(11) NOT NULL,
   `slug` varchar(100) NOT NULL,
@@ -1405,4 +1353,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-06-01  1:46:59
+-- Dump completed on 2015-06-13 20:43:06

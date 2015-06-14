@@ -23,5 +23,5 @@ header_text();
 
 $card = item_request(TYPE_CARD);
 $can_moderate = true;
-render_page("card", $card["card_id"], true);
+render_page(TYPE_CARD, $card["card_id"], true);
 

@@ -23,4 +23,4 @@ header_text();
 
 $pipe = item_request(TYPE_PIPE);
 $can_moderate = true;
-render_page("pipe", $pipe["pipe_id"], true);
+render_page(TYPE_PIPE, $pipe["pipe_id"], true);

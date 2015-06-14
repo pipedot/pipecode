@@ -225,19 +225,6 @@ function show_comment(comment_id)
 }
 
 
-function lang_name(lang)
-{
-	if (lang == "en") {
-		return "English";
-	} else if (lang == "es") {
-		return "Spanish";
-	} else if (lang == "eo") {
-		return "Esperanto";
-	} else {
-		return "Unknown";
-	}
-}
-
 function render(c)
 {
 	var i;
@@ -249,7 +236,6 @@ function render(c)
 	var by;
 	var seen;
 	var score;
-	var using;
 
 	if (c === undefined) {
 		return "";
@@ -287,30 +273,21 @@ function render(c)
 			} else {
 				seen = "h3 class=\"color-old\"";
 			}
-			if (c.src_lang != c.dst_lang) {
-				using = " using <a title=\"" + lang_name(c.src_lang) + " to " + lang_name(c.dst_lang) + "\" href=\"" + protocol + "://" + server_name + "/comment/" + c.code + "/translate\"><b>Google Translate</b></a>";
-			} else {
-				using = "";
-			}
 			s += "<article class=\"comment\">";
 			if (collapse) {
 				s += "<h5 id=\"collapse_" + c.code + "\" onclick=\"show_comment('" + c.code + "')\"><b>" + c.subject + ":</b> " + c.body + "</h4>";
 
 				s += "<" + seen + " id=\"title_" + c.code + "\" style=\"display: none\"><span id=\"subject_" + c.code + "\">" + c.subject + "</span> (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h4 id=\"subtitle_" + c.code + "\" style=\"display: none\">by " + by + using + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
+				s += "<h4 id=\"subtitle_" + c.code + "\" style=\"display: none\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
 				s += "<div class=\"comment-outline\">";
 				s += "<div id=\"body_" + c.code + "\" style=\"display: none\">";
 			} else {
 				s += "<" + seen + " id=\"title_" + c.code + "\"><span id=\"subject_" + c.code + "\">" + c.subject + "</span> (Score: <span id=\"score_" + c.code + "\">" + score + "</span>)</" + seen + ">";
-				s += "<h4 id=\"subtitle_" + c.code + "\">by " + by + using + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
+				s += "<h4 id=\"subtitle_" + c.code + "\">by " + by + " on " + t + " (<a href=\"" + protocol + "://" + server_name + "/" + c.code + "\">#" + c.code + "</a>)</h3>";
 				s += "<div class=\"comment-outline\">";
 				s += "<div id=\"body_" + c.code + "\">";
 			}
-			if (c.src_lang != c.dst_lang) {
-				s += "<div class=\"comment-body\" lang=\"" + c.dst_lang + "-x-mtfrom-" + c.src_lang + "\">" + c.body + "</div>";
-			} else {
-				s += "<div class=\"comment-body\">" + c.body + "</div>";
-			}
+			s += "<div class=\"comment-body\">" + c.body + "</div>";
 			if (inline_reply) {
 				s += "<footer><div><a href=\"javascript:reply('" + c.code + "')\">Reply</a>";
 			} else {
