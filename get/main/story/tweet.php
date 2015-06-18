@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 $story = item_request(TYPE_STORY);
 $topic = db_get_rec("topic", $story["tid"]);

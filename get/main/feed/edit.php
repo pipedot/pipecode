@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("you are not an admin");
-}
+require_admin();
 
 $feed = item_request(TYPE_FEED);
 $short_code = crypt_crockford_encode($feed["feed_id"]);

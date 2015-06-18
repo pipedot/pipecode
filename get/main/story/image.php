@@ -21,9 +21,7 @@ set_time_limit(15 * MINUTES);
 
 include("image.php");
 
-if (!$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 clean_tmp_images();
 $story = item_request(TYPE_STORY);

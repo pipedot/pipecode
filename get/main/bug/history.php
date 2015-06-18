@@ -17,6 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_feature("bug");
+
 print_header("Closed Bugs", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
 writeln("<h1>Closed Bugs</h1>");

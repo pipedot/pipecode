@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("you are not an admin");
-}
+require_admin();
 
 $icon = http_post_string("icon", array("valid" => "[a-z][0-9]-", "len" => 20));
 $name = http_post_string("name", array("valid" => "[A-Z][a-z][0-9]`~!@#$%^&*()_+-=[]\{}|;':\",./? ", "len" => 50));

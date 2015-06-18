@@ -22,9 +22,7 @@ include("clean.php");
 include("image.php");
 include("drive.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $feed_url = http_post_string("feed_url", array("len" => 100, "valid" => "[a-z][A-Z][0-9]~@#$%&()-_=+[];:,./?"));
 

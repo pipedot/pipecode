@@ -19,12 +19,9 @@
 
 include("render.php");
 
-if (!$auth_user["admin"] && !$auth_user["editor"]) {
-	die("not an editor or admin");
-}
+require_editor();
 
 $junk = true;
-//$junk_default = true;
 
 print_header("Junk");
 beg_main();

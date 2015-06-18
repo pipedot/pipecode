@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($zid !== $auth_zid) {
-	die("not your journal");
-}
+require_mine();
 
 $journal = item_request(TYPE_JOURNAL);
 $journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);

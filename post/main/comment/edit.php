@@ -20,9 +20,7 @@
 include("render.php");
 include("clean.php");
 
-if ($auth_zid === "") {
-	die("sign in to edit");
-}
+require_login();
 
 $subject = clean_subject();
 list($clean_body, $dirty_body) = clean_body();

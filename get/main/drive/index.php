@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"] && !$auth_user["editor"]) {
-	die("not an editor or admin");
-}
+require_admin();
 
 print_header("Drive");
 beg_main();

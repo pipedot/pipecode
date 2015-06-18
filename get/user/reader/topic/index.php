@@ -19,9 +19,7 @@
 
 include("feed.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 print_header("Topic", [], [], [], ["Reader", "Topic"], ["/reader/", "/reader/topic/"]);
 beg_main();

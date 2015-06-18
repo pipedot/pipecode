@@ -17,12 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($auth_zid !== $zid) {
-	die("not your page");
-}
-if ($auth_zid === "") {
-	die("sign in to create a folder");
-}
+require_login();
+require_mine();
 
 print_header("Drive");
 beg_main();

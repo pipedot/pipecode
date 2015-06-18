@@ -20,9 +20,7 @@
 include("render.php");
 include("clean.php");
 
-if ($auth_zid === "") {
-	die("sign in to edit");
-}
+require_login();
 
 $comment = item_request(TYPE_COMMENT);
 $clean_body = $comment["body"];
@@ -31,9 +29,7 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 	$dirty_body = str_replace("\n", "<br>", $dirty_body);
 }
 
-if ($comment["zid"] != $auth_zid) {
-	die("not your comment");
-}
+require_mine($comment["zid"]);
 
 print_header("Edit Comment");
 beg_main();

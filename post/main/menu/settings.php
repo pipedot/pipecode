@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 $server_name = http_post_string("server_name", array("len" => 50, "valid" => "[a-z][0-9]-."));
 $server_title = http_post_string("server_title", array("len" => 50, "valid" => "[KEYBOARD]"));
@@ -33,9 +31,7 @@ $time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][
 $https_enabled = http_post_bool("https_enabled", array("numeric" => true));
 $register_enabled = http_post_bool("register_enabled", array("numeric" => true));
 $submit_enabled = http_post_bool("submit_enabled", array("numeric" => true));
-
-$translate_enabled = http_post_bool("translate_enabled", array("numeric" => true));
-$translate_key = http_post_string("translate_key", array("len" => 100, "required" => false, "valid" => "[KEYBOARD]"));
+$bug_enabled = http_post_bool("bug_enabled", array("numeric" => true));
 
 $twitter_enabled = http_post_bool("twitter_enabled", array("numeric" => true));
 $twitter_consumer_key = http_post_string("twitter_consumer_key", array("len" => 100, "required" => false, "valid" => "[KEYBOARD]"));
@@ -52,8 +48,7 @@ $server_conf["time_zone"] = $time_zone;
 $server_conf["https_enabled"] = $https_enabled;
 $server_conf["register_enabled"] = $register_enabled;
 $server_conf["submit_enabled"] = $submit_enabled;
-$server_conf["translate_enabled"] = $translate_enabled;
-$server_conf["translate_key"] = $translate_key;
+$server_conf["bug_enabled"] = $bug_enabled;
 $server_conf["twitter_enabled"] = $twitter_enabled;
 $server_conf["twitter_consumer_key"] = $twitter_consumer_key;
 $server_conf["twitter_consumer_secret"] = $twitter_consumer_secret;

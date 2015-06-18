@@ -19,9 +19,7 @@
 
 require_once("$doc_root/lib/twitteroauth/twitteroauth.php");
 
-if (!$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 $story = item_request(TYPE_STORY);
 $topic = db_get_rec("topic", $story["tid"]);
@@ -40,7 +38,7 @@ $tweet_id = $status->id;
 if ($tweet_id > 0) {
 	$story["tweet_id"] = $tweet_id;
 	db_set_rec("story", $story);
-	header("Location: /story/{$story["short_code"]}");
+	header("Location: /story/" . $story["short_code"]);
 } else {
 	var_dump($status);
 }

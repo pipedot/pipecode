@@ -19,9 +19,7 @@
 
 include("clean.php");
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 print_header("Add Page");
 beg_main();

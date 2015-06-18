@@ -17,9 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"] || !$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_feature("bug");
+require_developer();
 
 $bug = item_request(TYPE_BUG);
 $bug["closed"] = 1;

@@ -20,16 +20,13 @@
 include("clean.php");
 include("story.php");
 
-if (!$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 $story = item_request(TYPE_STORY);
 $zid = $story["author_zid"];
 $title = $story["title"];
 $tid = $story["tid"];
-$icon = $story["icon"];
 $clean_body = $story["body"];
 $dirty_body = dirty_html($clean_body);
 
-print_story_box($story["story_id"], $tid, $icon, $title, $clean_body, $dirty_body, $zid);
+print_story_box($story["story_id"], $tid, $title, $clean_body, $dirty_body, $zid);

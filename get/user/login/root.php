@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $key = $s2;
 if (!string_uses($key, "[0-9]abcdef") || strlen($key) != 64) {

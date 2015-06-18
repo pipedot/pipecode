@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 if ($s2 === "edit") {
 	$topic = db_new_rec("topic");
@@ -39,16 +37,7 @@ beg_form();
 
 writeln('<h1>' . $friendly_name . '</h1>');
 
-$data = fs_slurp("$doc_root/www/style.css");
-preg_match_all("/\.([a-z-]+)-64 {/", $data, $out);
-$icons = array();
-for ($i = 0; $i < count($out[1]); $i++) {
-	$icon = $out[1][$i];
-	if ($icon != "icon") {
-		$icons[$icon] = true;
-	}
-}
-$icons = array_keys($icons);
+$icons = icon_list(false, true, true);
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name", "text_value" => $topic["topic"]));
@@ -58,9 +47,9 @@ print_row(array("caption" => "Promoted", "check_key" => "promoted", "checked" =>
 end_tab();
 
 if ($s2 === "edit") {
-	box_right("Save");
+	box_two('<a href="/icons">Icons</a>', "Save");
 } else {
-	box_right("Delete,Save");
+	box_two('<a href="/icons">Icons</a>', "Delete,Save");
 }
 
 end_form();

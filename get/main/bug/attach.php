@@ -17,9 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($auth_zid === "") {
-	die("sign in to attach");
-}
+require_feature("bug");
+require_login();
 
 print_header("Attach File", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();

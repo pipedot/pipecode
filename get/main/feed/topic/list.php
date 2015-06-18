@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("you are not an admin");
-}
+require_admin();
 
 print_header("Feed Topics");
 beg_main();

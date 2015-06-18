@@ -22,9 +22,7 @@ include("clean.php");
 include("image.php");
 include("drive.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $col = http_get_int("col");
 if ($col < 0 || $col > 2) {

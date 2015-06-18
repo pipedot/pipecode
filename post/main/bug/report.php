@@ -19,6 +19,9 @@
 
 include("clean.php");
 
+require_feature("bug");
+require_login();
+
 $title = clean_subject();
 list($clean_body, $dirty_body) = clean_body(false, "comment");
 

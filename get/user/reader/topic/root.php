@@ -20,9 +20,7 @@
 include("story.php");
 include("reader.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $topic = item_request(TYPE_READER_TOPIC);
 

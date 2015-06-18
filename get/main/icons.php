@@ -26,7 +26,7 @@ writeln('<td>');
 
 $a = fs_dir("$doc_root/www/images");
 for ($i = 0; $i < count($a); $i++) {
-	if (fs_ext($a[$i]) == "png" && string_has($a[$i], "-64") && $a[$i] != "logo-top-64.png") {
+	if (fs_ext($a[$i]) == "png" && string_has($a[$i], "-64") && $a[$i] != "logo-top-64.png" && !string_has($a[$i], "spinner")) {
 		writeln('<div class="tbox">');
 		writeln('	<img alt="icon" src="/images/' . $a[$i] . '">');
 		writeln('	' . substr($a[$i], 0, -7));

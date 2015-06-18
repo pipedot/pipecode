@@ -21,9 +21,8 @@ include("image.php");
 include("drive.php");
 include("avatar.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
+
 list($user, $domain) = explode("@", $zid);
 
 if (!isset($_FILES["upload"])) {

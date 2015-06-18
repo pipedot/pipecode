@@ -17,10 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"] && !$auth_user["editor"]) {
-	die("not an editor or admin");
-}
-
 print_header("Menu");
 beg_main("dual-table");
 
@@ -28,25 +24,30 @@ writeln('<div class="dual-left">');
 
 beg_tab();
 print_row(array("caption" => "Ban IP", "description" => "Manage banned IP addresses", "icon" => "error", "link" => "/ban_ip/"));
-print_row(array("caption" => "Ban User", "description" => "Manage banned users", "icon" => "devil", "link" => "/ban_user/"));
-print_row(array("caption" => "Drive", "description" => "View storage information", "icon" => "drive", "link" => "/drive/"));
-print_row(array("caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/"));
 if ($auth_user["admin"]) {
-	print_row(array("caption" => "Users", "description" => "List local users", "icon" => "users", "link" => "/user/"));
-	//print_row(array("caption" => "Links", "description" => "Manage server links", "icon" => "workgroup", "link" => "/link/"));
+	print_row(array("caption" => "Drive", "description" => "View storage information", "icon" => "drive", "link" => "/drive/"));
 }
-end_tab();
-
-writeln('</div>');
-writeln('<div class="dual_right">');
-
-beg_tab();
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
 }
-print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
 if ($auth_user["admin"]) {
 	print_row(array("caption" => "Settings", "description" => "Configure the server settings", "icon" => "tools", "link" => "settings"));
+}
+print_row(array("caption" => "Users", "description" => "List local users", "icon" => "users", "link" => "/user/"));
+end_tab();
+
+writeln('</div>');
+writeln('<div class="dual-right">');
+
+beg_tab();
+print_row(array("caption" => "Ban User", "description" => "Manage banned users", "icon" => "devil", "link" => "/ban_user/"));
+if ($auth_user["editor"]) {
+	print_row(array("caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/"));
+}
+if ($auth_user["editor"]) {
+	print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
+}
+if ($auth_user["admin"]) {
 	print_row(array("caption" => "Story Topics", "description" => "Add and remove story topics", "icon" => "chat", "link" => "/topic/list"));
 	print_row(array("caption" => "Feed Topics", "description" => "Add and remove feed topics", "icon" => "news", "link" => "/feed/topic/list"));
 }

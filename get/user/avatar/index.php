@@ -29,7 +29,6 @@ writeln('	</tr>');
 end_tab();
 
 if ($zid === $auth_zid) {
-
 	dict_beg("Previous");
 
 	$row = sql("select avatar_id from avatar where zid = ? order by time", $auth_zid);

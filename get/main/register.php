@@ -21,10 +21,7 @@ include("captcha.php");
 include("mail.php");
 
 require_https($https_enabled);
-
-if (!$server_conf["register_enabled"]) {
-	die("register not enabled");
-}
+require_feature("register");
 
 print_header("Register");
 writeln('<hr>');

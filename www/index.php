@@ -89,14 +89,22 @@ if (fs_is_file("$root/$s1.php")) {
 if (fs_is_dir("$root/$s1")) {
 	if ($s2 === "") {
 		if (fs_is_file("$root/$s1/index.php")) {
-			include("$root/$s1/index.php");
+			if (substr($request_script, -1) != "/") {
+				header("Location: $request_script/");
+			} else {
+				include("$root/$s1/index.php");
+			}
 			die();
 		}
 	} else {
 		if (fs_is_dir("$root/$s1/$s2")) {
 			if ($s3 === "") {
 				if (fs_is_file("$root/$s1/$s2/index.php")) {
-					include("$root/$s1/$s2/index.php");
+					if (substr($request_script, -1) != "/") {
+						header("Location: $request_script/");
+					} else {
+						include("$root/$s1/$s2/index.php");
+					}
 					die();
 				}
 			} else {
@@ -154,12 +162,13 @@ if (substr($slug, -1) === "+") {
 	}
 }
 
-http_response_code(404);
-print_header();
-beg_main();
+//http_response_code(404);
+fatal_error("Not Found", "stop", "Not Found", "Unable to find the requested page.", 404);
+//print_header();
+//beg_main();
 
-writeln('<h1>404</h1>');
-writeln('request_uri [' . $request_uri . ']');
+//writeln('<h1>404</h1>');
+//writeln('request_uri [' . $request_uri . ']');
 
-end_main();
-print_footer();
+//end_main();
+//print_footer();

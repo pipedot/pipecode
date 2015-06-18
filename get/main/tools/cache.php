@@ -19,9 +19,7 @@
 
 include("drive.php");
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 print_header("Cache");
 beg_main();

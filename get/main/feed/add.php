@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($auth_zid === "") {
-	die("sign in to add");
-}
+require_login();
 
 $feed = item_request(TYPE_FEED);
 

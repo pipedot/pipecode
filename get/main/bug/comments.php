@@ -19,6 +19,8 @@
 
 include("render.php");
 
+require_feature("bug");
+
 header_text();
 
 $bug_id = $s2;

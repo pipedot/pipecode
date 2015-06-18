@@ -20,9 +20,7 @@
 include("drive.php");
 include("avatar.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $avatar = item_request(TYPE_AVATAR);
 $avatar_code = $avatar["short_code"];

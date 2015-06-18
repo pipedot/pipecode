@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 $zid = domain_to_zid($s2);
 if (!is_local_user($zid)) {
@@ -28,9 +26,11 @@ if (!is_local_user($zid)) {
 $conf = db_get_conf("user_conf", $zid);
 
 $admin = http_post_bool("admin", array("numeric" => true));
+$developer = http_post_bool("developer", array("numeric" => true));
 $editor = http_post_bool("editor", array("numeric" => true));
 
 $conf["admin"] = $admin;
+$conf["developer"] = $developer;
 $conf["editor"] = $editor;
 db_set_conf("user_conf", $conf, $zid);
 

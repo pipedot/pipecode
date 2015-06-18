@@ -20,8 +20,7 @@
 include("render.php");
 
 print_header("Comments");
-print_main_nav("stories");
-beg_main("cell");
+beg_main();
 
 writeln('<h1>Recent Comments</h1>');
 
@@ -35,7 +34,6 @@ if ($auth_user["show_junk_enabled"]) {
 }
 for ($i = 0; $i < count($row); $i++) {
 	$a = article_info($row[$i], false);
-	//print "link [{$a["link"]}] title [{$a["title"]}]";
 	print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"], $row[$i]["junk_status"]);
 	writeln('</div>');
 	writeln('</article>');

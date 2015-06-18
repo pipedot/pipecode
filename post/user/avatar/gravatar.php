@@ -21,9 +21,7 @@ include("drive.php");
 include("image.php");
 include("avatar.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $avatar_id = create_gravatar_avatar($zid);
 $user_conf["avatar_id"] = $avatar_id;

@@ -19,9 +19,7 @@
 
 include("render.php");
 
-if (!$auth_user["admin"] && !$auth_user["editor"]) {
-	die("not an editor or admin");
-}
+require_editor();
 
 $ip = urldecode($s2);
 if (!string_uses($ip, "[0-9].:abcdef")) {

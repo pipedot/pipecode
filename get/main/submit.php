@@ -21,8 +21,6 @@ include("story.php");
 include("captcha.php");
 include("submit.php");
 
-if (!$server_conf["submit_enabled"]) {
-	die("sumbit not enabled");
-}
+require_feature("submit");
 
 print_submit_box("", "", "", 13, false);

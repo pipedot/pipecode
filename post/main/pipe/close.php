@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 $reason = http_post_string("reason", array("len" => 50, "valid" => "[a-z][A-Z][0-9]~!@#$%^*()_+-=[]\{}|;',./? "));
 

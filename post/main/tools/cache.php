@@ -19,9 +19,7 @@
 
 include("drive.php");
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 $hash = http_post_string("hash", array("valid" => "[a-z][A-Z][0-9]~#%&()-_+=[];:./?", "len" => 200));
 

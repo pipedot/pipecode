@@ -142,9 +142,7 @@ function item_request($type_id = 0)
 		if (!string_uses($s2, "[a-z][0-9]-")) {
 			die("invalid slug [$s2]");
 		}
-		if ($auth_zid === "") {
-			die("please sign in");
-		}
+		require_login();
 		$slug = $s2;
 		$reader_user = db_find_rec("reader_user", ["zid" => $auth_zid, "slug" => $slug]);
 		if ($reader_user === false) {
@@ -156,9 +154,7 @@ function item_request($type_id = 0)
 		if (!string_uses($s2, "[a-z][0-9]-")) {
 			die("invalid slug [$s2]");
 		}
-		if ($auth_zid === "") {
-			die("please sign in");
-		}
+		require_login();
 		$slug = $s3;
 		$reader_topic = db_find_rec("reader_topic", ["zid" => $auth_zid, "slug" => $slug]);
 		if ($reader_topic === false) {

@@ -19,9 +19,7 @@
 
 include("clean.php");
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 $old_slug = http_get_string("slug", array("len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
 $title = clean_subject();

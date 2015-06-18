@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $avatar = item_request(TYPE_AVATAR);
 

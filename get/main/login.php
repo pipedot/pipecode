@@ -23,7 +23,7 @@ require_https($https_enabled);
 print_header("Login");
 writeln('<hr>');
 beg_main();
-beg_form("/login");
+beg_form();
 writeln('<h1>Login</h1>');
 
 writeln('<table class="login">');

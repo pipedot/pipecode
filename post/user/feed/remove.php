@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 $feed_id = http_get_int("feed_id");
 $feed = db_get_rec("feed", $feed_id);

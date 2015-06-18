@@ -21,9 +21,7 @@ include("clean.php");
 include("story.php");
 include("publish.php");
 
-if (!$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 $pipe = item_request(TYPE_PIPE);
 $zid = $pipe["author_zid"];

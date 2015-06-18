@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 if ($s2 === "edit") {
 	$topic = db_new_rec("reader_topic");

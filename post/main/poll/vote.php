@@ -22,9 +22,7 @@ include("poll.php");
 $poll = item_request(TYPE_POLL);
 $type_id = $poll["type_id"];
 
-if ($auth_zid === "") {
-	die("sign in to vote");
-}
+require_login();
 
 if ($type_id == 1) {
 	$answer_id = http_post_string("answer_id", array("len" => 64, "valid" => "[a-z][0-9]_"));

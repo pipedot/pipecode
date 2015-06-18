@@ -19,9 +19,8 @@
 
 include("drive.php");
 
-if (!$auth_user["editor"] && !$auth_user["admin"]) {
-	die("not an editor or an admin");
-}
+require_feature("bug");
+require_developer();
 
 $bug = item_request(TYPE_BUG);
 

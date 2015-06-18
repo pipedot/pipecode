@@ -17,10 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_feature("bug");
+require_developer();
+
 $bug = item_request(TYPE_BUG);
 
 $labels = array();
-$row = sql("select label_id from bug_label where bug_id = ?", $bug["bug_id"]);
+$row = sql("select label_id from bug_labels where bug_id = ?", $bug["bug_id"]);
 for ($i = 0; $i < count($row); $i++) {
 	$labels[] = $row[$i]["label_id"];
 }
@@ -40,7 +43,7 @@ if ($auth_zid === "") {
 end_tab();
 
 beg_tab("Labels");
-$list = db_get_list("label", "label_name");
+$list = db_get_list("bug_label", "label_name");
 $keys = array_keys($list);
 for ($i = 0; $i < count($list); $i++) {
 	$item = $list[$keys[$i]];

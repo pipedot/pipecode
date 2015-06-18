@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 header('Content-Type: text/xml');
 header('Content-Disposition: attachment; filename="reader.opml"');

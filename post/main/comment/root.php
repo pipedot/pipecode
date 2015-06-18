@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"] && !$auth_user["editor"]) {
-	die("not an editor or admin");
-}
+require_editor();
 
 $comment = item_request(TYPE_COMMENT);
 if ($_POST["junk"] == "not-junk") {

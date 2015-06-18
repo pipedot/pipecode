@@ -17,23 +17,30 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 print_header("Topics");
 beg_main();
 
 writeln('<h1>Topics</h1>');
 
+beg_tab();
 $list = db_get_list("topic", "topic");
-$k = array_keys($list);
-for ($i = 0; $i < count($list); $i++) {
-	$topic = $list[$k[$i]];
-	writeln('<a class="topic-box ' . $topic["icon"] . '-64" href="/topic/' . $topic["slug"] . '/edit">' . $topic["topic"] . '</a>');
+foreach ($list as $topic) {
+	writeln('	<tr>');
+	writeln('		<td class="hover">');
+	writeln('			<a href="/topic/' . $topic["slug"] . '/edit">');
+	writeln('			<dl class="dl-32 ' . $topic["icon"] . '-32">');
+	writeln('				<dt>' . $topic["topic"] . '</dt>');
+	writeln('				<dd>' . $server_name . '</dd>');
+	writeln('			</dl>');
+	writeln('			</a>');
+	writeln('		</td>');
+	writeln('	</tr>');
 }
+end_tab();
 
-box_left('<a class="icon-16 plus-16" href="edit">Add</a>');
+box_right('<a class="icon-16 plus-16" href="edit">Add</a>');
 
 end_main();
 print_footer();

@@ -17,11 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
-
+require_admin();
 require_https($https_enabled);
+
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 
 print_header("Settings");
@@ -48,6 +46,7 @@ beg_tab("Features");
 print_row(array("caption" => "HTTPS Available", "check_key" => "https_enabled", "checked" => $server_conf["https_enabled"]));
 print_row(array("caption" => "User Registration", "check_key" => "register_enabled", "checked" => $server_conf["register_enabled"]));
 print_row(array("caption" => "Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
+print_row(array("caption" => "Bug Tracker", "check_key" => "bug_enabled", "checked" => $server_conf["bug_enabled"]));
 end_tab();
 
 beg_tab("Twitter");

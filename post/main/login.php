@@ -20,6 +20,7 @@
 $username = http_post_string("username", array("len" => 20, "valid" => "[a-z][A-Z][0-9]"));
 $password = http_post_string("password", array("len" => 64, "valid" => "[KEYBOARD]"));
 $referer = http_get_string("referer", array("required" => false, "len" => 200, "valid" => "[a-z][A-Z][0-9].+-_/?&#=;~"));
+$server = http_get_string("server", array("required" => false, "len" => 100, "valid" => "[a-z][0-9].-"));
 
 $zid = strtolower($username) . "@$server_name";
 $user_conf = db_get_conf("user_conf", $zid);
@@ -39,7 +40,11 @@ db_set_rec("login", $login);
 setcookie("auth", "zid=$zid&key=$key", time() + $auth_expire, "/", ".$server_name");
 
 if ($referer != "") {
-	header("Location: $referer");
+	if ($server != "") {
+		header("Location: $protocol://$server$referer");
+	} else {
+		header("Location: $referer");
+	}
 } else {
 	header("Location: ./");
 }

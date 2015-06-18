@@ -19,9 +19,7 @@
 
 include("clean.php");
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 $question = http_post_string("question", array("len" => 200));
 $type_id = http_post_int("type_id");

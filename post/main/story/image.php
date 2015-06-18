@@ -19,9 +19,7 @@
 
 include("image.php");
 
-if (!@$auth_user["editor"]) {
-	die("you are not an editor");
-}
+require_editor();
 
 $story = item_request(TYPE_STORY);
 $tmp_image_id = http_post_int("tmp_image_id");

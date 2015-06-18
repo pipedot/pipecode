@@ -22,19 +22,21 @@ include("story.php");
 include("bug.php");
 include("drive.php");
 
+require_feature("bug");
+
 if (string_uses($s2, "[A-Z][0-9]")) {
 	$bug = item_request(TYPE_BUG);
 
 	print_header("Bug", array("Report"), array("ladybug"), array("/bug/report"));
 	beg_main();
 
-	writeln('<div class="bug_table">');
+	writeln('<div class="bug-table">');
 	print_bug($bug);
 	writeln('<aside>');
 
 	writeln('<div class="dialog-title">Priority</div>');
 	writeln('<div class="dialog-body">');
-	writeln('	<div class="icon_32 ' . bug_priority_icon($bug["priority"]) . '">' . ucwords($bug["priority"]) . '</div>');
+	writeln('	<div class="icon-32 ' . bug_priority_icon($bug["priority"]) . '">' . ucwords($bug["priority"]) . '</div>');
 	writeln('</div>');
 
 	$row = sql("select label_name, label_tag, background_color, foreground_color from bug_labels inner join bug_label on bug_labels.label_id = bug_label.label_id where bug_id = ?", $bug["bug_id"]);
@@ -52,9 +54,9 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 		writeln('<div class="dialog-title">Screenshots</div>');
 		writeln('<div class="bug-screenshots">');
 		for ($i = 0; $i < count($row); $i++) {
-			$bug_file_short_code = crypt_crockford_encode($row[$i]["bug_id"]);
-			$path = public_path($row[$i]["time"]) . "/bug_file_" . $bug_file_short_code . "_256x256.jpg";
-			writeln('	<a href="/pub/bug/' . $bug_file_short_code . '.' . $row[$i]["type"] . '"><img alt="screenshot" src="' . $path . '"></a>');
+			$bug_file_code = crypt_crockford_encode($row[$i]["bug_file_id"]);
+			$path = public_path($row[$i]["time"]) . "/bug_file_" . $bug_file_code . "_256x256.jpg";
+			writeln('	<a href="/pub/bug/' . $bug_file_code . '.' . $row[$i]["type"] . '"><img alt="screenshot" src="' . $path . '"></a>');
 		}
 		writeln('</div>');
 	}
@@ -64,8 +66,8 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 		writeln('<div class="dialog-title">Attachments</div>');
 		writeln('<div class="bug-attachments">');
 		for ($i = 0; $i < count($row); $i++) {
-			$bug_file_short_code = crypt_crockford_encode($row[$i]["bug_id"]);
-			writeln('	<div><a class="icon-16 ' . file_icon($row[$i]["type"]) . '" href="/pub/bug/' . $bug_file_short_code . '.' . $row[$i]["type"] . '">' . $row[$i]["name"] . '</a></div>');
+			$bug_file_code = crypt_crockford_encode($row[$i]["bug_file_id"]);
+			writeln('	<div><a class="icon-16 ' . file_icon($row[$i]["type"]) . '" href="/pub/bug/' . $bug_file_code . '.' . $row[$i]["type"] . '">' . $row[$i]["name"] . '</a></div>');
 		}
 		writeln('</div>');
 	}

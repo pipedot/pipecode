@@ -20,9 +20,7 @@
 include("reader.php");
 include("story.php");
 
-if ($zid !== $auth_zid) {
-	die("not your page");
-}
+require_mine();
 
 print_header("Reader", ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader"], ["/reader/"]);
 print_reader_nav();

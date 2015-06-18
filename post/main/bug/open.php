@@ -17,14 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($auth_zid === "") {
-	die("sign in to open this bug");
-}
+require_feature("bug");
+require_login();
 
 $bug = item_request(TYPE_BUG);
 $bug["closed"] = 0;
 $bug["closed_zid"] = $auth_zid;
 db_set_rec("bug", $bug);
 
-header("Location: /bug/{$bug["short_code"]}");
+header("Location: /bug/" . $bug["short_code"]);
 

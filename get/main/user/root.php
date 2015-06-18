@@ -37,6 +37,7 @@ writeln('</div>');
 if ($auth_user["admin"]) {
 	beg_tab();
 	print_row(array("caption" => "Admin", "check_key" => "admin", "checked" => $conf["admin"]));
+	print_row(array("caption" => "Developer", "check_key" => "developer", "checked" => $conf["developer"]));
 	print_row(array("caption" => "Editor", "check_key" => "editor", "checked" => $conf["editor"]));
 	end_tab();
 
@@ -44,6 +45,7 @@ if ($auth_user["admin"]) {
 } else {
 	dict_beg();
 	dict_row("Admin", $conf["admin"]);
+	dict_row("Developer", $conf["developer"]);
 	dict_row("Editor", $conf["editor"]);
 	dict_end();
 }

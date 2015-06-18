@@ -142,6 +142,7 @@ const TYPE_SAFARI = 215;
 
 $default_conf["server_conf"] = [
 	"auth_key" => "",
+	"bug_enabled" => "0",
 	"captcha_key" => "",
 	"https_enabled" => "0",
 	"register_enabled" => "1",
@@ -167,6 +168,7 @@ $default_conf["user_conf"] = [
 	"admin" => "0",
 	"avatar_id" => "0",
 	"birthday" => "0",
+	"developer" => "0",
 	"display_name" => "",
 	"editor" => "0",
 	"email" => "",

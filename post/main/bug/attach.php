@@ -19,9 +19,8 @@
 
 include("image.php");
 
-if ($auth_zid === "") {
-	die("sign in to attach");
-}
+require_feature("bug");
+require_login();
 
 $bug = item_request(TYPE_BUG);
 

@@ -22,9 +22,7 @@ include("story.php");
 include("captcha.php");
 include("submit.php");
 
-if (!$server_conf["submit_enabled"]) {
-	die("sumbit not enabled");
-}
+require_feature("submit");
 
 $title = clean_subject();
 list($clean_body, $dirty_body) = clean_body();

@@ -19,6 +19,8 @@
 
 include("bug.php");
 
+require_feature("bug");
+
 print_header("Open Bugs", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
 writeln("<h1>Open Bugs</h1>");
@@ -27,18 +29,18 @@ $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 0));
 
 $row = sql("select bug_id, author_zid, body, priority, publish_time, title from bug where closed = 0 order by publish_time desc limit $item_start, $items_per_page");
-$comments = count_comments(TYPE_BUG, $row[$i]["bug_id"]);
 beg_tab();
 for ($i = 0; $i < count($row); $i++) {
 	$author_zid = user_link($row[$i]["author_zid"], ["tag" => true]);
 	$bug_code = crypt_crockford_encode($row[$i]["bug_id"]);
 	$icon = bug_priority_icon($row[$i]["priority"]);
 	$labels = make_bug_labels($row[$i]["bug_id"]);
+	$comments = count_comments(TYPE_BUG, $row[$i]["bug_id"]);
 
 	writeln('	<tr>');
 	writeln('		<td>');
-	writeln('			<div class="bug_row ' . $icon . '">');
-	writeln('				<div class="bug-title"><div><a href="' . $short_code . '">' . $row[$i]["title"] . '</a></div><div>' . $labels . '</div></div>');
+	writeln('			<div class="bug-row ' . $icon . '">');
+	writeln('				<div class="bug-title"><div><a href="' . $bug_code . '">' . $row[$i]["title"] . '</a></div><div>' . $labels . '</div></div>');
 	writeln('				<div class="bug-subtitle">by <b>' . $author_zid . '</b> on ' . date("Y-m-d H:i", $row[$i]["publish_time"]) . ' (<a href="/' . $bug_code . '">#' . $bug_code . '</a>)</div>');
 	writeln('			</div>');
 	writeln('		</td>');

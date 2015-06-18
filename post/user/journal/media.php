@@ -19,9 +19,7 @@
 
 include("image.php");
 
-if ($zid !== $auth_zid) {
-	die("not your journal");
-}
+require_mine();
 
 $journal = item_request(TYPE_JOURNAL);
 

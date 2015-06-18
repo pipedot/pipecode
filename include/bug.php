@@ -55,13 +55,13 @@ function print_bug_label_checkboxes($bug_id = 0)
 function bug_priority_icon($priority)
 {
 	if ($priority == "informational") {
-		return "bulb_32";
+		return "bulb-32";
 	} else if ($priority == "important") {
-		return "important_32";
+		return "important-32";
 	} else if ($priority == "critical") {
-		return "stop_32";
+		return "stop-32";
 	} else {
-		return "warning_32";
+		return "warning-32";
 	}
 }
 
@@ -72,12 +72,13 @@ function print_bug($bug)
 
 	$a["body"] = $bug["body"];
 	$a["bug_id"] = $bug["bug_id"];
-	$a["time"] = $bug["publish_time"];
-	$a["title"] = $bug["title"];
-	$a["zid"] = $bug["author_zid"];
-	$a["labels"] = make_bug_labels($bug["bug_id"]);
 	$a["closed"] = $bug["closed"];
 	$a["comments"] = count_comments(TYPE_BUG, $bug["bug_id"]);
+	$a["labels"] = make_bug_labels($bug["bug_id"]);
+	$a["time"] = $bug["publish_time"];
+	$a["title"] = $bug["title"];
+	$a["type_id"] = TYPE_BUG;
+	$a["zid"] = $bug["author_zid"];
 
 	print_article($a);
 }

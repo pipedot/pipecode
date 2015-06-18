@@ -1288,6 +1288,107 @@ function load_server_conf()
 }
 
 
+function require_feature($key)
+{
+	global $server_conf;
+
+	if (!$server_conf[$key . "_enabled"]) {
+		$feature = ucwords($key);
+		fatal_error("$feature Feature Disabled", "error", "Feature Disabled", "The $feature system is disabled on this server.");
+	}
+}
+
+
+function require_admin()
+{
+	global $auth_user;
+
+	if (!$auth_user["admin"]) {
+		fatal_error("Access Denied", "lock", "Access Denied", "You need administrative rights to access this page.");
+	}
+}
+
+
+function require_editor()
+{
+	global $auth_user;
+
+	if (!$auth_user["editor"]) {
+		fatal_error("Access Denied", "lock", "Access Denied", "You need editor rights to access this page.");
+	}
+}
+
+
+function require_developer()
+{
+	global $auth_user;
+
+	if (!$auth_user["developer"]) {
+		fatal_error("Access Denied", "lock", "Access Denied", "You need developer rights to access this page.");
+	}
+}
+
+
+function require_login()
+{
+	global $auth_zid;
+	global $http_host;
+	global $https_enabled;
+	global $request_uri;
+	global $server_name;
+
+	if ($auth_zid === "") {
+		if ($https_enabled) {
+			$protocol = "https";
+		} else {
+			$protocol = "http";
+		}
+		if ($http_host != $server_name) {
+			$server = "&server=$http_host";
+		} else {
+			$server = "";
+		}
+		fatal_error("Login Required", "user", "Login Required", "You must <a href=\"$protocol://$server_name/login?referer=$request_uri$server\">login</a> to access this page.");
+	}
+}
+
+
+function require_mine($test = -1)
+{
+	global $auth_zid;
+	global $zid;
+
+	require_login();
+	if ($test === -1) {
+		if ($zid !== $auth_zid) {
+			fatal_error("Not Your Page", "important", "Not Your Page", "This is not your page.");
+		}
+	} else if ($test === $auth_zid) {
+		fatal_error("Not Your Item", "important", "Not Your Item", "This is not your item.");
+	}
+}
+
+
+function fatal_error($title, $icon, $name, $value, $code = 200)
+{
+	if ($code != 200) {
+		http_response_code($code);
+	}
+
+	print_header($title);
+	beg_main();
+	writeln('<div class="balloon">');
+	writeln('	<dl class="dl-32 ' . $icon . '-32">');
+	writeln('		<dt>' . $name . '</dt>');
+	writeln('		<dd>' . $value . '</dd>');
+	writeln('	</dl>');
+	writeln('</div>');
+	end_main();
+	print_footer();
+	die();
+}
+
+
 $request_uri = $_SERVER["REQUEST_URI"];
 if (string_has($request_uri, "?")) {
 	$request_script = substr($request_uri, 0, strpos($request_uri, "?"));

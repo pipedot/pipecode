@@ -19,12 +19,9 @@
 
 include("render.php");
 
-if (!$auth_user["admin"] && !$auth_user["editor"]) {
-	die("not an editor or admin");
-}
+require_editor();
 
 $junk = true;
-//$junk_default = false;
 
 print_header("Junk");
 beg_main();
@@ -37,7 +34,6 @@ if (count($row) == 0) {
 } else {
 	beg_form();
 	for ($i = 0; $i < count($row); $i++) {
-		//var_dump($row[$i]);
 		$a = article_info($row[$i], false);
 		print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"]);
 		writeln('</div>');

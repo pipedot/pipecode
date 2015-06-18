@@ -17,6 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_feature("bug");
+require_login();
+
 print_header("Report Bug", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
 beg_form();

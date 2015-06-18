@@ -1569,6 +1569,9 @@ del {
 	padding: 8px;
 	margin-bottom: 8px;
 }
+.balloon a {
+	text-decoration: underline;
+}
 .dialog-title {
 	background-color: #d3d3d3;
 	border: 1px solid #888888;
@@ -1652,16 +1655,6 @@ del {
 }
 .round td, .round th {
 	padding: 4px;
-}
-.mirror-balloon {
-	background-color: #ffffcc;
-	border: 1px solid #ffcc66;
-	border-radius: 4px;
-	display: block;
-	padding-top: 12px;
-	padding-left: 12px;
-	padding-right: 12px;
-	margin-bottom: 8px;
 }
 .title {
 	border-collapse: separate;
@@ -2386,8 +2379,17 @@ del {
 /**
  * Icon
  */
+.aphone-32 {
+	background-image: url(/images/aphone-32.png);
+}
 .aphone-64 {
 	background-image: url(/images/aphone-64.png);
+}
+.apple-16 {
+	background-image: url(/images/apple-16.png);
+}
+.apple-32 {
+	background-image: url(/images/apple-32.png);
 }
 .apple-64 {
 	background-image: url(/images/apple-64.png);
@@ -2469,6 +2471,9 @@ del {
 }
 .coins-64 {
 	background-image: url(/images/coins-64.png);
+}
+.computers-32 {
+	background-image: url(/images/computers-32.png);
 }
 .computers-64 {
 	background-image: url(/images/computers-64.png);
@@ -2557,6 +2562,9 @@ del {
 .globe-64 {
 	background-image: url(/images/globe-64.png);
 }
+.hardhat-32 {
+	background-image: url(/images/hardhat-32.png);
+}
 .hardhat-64 {
 	background-image: url(/images/hardhat-64.png);
 }
@@ -2589,6 +2597,9 @@ del {
 }
 .internet-64 {
 	background-image: url(/images/internet-64.png);
+}
+.joystick-32 {
+	background-image: url(/images/joystick-32.png);
 }
 .joystick-64 {
 	background-image: url(/images/joystick-64.png);
@@ -2629,14 +2640,23 @@ del {
 .mail-reply-16 {
 	background-image: url(/images/mail-reply-16.png);
 }
+.microphone-32 {
+	background-image: url(/images/microphone-32.png);
+}
 .microphone-64 {
 	background-image: url(/images/microphone-64.png);
+}
+.microsoft-32 {
+	background-image: url(/images/microsoft-32.png);
 }
 .microsoft-64 {
 	background-image: url(/images/microsoft-64.png);
 }
 .minus-16 {
 	background-image: url(/images/minus-16.png);
+}
+.moon-32 {
+	background-image: url(/images/moon-32.png);
 }
 .moon-64 {
 	background-image: url(/images/moon-64.png);
@@ -2710,6 +2730,9 @@ del {
 .register-16 {
 	background-image: url(/images/register-16.png);
 }
+.robot-desktop-32 {
+	background-image: url(/images/robot-desktop-32.png);
+}
 .robot-desktop-64 {
 	background-image: url(/images/robot-desktop-64.png);
 }
@@ -2727,6 +2750,9 @@ del {
 }
 .shirts-32 {
 	background-image: url(/images/shirts-32.png);
+}
+.soccer-32 {
+	background-image: url(/images/soccer-32.png);
 }
 .soccer-64 {
 	background-image: url(/images/soccer-64.png);
@@ -2748,6 +2774,12 @@ del {
 }
 .tweet-16 {
 	background-image: url(/images/tweet-16.png);
+}
+.tux-16 {
+	background-image: url(/images/tux-16.png);
+}
+.tux-32 {
+	background-image: url(/images/tux-32.png);
 }
 .tux-64 {
 	background-image: url(/images/tux-64.png);
@@ -2795,8 +2827,17 @@ del {
 	background-image: url(/images/workgroup-32.png);
 }
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+	.aphone-32 {
+		background-image: url(/images/aphone-64.png);
+	}
 	.aphone-64 {
 		background-image: url(/images/aphone-128.png);
+	}
+	.apple-16 {
+		background-image: url(/images/apple-32.png);
+	}
+	.apple-32 {
+		background-image: url(/images/apple-64.png);
 	}
 	.apple-64 {
 		background-image: url(/images/apple-128.png);
@@ -2875,6 +2916,9 @@ del {
 	}
 	.coins-64 {
 		background-image: url(/images/coins-128.png);
+	}
+	.computers-32 {
+		background-image: url(/images/computers-64.png);
 	}
 	.computers-64 {
 		background-image: url(/images/computers-128.png);
@@ -2966,6 +3010,9 @@ del {
 	.globe-64 {
 		background-image: url(/images/globe-128.png);
 	}
+	.hardhat-32 {
+		background-image: url(/images/hardhat-64.png);
+	}
 	.hardhat-64 {
 		background-image: url(/images/hardhat-128.png);
 	}
@@ -2998,6 +3045,9 @@ del {
 	}
 	.internet-64 {
 		background-image: url(/images/internet-128.png);
+	}
+	.joystick-32 {
+		background-image: url(/images/joystick-64.png);
 	}
 	.joystick-64 {
 		background-image: url(/images/joystick-128.png);
@@ -3038,14 +3088,23 @@ del {
 	.mail-reply-16 {
 		background-image: url(/images/mail-reply-32.png);
 	}
+	.microphone-32 {
+		background-image: url(/images/microphone-64.png);
+	}
 	.microphone-64 {
 		background-image: url(/images/microphone-128.png);
+	}
+	.microsoft-32 {
+		background-image: url(/images/microsoft-64.png);
 	}
 	.microsoft-64 {
 		background-image: url(/images/microsoft-128.png);
 	}
 	.minus-16 {
 		background-image: url(/images/minus-32.png);
+	}
+	.moon-32 {
+		background-image: url(/images/moon-64.png);
 	}
 	.moon-64 {
 		background-image: url(/images/moon-128.png);
@@ -3119,6 +3178,9 @@ del {
 	.register-16 {
 		background-image: url(/images/register-32.png);
 	}
+	.robot-desktop-32 {
+		background-image: url(/images/robot-desktop-64.png);
+	}
 	.robot-desktop-64 {
 		background-image: url(/images/robot-desktop-128.png);
 	}
@@ -3137,6 +3199,9 @@ del {
 	.shirts-32 {
 		background-image: url(/images/shirts-64.png);
 	}
+	.soccer-32 {
+		background-image: url(/images/soccer-64.png);
+	}
 	.soccer-64 {
 		background-image: url(/images/soccer-128.png);
 	}
@@ -3154,6 +3219,12 @@ del {
 	}
 	.trash-16 {
 		background-image: url(/images/trash-32.png);
+	}
+	.tux-16 {
+		background-image: url(/images/tux-32.png);
+	}
+	.tux-32 {
+		background-image: url(/images/tux-64.png);
 	}
 	.tux-64 {
 		background-image: url(/images/tux-128.png);

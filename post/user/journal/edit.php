@@ -19,9 +19,7 @@
 
 include("clean.php");
 
-if ($zid !== $auth_zid) {
-	die("not your journal");
-}
+require_mine();
 
 $journal = item_request(TYPE_JOURNAL);
 $title = clean_subject();

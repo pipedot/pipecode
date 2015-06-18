@@ -19,12 +19,7 @@
 
 include("clean.php");
 
-if ($auth_zid === "") {
-	die("sign in to write");
-}
-if ($zid !== $auth_zid) {
-	die("not your journal");
-}
+require_mine();
 
 $journal = item_request(TYPE_JOURNAL);
 $journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);

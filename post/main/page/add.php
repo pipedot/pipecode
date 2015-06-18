@@ -19,9 +19,7 @@
 
 include("clean.php");
 
-if (!$auth_user["admin"]) {
-	die("not an admin");
-}
+require_admin();
 
 $title = clean_subject();
 $slug = clean_slug();

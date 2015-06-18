@@ -17,12 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($auth_zid === "") {
-	die("sign in to write");
-}
-if ($zid !== $auth_zid) {
-	die("not your journal");
-}
+require_mine();
 
 print_header("Write", [], [], [], ["Journal", "Write"], ["/journal/", "/journal/write"]);
 beg_main();

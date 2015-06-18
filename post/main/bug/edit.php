@@ -19,6 +19,9 @@
 
 include("clean.php");
 
+require_feature("bug");
+require_developer();
+
 $bug = item_request(TYPE_BUG);
 $title = clean_subject();
 $priority = http_post_string("priority", array("valid" => "[a-z]"));
@@ -38,7 +41,7 @@ for ($i = 0; $i < count($keys); $i++) {
 	if (substr($keys[$i], 0, 6) == "label_") {
 		$label_id = (int) substr($keys[$i], 6);
 		//print "label_id [$label_id]";
-		if (db_has_rec("label", $label_id)) {
+		if (db_has_rec("bug_label", $label_id)) {
 			$labels[] = $label_id;
 		}
 	}
@@ -46,13 +49,13 @@ for ($i = 0; $i < count($keys); $i++) {
 //var_dump($labels);
 //die("here");
 
-sql("delete from bug_label where bug_id = ?", $bug["bug_id"]);
+sql("delete from bug_labels where bug_id = ?", $bug["bug_id"]);
 for ($i = 0; $i < count($labels); $i++) {
 	//$bug_label = db_new_rec("bug_label");
 	//$bug_label["bug_id"] = $bug["bug_id"];
 	//$bug_label["label_id"] = $labels[$i];
 	//db_set_rec("bug_label", $bug_label);
-	sql("insert into bug_label (bug_id, label_id) values (?, ?)", $bug["bug_id"], $labels[$i]);
+	sql("insert into bug_labels (bug_id, label_id) values (?, ?)", $bug["bug_id"], $labels[$i]);
 }
 
 header("Location: /bug/" . crypt_crockford_encode($bug["bug_id"]));
