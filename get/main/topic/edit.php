@@ -24,7 +24,7 @@ if ($s2 === "edit") {
 	$friendly_name = "New Topic";
 } else {
 	if (!string_uses($s2, "[a-z]")) {
-		die("invalid topic");
+		fatal("Invalid topic");
 	}
 	$topic = $s2;
 	$topic = db_get_rec("topic", array("slug" => $topic));

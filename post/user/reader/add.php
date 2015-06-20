@@ -29,10 +29,10 @@ $feed_url = http_post_string("feed_url", array("len" => 100, "valid" => "[a-z][A
 $feed_id = add_feed($feed_url);
 $feed = db_find_rec("feed", $feed_id);
 if ($feed == null) {
-	die("feed_id not found [$feed_id]");
+	fatal("Feed not found");
 }
 if (db_has_rec("reader_user", ["zid" => $auth_zid, "feed_id" => $feed_id])) {
-	die("feed [$feed_id] is already in your list");
+	fatal("Feed is already in your list");
 }
 
 $reader_user = db_new_rec("reader_user");

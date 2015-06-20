@@ -19,7 +19,7 @@
 
 $zid = domain_to_zid($s2);
 if (!is_local_user($zid)) {
-	die("user not found [$zid]");
+	fatal("User not found");
 }
 $conf = db_get_conf("user_conf", $zid);
 

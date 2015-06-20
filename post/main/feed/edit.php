@@ -40,7 +40,6 @@ if (http_post("sure")) {
 	sql("delete from feed where feed_id = ?", $feed["feed_id"]);
 	sql("delete from short where short_id = ?", $feed["feed_id"]);
 
-	//die("deleted feed [$short_code]");
 	header("Location: /feed/browse");
 	die();
 }
@@ -49,7 +48,7 @@ $slug = http_post_string("slug", array("valid" => "[a-z][0-9]-", "len" => 200));
 $topic_id = http_post_int("topic_id");
 
 if (!string_uses(substr($slug, 0, 1), "[a-z]")) {
-	die("slug must start with a letter");
+	fatal("Slug must start with a letter");
 }
 
 $feed["slug"] = $slug;

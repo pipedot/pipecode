@@ -251,10 +251,10 @@ function clean_html($dirty, $definition = "comment")
 	$clean = trim($clean);
 
 	while (substr($clean, 0, 4) == "<br>") {
-		$clean = trim(substr($clean, 5));
+		$clean = trim(substr($clean, 4));
 	}
 	while (substr($clean, -4, 4) == "<br>") {
-		$clean = trim(substr($clean, 0, -5));
+		$clean = trim(substr($clean, 0, -4));
 	}
 	$clean = string_replace_all("<br><br><br>", "<br><br>", $clean);
 
@@ -611,7 +611,7 @@ function clean_text($text, $max = 200, $min = 1)
 		$subject = substr($text, 0, $max);
 	}
 	if (strlen($text) < $min) {
-		die("missing text field");
+		fatal("Missing text field");
 	}
 
 	return $text;
@@ -625,7 +625,7 @@ function clean_subject()
 	} else if (array_key_exists("title", $_POST)) {
 		$subject = $_POST["title"];
 	} else {
-		die("no subject");
+		fatal("No subject");
 	}
 
 	return clean_text($subject);
@@ -677,7 +677,7 @@ function clean_body($required = true, $definition = "comment")
 		$dirty_body = $_POST["story"];
 	} else {
 		if ($required) {
-			die("no body");
+			fatal("No body");
 		} else {
 			return array("", "");
 		}
@@ -702,7 +702,7 @@ function clean_body($required = true, $definition = "comment")
 	}
 	if (strlen($clean_body) == 0) {
 		if ($required) {
-			die("no body");
+			fatal("No body");
 		} else {
 			return array("", "");
 		}

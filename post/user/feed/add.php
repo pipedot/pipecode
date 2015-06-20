@@ -26,7 +26,7 @@ require_mine();
 
 $col = http_get_int("col");
 if ($col < 0 || $col > 2) {
-	die("invalid col [$col]");
+	fatal("Invalid col");
 }
 
 $feed_id = http_post_int("feed_id", array("required" => false));
@@ -34,15 +34,15 @@ $uri = http_post_string("uri", array("required" => false, "len" => 100, "valid" 
 
 if ($feed_id == 0) {
 	if ($uri == "") {
-		die("no feed uri given");
+		fatal("No feed uri given");
 	}
 	$feed_id = add_feed($uri);
 }
 if (!db_has_rec("feed", $feed_id)) {
-	die("feed_id not found [$feed_id]");
+	fatal("Feed not found");
 }
 if (db_has_rec("feed_user", array("zid" => $auth_zid, "feed_id" => $feed_id))) {
-	die("feed [$feed_id] is already on your page");
+	fatal("Feed is already on your page");
 }
 
 $row = sql("select max(pos) as max_pos from feed_user where zid = ? and col = ?", $auth_zid, $col);

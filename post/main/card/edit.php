@@ -24,9 +24,7 @@ $card = item_request(TYPE_CARD);
 $tags = clean_tags();
 list($clean_body, $dirty_body) = clean_body();
 
-if ($card["zid"] !== $auth_zid) {
-	die("not your card");
-}
+require_mine($card["zid"]);
 
 sql("delete from card_tags where card_id = ?", $card["card_id"]);
 for ($i = 0; $i < count($tags); $i++) {

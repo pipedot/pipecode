@@ -21,7 +21,7 @@ require_mine();
 
 $key = $s2;
 if (!string_uses($key, "[0-9]abcdef") || strlen($key) != 64) {
-	die("invalid key");
+	fatal("Invalid key");
 }
 
 sql("delete from login where zid = ? and login_key = ?", $auth_zid, $key);

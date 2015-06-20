@@ -25,7 +25,7 @@ $journal = item_request(TYPE_JOURNAL);
 $journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);
 
 if (!$journal["published"] && $zid != $auth_zid) {
-	die("not published");
+	fatal("Not published");
 }
 
 if ($auth_zid === $zid) {

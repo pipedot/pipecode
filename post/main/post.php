@@ -45,7 +45,7 @@ if ($auth_zid === "") {
 	$coward = true;
 	if (http_post("post")) {
 		if (!captcha_verify($answer)) {
-			die("captcha failed");
+			fatal("Captcha failed");
 		}
 	}
 } else {
@@ -82,7 +82,7 @@ if (http_post("preview")) {
 
 if ($auth_zid === "" || $zid === "") {
 	if (db_has_rec("ban_ip", $remote_ip)) {
-		die("Your IP address is banned for sending junk messages");
+		fatal("Your IP address is banned for sending junk messages");
 	}
 }
 

@@ -18,7 +18,7 @@
 //
 
 if (is_file("$doc_root/conf.php")) {
-	die("already setup");
+	fatal("Already setup");
 }
 
 if (http_post()) {

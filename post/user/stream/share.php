@@ -33,7 +33,7 @@ if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$hash = crypt_sha256($data);
 	$src_img = @imagecreatefromstring($data);
 	if ($src_img === false) {
-		die("unable to open uploaded file");
+		fatal("Unable to open uploaded file");
 	}
 	$photo_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
 } else {
@@ -50,7 +50,7 @@ if ($link_url == "") {
 }
 
 if ($clean_body == "" && $link_url == "" && $photo_id == 0) {
-	die("nothing to share");
+	fatal("Nothing to share");
 }
 
 $card = db_new_rec("card");

@@ -26,12 +26,12 @@ require_mine();
 list($user, $domain) = explode("@", $zid);
 
 if (!isset($_FILES["upload"])) {
-	die("unknown error in upload");
+	fatal("Unknown error in upload");
 }
 $data = fs_slurp($_FILES["upload"]["tmp_name"]);
 $src_img = @imagecreatefromstring($data);
 if ($src_img === false) {
-	die("unable to open uploaded file");
+	fatal("Unable to open uploaded file");
 }
 $avatar_id = create_image_avatar($auth_zid, $src_img);
 imagedestroy($src_img);

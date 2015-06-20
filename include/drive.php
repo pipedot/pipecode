@@ -27,7 +27,7 @@ function resolve_path($path, $zid)
 		return 0;
 	}
 	if (substr($path, 0, 1) !== "/") {
-		die("invalid path [$path]");
+		fatal("Invalid path");
 	}
 	$path = substr($path, 1);
 	if (substr($path, -1) === "/") {
@@ -39,7 +39,7 @@ function resolve_path($path, $zid)
 	for ($i = 0; $i < count($a); $i++) {
 		$row = sql("select file_id from drive_file where parent_id = ? and type = ? and zid = ? and name = ?", $parent_id, DRIVE_DIR, $zid, $a[$i]);
 		if (count($row) == 0) {
-			die("path not found [$path]");
+			fatal("Path not found");
 		}
 		$parent_id = $row[0]["file_id"];
 		//writeln("found [" . $a[$i] . "] file_id [$parent_id]<br>\n");
@@ -59,7 +59,7 @@ function print_drive_crumbs($path, $zid)
 		return;
 	}
 	if (substr($path, 0, 1) !== "/") {
-		die("invalid path [$path]");
+		fatal("Invalid path");
 	}
 	$path = substr($path, 1);
 	if (substr($path, -1) === "/") {
@@ -72,7 +72,7 @@ function print_drive_crumbs($path, $zid)
 	for ($i = 0; $i < count($a); $i++) {
 		$row = sql("select file_id from drive_file where parent_id = ? and type = ? and zid = ? and name = ?", $parent_id, DRIVE_DIR, $zid, $a[$i]);
 		if (count($row) == 0) {
-			die("path not found [$path]");
+			fatal("Path not found");
 		}
 		$parent_id = $row[0]["file_id"];
 		$clean_name = encode_file_name($a[$i]);
@@ -207,11 +207,6 @@ function drive_set($data)
 {
 	global $doc_root;
 	global $server_id;
-
-	//if (strlen($hash) != 64 || !string_uses($hash, "[0-9]abcdef")) {
-	//	//die("invalid hash [$hash]");
-	//	return false;
-	//}
 
 	if ($data === "") {
 		return crypt_sha256("");

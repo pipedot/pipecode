@@ -19,10 +19,10 @@
 
 $pipe_id = $s2;
 if (!string_uses($pipe_id, "[a-z][0-9]_")) {
-	die("invalid pipe_id [$pipe_id]");
+	die("error: invalid pipe_id");
 }
 if (!db_has_rec("pipe", $pipe_id)) {
-	die("error: pipe not found [$pipe_id]");
+	die("error: pipe not found");
 }
 
 if (array_key_exists("up_x", $_POST) || array_key_exists("down_x", $_POST) || array_key_exists("undo_x", $_POST)) {

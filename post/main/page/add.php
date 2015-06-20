@@ -25,7 +25,7 @@ $title = clean_subject();
 $slug = clean_slug();
 
 if (db_has_rec("page", $slug)) {
-	die("page already exists [$slug]");
+	fatal("Page already exists");
 }
 
 $page = array();

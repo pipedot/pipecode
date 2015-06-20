@@ -24,7 +24,7 @@ if ($s2 === "edit") {
 	$title = "New Topic";
 } else {
 	if (!string_uses($s2, "[a-z]")) {
-		die("invalid topic");
+		fatal("Invalid topic");
 	}
 	$slug = $s2;
 	$topic = db_get_rec("reader_topic", array("slug" => $slug));

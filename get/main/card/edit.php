@@ -21,9 +21,7 @@ include("clean.php");
 
 $card = item_request(TYPE_CARD);
 
-if ($card["zid"] !== $auth_zid) {
-	die("not your card");
-}
+require_mine($card["zid"]);
 
 $clean_body = $card["body"];
 $dirty_body = dirty_html($clean_body);

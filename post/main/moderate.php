@@ -19,9 +19,7 @@
 
 include("render.php");
 
-if ($auth_zid === "") {
-	die("error: sign in to moderate");
-}
+require_login();
 
 $comment = item_request(TYPE_COMMENT);
 
@@ -32,7 +30,7 @@ if (db_has_rec("comment_vote", array("comment_id" => $comment["comment_id"], "zi
 $reason = http_post_string("reason", array("len" => 20, "valid" => "[a-z][A-Z]"));
 
 if (!array_key_exists($reason, $reasons)) {
-	die("error: unknown reason [$reason]");
+	fatal("error: unknown reason");
 }
 $value = $reasons[$reason];
 

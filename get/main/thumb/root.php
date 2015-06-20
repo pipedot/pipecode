@@ -24,7 +24,7 @@ $ext = fs_ext($s2);
 if ($ext == "jpg") {
 	$short_code = substr($s2, 0, -4);
 	if (!string_uses($short_code, "[A-Z][0-9]")) {
-		die("invalid short code");
+		fatal("Invalid short code");
 	}
 	$thumb_id = crypt_crockford_decode($short_code);
 

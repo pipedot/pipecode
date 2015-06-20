@@ -20,7 +20,7 @@
 require_admin();
 
 if (!string_uses($s3, "[a-z][0-9]-")) {
-	die("invalid topic");
+	fatal("Invalid topic");
 }
 $topic = db_get_rec("feed_topic", array("slug" => $s3));
 $icons = icon_list(true, true, true);

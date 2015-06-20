@@ -20,7 +20,7 @@
 $feed = item_request(TYPE_FEED);
 
 if (db_has_rec("reader_user", ["zid" => $auth_zid, "feed_id" => $feed["feed_id"]])) {
-	die("feed already added");
+	fatal("Feed already added");
 }
 
 $name = http_post_string("name", array("valid" => "[A-Z][a-z][0-9]`~!@#$%^&*()_+-=[]\{}|;':\",./? ", "len" => 50));
@@ -42,7 +42,7 @@ if ($topic_id == -1) {
 	}
 } else if ($topic_id > 0) {
 	if (!db_has_rec("feed_topic", $feed["topic_id"])) {
-		die("unknown topic");
+		fatal("Unknown topic");
 	}
 }
 

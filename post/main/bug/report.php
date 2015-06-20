@@ -28,7 +28,7 @@ list($clean_body, $dirty_body) = clean_body(false, "comment");
 $priority = http_post_string("priority", array("valid" => "[a-z]"));
 $priorities = array("informational", "normal", "important", "critical");
 if (!in_array($priority, $priorities)) {
-	die("invalid priority [$pritority]");
+	fatal("Invalid priority");
 }
 
 $labels = array();

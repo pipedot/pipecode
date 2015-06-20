@@ -21,7 +21,7 @@ include("render.php");
 
 $ip = urldecode($s2);
 if (!string_uses($ip, "[0-9].:abcdef")) {
-	die("invalid ip address");
+	fatal("Invalid ip address");
 }
 $ban_ip = db_get_rec("ban_ip", $ip);
 

@@ -30,10 +30,10 @@ if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$bug_file["size"] = fs_size($_FILES["upload"]["tmp_name"]);
 	$bug_file["hash"] = crypt_sha256_file($_FILES["upload"]["tmp_name"]);
 } else {
-	die("no upload");
+	fatal("No upload");
 }
 if ($bug_file["type"] === "php") {
-	die("invalid file type");
+	fatal("Invalid file type");
 }
 
 $bug_file = db_new_rec("bug_file");
@@ -47,10 +47,10 @@ if ($bug_file["type"] == "jpg" || $bug_file["type"] == "png") {
 	$data = fs_slurp($_FILES["upload"]["tmp_name"]);
 	$src_img = @imagecreatefromstring($data);
 	if ($src_img === false) {
-		die("unable to open uploaded image");
+		fatal("Unable to open uploaded image");
 	}
 	if (imagesx($src_img) < 256 || imagesy($src_img) < 256) {
-		die("images must be at least 256 x 256");
+		fatal("Images must be at least 256 x 256");
 	}
 	$path = $doc_root . "/www" . public_path($now);
 	if (!is_dir($path)) {
@@ -64,7 +64,7 @@ if ($bug_file["type"] == "jpg" || $bug_file["type"] == "png") {
 	imagedestroy($tmp_img);
 }
 if (!move_uploaded_file($_FILES["upload"]["tmp_name"], "$doc_root/www/pub/bug/{$bug["short_code"]}." . $bug_file["type"])) {
-	die("upload failed");
+	fatal("Upload failed");
 }
 
 db_set_rec("bug_file", $bug_file);

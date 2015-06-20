@@ -20,7 +20,7 @@
 $photo = item_request(TYPE_PHOTO);
 
 if ($photo["zid"] !== $auth_zid) {
-	die("not your photo");
+	fatal("Not your photo");
 }
 
 $path = public_path($photo["time"]) . "/photo_{$photo["short_code"]}_256x256.jpg";

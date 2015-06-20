@@ -27,9 +27,7 @@ list($clean_body, $dirty_body) = clean_body();
 
 $comment = item_request(TYPE_COMMENT);
 
-if ($comment["zid"] !== $auth_zid) {
-	die("not your comment");
-}
+require_mine($comment["zid"]);
 
 if ($comment["body"] !== $clean_body || $comment["subject"] !== $subject) {
 	db_set_rec("comment_edit", $comment);

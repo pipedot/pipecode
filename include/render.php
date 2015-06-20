@@ -251,8 +251,6 @@ function render_page($type_id, $root_id, $json)
 	}
 	$total = count($row);
 	$comments = array();
-	//$k = array_keys($comments);
-	//die("total [$total]");
 
 	if ($json) {
 		writeln('{');
@@ -347,8 +345,6 @@ function render_page($type_id, $root_id, $json)
 			}
 		}
 	}
-	//var_dump($keys);
-	//die("s [$s]");
 
 	if ($json) {
 		if ($total > 0) {

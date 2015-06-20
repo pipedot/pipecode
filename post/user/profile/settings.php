@@ -40,7 +40,7 @@ $show_email_enabled = http_post_bool("show_email_enabled", array("numeric" => tr
 //$list_enabled = http_post_bool("list_enabled", array("numeric" => true));
 
 if (!in_array($time_zone, $zones)) {
-	die("invalid time zone [$time_zone]");
+	fatal("Invalid time zone");
 }
 $birthday = strtotime($birthday);
 if ($birthday === false) {

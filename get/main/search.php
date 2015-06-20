@@ -43,7 +43,7 @@ if ($needle != "") {
 	} else if ($haystack == "polls") {
 		$sql = "select * , match (question) against (? in boolean mode) as relevance from poll where match (question) against (? in boolean mode) order by relevance";
 	} else {
-		die("unknown haystack [$haystack]");
+		fatal("Unknown haystack");
 	}
 
 	print_header("$needle - Search");

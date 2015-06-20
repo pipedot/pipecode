@@ -23,7 +23,7 @@ if ($s2 === "edit") {
 	$topic = db_new_rec("reader_topic");
 } else {
 	if (!string_uses($s2, "[a-z]")) {
-		die("invalid topic");
+		fatal("Invalid topic");
 	}
 	$topic = $s2;
 	$topic = db_get_rec("reader_topic", array("slug" => $topic));
@@ -33,7 +33,7 @@ if (http_post("delete")) {
 	$row = sql("select count(*) as feeds from feed_topic where topic_id = ?", $topic["topic_id"]);
 	$count = $row[0]["feeds"];
 	if ($count > 0) {
-		die("unable to delete topic - used in [$count] feeds");
+		fatal("Unable to delete topic - used in [$count] feeds");
 	}
 
 	db_del_rec("reader_topic", $topic["topic_id"]);

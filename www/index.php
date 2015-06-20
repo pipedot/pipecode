@@ -56,7 +56,7 @@ if ($user_page === "") {
 
 if ($s1 === "drive") {
 	if (!string_uses($request_script, "[A-Z][a-z][0-9]`~!@#\$%^&()_+-=[]{};',./ ")) {
-		die("invalid drive request [$request_script]");
+		fatal("Invalid drive request");
 	}
 	include("drive.php");
 	$path = decode_file_name(substr($request_script, 6));
@@ -65,7 +65,7 @@ if ($s1 === "drive") {
 			include("$root/$s1/$query.php");
 			die();
 		} else {
-			die("unknown action [$query]");
+			fatal("Unknown action");
 		}
 	}
 	if (substr($request_script, -1) !== "/") {
@@ -75,7 +75,7 @@ if ($s1 === "drive") {
 	include("$root/$s1/index.php");
 	die();
 } else if (!string_uses($request_script, "[A-Z][a-z][0-9]_-./+")) {
-	die("invalid request [$request_script]");
+	fatal("Invalid request");
 }
 
 if ($s1 === "") {
@@ -162,13 +162,4 @@ if (substr($slug, -1) === "+") {
 	}
 }
 
-//http_response_code(404);
-fatal_error("Not Found", "stop", "Not Found", "Unable to find the requested page.", 404);
-//print_header();
-//beg_main();
-
-//writeln('<h1>404</h1>');
-//writeln('request_uri [' . $request_uri . ']');
-
-//end_main();
-//print_footer();
+fatal("Not Found", "stop", "Not Found", "Unable to find the requested page.", 404);

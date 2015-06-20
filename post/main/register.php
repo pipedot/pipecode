@@ -20,9 +20,7 @@
 include("captcha.php");
 include("mail.php");
 
-if (!$server_conf["register_enabled"]) {
-	die("register not enabled");
-}
+require_feature("register");
 
 $username = http_post_string("username", array("len" => 20, "valid" => "[a-z][A-Z][0-9]"));
 $mail_1 = http_post_string("mail_1", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@.-_+"));
@@ -31,39 +29,39 @@ $answer = http_post_string("answer", array("required" => false));
 
 $username = strtolower($username);
 if (string_uses(substr($username, 0, 1), "[0-9]")) {
-	die("user_name may not start with a number [$username]");
+	fatal("Username may not start with a number");
 }
 if (strlen($username) < 3) {
-	die("user_name must be at least 3 characters [$username]");
+	fatal("Username must be at least 3 characters");
 }
 
 $rfc_2142 = array("info", "marketing", "sales", "support", "abuse", "noc", "security", "postmaster", "hostmaster", "usenet", "news", "webmaster", "www", "uucp", "ftp");
 if (in_array($username, $rfc_2142)) {
-	die("username is reserved [$username]");
+	fatal("Username is reserved");
 }
 $reserved_usernames = array("admin", "administrator", "anonymous", "blog", "bugs", "cash", "code", "donate", "feed", "feedback", "forum", "git", "img", "legal", "list", "lists", "mail", "pipe", "pipecode", "pipedot", "pipeline", "root", "scm", "ssladmin", "wiki");
 if (in_array($username, $reserved_usernames)) {
-	die("username is reserved [$username]");
+	fatal("Username is reserved");
 }
 if ($mail_1 != $mail_2) {
-	die("email addresses do not match [$mail_1] [$mail_2]");
+	fatal("Email addresses do not match");
 }
 $a = explode("@", $mail_1);
 if (count($a) != 2) {
-	die("invalid email address [$mail_1]");
+	fatal("Invalid email address");
 }
 if (strlen($a[0]) == 0) {
-	die("invalid username in email address [$mail_1]");
+	fatal("Invalid username in email address");
 }
 if (strlen($a[1]) < 3 || !string_has($a[1], ".")) {
-	die("invalid domain in email address [$mail_1]");
+	fatal("Invalid domain in email address");
 }
 if (is_local_user("$username@$server_name")) {
-	die("username already exists [$username]");
+	fatal("Username already exists");
 }
 
 if (!captcha_verify($answer)) {
-	die("captcha failed");
+	fatal("Captcha failed");
 }
 
 $code = random_hash();

@@ -22,7 +22,7 @@ $short_id = crypt_crockford_decode($short_code);
 
 $short = db_find_rec("short", $short_id);
 if ($short === false) {
-	die("unable to find record [$short_code]");
+	fatal("Unable to find record");
 }
 
 $type_id = item_type($short["type_id"]);

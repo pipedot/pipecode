@@ -52,7 +52,7 @@ function create_image_avatar($zid, $src_img)
 	$original_width = imagesx($src_img);
 	$original_height = imagesy($src_img);
 	if ($original_width < 256 || $original_height < 256) {
-		die("avatar must be at least 256 x 256");
+		fatal("Avatar must be at least 256 x 256");
 	}
 
 	list($user, $host) = explode("@", $zid);
@@ -138,7 +138,7 @@ function identicon($zid, $size)
 	global $doc_root;
 
 	if ($size != 64 && $size != 128 && $size != 256) {
-		die("invalid size");
+		fatal("Invalid size");
 	}
 
 	$hash = md5($zid);

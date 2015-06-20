@@ -70,12 +70,12 @@ for ($i = 0; $i < count($k); $i++) {
 	if (substr($k[$i], 0, 8) == "comment_") {
 		$comment_code = substr($k[$i], 8);
 		if (!string_uses($comment_code, "[A-Z][0-9]")) {
-			die("invalid comment code [$comment_code]");
+			die("invalid comment code");
 		}
 		$comment_id = crypt_crockford_decode($comment_code);
 		$reason = $_POST[$k[$i]];
 		if (!array_key_exists($reason, $reasons)) {
-			die("invaid reason [$reason]");
+			die("invaid reason");
 		}
 
 		moderate($comment_id, $auth_zid, $reason);

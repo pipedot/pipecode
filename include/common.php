@@ -522,17 +522,17 @@ function check_auth()
 	}
 	if (!string_uses($key, "[0-9]abcdef") || strlen($key) != 64) {
 		expire_auth();
-		die("invalid key [$key]");
+		fatal("Invalid key");
 	}
 	if (!string_uses($zid, "[a-z][0-9]@.-")) {
 		expire_auth();
-		die("invalid zid [$zid]");
+		fatal("Invalid zid");
 	}
 
 	$login = db_find_rec("login", ["zid" => $zid, "login_key" => $key]);
 	if ($login === false) {
 		expire_auth();
-		die("login key not found [$zid]");
+		fatal("Login key not found");
 	}
 	$login["last_time"] = $now;
 	db_set_rec("login", $login);
@@ -617,7 +617,7 @@ function check_article_type($type)
 {
 	$a = array("card", "story", "pipe", "poll", "journal");
 	if (!in_array($type, $a)) {
-		die("unknown article type [$type]");
+		fatal("Unknown article type");
 	}
 }
 
@@ -1294,7 +1294,7 @@ function require_feature($key)
 
 	if (!$server_conf[$key . "_enabled"]) {
 		$feature = ucwords($key);
-		fatal_error("$feature Feature Disabled", "error", "Feature Disabled", "The $feature system is disabled on this server.");
+		fatal("$feature Feature Disabled", "error", "Feature Disabled", "The $feature system is disabled on this server.");
 	}
 }
 
@@ -1304,7 +1304,7 @@ function require_admin()
 	global $auth_user;
 
 	if (!$auth_user["admin"]) {
-		fatal_error("Access Denied", "lock", "Access Denied", "You need administrative rights to access this page.");
+		fatal("Access Denied", "lock", "Access Denied", "You need administrative rights to access this page.");
 	}
 }
 
@@ -1314,7 +1314,7 @@ function require_editor()
 	global $auth_user;
 
 	if (!$auth_user["editor"]) {
-		fatal_error("Access Denied", "lock", "Access Denied", "You need editor rights to access this page.");
+		fatal("Access Denied", "lock", "Access Denied", "You need editor rights to access this page.");
 	}
 }
 
@@ -1324,7 +1324,7 @@ function require_developer()
 	global $auth_user;
 
 	if (!$auth_user["developer"]) {
-		fatal_error("Access Denied", "lock", "Access Denied", "You need developer rights to access this page.");
+		fatal("Access Denied", "lock", "Access Denied", "You need developer rights to access this page.");
 	}
 }
 
@@ -1348,7 +1348,7 @@ function require_login()
 		} else {
 			$server = "";
 		}
-		fatal_error("Login Required", "user", "Login Required", "You must <a href=\"$protocol://$server_name/login?referer=$request_uri$server\">login</a> to access this page.");
+		fatal("Login Required", "user", "Login Required", "You must <a href=\"$protocol://$server_name/login?referer=$request_uri$server\">login</a> to access this page.");
 	}
 }
 
@@ -1361,18 +1361,23 @@ function require_mine($test = -1)
 	require_login();
 	if ($test === -1) {
 		if ($zid !== $auth_zid) {
-			fatal_error("Not Your Page", "important", "Not Your Page", "This is not your page.");
+			fatal("Not Your Page", "important", "Not Your Page", "This is not your page.");
 		}
-	} else if ($test === $auth_zid) {
-		fatal_error("Not Your Item", "important", "Not Your Item", "This is not your item.");
+	} else if ($test !== $auth_zid) {
+		fatal("Not Your Item", "important", "Not Your Item", "This is not your item.");
 	}
 }
 
 
-function fatal_error($title, $icon, $name, $value, $code = 200)
+function fatal($title, $icon = "error", $name = "", $value = "", $code = 200)
 {
 	if ($code != 200) {
 		http_response_code($code);
+	}
+	if ($name == "" && $value == "") {
+		$name = "Fatal Error";
+		$value = $title;
+		$title = "$name - $title";
 	}
 
 	print_header($title);
@@ -1441,10 +1446,10 @@ if (count($a) == $server_level) {
 	}
 	$user_page = strtolower($a[0]);
 	if (!string_uses($user_page, "[a-z][0-9]")) {
-		die("invalid user page [$user_page]");
+		fatal("Invalid user page");
 	}
 	if (!is_local_user("$user_page@$server_name")) {
-		die("user not found [$user_page]");
+		fatal("User not found");
 	}
 }
 if ($user_page != "") {

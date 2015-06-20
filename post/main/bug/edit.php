@@ -27,7 +27,7 @@ $title = clean_subject();
 $priority = http_post_string("priority", array("valid" => "[a-z]"));
 $priorities = array("informational", "normal", "important", "critical");
 if (!in_array($priority, $priorities)) {
-	die("invalid priority [$pritority]");
+	fatal("Invalid priority");
 }
 $bug["priority"] = $priority;
 $bug["title"] = $title;
@@ -46,8 +46,6 @@ for ($i = 0; $i < count($keys); $i++) {
 		}
 	}
 }
-//var_dump($labels);
-//die("here");
 
 sql("delete from bug_labels where bug_id = ?", $bug["bug_id"]);
 for ($i = 0; $i < count($labels); $i++) {

@@ -21,7 +21,7 @@ require_mine();
 
 $key = $s2;
 if (!string_uses($key, "[0-9]abcdef") || strlen($key) != 64) {
-	die("invalid key");
+	fatal("Invalid key");
 }
 $tiny_key = substr($key, 0, 8);
 
@@ -33,7 +33,7 @@ beg_form();
 beg_tab();
 $row = sql("select agent_id, os_id, last_time, country_name, address, latitude, longitude from login inner join ip on login.ip_id = ip.ip_id inner join country on ip.country_id = country.country_id where zid = ? and login_key = ?", $zid, $key);
 if (count($row) == 0) {
-	die("login key not found");
+	fatal("Login key not found");
 }
 
 if ($row[0]["latitude"] != 0 && $row[0]["longitude"] != 0) {

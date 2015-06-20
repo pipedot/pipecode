@@ -28,17 +28,17 @@ if ($type_id == 1) {
 	$answer_id = http_post_string("answer_id", array("len" => 64, "valid" => "[a-z][0-9]_"));
 	$poll_answer = db_get_rec("poll_answer", $answer_id);
 	if ($poll["poll_id"] != $poll_answer["poll_id"]) {
-		die("answer [$answer_id] not on poll [" . $poll["poll_id"] . "]");
+		fatal("Answer not on poll");
 	}
 } else if ($type_id == 2) {
 	$answer_ids = @$_POST["answer_id"];
 	for ($i = 0; $i < count($answer_ids); $i++) {
 		if (!string_uses($answer_ids[$i], "[a-z][0-9]_")) {
-			die("invalid answer_id [" . $answer_ids[$i] . "]");
+			fatal("Invalid answer_id");
 		}
 		$poll_answer = db_get_rec("poll_answer", $answer_ids[$i]);
 		if ($poll["poll_id"] != $poll_answer["poll_id"]) {
-			die("answer [" . $answer_ids[$i] . "] not on question [" . $poll["poll_id"] . "]");
+			fatal("Answer not on poll");
 		}
 	}
 } else if ($type_id == 3) {
@@ -50,23 +50,23 @@ if ($type_id == 1) {
 	$scores = array();
 	for ($i = 0; $i < count($keys); $i++) {
 		if (!string_uses($keys[$i], "[a-z][0-9]_")) {
-			die("invalid answer_id [" . $keys[$i] . "]");
+			fatal("Invalid answer_id");
 		}
 		$poll_answer = db_get_rec("poll_answer", $keys[$i]);
 		if ($poll["poll_id"] != $poll_answer["poll_id"]) {
-			die("answer [" . $keys[$i] . "] not on question [" . $poll["poll_id"] . "]");
+			fatal("Answer not on poll");
 		}
 		$answer_id = $keys[$i];
 		$score = (int) $answer_ids[$answer_id];
 		if ($answer_ids[$answer_id] === "0" || $score > $max) {
-			die("score out of bounds [$score]");
+			fatal("Score out of bounds");
 		}
 		if ($score > 0) {
 			$scores[] = $score;
 		}
 	}
 	if (count($scores) !== count(array_unique($scores))) {
-		die("duplicate score detected");
+		fatal("Duplicate score detected");
 	}
 }
 

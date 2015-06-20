@@ -22,7 +22,7 @@ include("image.php");
 
 $tag = $s2;
 if (!string_uses($tag, "[a-z][0-9]")) {
-	die("invalid tag [$tag]");
+	fatal("Invalid tag");
 }
 //$tag = db_get_rec("tag", array("tag" => $tag));
 //$tag_id = $tag["tag_id"];

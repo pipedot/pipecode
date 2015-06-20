@@ -22,7 +22,7 @@ include("avatar.php");
 
 $avatar = item_request(TYPE_AVATAR);
 if ($avatar["zid"] != $zid) {
-	die("avatar not set by this user");
+	fatal("Avatar not set by this user");
 }
 $avatar_code = $avatar["short_code"];
 $avatar_root = "$protocol://$server_name/avatar/$avatar_code";

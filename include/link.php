@@ -103,7 +103,7 @@ function item_request($type_id = 0)
 		$slug = $s3;
 		$time_beg = strtotime("$date GMT");
 		if ($time_beg === false) {
-			die("invalid date [$date]");
+			fatal("Invalid date");
 		}
 		$time_end = $time_beg + DAYS;
 
@@ -131,41 +131,41 @@ function item_request($type_id = 0)
 			$slug = $s2;
 			$feed = db_find_rec("feed", array("slug" => $slug));
 		} else {
-			die("invalid request [$s2]");
+			fatal("Invalid request");
 		}
 		if ($feed === false) {
-			die("unknown feed [$s2]");
+			fatal("Unknown feed");
 		}
 
 		return $feed;
 	} else if ($type_id == TYPE_READER) {
 		if (!string_uses($s2, "[a-z][0-9]-")) {
-			die("invalid slug [$s2]");
+			fatal("Invalid slug");
 		}
 		require_login();
 		$slug = $s2;
 		$reader_user = db_find_rec("reader_user", ["zid" => $auth_zid, "slug" => $slug]);
 		if ($reader_user === false) {
-			die("unknown feed [$slug]");
+			fatal("Unknown feed");
 		}
 
 		return $reader_user;
 	} else if ($type_id == TYPE_READER_TOPIC) {
 		if (!string_uses($s2, "[a-z][0-9]-")) {
-			die("invalid slug [$s2]");
+			fatal("Invalid slug");
 		}
 		require_login();
 		$slug = $s3;
 		$reader_topic = db_find_rec("reader_topic", ["zid" => $auth_zid, "slug" => $slug]);
 		if ($reader_topic === false) {
-			die("unknown topic [$slug]");
+			fatal("Unknown topic");
 		}
 
 		return $reader_topic;
 	} else if ($type_id == TYPE_ARTICLE || $type_id == TYPE_THUMB) {
 		$short_code = $s2;
 		if (!string_uses($short_code, "[A-Z][a-z][0-9]")) {
-			die("invalid short code [$short_code]");
+			fatal("Invalid short code");
 		}
 		$short_id = crypt_crockford_decode($short_code);
 		$type = item_type($type_id);
@@ -178,7 +178,7 @@ function item_request($type_id = 0)
 			$short_code = $s2;
 		}
 		if (!string_uses($short_code, "[A-Z][a-z][0-9]")) {
-			die("invalid short code [$short_code]");
+			fatal("Invalid short code");
 		}
 		$short_id = crypt_crockford_decode($short_code);
 
@@ -403,7 +403,7 @@ function item_type($type_id)
 			return "Safari";
 
 		default:
-			die("unknown type [$type_id]");
+			fatal("Unknown link type");
 	}
 }
 
@@ -452,7 +452,7 @@ function domain_to_zid($domain)
 {
 	$pos = strpos($domain, ".");
 	if (!string_uses($domain, "[a-z][0-9].-") || $pos === false) {
-		die("invalid domain [$domain]");
+		fatal("Unable to convert domain");
 	}
 
 	return substr_replace($domain, "@", $pos, 1);
@@ -488,5 +488,5 @@ function short_redirect($short_code)
 		header("Location: " . item_link($short["type_id"], $short_id));
 		die();
 	}
-	die("unknown short_code [$short_code]");
+	fatal("Unknown short code");
 }

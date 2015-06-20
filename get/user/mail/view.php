@@ -47,9 +47,7 @@ include("mail.php");
 $mail_id = http_get_int("mid");
 
 $message = db_get_rec("mail", $mail_id);
-if ($message["zid"] != $auth_zid) {
-	die("not your message");
-}
+require_mine($message["zid"]);
 
 //$address = parse_mail_address($message["mail_from"]);
 

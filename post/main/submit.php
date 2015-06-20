@@ -31,7 +31,7 @@ $answer = http_post_string("answer", array("required" => false));
 $time = time();
 
 if ($auth_zid == "" && !captcha_verify($answer)) {
-	die("captcha failed");
+	fatal("Captcha failed");
 }
 
 $topic = db_get_rec("topic", $tid);

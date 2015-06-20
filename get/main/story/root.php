@@ -25,7 +25,7 @@ if (string_has($s2, "-") && $s3 === "") {
 	$date = $s2;
 	$time_beg = strtotime("$date GMT");
 	if ($time_beg === false) {
-		die("invalid date [$date]");
+		fatal("Invalid date");
 	}
 	$time_end = $time_beg + DAYS;
 

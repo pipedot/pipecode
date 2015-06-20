@@ -25,7 +25,7 @@ $server = http_get_string("server", array("required" => false, "len" => 100, "va
 $zid = strtolower($username) . "@$server_name";
 $user_conf = db_get_conf("user_conf", $zid);
 if ($user_conf["password"] != crypt_sha256($password . $user_conf["salt"])) {
-	die("wrong password");
+	fatal("Wrong Password", "lock", "Login Failed", "Wrong Password");
 }
 
 $key = random_hash();

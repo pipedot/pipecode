@@ -29,7 +29,7 @@ if (!string_uses($hash, "[0-9]abcdef")) {
 $cache = item_request(TYPE_CACHE, $hash);
 
 if ($cache === false) {
-	die("cache item not found");
+	fatal("Cache item not found");
 }
 
 //$row = sql("select count(*) as links from drive_data

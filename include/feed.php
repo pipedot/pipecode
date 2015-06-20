@@ -210,7 +210,7 @@ function add_feed($uri)
 	$count = $sp->get_item_quantity();
 
 	if (strlen($title) == 0 || $count == 0) {
-		die("unable to parse feed [$uri]");
+		fatal("Unable to parse feed");
 		//die("unable to parse feed [$uri] data [$data]");
 	}
 

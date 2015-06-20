@@ -25,7 +25,7 @@ $story = item_request(TYPE_STORY);
 $topic = db_get_rec("topic", $story["tid"]);
 $topic = $topic["topic"];
 if ($story["tweet_id"] > 0) {
-	die("already tweeted");
+	fatal("Already tweeted");
 }
 
 $status_text = http_post_string("status_text", array("len" => 140, "valid" => "[a-z][A-Z][0-9]`~!@#$%^&*()_+-={}|[]\\:\";',./? "));

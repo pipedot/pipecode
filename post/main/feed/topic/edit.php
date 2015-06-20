@@ -24,7 +24,7 @@ $name = http_post_string("name", array("valid" => "[A-Z][a-z][0-9]`~!@#$%^&*()_+
 $slug = http_post_string("slug", array("valid" => "[a-z][0-9]-", "len" => 50));
 
 if (!string_uses($s3, "[a-z]")) {
-	die("invalid topic");
+	fatal("Invalid topic");
 }
 $feed_topic = db_get_rec("feed_topic", ["slug" => $s3]);
 $feed_topic["icon"] = $icon;

@@ -22,12 +22,12 @@ $password_1 = http_post_string("password_1", ["len" => 64, "valid" => "[KEYBOARD
 $password_2 = http_post_string("password_2", ["len" => 64, "valid" => "[KEYBOARD]"]);
 
 if ($password_1 != $password_2) {
-	die("passwords do not match");
+	fatal("Passwords do not match");
 }
 
 $email_challenge = db_find_rec("email_challenge", $code);
 if ($email_challenge === false) {
-	die("wrong verification code");
+	fatal("Wrong verification code");
 }
 
 $zid = strtolower($email_challenge["username"]) . "@$server_name";

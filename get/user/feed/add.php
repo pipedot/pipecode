@@ -23,7 +23,7 @@ require_mine();
 
 $col = http_get_int("col");
 if ($col < 0 || $col > 2) {
-	die("invalid col [$col]");
+	fatal("Invalid col");
 }
 
 print_header();

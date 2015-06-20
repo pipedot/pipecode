@@ -17,7 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_login();
 require_mine();
 
 print_header("Drive");

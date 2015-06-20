@@ -18,7 +18,7 @@
 //
 
 if (!string_uses($s3, "[a-z]")) {
-	die("invalid topic");
+	fatal("Invalid topic");
 }
 $topic = db_get_rec("feed_topic", ["slug" => $s3]);
 

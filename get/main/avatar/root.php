@@ -49,24 +49,24 @@ $s = substr($s2, 0, -1 - strlen($ext));
 
 $pos = strrpos($s, "-");
 if ($pos === false) {
-	die("filename must include size");
+	fatal("Filename must include size");
 }
 $size = substr($s, $pos + 1);
 if ($size == 64) {
 	if ($ext != "png") {
-		die("filename must end in .png");
+		fatal("Filename must end in .png");
 	}
 } else if ($size == 128 || $size == 256) {
 	if ($ext != "jpg") {
-		die("filename must end in .jpg");
+		fatal("Filename must end in .jpg");
 	}
 } else {
-	die("invalid request $size $ext");
+	fatal("Invalid request $size $ext");
 }
 $s = substr($s, 0, $pos);
 
 if (!string_uses($s, "[A-Z][0-9]")) {
-	die("invalid short code");
+	fatal("Invalid short code");
 }
 $avatar_id = crypt_crockford_decode($s);
 $avatar = db_get_rec("avatar", $avatar_id);

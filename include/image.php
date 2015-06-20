@@ -433,7 +433,7 @@ function create_photo($src_img, $original_name, $hash)
 	$original_height = imagesy($src_img);
 
 	if ($original_width < 320 || $original_height < 180) {
-		die("photo must be at least 320 x 180");
+		fatal("Photo must be at least 320 x 180");
 	}
 
 	$res = array();
@@ -476,12 +476,7 @@ function create_photo($src_img, $original_name, $hash)
 	$photo["has_medium"] = 0;
 	$photo["has_large"] = 0;
 	$photo["zid"] = $auth_zid;
-	//db_set_rec("photo", $photo);
 	$photo_code = crypt_crockford_encode($photo["photo_id"]);
-	//$photo = db_get_rec("photo", array("zid" => $auth_zid, "time" => $time));
-	//$photo_id = $photo["photo_id"];
-	//var_dump($photo);
-	//die();
 
 	if (!is_dir("$doc_root/www$path")) {
 		mkdir("$doc_root/www$path", 0755, true);
@@ -513,7 +508,6 @@ function create_photo($src_img, $original_name, $hash)
 
 	$photo["size"] = $size;
 	db_set_rec("photo", $photo);
-	//die("here");
 
 	return $photo["photo_id"];
 }

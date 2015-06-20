@@ -25,7 +25,7 @@ $topic_id = http_post_int("topic_id");
 
 if ($topic_id != 0) {
 	if (!db_has_rec("reader_topic", $topic_id)) {
-		die("unknown topic");
+		fatal("Unknown topic");
 	}
 }
 

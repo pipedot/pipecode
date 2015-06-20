@@ -28,7 +28,7 @@ if (isset($_FILES["upload"]) && $_FILES["upload"]["tmp_name"] != "") {
 	$hash = crypt_sha256($data);
 	$src_img = @imagecreatefromstring($data);
 	if ($src_img === false) {
-		die("unable to open uploaded file");
+		fatal("Unable to open uploaded file");
 	}
 	$photo_id = create_photo($src_img, $_FILES["upload"]["name"], $hash);
 } else {

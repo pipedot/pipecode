@@ -22,7 +22,7 @@ require_login();
 $feed = item_request(TYPE_FEED);
 
 if (db_has_rec("reader_user", ["zid" => $auth_zid, "feed_id" => $feed["feed_id"]])) {
-	die("feed already added");
+	fatal("Feed already added");
 }
 
 $feed_topic = db_get_rec("feed_topic", $feed["topic_id"]);

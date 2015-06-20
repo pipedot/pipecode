@@ -23,7 +23,7 @@ $username = http_post_string("username", array("len" => 20, "valid" => "[a-z][A-
 
 $zid = strtolower($username) . "@$server_name";
 if (!is_local_user($zid)) {
-	die("no such user [$zid]");
+	fatal("No such user");
 }
 $user_conf = db_get_conf("user_conf", $zid);
 

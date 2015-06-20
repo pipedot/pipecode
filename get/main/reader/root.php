@@ -18,7 +18,7 @@
 //
 
 if (!string_uses($s2, "[a-z]")) {
-	die("invalid topic");
+	fatal("Invalid topic");
 }
 $slug = $s2;
 $topic = db_get_rec("reader_topic", ["slug" => $slug]);

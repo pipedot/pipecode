@@ -20,9 +20,8 @@
 $photo = item_request(TYPE_PHOTO);
 $photo_code = $photo["short_code"];
 $photo_id = $photo["photo_id"];
-if ($photo["zid"] !== $auth_zid) {
-	die("not your photo");
-}
+
+require_mine($photo["zid"]);
 
 //$journal = item_request("journal");
 //if (!db_has_rec("journal_photo", array("journal_id" => $journal["journal_id"], "photo_id" => $photo_id))) {

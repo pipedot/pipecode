@@ -22,7 +22,7 @@ include("image.php");
 
 $topic = $s2;
 if (strlen($topic) > 0 && !string_uses($topic, "[a-z][0-9]-")) {
-	die("invalid topic [$topic]");
+	fatal("Invalid topic");
 }
 
 if ($topic == "") {

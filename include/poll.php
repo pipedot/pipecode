@@ -55,7 +55,7 @@ function vote_box($poll_id, $vote)
 				$units = "points";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id[' . $answer["answer_id"] . ']" type="text"></td>');
 			} else {
-				die("unknown poll type [$type_id]");
+				fatal("Unknown poll type");
 			}
 			writeln('			<td><label for="a_' . $aid . '">' . $answer["answer"] . '</label></td>');
 			writeln('		</tr>');

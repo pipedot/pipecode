@@ -46,11 +46,11 @@ if ($code == "") {
 }
 
 if (!db_has_rec("email_challenge", $code)) {
-	die("wrong verification code");
+	fatal("Wrong verification code");
 }
 $email_challenge = db_find_rec("email_challenge", $code);
 if ($email_challenge === false) {
-	die("wrong verification code");
+	fatal("Wrong verification code");
 }
 
 $zid = strtolower($email_challenge["username"]) . "@$server_name";

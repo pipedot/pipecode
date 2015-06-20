@@ -162,7 +162,6 @@ function print_card_small($a)
 		$photo_link = "";
 		$photo_class = "";
 	}
-	//die("photo_code [$photo_code]");
 	$tag_links = "";
 	if (array_key_exists("tags", $a)) {
 		for ($i = 0; $i < count($a["tags"]); $i++) {

@@ -36,7 +36,7 @@ $time = time();
 
 if (http_post("publish")) {
 	if ($pipe["closed"] == 1) {
-		die("pipe [$pipe_id] is already closed");
+		fatal("This pipe is already closed");
 	}
 	$pipe["closed"] = 1;
 	$pipe["edit_zid"] = $auth_zid;
