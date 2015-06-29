@@ -25,7 +25,7 @@ header_text();
 
 $bug_id = $s2;
 if (!string_uses($bug_id, "[a-z][0-9]_")) {
-	fatal("Invalid bug_id [$bug_id]");
+	fatal("Invalid bug_id");
 }
 
 $can_moderate = true;

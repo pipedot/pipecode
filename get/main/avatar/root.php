@@ -61,7 +61,7 @@ if ($size == 64) {
 		fatal("Filename must end in .jpg");
 	}
 } else {
-	fatal("Invalid request $size $ext");
+	fatal("Invalid request");
 }
 $s = substr($s, 0, $pos);
 

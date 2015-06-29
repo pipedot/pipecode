@@ -119,7 +119,7 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 	end_tab();
 
 } else {
-	fatal("Invalid request [$s2]");
+	fatal("Invalid request");
 }
 
 end_main();

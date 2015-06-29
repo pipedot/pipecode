@@ -522,7 +522,9 @@ function check_auth()
 	}
 	if (!string_uses($key, "[0-9]abcdef") || strlen($key) != 64) {
 		expire_auth();
-		fatal("Invalid key");
+		$auth_user = db_get_conf("user_conf", "");
+		$auth_user["javascript_enabled"] = 0;
+		return;
 	}
 	if (!string_uses($zid, "[a-z][0-9]@.-")) {
 		expire_auth();
