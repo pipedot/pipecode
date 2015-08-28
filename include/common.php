@@ -47,6 +47,10 @@ $reasons["Overrated"] = -1;
 $reasons["Underrated"] = 1;
 $reasons["Spam"] = -1;
 
+$story_image_style[1] = "None";
+$story_image_style[2] = "Icon";
+$story_image_style[3] = "Image";
+
 
 function print_header($title = "", $link_name = [], $link_icon = [], $link_url = [], $spin_name = [], $spin_link = [])
 {
@@ -979,6 +983,7 @@ function similar_count($story)
 function http_cache($url)
 {
 	global $redirect_url;
+	global $now;
 
 	$url_hash = crypt_sha256($url);
 	$url = string_clean($url, "[a-z][A-Z][0-9]~#%&()-_+=[];:./?", 200);
@@ -1018,6 +1023,8 @@ function http_cache($url)
 		//writeln("drive_get [" . $cache["hash"] . "]");
 		//var_dump($cache);
 		$data = drive_get($cache["data_hash"]);
+		$cache["access_time"] = $now;
+		db_set_rec("cache", $cache);
 	}
 
 	return $data;
@@ -1135,6 +1142,8 @@ function get_agent_id($user_agent = "")
 
 	if (string_has($user_agent, "Chrome") || string_has($user_agent, "CriOS")) {
 		return TYPE_CHROME;
+	} else if (string_has($user_agent, "PaleMoon")) {
+		return TYPE_PALEMOON;
 	} else if (string_has($user_agent, "Firefox")) {
 		return TYPE_FIREFOX;
 	} else if (string_has($user_agent, "MSIE")) {
@@ -1235,6 +1244,7 @@ function load_server_conf()
 	global $auth_expire;
 	global $captcha_key;
 	global $https_enabled;
+	global $https_redirect_enabled;
 	global $http_host;
 	global $server_name;
 	global $server_redirect_enabled;
@@ -1262,6 +1272,7 @@ function load_server_conf()
 	$captcha_key = $server_conf["captcha_key"];
 
 	$https_enabled = (bool) $server_conf["https_enabled"];
+	$https_redirect_enabled = (bool) $server_conf["https_redirect_enabled"];
 
 	$server_name = $server_conf["server_name"];
 	if ($server_name == "example.com" || $server_name == "") {
@@ -1427,6 +1438,10 @@ if (array_key_exists("HTTP_HOST", $_SERVER)) {
 	$http_host = gethostname();
 }
 load_server_conf();
+if ($https_redirect_enabled && $protocol != "https") {
+	header("Location: https://$server_name$request_uri");
+	die();
+}
 $user_page = "";
 $meta = "";
 $a = explode(".", $server_name);

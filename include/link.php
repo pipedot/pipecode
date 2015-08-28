@@ -395,6 +395,8 @@ function item_type($type_id)
 			return "Firefox";
 		case TYPE_IE:
 			return "Internet Explorer";
+		case TYPE_PALEMOON:
+			return "Pale Moon";
 		case TYPE_PIPECODE:
 			return "Pipecode Server";
 		case TYPE_PIPEDOT:

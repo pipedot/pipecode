@@ -1386,15 +1386,25 @@ function fs_unlink($path)
 }
 
 
-function header_expires()
+function header_expires($delta = 0)
 {
-	header("Expires: Thur, 28 Aug 1980 10:00:00 GMT");
+	if ($delta == 0) {
+		header("Expires: Thur, 28 Aug 1980 10:00:00 GMT");
+	} else {
+		header("Expires: " . gmdate('D, d M Y H:i:s \G\M\T', time() + $delta));
+	}
 }
 
 
 function header_html()
 {
 	header("Content-Type: text/html; charset=utf-8");
+}
+
+
+function header_last_modified($time)
+{
+	header("Last-Modified: " . gmdate("D, j M Y H:i:s", $time) . " GMT");
 }
 
 

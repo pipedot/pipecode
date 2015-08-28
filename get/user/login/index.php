@@ -46,6 +46,8 @@ for ($i = 0; $i < count($row); $i++) {
 	$icon = strtolower($agent);
 	if ($icon == "pipecode server" || $icon == "pipedot app") {
 		$icon = "pipedot";
+	} else if ($icon == "pale moon") {
+		$icon = "palemoon";
 	} else if ($icon == "internet explorer") {
 		$icon = "ie";
 	} else if ($icon == "unknown") {

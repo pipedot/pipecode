@@ -25,9 +25,9 @@ require_mine();
 $avatar = item_request(TYPE_AVATAR);
 $avatar_code = $avatar["short_code"];
 
-drive_unlink($avatar["hash_64"], $avatar["avatar_id"]);
-drive_unlink($avatar["hash_128"], $avatar["avatar_id"]);
-drive_unlink($avatar["hash_256"], $avatar["avatar_id"]);
+drive_unlink($avatar["hash_64"], $avatar["avatar_id"], TYPE_AVATAR);
+drive_unlink($avatar["hash_128"], $avatar["avatar_id"], TYPE_AVATAR);
+drive_unlink($avatar["hash_256"], $avatar["avatar_id"], TYPE_AVATAR);
 db_del_rec("short", $avatar["avatar_id"]);
 db_del_rec("avatar", $avatar["avatar_id"]);
 

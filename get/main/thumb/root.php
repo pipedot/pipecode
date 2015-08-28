@@ -36,7 +36,9 @@ if ($ext == "jpg") {
 	} else {
 		header("Content-type: image/jpeg");
 		header("Content-length: " . strlen($data));
-		header("Last-Modified: " . gmdate("D, j M Y H:i:s", $thumb["time"]) . " GMT");
+		header_expires(90 * DAYS);
+		//header("Last-Modified: " . gmdate("D, j M Y H:i:s", $thumb["time"]) . " GMT");
+		header_last_modified($thumb["time"]);
 		header("ETag: \"" . $thumb["hash"] . "\"");
 
 		print $data;

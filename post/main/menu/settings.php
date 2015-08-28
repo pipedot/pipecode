@@ -29,6 +29,7 @@ $captcha_key = http_post_string("captcha_key", array("len" => 100, "required" =>
 $time_zone = http_post_string("time_zone", array("len" => 50, "valid" => "[a-z][A-Z]-_/"));
 
 $https_enabled = http_post_bool("https_enabled", array("numeric" => true));
+$https_redirect_enabled = http_post_bool("https_redirect_enabled", array("numeric" => true));
 $register_enabled = http_post_bool("register_enabled", array("numeric" => true));
 $submit_enabled = http_post_bool("submit_enabled", array("numeric" => true));
 $bug_enabled = http_post_bool("bug_enabled", array("numeric" => true));
@@ -46,6 +47,7 @@ $server_conf["server_redirect_enabled"] = $server_redirect_enabled;
 $server_conf["captcha_key"] = $captcha_key;
 $server_conf["time_zone"] = $time_zone;
 $server_conf["https_enabled"] = $https_enabled;
+$server_conf["https_redirect_enabled"] = $https_redirect_enabled;
 $server_conf["register_enabled"] = $register_enabled;
 $server_conf["submit_enabled"] = $submit_enabled;
 $server_conf["bug_enabled"] = $bug_enabled;

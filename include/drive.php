@@ -192,9 +192,9 @@ function drive_link($hash, $item_id, $type_id, $zid = "")
 }
 
 
-function drive_unlink($hash, $item_id)
+function drive_unlink($hash, $item_id, $type_id)
 {
-	db_del_rec("drive_link", ["hash" => $hash, "item_id" => $item_id]);
+	db_del_rec("drive_link", ["hash" => $hash, "item_id" => $item_id, "type_id" => $type_id]);
 	$link_count = db_get_count("drive_link", ["hash" => $hash]);
 
 	if ($link_count == 0) {

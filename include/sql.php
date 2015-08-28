@@ -138,6 +138,7 @@ const TYPE_IE = 212;
 const TYPE_PIPECODE = 213;
 const TYPE_PIPEDOT = 214;
 const TYPE_SAFARI = 215;
+const TYPE_PALEMOON = 216;
 
 
 $default_conf["server_conf"] = [
@@ -145,6 +146,7 @@ $default_conf["server_conf"] = [
 	"bug_enabled" => "0",
 	"captcha_key" => "",
 	"https_enabled" => "0",
+	"https_redirect_enabled" => "0",
 	"register_enabled" => "1",
 	"server_name" => "example.com",
 	"server_redirect_enabled" => "0",
@@ -274,8 +276,9 @@ $db_table["bug_view"] = array(
 
 $db_table["cache"] = array(
 	array("name" => "cache_id", "key" => true, "auto" => true),
+	array("name" => "access_time", "default" => $now),
+	array("name" => "create_time", "default" => $now),
 	array("name" => "data_hash"),
-	array("name" => "time", "default" => $now),
 	array("name" => "url"),
 	array("name" => "url_hash")
 );

@@ -43,7 +43,8 @@ print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_l
 end_tab();
 
 beg_tab("Features");
-print_row(array("caption" => "HTTPS Available", "check_key" => "https_enabled", "checked" => $server_conf["https_enabled"]));
+print_row(array("caption" => "HTTPS Enabled", "check_key" => "https_enabled", "checked" => $server_conf["https_enabled"]));
+print_row(array("caption" => "HTTPS Required", "check_key" => "https_redirect_enabled", "checked" => $server_conf["https_redirect_enabled"]));
 print_row(array("caption" => "User Registration", "check_key" => "register_enabled", "checked" => $server_conf["register_enabled"]));
 print_row(array("caption" => "Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
 print_row(array("caption" => "Bug Tracker", "check_key" => "bug_enabled", "checked" => $server_conf["bug_enabled"]));

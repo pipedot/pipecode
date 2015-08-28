@@ -543,6 +543,14 @@ article.story footer div:nth-child(2) {
 .external-table td:nth-child(even) {
 	text-align: right;
 }
+.story-icon-64 {
+	background-size: 64px 64px;
+	float: right;
+	margin-left: 8px;
+	margin-bottom: 8px;
+	width: 64px;
+	height: 64px;
+}
 .story-image-128 {
 	float: right;
 	margin-left: 8px;
@@ -2703,6 +2711,12 @@ del {
 .package-16 {
 	background-image: url(/images/package-16.png);
 }
+.palemoon-32 {
+	background-image: url(/images/palemoon-32.png);
+}
+.palemoon-64 {
+	background-image: url(/images/palemoon-64.png);
+}
 .picture-16 {
 	background-image: url(/images/picture-16.png);
 }
@@ -3150,6 +3164,12 @@ del {
 	}
 	.package-16 {
 		background-image: url(/images/package-32.png);
+	}
+	.palemoon-32 {
+		background-image: url(/images/palemoon-64.png);
+	}
+	.palemoon-64 {
+		background-image: url(/images/palemoon-128.png);
 	}
 	.picture-16 {
 		background-image: url(/images/picture-32.png);

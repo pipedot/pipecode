@@ -303,6 +303,9 @@ function print_article($a)
 	}
 	if (array_key_exists("icon", $a)) {
 		$icon = $a["icon"];
+	} else if ($type == "story") {
+		$rec = db_get_rec("topic", ["topic" => $topic]);
+		$icon = $rec["icon"];
 	} else {
 		$icon = "";
 	}
@@ -332,14 +335,7 @@ function print_article($a)
 		$image_path = "";
 	} else if ($image_style == 2) {
 		// icon
-		if ($icon == "") {
-			$image_path = "";
-			$image_url = "";
-		} else {
-			$image_path = "/images/$icon-64.png";
-			$image_url = "";
-			$width = "64";
-		}
+		$image_path = "";
 	} else {
 		if ($image_id <= 0) {
 			$image_path = "";
@@ -400,14 +396,12 @@ function print_article($a)
 	}
 	writeln("	</header>");
 
-	if ($image_path != "") {
-		if ($image_url != "") {
-			writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"></a>$story</div>");
-		} else {
-			writeln("	<div><img alt=\"story icon\" style=\"float: right; margin-left: 8px; margin-bottom: 8px;" . "px\" src=\"$image_path\">$story</div>");
-		}
-	} else {
+	if ($image_style == 3 && $image_path != "") {
+		writeln("	<div><a href=\"$image_url\"><img alt=\"story image\" class=\"story-image-128\" src=\"$image_path\"></a>$story</div>");
+	} else if ($image_style == 1 || $icon == "") {
 		writeln("	<div>$story</div>");
+	} else {
+		writeln("	<div><a href=\"$topic_link\" class=\"story-icon-64 $icon-64\"></a>$story</div>");
 	}
 
 	$link = "";

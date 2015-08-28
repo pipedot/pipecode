@@ -41,6 +41,7 @@ beg_tab("Display");
 //	$image_descriptions[] = $row[$i]["description"];
 //}
 //print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
+print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => array_keys($story_image_style), "option_list" => array_values($story_image_style), "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $user_conf["time_zone"]));
 print_row(array("caption" => "Large Text", "check_key" => "large_text_enabled", "checked" => $user_conf["large_text_enabled"]));
 end_tab();

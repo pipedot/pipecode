@@ -22,9 +22,14 @@ include("diff.php");
 
 $comment = item_request(TYPE_COMMENT);
 $comment_body = $comment["body"];
-$can_moderate = false;
+//if ($auth_zid === "") {
+//	$can_moderate = false;
+//} else {
+	$can_moderate = true;
+//}
 $a = article_info($comment);
 $type_id = $a["type_id"];
+$root_code = crypt_crockford_encode($comment["root_id"]);
 
 print_header($comment["subject"]);
 print_main_nav("stories");
@@ -42,6 +47,11 @@ writeln('<a class="icon-16 ' . $icon . '-16" href="' . $a["link"] . '">' . $a["t
 
 writeln('<h2>Preview</h2>');
 
+if (!$auth_user["javascript_enabled"]) {
+	beg_form("$protocol://$server_name/moderate_noscript");
+	writeln('<input type="hidden" name="root_code" value="' . $root_code . '">');
+}
+
 $list = array($comment);
 $c = $comment;
 while ($c["parent_id"] != 0) {
@@ -55,6 +65,10 @@ for ($i = count($list) - 1; $i >= 0; $i--) {
 }
 $s .= str_repeat("</div>\n</article>\n", count($list));
 writeln($s);
+
+if (!$auth_user["javascript_enabled"]) {
+	end_form();
+}
 
 $row = sql("select * from comment_edit where comment_id = ? order by edit_time", $comment["comment_id"]);
 if (count($row) > 0) {

@@ -40,19 +40,16 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 
 	$s = "<article class=\"comment\">\n";
 	if ($junk_status > 0) {
-		$s .= "<h3 class=\"color-junk\">$subject (Score: $score_reason)</h3>\n";
+		$color = "junk";
 	} else if ($time > $last_seen) {
-		$s .= "<h3 class=\"color-new\">$subject (Score: $score_reason)</h3>\n";
+		$color = "new";
 	} else {
-		$s .= "<h3 class=\"color-old\">$subject (Score: $score_reason)</h3>\n";
+		$color = "old";
 	}
+	$s .= "<h3 class=\"color-$color\">$subject (Score: <span id=\"score_$comment_code\">$score_reason</span>)</h3>\n";
 	$date = date("Y-m-d H:i", $time);
 
-	//if ($comment_id != "") {
-	//	$date = "<a href=\"$protocol://$server_name/comment/$comment_code\">$date</a>";
-	//}
 	if ($article_link != "") {
-		//print "new link [$article_link] new title [$article_title]";
 		$in = " in <a href=\"$article_link\"><b>$article_title</b></a>";
 	} else {
 		$in = "";
@@ -67,7 +64,6 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	$s .= "<div>";
 	$s .= "<div class=\"comment-body\">$body</div>\n";
 
-	//$reason = array("Normal", "Offtopic", "Flamebait", "Troll", "Redundant", "Insightful", "Interesting", "Informative", "Funny", "Overrated", "Underrated");
 	if ($can_moderate && $auth_zid != "" && $zid != $auth_zid) {
 		$row = sql("select reason from comment_vote where comment_id = ? and zid = ?", $comment_id, $auth_zid);
 		if (count($row) == 0) {
@@ -76,7 +72,12 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 			$selected = $row[0]["reason"];
 		}
 
-		$s .= "<footer><a href=\"$protocol://$server_name/post/$comment_code\">Reply</a><select name=\"comment_$comment_code\">";
+		$s .= "<footer><a href=\"$protocol://$server_name/post/$comment_code\">Reply</a>";
+		if ($auth_user["javascript_enabled"]) {
+			$s .= "<select name=\"comment_$comment_code\" onchange=\"moderate(this, '$comment_code')\">";
+		} else {
+			$s .= "<select name=\"comment_$comment_code\">";
+		}
 		$k = array_keys($reasons);
 		for ($i = 0; $i < count($reasons); $i++) {
 			if ($k[$i] == $selected) {
@@ -85,7 +86,10 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 				$s .= "<option>" . $k[$i] . "</option>";
 			}
 		}
-		$s .= "</select> <input type=\"submit\" value=\"Moderate\"></footer>\n";
+		$s .= "</select>";
+		if (!$auth_user["javascript_enabled"]) {
+			$s .= " <input type=\"submit\" value=\"Moderate\"></footer>\n";
+		}
 	} else if ($junk) {
 		if ($query == "default=spam") {
 			$junk_default = true;
@@ -152,7 +156,6 @@ function render_comment_json($subject, $zid, $time, $comment_id, $body, $junk_st
 	$body = make_clickable($body);
 
 	$s = "\$level{\n";
-	//$s .= "\$level	\"comment_id\": \"$comment_id\",\n";
 	$s .= "\$level	\"code\": \"" . crypt_crockford_encode($comment_id) . "\",\n";
 	$s .= "\$level	\"body\": \"" . addcslashes($body, "\\\"") . "\",\n";
 	$s .= "\$level	\"score\": $score,\n";
@@ -217,40 +220,24 @@ function render_page($type_id, $root_id, $json)
 	global $hide_value;
 	global $expand_value;
 
-	$render = array();
-	$username = array();
-	$parent = array();
+	$render = [];
+	$parent = [];
+	$comments = [];
 
-	//$article = db_get_rec($type, $root_id);
 	$root_code = crypt_crockford_encode($root_id);
 
 	if ($auth_zid === "") {
 		$last_seen = 0;
 	} else {
-		//if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
-		//	$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
-		//	$view["last_time"] = $view["time"];
-		//	$last_seen = $view["time"];
-		//} else {
-		//	$view = array();
-		//	$view["{$type}_id"] = $root_id;
-		//	$view["zid"] = $auth_zid;
-		//	$view["last_time"] = 0;
-		//	$last_seen = 0;
-		//}
-		//$view["time"] = time();
-		//db_set_rec("{$type}_view", $view);
 		$last_seen = update_view_time($type_id, $root_id);
 	}
 
 	if ($auth_user["show_junk_enabled"]) {
-		//$comments = db_get_list("comment", "publish_time", array("root_id" => $root_id));
 		$row = sql("select * from comment where root_id = ? order by publish_time", $root_id);
 	} else {
 		$row = sql("select * from comment where root_id = ? and junk_status <= 0 order by publish_time", $root_id);
 	}
 	$total = count($row);
-	$comments = array();
 
 	if ($json) {
 		writeln('{');
@@ -262,7 +249,6 @@ function render_page($type_id, $root_id, $json)
 		writeln('<div class="comment-header">');
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
-		//writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon-16 chat-16">Reply</a></td>');
 		writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post/' . $root_code . '" class="icon-16 chat-16">Reply</a></td>');
 		if ($can_moderate && false) {
 			writeln('			<td style="width: 30%">');
@@ -323,15 +309,12 @@ function render_page($type_id, $root_id, $json)
 		}
 		$parent[$comment["comment_id"]] = $comment["parent_id"];
 	}
-	//var_dump($render);
-	//die();
 
 	$keys = array_keys($render);
 	$s = "";
 
 	if (!$json && $can_moderate) {
 		beg_form("$protocol://$server_name/moderate_noscript");
-		//writeln('<input type="hidden" name="type" value="' . $type . '">');
 		writeln('<input type="hidden" name="root_code" value="' . $root_code . '">');
 	}
 	for ($i = 0; $i < $total; $i++) {
@@ -375,7 +358,6 @@ function print_sliders($type_id, $root_id)
 	writeln('<div class="comment-header">');
 	writeln('	<table class="fill">');
 	writeln('		<tr>');
-	//writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post?type=' . $type . '&amp;root_id=' . $root_id . '" class="icon-16 chat-16">Reply</a></td>');
 	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post/' . $root_code . '" class="icon-16 chat-16">Reply</a></td>');
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
