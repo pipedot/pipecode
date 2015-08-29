@@ -18,27 +18,28 @@
 //
 
 include("render.php");
+include("story.php");
 
-print_header("Comments", [], [], [], ["Comments"], ["/comments"]);
+print_header("Submissions", [], [], [], ["Submissions"], ["/submissions"]);
 beg_main();
 
-$items_per_page = 50;
-list($item_start, $page_footer) = page_footer("comment", $items_per_page, array("zid" => $zid));
+$items_per_page = 10;
+list($item_start, $page_footer) = page_footer("story", $items_per_page, array("author_zid" => $zid));
 
-if ($auth_user["show_junk_enabled"]) {
-	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body from comment where zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
-} else {
-	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit $item_start, $items_per_page", $zid);
+$row = sql("select story_id from story where author_zid = ? order by publish_time desc limit $item_start, $items_per_page", $zid);
+if (count($row) == 0) {
+	if ($auth_zid === $zid) {
+		writeln('<p>You have no accepted story submissions yet. <a href="' . $protocol . '://' . $server_name . '/submit">Submit</a> one now!</p>');
+	} else {
+		writeln('<p>This user has no accepted submissions yet.</p>');
+	}
 }
 for ($i = 0; $i < count($row); $i++) {
-	$a = article_info($row[$i], false);
-	print render_comment($row[$i]["subject"], $zid, $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"], $row[$i]["junk_status"]);
-	writeln('</div>');
-	writeln('</article>');
-	writeln();
+	print_story($row[$i]["story_id"]);
 }
 
 writeln($page_footer);
 
 end_main();
 print_footer();
+

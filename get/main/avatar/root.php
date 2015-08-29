@@ -82,7 +82,8 @@ if (!http_modified($avatar["time"], $hash)) {
 		header("Content-type: image/png");
 	}
 	header("Content-length: " . strlen($data));
-	header("Last-Modified: " . gmdate("D, j M Y H:i:s", $avatar["time"]) . " GMT");
+	header_expires(90 * DAYS);
+	header_last_modified($avatar["time"]);
 	header("ETag: \"$hash\"");
 
 	print $data;

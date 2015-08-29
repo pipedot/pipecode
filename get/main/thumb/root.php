@@ -37,7 +37,6 @@ if ($ext == "jpg") {
 		header("Content-type: image/jpeg");
 		header("Content-length: " . strlen($data));
 		header_expires(90 * DAYS);
-		//header("Last-Modified: " . gmdate("D, j M Y H:i:s", $thumb["time"]) . " GMT");
 		header_last_modified($thumb["time"]);
 		header("ETag: \"" . $thumb["hash"] . "\"");
 
@@ -73,32 +72,6 @@ if (count($row) > 0) {
 
 	for ($i = 0; $i < count($row); $i++) {
 		print_news($row[$i]);
-		/*
-		$info = "in <b><a href=\"/feed/" . $row[$i]["slug"] . "\">" . $row[$i]["feed_title"] . "</a></b> on " . date("Y-m-d H:i", $row[$i]["publish_time"]);
-		if ($row[$i]["author_name"] != "") {
-			$by = $row[$i]["author_name"];
-			if ($row[$i]["author_link"] != "") {
-				//$by = '<a href="' . $row[$i]["author_link"] . '" rel="nofollow">' . $by . '</a>';
-				$by = '<a href="' . $row[$i]["author_link"] . '" rel="author">' . $by . '</a>';
-			}
-			$info = "<address>$by</address> $info";
-		}
-		$short_code = crypt_crockford_encode($row[$i]["article_id"]);
-
-		writeln('<article class="news-text">');
-		writeln('<table>');
-		writeln('	<tr>');
-		writeln('		<td>');
-		writeln('			<div class="article-preview">');
-		writeln('				<div class="article-link"><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></div>');
-		writeln('				<div class="article-info">' . $info . '</div>');
-		writeln('				<div class="article-description">' . $row[$i]["description"] . '</div>');
-		writeln('			</div>');
-		writeln('		</td>');
-		writeln('	</tr>');
-		writeln('</table>');
-		writeln('</article>');
-		*/
 	}
 
 	writeln($page_footer);

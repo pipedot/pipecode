@@ -362,7 +362,7 @@ function print_article($a)
 
 	writeln("<article class=\"story\">");
 	if ($story_id != "") {
-		$title_link = "/story/$day/$slug";
+		$title_link = "$protocol://$server_name/story/$day/$slug";
 	} else if ($pipe_id != "") {
 		$title_link = "/pipe/$short_code";
 	} else if ($journal_id != "" && $time > 0) {
@@ -407,23 +407,23 @@ function print_article($a)
 	$link = "";
 	$actions = [];
 	if ($story_id != "") {
-		$link = "<a href=\"/story/$day/$slug\">{$a["comments"]["tag"]}</a>";
+		$link = "<a href=\"$protocol://$server_name/story/$day/$slug\">{$a["comments"]["tag"]}</a>";
 		if ($a["keywords"] != "") {
 			$count = similar_count($a);
 			if ($count > 0) {
-				$actions[] = "<a href=\"/story/$short_code/similar\" class=\"icon-16 news-16\">Similar</a>";
+				$actions[] = "<a href=\"$protocol://$server_name/story/$short_code/similar\" class=\"icon-16 news-16\">Similar</a>";
 			}
 		}
 		if ($auth_user["editor"]) {
 			if ($tweet_id == 0) {
 				if (is_file("$doc_root/www/images/tweet-16.png")) {
-					$actions[] = "<a href=\"/story/$short_code/tweet\" class=\"icon-16 tweet-16\">Tweet</a>";
+					$actions[] = "<a href=\"$protocol://$server_name/story/$short_code/tweet\" class=\"icon-16 tweet-16\">Tweet</a>";
 				} else {
-					$actions[] = "<a href=\"/story/$short_code/tweet\" class=\"icon-16 music-16\">Tweet</a>";
+					$actions[] = "<a href=\"$protocol://$server_name/story/$short_code/tweet\" class=\"icon-16 music-16\">Tweet</a>";
 				}
 			}
-			$actions[] = "<a href=\"/story/$short_code/image\" class=\"icon-16 picture-16\">Image</a>";
-			$actions[] = "<a href=\"/story/$short_code/edit\" class=\"icon-16 notepad-16\">Edit</a>";
+			$actions[] = "<a href=\"$protocol://$server_name/story/$short_code/image\" class=\"icon-16 picture-16\">Image</a>";
+			$actions[] = "<a href=\"$protocol://$server_name/story/$short_code/edit\" class=\"icon-16 notepad-16\">Edit</a>";
 		}
 	} else if ($pipe_id != "") {
 		$link = $a["comments"]["tag"];
