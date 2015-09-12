@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
-
 require_editor();
 
 $junk = true;
@@ -28,17 +26,13 @@ beg_main();
 
 writeln('<h1>Junk</h1>');
 
-$row = sql("select comment_vote.comment_id, count(*) as votes, root_id, subject, edit_time, body, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
+$row = sql("select comment_vote.comment_id, count(*) as votes, root_id, subject, edit_time, body, junk_status, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
 if (count($row) == 0) {
 	writeln('<p>No unmarked junk comments</p>');
 } else {
 	beg_form();
 	for ($i = 0; $i < count($row); $i++) {
-		$a = article_info($row[$i], false);
-		print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"]);
-		writeln('</div>');
-		writeln('</article>');
-		writeln();
+		print_comment($row[$i], true);
 	}
 
 	box_two('<a href="?default=spam">Default to Spam</a>', "Save");

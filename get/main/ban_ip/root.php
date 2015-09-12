@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
-
 $ip = urldecode($s2);
 if (!string_uses($ip, "[0-9].:abcdef")) {
 	fatal("Invalid ip address");

@@ -18,7 +18,6 @@
 //
 
 include("search.php");
-include("render.php");
 include("story.php");
 include("pipe.php");
 include("poll.php");

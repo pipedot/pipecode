@@ -18,7 +18,6 @@
 //
 
 include("clean.php");
-include("render.php");
 include("captcha.php");
 include("post.php");
 

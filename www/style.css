@@ -190,7 +190,6 @@ textarea {
 }
 .dl-32 dt {
 	color: #000000;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -221,7 +220,6 @@ textarea {
 	padding-left: 40px;
 	padding-top: 8px;
 	height: 40px;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 }
 .icon-64 {
@@ -231,7 +229,6 @@ textarea {
 	padding-left: 72px;
 	line-height: 64px;
 	height: 64px;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 }
 .nowrap {
@@ -1164,7 +1161,6 @@ del {
 	border: 1px solid #888888;
 	border-top-left-radius: 10px;
 	color: #000000;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	padding: 0px;
@@ -1180,7 +1176,6 @@ del {
 	border-top-left-radius: 10px;
 	border-bottom-left-radius: 10px;
 	color: #000000;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	padding: 0px;
@@ -1192,7 +1187,6 @@ del {
 }
 .pipe-subtitle {
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	font-weight: normal;
 	padding: 0px;
@@ -1438,7 +1432,128 @@ del {
 	border: 1px solid #888888;
 	background-color: #d3d3d3;
 }
+.side-link-one {
+}
+.side-link-one a {
+	xbackground-position: 5% 50%;
+	xbackground-repeat: no-repeat;
+	border: 1px solid #ffffff;
+	border-radius: 4px;
+	display: block;
+	xfont-size: 9pt;
+	xfont-size: 1.2rem;
+	xfont-weight: bolder;
+	height: 48px;
+	xline-height: 32px;
+	padding-top: 4px;
+	xpadding-left: 48px;
+	xvertical-align: middle;
+	width: 282px;
+	xwidth: auto;
+}
+.side-link-one a:hover {
+	border: 1px solid #888888;
+	background-color: #d3d3d3;
+}
+.side-link-one dl {
+	background-position: 2px 50%;
+}
+.side-link-one a:hover dd {
+	color: #ff0000;
+}
+.side-link-one a:hover dt {
+	color: #ff0000;
+}
+.side-link-one dt {
+	color: #1e3c82;
+	font-size: 1.2rem;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+.side-link-one dt:hover {
+	color: #ff0000;
+}
+.side-link-one dd {
+	color: #666666;
+	font-size: 1.1rem;
+}
+.side-link-two {
+	width: 100%;
+}
+.side-link-two a {
+	background-position: 5px 50%;
+	background-repeat: no-repeat;
+	background-size: 32px 32px;
+	border: 1px solid #ffffff;
+	border-radius: 4px;
+	display: block;
+	height: 40px;
+	xfont-size: 1.6rem;
+	font-size: 1.2rem;
+	font-weight: bolder;
+	height: 48px;
+	line-height: 32px;
+	padding-left: 48px;
+	padding-top: 8px;
+	vertical-align: middle;
+	width: 139px;
+}
+.side-link-two a:hover {
+	border: 1px solid #888888;
+	background-color: #d3d3d3;
+}
+.notification-title {
+	background-color: #d3d3d3;
+	border: 1px solid #888888;
+	border-top-left-radius: 10px;
+	border-bottom-left-radius: 10px;
+	color: #666666;
+	display: table;
+	font-size: 1.4rem;
+	font-weight: bolder;
+	xpadding: 0px;
+	xpadding-left: 4px;
+	margin-bottom: 8px;
+	width: 100%;
+}
+.notification-title div {
+	display: table-cell;
+}
+.notification-title a {
+	color: #666666;
+}
+.notification-title2 {
+	background-position: 4px 50%;
+	background-repeat: no-repeat;
+	xpadding-left: 20px;
+	border-top-left-radius: 10px;
+	color: #ffffff;
+	xfont-size: 1.2rem;
+	font-size: 1.4rem;
+	font-weight: bolder;
+	margin-bottom: 0;
+	margin-top: 2px;
+	padding: 6px 6px 6px 10px;
+	xpadding: 6px 6px 6px 24px;
+}
+.notification-body {
+	xpadding-left: 16px;
+	xpadding-right: 2px;
+	xmargin-bottom: 2px;
 
+	border: 1px solid #d3d3d3;
+	border-top: 0px;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
+	display: table;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin-bottom: 10px;
+	width: 100%;
+}
 
 /**
  * Story
@@ -1603,6 +1718,11 @@ del {
 .dialog-body textarea {
 	border: 1px #d3d3d3 solid;
 	padding: 2px;
+}
+.dialog-middle {
+	border: 1px solid #888888;
+	border-top: 0px;
+	padding: 8px;
 }
 .footer {
 	border-top: 1px #d3d3d3 solid;
@@ -1839,6 +1959,12 @@ del {
 	.tri-left, .tri-center, .tri-right {
 		display: block;
 		padding: 0px;
+	}
+	.notification-box a {
+		width: auto;
+	}
+	.box-link-short a {
+		width: auto;
 	}
 }
 @media all and (min-width: 766px) {
@@ -2420,6 +2546,18 @@ del {
 .binder-64 {
 	background-image: url(/images/binder-64.png);
 }
+.broom-16 {
+	background-image: url(/images/broom-16.png);
+}
+.broom-32 {
+	background-image: url(/images/broom-32.png);
+}
+.broom-64 {
+	background-image: url(/images/broom-64.png);
+}
+.bulb-16 {
+	background-image: url(/images/bulb-16.png);
+}
 .bulb-32 {
 	background-image: url(/images/bulb-32.png);
 }
@@ -2524,6 +2662,9 @@ del {
 }
 .face-sad-32 {
 	background-image: url(/images/face-sad-32.png);
+}
+.face-smile-16 {
+	background-image: url(/images/face-smile-16.png);
 }
 .face-smile-32 {
 	background-image: url(/images/face-smile-32.png);
@@ -2735,6 +2876,9 @@ del {
 .plus-32 {
 	background-image: url(/images/plus-32.png);
 }
+.question-32 {
+	background-image: url(/images/question-32.png);
+}
 .reader-16 {
 	background-image: url(/images/reader-16.png);
 }
@@ -2770,6 +2914,9 @@ del {
 }
 .soccer-64 {
 	background-image: url(/images/soccer-64.png);
+}
+.spreadsheet-32 {
+	background-image: url(/images/spreadsheet-32.png);
 }
 .stop-32 {
 	background-image: url(/images/stop-32.png);
@@ -2874,8 +3021,20 @@ del {
 	.binder-64 {
 		background-image: url(/images/binder-128.png);
 	}
+	.bulb-16 {
+		background-image: url(/images/bulb-32.png);
+	}
 	.bulb-32 {
 		background-image: url(/images/bulb-64.png);
+	}
+	.broom-16 {
+		background-image: url(/images/broom-32.png);
+	}
+	.broom-32 {
+		background-image: url(/images/broom-64.png);
+	}
+	.broom-64 {
+		background-image: url(/images/broom-128.png);
 	}
 	.cake-16 {
 		background-image: url(/images/cake-32.png);
@@ -2978,6 +3137,9 @@ del {
 	}
 	.face-sad-32 {
 		background-image: url(/images/face-sad-64.png);
+	}
+	.face-smile-16 {
+		background-image: url(/images/face-smile-32.png);
 	}
 	.face-smile-32 {
 		background-image: url(/images/face-smile-64.png);
@@ -3189,6 +3351,9 @@ del {
 	.plus-32 {
 		background-image: url(/images/plus-64.png);
 	}
+	.question-32 {
+		background-image: url(/images/question-64.png);
+	}
 	.reader-16 {
 		background-image: url(/images/reader-32.png);
 	}
@@ -3224,6 +3389,9 @@ del {
 	}
 	.soccer-64 {
 		background-image: url(/images/soccer-128.png);
+	}
+	.spreadsheet-64 {
+		background-image: url(/images/spreadsheet-128.png);
 	}
 	.stop-32 {
 		background-image: url(/images/stop-64.png);

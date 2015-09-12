@@ -18,7 +18,6 @@
 //
 
 include("clean.php");
-include("render.php");
 include("mail.php");
 
 if ($auth_zid === "") {

@@ -17,7 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
 include("story.php");
 include("clean.php");
 

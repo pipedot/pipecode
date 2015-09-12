@@ -17,6 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_feature("twitter");
 require_editor();
 
 $story = item_request(TYPE_STORY);

@@ -197,6 +197,7 @@ function print_article($a)
 	global $auth_zid;
 	global $protocol;
 	global $doc_root;
+	global $twitter_enabled;
 
 	if (array_key_exists("time", $a)) {
 		$time = $a["time"];
@@ -415,7 +416,7 @@ function print_article($a)
 			}
 		}
 		if ($auth_user["editor"]) {
-			if ($tweet_id == 0) {
+			if ($twitter_enabled && $tweet_id == 0) {
 				if (is_file("$doc_root/www/images/tweet-16.png")) {
 					$actions[] = "<a href=\"$protocol://$server_name/story/$short_code/tweet\" class=\"icon-16 tweet-16\">Tweet</a>";
 				} else {

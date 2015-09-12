@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
-
 header_text();
 
 $card = item_request(TYPE_CARD);

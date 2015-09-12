@@ -33,7 +33,8 @@ if ($zid === $auth_zid) {
 	print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
 	print_row(array("caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/"));
 }
-print_row(array("caption" => "Submissions", "description" => "View story submissions", "icon" => "news", "link" => "/submissions"));
+print_row(array("caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"));
+print_row(array("caption" => "Summary", "description" => "View user overview", "icon" => "spreadsheet", "link" => "/summary"));
 end_tab();
 
 writeln('</div>');
@@ -44,12 +45,11 @@ print_row(array("caption" => "Comments", "description" => "View past comments", 
 print_row(array("caption" => "Journal", "description" => "View journal entries", "icon" => "notepad", "link" => "/journal/"));
 if ($zid === $auth_zid) {
 	print_row(array("caption" => "Login", "description" => "Monitor your active sessions", "icon" => "lock", "link" => "/login/"));
-	print_row(array("caption" => "Profile", "description" => "Configure your account settings", "icon" => "tools", "link" => "/profile/settings"));
+	print_row(array("caption" => "Notifications", "description" => "View your notification messages", "icon" => "bulb", "link" => "/notification/"));
+	print_row(array("caption" => "Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/settings"));
 	//print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
-} else {
-	print_row(array("caption" => "Profile", "description" => "View public profile", "icon" => "users", "link" => "/profile/"));
 }
-print_row(array("caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"));
+print_row(array("caption" => "Submissions", "description" => "View story submissions", "icon" => "news", "link" => "/submissions"));
 end_tab();
 
 writeln('</div>');

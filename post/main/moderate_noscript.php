@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
-
 if ($auth_zid === "") {
 	die("error: sign in to moderate");
 }

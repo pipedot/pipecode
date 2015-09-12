@@ -272,24 +272,31 @@ function send_notifications($comment)
 		$parent_code = crypt_crockford_encode($comment["comment_id"]);
 		$zid = $comment["zid"];
 		if ($zid != "" && $zid != $auth_zid && !in_array($zid, $sent_list)) {
-			$a = article_info($comment);
-			$subject = 'Reply to "' . $comment["subject"] . '" by ' . $new_zid;
-			$body = "Your comment has a new reply.\n";
-			$body .= "\n";
-			$body .= "In the " . $a["type_id"] . ":\n";
-			$body .= htmlspecialchars_decode($a["title"]) . "\n";
-			$body .= $a["link"] . "\n";
-			$body .= "\n";
-			$body .= "Your original comment:\n";
-			$body .= $comment["subject"] . "\n";
-			$body .= "https://$server_name/comment/$parent_code\n";
-			$body .= "\n";
-			$body .= "The new reply:\n";
-			$body .= "$new_subject\n";
-			$body .= "https://$server_name/comment/$new_comment_code\n";
-			$body .= "\n";
+//			$a = article_info($comment);
+//			$subject = 'Reply to "' . $comment["subject"] . '" by ' . $new_zid;
+//			$body = "Your comment has a new reply.\n";
+//			$body .= "\n";
+//			$body .= "In the " . $a["type_id"] . ":\n";
+//			$body .= htmlspecialchars_decode($a["title"]) . "\n";
+//			$body .= $a["link"] . "\n";
+//			$body .= "\n";
+//			$body .= "Your original comment:\n";
+//			$body .= $comment["subject"] . "\n";
+//			$body .= "https://$server_name/comment/$parent_code\n";
+//			$body .= "\n";
+//			$body .= "The new reply:\n";
+//			$body .= "$new_subject\n";
+//			$body .= "https://$server_name/comment/$new_comment_code\n";
+//			$body .= "\n";
+//			send_web_mail($zid, $subject, $body, "", false);
 
-			send_web_mail($zid, $subject, $body, "", false);
+			$notification = db_new_rec("notification");
+			$notification["item_id"] = $new_comment_id;
+			$notification["parent_id"] = $parent_id;
+			$notification["type_id"] = TYPE_COMMENT;
+			$notification["zid"] = $zid;
+			db_set_rec("notification", $notification);
+
 			$sent_list[] = $zid;
 		}
 

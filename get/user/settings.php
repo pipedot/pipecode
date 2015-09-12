@@ -21,7 +21,7 @@ require_mine();
 
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 
-print_header("Profile Settings", [], [], [], ["Profile", "Settings"], ["/profile/", "/profile/settings"]);
+print_header("Settings", [], [], [], ["Settings"], ["/settings"]);
 beg_main();
 beg_form();
 //writeln('<h1>Profile Settings</h1>');
@@ -88,4 +88,5 @@ box_right("Save");
 end_form();
 end_main();
 print_footer();
+
 

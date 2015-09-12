@@ -17,9 +17,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-header_text();
+print_header("Tools");
+beg_main();
+beg_form();
 
-$poll = item_request(TYPE_POLL);
-$can_moderate = true;
-render_page(TYPE_POLL, $poll["poll_id"], true);
+beg_tab("Short Code Encode");
+print_row(array("caption" => "Integer", "text_key" => "short_encode"));
+end_tab();
+box_right("Encode");
 
+beg_tab("Short Code Decode");
+print_row(array("caption" => "Short Code", "text_key" => "short_decode"));
+end_tab();
+box_right("Decode");
+
+end_form();
+end_main();
+print_footer();

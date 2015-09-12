@@ -18,8 +18,10 @@
 //
 
 include("../include/common.php");
-include("link.php");
 include("geoip.php");
+include("link.php");
+include("notification.php");
+include("render.php");
 
 $a = explode("/", $request_script);
 if (count($a) >= 2) {

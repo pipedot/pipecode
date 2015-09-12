@@ -59,6 +59,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 	global $doc_root;
 	global $https_enabled;
 	global $meta;
+	global $notification_count;
 	global $protocol;
 	global $request_script;
 	global $server_conf;
@@ -134,6 +135,12 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 		writeln('	</div>');
 	}
 
+	if ($auth_zid === "") {
+		$notification_count = 0;
+	} else {
+		$notification_count = db_get_count("notification", ["zid" => $auth_zid]);
+	}
+
 	if ($user_page === "") {
 		if ($auth_zid === "") {
 			if ($server_conf["submit_enabled"]) {
@@ -147,9 +154,12 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 			if ($server_conf["submit_enabled"]) {
 				$link_name[] = "Submit";
 			}
-			$link_name[] = "Home";
+			$link_name[] = "Menu";
 			if (($auth_user["admin"] || $auth_user["editor"]) && $request_script != "/menu/") {
 				$link_name[] = "Tools";
+			}
+			if ($notification_count > 0) {
+				$link_name[] = "Notifications";
 			}
 			$link_name[] = "Logout";
 		}
@@ -159,9 +169,12 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 			$link_name[] = "Login";
 		} else {
 			//if ($request_script != "/menu/") {
-			//	$link_name[] = "Home";
+			//	$link_name[] = "Menu";
 			//}
 			$link_name[] = "Server";
+			if ($notification_count > 0) {
+				$link_name[] = "Notifications";
+			}
 			$link_name[] = "Logout";
 		}
 	}
@@ -175,16 +188,20 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 		if ($name == "Submit") {
 			$icon = "notepad";
 			$link = "/submit";
-		} else if ($name == "Home") {
-			$icon = "home";
+		} else if ($name == "Menu") {
+			$icon = "user";
 			$link = user_link($auth_zid);
+		} else if ($name == "Notifications") {
+			$name = "Notifications ($notification_count)";
+			$icon = "bulb";
+			$link = user_link($auth_zid) . "notification/";
 		} else if ($name == "Server") {
 			$name = $server_title;
 			$icon = "logo";
 			$link = "$protocol://$server_name/";
 		} else if ($name == "Tools") {
 			$icon = "tools";
-			$link = "/menu/";
+			$link = "/tools/";
 		} else if ($name == "Register") {
 			$icon = "register";
 			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/register";
@@ -321,30 +338,89 @@ function print_user_box()
 
 	writeln('<div class="dialog-title">' . $auth_zid . '</div>');
 	writeln('<div class="dialog-body">');
-	writeln('<table class="user-box">');
+	writeln('<table class="side-link-two">');
 	writeln('	<tr>');
 	//writeln('		<td><a href="' . $link . 'comments"><div class="chat-32">Comments</div></a></td>');
-	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'feed/">Feed</a></td>');
-	writeln('		<td><a class="icon-32 notepad-32" href="' . $link . 'journal/">Journal</a></td>');
+	writeln('		<td><a class="news-32" href="' . $link . 'feed/">Feed</a></td>');
+	writeln('		<td><a class="notepad-32" href="' . $link . 'journal/">Journal</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'karma/"><div class="user-box-icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
-//	writeln('		<td><a class="icon-32 news-32" href="' . $link . '"><div class="user-box-icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
+//	writeln('		<td><a class="news-32" href="' . $link . 'karma/"><div class="user-box-icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
+//	writeln('		<td><a class="news-32" href="' . $link . '"><div class="user-box-icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
 //	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon-32 news-32" href="' . $link . 'comments"><div class="user-box-icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
-//	writeln('		<td><a class="icon-32 news-32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user-box-icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
+//	writeln('		<td><a class="news-32" href="' . $link . 'comments"><div class="user-box-icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
+//	writeln('		<td><a class="news-32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user-box-icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
 //	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a class="icon-32 mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
-	writeln('		<td><a class="icon-32 tools-32" href="' . $link . 'profile/settings">Settings</a></td>');
+	writeln('		<td><a class="mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
+	writeln('		<td><a class="tools-32" href="' . $link . 'profile/settings">Settings</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
-//	writeln('		<td><a class="icon-32 reader-32" href="' . $link . 'reader/">Reader</a></td>');
-//	writeln('		<td><a class="icon-32 internet-32" href="' . $link . 'stream/">Stream</a></td>');
+//	writeln('		<td><a class="reader-32" href="' . $link . 'reader/">Reader</a></td>');
+//	writeln('		<td><a class="internet-32" href="' . $link . 'stream/">Stream</a></td>');
 //	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
+}
+
+
+function score_icon($score)
+{
+	$a = explode(", ", $score);
+	$number = $a[0];
+	if (count($a) == 1) {
+		$reason = "";
+	} else {
+		$reason = $a[1];
+	}
+
+	if ($number >= 5) {
+		return "face-grin";
+	}
+	switch ($reason) {
+		case "Offtopic":
+			$icon = "face-plain";
+			break;
+		case "Flamebait":
+			$icon = "face-crying";
+			break;
+		case "Troll":
+			$icon = "face-crying";
+			break;
+		case "Redundant":
+			$icon = "face-sad";
+			break;
+		case "Insightful":
+			$icon = "face-smile";
+			break;
+		case "Interesting":
+			$icon = "face-smile";
+			break;
+		case "Informative":
+			$icon = "face-smile";
+			break;
+		case "Funny":
+			$icon = "face-grin";
+			break;
+		case "Spam":
+			$icon = "junk";
+			break;
+		default:
+			if ($number >= 5) {
+				$icon = "face-grin";
+			} else if ($number >= 2) {
+				$icon = "face-smile";
+			} else if ($number >= 1) {
+				$icon = "face-plain";
+			} else if ($number >= 0) {
+				$icon = "face-sad";
+			} else {
+				$icon = "face-crying";
+			}
+	}
+
+	return $icon;
 }
 
 

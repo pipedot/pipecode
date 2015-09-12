@@ -17,35 +17,29 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-require_editor();
+require_mine();
 
-$junk = true;
-
-print_header("Junk");
+print_header("Notifications", [], [], [], ["Notifications"], ["/notification/"]);
 beg_main();
+beg_form();
 
-writeln('<h1>Anonymous Comments</h1>');
+$items_per_page = 10;
+list($item_start, $page_footer) = page_footer("notification", $items_per_page, ["zid" => $zid]);
 
-$row = sql("select comment_id, body, edit_time, junk_status, root_id, subject, zid from comment where zid = '' and junk_status = 0 order by publish_time desc limit 0, 100");
-if (count($row) == 0) {
-	writeln('<p>No unmarked anonymous comments</p>');
-} else {
-	beg_form();
-	for ($i = 0; $i < count($row); $i++) {
-		print_comment($row[$i], true);
-	}
-
-	box_two("<a href=\"?default=spam\">Default to Spam</a>", "Save");
-	end_form();
+$row = sql("select notification_id, item_id, parent_id, type_id from notification where zid = ? order by time desc limit $item_start, $items_per_page", $auth_zid);
+for ($i = 0; $i < count($row); $i++) {
+	notification_large($row[$i]["notification_id"], $row[$i]["item_id"], $row[$i]["parent_id"], $row[$i]["type_id"]);
 }
 
-//<div id="select_all">Select All</div>
-//<script>
-//$('#select_all').click(function () {
-//	alert("hello");
-//});
-//</script>
+if (count($row) == 0) {
+	writeln("No notifications yet!");
+} else {
+	//box_right("Clear All");
+	box_right('<a class="icon-16 broom-16" href="clear">Clear All</a>');
+}
 
+writeln($page_footer);
+
+end_form();
 end_main();
 print_footer();
-

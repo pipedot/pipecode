@@ -17,7 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
 include("diff.php");
 
 $comment = item_request(TYPE_COMMENT);

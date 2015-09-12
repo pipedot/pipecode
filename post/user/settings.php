@@ -67,4 +67,5 @@ $user_conf["show_email_enabled"] = $show_email_enabled;
 
 db_set_conf("user_conf", $user_conf, $auth_zid);
 
-header("Location: /profile/");
+header("Location: /");
+

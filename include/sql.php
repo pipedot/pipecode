@@ -498,6 +498,15 @@ $db_table["mail"] = array(
 	array("name" => "zid")
 );
 
+$db_table["notification"] = array(
+	array("name" => "notification_id", "auto" => true, "key" => true),
+	array("name" => "item_id", "default" => 0),
+	array("name" => "parent_id", "default" => 0),
+	array("name" => "time", "default" => $now),
+	array("name" => "type_id", "default" => 0),
+	array("name" => "zid")
+);
+
 $db_table["page"] = array(
 	array("name" => "slug", "key" => true),
 	array("name" => "title"),

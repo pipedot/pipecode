@@ -17,8 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
-
 print_header("Comments");
 beg_main();
 
@@ -33,11 +31,7 @@ if ($auth_user["show_junk_enabled"]) {
 	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit $item_start, $items_per_page");
 }
 for ($i = 0; $i < count($row); $i++) {
-	$a = article_info($row[$i], false);
-	print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["edit_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"], $row[$i]["junk_status"]);
-	writeln('</div>');
-	writeln('</article>');
-	writeln();
+	print_comment($row[$i], true);
 }
 
 writeln($page_footer);

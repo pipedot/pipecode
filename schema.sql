@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.43, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.25, for debian-linux-gnu (x86_64)
 --
--- Host: yuzu.zenbi.net    Database: pipedot
+-- Host: 192.168.1.14    Database: pipedot
 -- ------------------------------------------------------
--- Server version	5.5.43-0ubuntu0.14.04.1
+-- Server version	5.6.25-0ubuntu0.15.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -200,8 +200,9 @@ DROP TABLE IF EXISTS `cache`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cache` (
   `cache_id` int(11) NOT NULL AUTO_INCREMENT,
+  `access_time` int(11) NOT NULL,
+  `create_time` int(11) NOT NULL,
   `data_hash` varchar(64) NOT NULL,
-  `time` int(11) NOT NULL,
   `url` varchar(250) NOT NULL,
   `url_hash` varchar(64) NOT NULL,
   PRIMARY KEY (`cache_id`),
@@ -429,6 +430,24 @@ CREATE TABLE `drive_data` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `drive_dir`
+--
+
+DROP TABLE IF EXISTS `drive_dir`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drive_dir` (
+  `dir_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`dir_id`),
+  UNIQUE KEY `path_id_UNIQUE` (`dir_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `drive_file`
 --
 
@@ -462,24 +481,6 @@ CREATE TABLE `drive_link` (
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`hash`,`item_id`,`type_id`),
   UNIQUE KEY `drive_link_unique` (`hash`,`item_id`,`type_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `drive_path`
---
-
-DROP TABLE IF EXISTS `drive_path`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `drive_path` (
-  `path_id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `parent_id` int(11) NOT NULL,
-  `time` int(11) NOT NULL,
-  `zid` varchar(50) NOT NULL,
-  PRIMARY KEY (`path_id`),
-  UNIQUE KEY `path_id_UNIQUE` (`path_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -767,6 +768,26 @@ CREATE TABLE `mail` (
   `subject` varchar(250) NOT NULL,
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`mail_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `notification`
+--
+
+DROP TABLE IF EXISTS `notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `notification` (
+  `notification_id` int(11) NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) NOT NULL,
+  `parent_id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`notification_id`),
+  UNIQUE KEY `notification_id_UNIQUE` (`notification_id`),
+  KEY `notification_index` (`zid`,`time`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1353,4 +1374,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-06-20 17:43:22
+-- Dump completed on 2015-09-12  1:41:45

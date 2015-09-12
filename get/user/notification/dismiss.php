@@ -17,9 +17,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-header_text();
+require_mine();
 
-$poll = item_request(TYPE_POLL);
-$can_moderate = true;
-render_page(TYPE_POLL, $poll["poll_id"], true);
+if (!string_uses($s2, "[0-9]")) {
+	fatal("Invalid notification");
+}
+$notification_id = $s2;
+$notification = db_get_rec("notification", $notification_id);
+
+sql("delete from notification where notification_id = ?", $notification_id);
+
+header("Location: $protocol://$server_name/");
+
 

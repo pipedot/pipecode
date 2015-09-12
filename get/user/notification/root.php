@@ -17,9 +17,3 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-header_text();
-
-$poll = item_request(TYPE_POLL);
-$can_moderate = true;
-render_page(TYPE_POLL, $poll["poll_id"], true);
-

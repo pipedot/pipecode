@@ -444,6 +444,28 @@ function user_link($zid, $a = [])
 }
 
 
+function display_name($zid)
+{
+	$user_conf = db_get_conf("user_conf", $zid);
+	$display_name = $user_conf["display_name"];
+	if ($display_name == "") {
+		$display_name = $zid;
+	}
+
+	return $display_name;
+}
+
+
+function possessive_name($display_name)
+{
+	if (string_has($display_name, "@")) {
+		return ucwords(substr($display_name, 0, strpos($display_name, "@"))) . "'s";
+	} else {
+		return "$display_name's";
+	}
+}
+
+
 function zid_to_domain($zid)
 {
 	return str_replace("@", ".", $zid);

@@ -17,14 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
 include("story.php");
 
 print_header("Submissions", [], [], [], ["Submissions"], ["/submissions"]);
 beg_main();
 
 $items_per_page = 10;
-list($item_start, $page_footer) = page_footer("story", $items_per_page, array("author_zid" => $zid));
+list($item_start, $page_footer) = page_footer("story", $items_per_page, ["author_zid" => $zid]);
 
 $row = sql("select story_id from story where author_zid = ? order by publish_time desc limit $item_start, $items_per_page", $zid);
 if (count($row) == 0) {

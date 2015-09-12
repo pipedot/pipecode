@@ -19,6 +19,7 @@
 
 require_once("$doc_root/lib/twitteroauth/twitteroauth.php");
 
+require_feature("twitter");
 require_editor();
 
 $story = item_request(TYPE_STORY);

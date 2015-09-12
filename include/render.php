@@ -17,6 +17,36 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+function print_comment($comment, $article = false, $article_type_id = 0, $last_seen = 0)
+{
+	if (($article_type_id == 0) && ((is_bool($article) && $article) || is_array($artcile))) {
+		$short = db_get_rec("short", $comment["root_id"]);
+		$article_type_id = $short["type_id"];
+	}
+	if (is_bool($article) && $article) {
+		$article_type = item_type($article_type_id);
+		$article = db_get_rec($article_type, $comment["root_id"]);
+	}
+	if (is_array($article)) {
+		$article_link = item_link($article_type_id, $comment["root_id"], $article);
+		if ($article_type_id == TYPE_POLL) {
+			$article_title = $article["question"];
+		} else if ($article_type_id == TYPE_CARD) {
+			$article_title = "#" . crypt_crockford_encode($article["card_id"]);
+		} else {
+			$article_title = $article["title"];
+		}
+	} else {
+		$article_link = "";
+		$article_title = "";
+	}
+
+	print render_comment($comment["subject"], $comment["zid"], $comment["edit_time"], $comment["comment_id"], $comment["body"], $last_seen, $article_link, $article_title, $comment["junk_status"]);
+	writeln('</div>');
+	writeln('</article>');
+}
+
+
 function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 0, $article_link = "", $article_title = "", $junk_status = 0)
 {
 	global $server_name;

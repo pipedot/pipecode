@@ -58,4 +58,5 @@ $server_conf["twitter_oauth_token"] = $twitter_oauth_token;
 $server_conf["twitter_oauth_secret"] = $twitter_oauth_secret;
 db_set_conf("server_conf", $server_conf);
 
-header("Location: /menu/");
+header("Location: /tools/");
+

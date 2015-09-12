@@ -17,9 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
-
-print_header("Profile", [], [], [], ["Profile"], ["/profile/"]);
+print_header("Summary", [], [], [], ["Summary"], ["/summary"]);
 beg_main("dual-table");
 writeln('<div class="dual-left">');
 
@@ -93,9 +91,9 @@ writeln('</table>');
 box_right('<a class="icon-16 picture-16" href="/avatar/">Avatars</a>');
 
 if ($auth_user["show_junk_enabled"]) {
-	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body from comment where zid = ? order by edit_time desc limit 10", $zid);
+	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body from comment where zid = ? order by edit_time desc limit 20", $zid);
 } else {
-	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit 10", $zid);
+	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body from comment where junk_status <= 0 and zid = ? order by edit_time desc limit 20", $zid);
 }
 if (count($row) > 0) {
 	beg_tab();
@@ -126,3 +124,4 @@ if (count($row) > 0) {
 writeln('</div>');
 end_main();
 print_footer();
+

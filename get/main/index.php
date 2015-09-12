@@ -39,6 +39,7 @@ writeln('<aside>');
 
 if ($auth_zid != "") {
 	print_user_box();
+	print_notification_box();
 } else {
 	writeln('<div style="width: 300px">');
 }

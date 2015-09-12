@@ -17,14 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("render.php");
 include("story.php");
 include("image.php");
 
 if ($auth_zid === $zid) {
-	print_header("Journal", array("Write"), array("notepad"), array("/journal/write"), ["Journal"], ["/journal/"]);
+	print_header("Journal", ["Write"], ["notepad"], ["/journal/write"], ["Journal"], ["/journal/"]);
 } else {
-	print_header("Journal");
+	print_header("Journal", [], [], [], ["Journal"], ["/journal/"]);
 }
 print_user_nav("journal");
 beg_main("cell");
