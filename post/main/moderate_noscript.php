@@ -32,7 +32,8 @@ function moderate($comment_id, $zid, $reason)
 	if (!array_key_exists($reason, $reasons)) {
 		return;
 	}
-	if (!db_has_rec("comment", $comment_id)) {
+	$comment = db_find_rec("comment", $comment_id);
+	if (!$comment) {
 		return;
 	}
 	if (db_has_rec("comment_vote", array("comment_id" => $comment_id, "zid" => $zid))) {
@@ -47,6 +48,7 @@ function moderate($comment_id, $zid, $reason)
 			$comment_vote["value"] = $reasons[$reason];
 			$comment_vote["time"] = time();
 			db_set_rec("comment_vote", $comment_vote);
+			send_notification_moderation($comment_id, $comment["zid"]);
 			return;
 		}
 	}
@@ -60,6 +62,7 @@ function moderate($comment_id, $zid, $reason)
 	$comment_vote["value"] = $reasons[$reason];
 	$comment_vote["zid"] = $zid;
 	db_set_rec("comment_vote", $comment_vote);
+	send_notification_moderation($comment_id, $comment["zid"]);
 }
 
 

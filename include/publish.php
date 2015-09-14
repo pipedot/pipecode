@@ -17,11 +17,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_publish_box($pipe_id, $tid, $keywords, $title, $clean_body, $dirty_body, $zid)
+function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, $dirty_body, $zid)
 {
 	global $doc_root;
 
-	$topic = db_get_rec("topic", $tid);
+	$topic = db_get_rec("topic", $topic_id);
 	$topic = $topic["topic"];
 
 	print_header("Publish Submission");
@@ -62,7 +62,7 @@ function print_publish_box($pipe_id, $tid, $keywords, $title, $clean_body, $dirt
 	writeln('<h1>Publish</h1>');
 	beg_tab();
 	print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
-	print_row(array("caption" => "Topic", "option_key" => "tid", "option_value" => $tid, "option_list" => $topic_list, "option_keys" => $topic_keys));
+	print_row(array("caption" => "Topic", "option_key" => "topic_id", "option_value" => $topic_id, "option_list" => $topic_list, "option_keys" => $topic_keys));
 	print_row(array("caption" => "Keywords", "text_key" => "keywords", "text_value" => $keywords));
 	//print_row(array("caption" => "Icon", "option_key" => "icon", "option_value" => $icon, "option_list" => $icon_list));
 	print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));

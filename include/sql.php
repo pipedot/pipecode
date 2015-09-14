@@ -539,7 +539,7 @@ $db_table["pipe"] = array(
 	array("name" => "keywords"),
 	array("name" => "reason"),
 	array("name" => "slug"),
-	array("name" => "tid", "default" => 0),
+	array("name" => "topic_id", "default" => 0),
 	array("name" => "time", "default" => $now),
 	array("name" => "title")
 );
@@ -638,7 +638,7 @@ $db_table["story"] = array(
 	array("name" => "pipe_id"),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "slug"),
-	array("name" => "tid", "default" => 0),
+	array("name" => "topic_id", "default" => 0),
 	array("name" => "title"),
 	array("name" => "tweet_id", "default" => 0)
 );
@@ -651,7 +651,7 @@ $db_table["story_edit"] = array(
 	array("name" => "icon"),
 	array("name" => "image_id", "default" => 0),
 	array("name" => "slug"),
-	array("name" => "tid", "default" => 0),
+	array("name" => "topic_id", "default" => 0),
 	array("name" => "title")
 );
 
@@ -687,7 +687,7 @@ $db_table["tmp_image"] = array(
 );
 
 $db_table["topic"] = array(
-	array("name" => "tid", "auto" => true, "key" => true),
+	array("name" => "topic_id", "auto" => true, "key" => true),
 	array("name" => "icon"),
 	array("name" => "promoted", "default" => 0),
 	array("name" => "slug"),

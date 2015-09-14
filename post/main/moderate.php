@@ -44,6 +44,8 @@ if ($reason != "Normal") {
 
 list($score, $reason) = get_comment_score($comment["comment_id"]);
 
+send_notification_moderation($comment["comment_id"], $comment["zid"]);
+
 writeln('{');
 writeln('	"code": "' . $comment["short_code"] . '",');
 writeln('	"score": ' . $score . ',');

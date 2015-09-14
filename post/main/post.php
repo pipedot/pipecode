@@ -61,8 +61,7 @@ if (http_post("preview")) {
 	$zid = $auth_zid;
 
 	print_header("Post Comment");
-	print_main_nav("stories");
-	beg_main("cell");
+	beg_main();
 
 	writeln('<h1>Preview</h1>');
 	writeln('<p>Check your links before you post!</p>');

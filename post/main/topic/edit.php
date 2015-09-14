@@ -30,13 +30,13 @@ if ($s2 === "edit") {
 }
 
 if (http_post("delete")) {
-	$row = sql("select count(*) as stories from story where tid = ?", $topic["tid"]);
+	$row = sql("select count(*) as stories from story where topic_id = ?", $topic["topic_id"]);
 	$count = $row[0]["stories"];
 	if ($count > 0) {
 		fatal("Unable to delete topic - used in [$count] stories");
 	}
 
-	db_del_rec("topic", $topic["tid"]);
+	db_del_rec("topic", $topic["topic_id"]);
 } else {
 	$name = http_post_string("name", array("len" => 50, "valid" => "[a-z]"));
 	$slug = http_post_string("slug", array("len" => 50, "valid" => "[a-z]"));

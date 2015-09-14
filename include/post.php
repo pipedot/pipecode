@@ -45,7 +45,6 @@ function print_post_box($root_id, $subject, $dirty_body, $coward)
 	}
 
 	beg_form();
-	//writeln('<input type="hidden" name="type" value="' . $type . '">');
 	writeln('<input type="hidden" name="root_id" value="' . $root_id . '">');
 	writeln('<div class="reply">');
 	writeln('<div class="dialog-title">Post Comment</div>');

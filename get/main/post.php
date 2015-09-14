@@ -20,14 +20,14 @@
 include("clean.php");
 include("captcha.php");
 include("post.php");
+include("story.php");
 
 $item = item_request();
 
 print_header("Post Comment");
-print_main_nav("stories");
-beg_main("cell");
+beg_main();
 
-if ($item["short_type"] === "comment") {
+if ($item["short_type_id"] == TYPE_COMMENT) {
 	$subject = $item["subject"];
 	$root_id = $item["root_id"];
 
@@ -40,16 +40,25 @@ if ($item["short_type"] === "comment") {
 	if (!$re) {
 		$subject = "Re: " . $item["subject"];
 	}
+} else {
+	$subject = "";
+	$root_id = $item[$item["short_type"] . "_id"];
+}
 
+$short = db_get_rec("short", $root_id);
+$article_type_id = $short["type_id"];
+if ($article_type_id == TYPE_STORY) {
+	print_story($root_id);
+} else if ($article_type_id == TYPE_JOURNAL) {
+	print_journal($root_id);
+}
+
+if ($item["short_type_id"] == TYPE_COMMENT) {
 	writeln('<div class="box">');
 	print render_comment($item["subject"], $item["zid"], $item["edit_time"], $item["comment_id"], $item["body"], 0);
 	writeln('</div>');
 	writeln('</article>');
 	writeln('</div>');
-
-} else {
-	$subject = "";
-	$root_id = $item[$item["short_type"] . "_id"];
 }
 
 print_post_box($root_id, $subject, "", false);

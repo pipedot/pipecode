@@ -3390,8 +3390,8 @@ del {
 	.soccer-64 {
 		background-image: url(/images/soccer-128.png);
 	}
-	.spreadsheet-64 {
-		background-image: url(/images/spreadsheet-128.png);
+	.spreadsheet-32 {
+		background-image: url(/images/spreadsheet-64.png);
 	}
 	.stop-32 {
 		background-image: url(/images/stop-64.png);

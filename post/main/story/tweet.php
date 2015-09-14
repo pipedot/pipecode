@@ -23,7 +23,7 @@ require_feature("twitter");
 require_editor();
 
 $story = item_request(TYPE_STORY);
-$topic = db_get_rec("topic", $story["tid"]);
+$topic = db_get_rec("topic", $story["topic_id"]);
 $topic = $topic["topic"];
 if ($story["tweet_id"] > 0) {
 	fatal("Already tweeted");

@@ -30,9 +30,9 @@ print_main_nav($topic);
 beg_main("cell");
 
 $items_per_page = 10;
-list($item_start, $page_footer) = page_footer("story", $items_per_page, array("tid" => $topic["tid"]));
+list($item_start, $page_footer) = page_footer("story", $items_per_page, array("topic_id" => $topic["topic_id"]));
 
-$row = sql("select story_id from story where tid = ? order by publish_time desc limit $item_start, $items_per_page", $topic["tid"]);
+$row = sql("select story_id from story where topic_id = ? order by publish_time desc limit $item_start, $items_per_page", $topic["topic_id"]);
 for ($i = 0; $i < count($row); $i++) {
 	print_story($row[$i]["story_id"]);
 }

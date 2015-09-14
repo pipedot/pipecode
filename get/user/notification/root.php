@@ -17,3 +17,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+require_mine();
+
+if (!string_uses($s2, "[0-9]")) {
+	fatal("Invalid notification");
+}
+$notification_id = $s2;
+$notification = db_get_rec("notification", $notification_id);
+
+sql("delete from notification where notification_id = ?", $notification_id);
+
+if ($notification["type_id"] == TYPE_COMMENT_VOTE) {
+	$type_id = TYPE_COMMENT;
+} else {
+	$type_id = $notification["type_id"];
+}
+header("Location: " . item_link($type_id, $notification["item_id"]));
+

@@ -27,6 +27,4 @@ $notification = db_get_rec("notification", $notification_id);
 
 sql("delete from notification where notification_id = ?", $notification_id);
 
-header("Location: $protocol://$server_name/");
-
-
+header("Location: /notification/");

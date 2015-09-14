@@ -21,18 +21,13 @@ include("diff.php");
 
 $comment = item_request(TYPE_COMMENT);
 $comment_body = $comment["body"];
-//if ($auth_zid === "") {
-//	$can_moderate = false;
-//} else {
-	$can_moderate = true;
-//}
+$can_moderate = true;
 $a = article_info($comment);
 $type_id = $a["type_id"];
 $root_code = crypt_crockford_encode($comment["root_id"]);
 
 print_header($comment["subject"]);
-print_main_nav("stories");
-beg_main("cell");
+beg_main();
 
 writeln('<h1>' . ucwords(item_type($type_id)) . '</h1>');
 if ($type_id == TYPE_POLL) {

@@ -849,11 +849,10 @@ CREATE TABLE `pipe` (
   `keywords` varchar(100) NOT NULL,
   `reason` varchar(50) NOT NULL,
   `slug` varchar(100) NOT NULL,
-  `tid` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
+  `topic_id` int(11) NOT NULL,
   PRIMARY KEY (`pipe_id`),
-  UNIQUE KEY `short_id_UNIQUE` (`pipe_id`),
   FULLTEXT KEY `pipe_search` (`body`,`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1214,11 +1213,10 @@ CREATE TABLE `story` (
   `pipe_id` int(11) NOT NULL,
   `publish_time` int(11) NOT NULL,
   `slug` varchar(100) NOT NULL,
-  `tid` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
+  `topic_id` int(11) NOT NULL,
   `tweet_id` bigint(20) NOT NULL,
   PRIMARY KEY (`story_id`),
-  UNIQUE KEY `short_id_UNIQUE` (`story_id`),
   KEY `story_short_id` (`story_id`),
   KEY `story_publish_time` (`publish_time`),
   FULLTEXT KEY `story_search` (`title`,`body`)
@@ -1240,8 +1238,8 @@ CREATE TABLE `story_edit` (
   `icon` varchar(20) NOT NULL,
   `image_id` int(11) NOT NULL,
   `slug` varchar(100) NOT NULL,
-  `tid` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
+  `topic_id` int(11) NOT NULL,
   UNIQUE KEY `story_edit_index` (`edit_time`,`story_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1324,12 +1322,12 @@ DROP TABLE IF EXISTS `topic`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `topic` (
-  `tid` int(11) NOT NULL AUTO_INCREMENT,
+  `topic_id` int(11) NOT NULL AUTO_INCREMENT,
   `icon` varchar(20) NOT NULL,
   `promoted` tinyint(4) NOT NULL,
   `slug` varchar(50) NOT NULL,
   `topic` varchar(50) NOT NULL,
-  PRIMARY KEY (`tid`),
+  PRIMARY KEY (`topic_id`),
   UNIQUE KEY `slug_UNIQUE` (`slug`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -1374,4 +1372,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-09-12  1:41:45
+-- Dump completed on 2015-09-14  0:27:59

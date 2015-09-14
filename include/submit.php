@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_submit_box($title, $dirty_body, $body, $tid, $preview)
+function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 {
 	global $auth_zid;
 	global $auth_user;
@@ -29,7 +29,7 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	if ($preview) {
 		$a["type_id"] = TYPE_STORY;
 		$a["zid"] = $auth_zid;
-		$topic = db_get_rec("topic", $tid);
+		$topic = db_get_rec("topic", $topic_id);
 		$a["title"] = $title;
 		$a["topic"] = $topic["topic"];
 		$a["icon"] = $topic["icon"];
@@ -51,15 +51,15 @@ function print_submit_box($title, $dirty_body, $body, $tid, $preview)
 	writeln('	<tr>');
 	writeln('		<td style="width: 80px">Topic</td>');
 	writeln('		<td colspan="2">');
-	writeln('			<select name="tid">');
+	writeln('			<select name="topic_id">');
 	$topics = db_get_list("topic", "topic");
 	$k = array_keys($topics);
 	for ($i = 0; $i < count($topics); $i++) {
 		$topic = $topics[$k[$i]];
-		if ($topic["tid"] == $tid) {
-			writeln('				<option value="' . $topic["tid"] . '" selected="selected">' . $topic["topic"] . '</option>');
+		if ($topic["topic_id"] == $topic_id) {
+			writeln('				<option value="' . $topic["topic_id"] . '" selected="selected">' . $topic["topic"] . '</option>');
 		} else {
-			writeln('				<option value="' . $topic["tid"] . '">' . $topic["topic"] . '</option>');
+			writeln('				<option value="' . $topic["topic_id"] . '">' . $topic["topic"] . '</option>');
 		}
 	}
 	writeln('			</select>');

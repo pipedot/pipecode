@@ -25,7 +25,7 @@ if (!string_uses($s2, "[a-z]")) {
 $topic = $s2;
 $topic = db_get_rec("topic", array("slug" => $topic));
 
-$row = sql("select count(*) as stories from story where tid = ?", $topic["tid"]);
+$row = sql("select count(*) as stories from story where topic_id = ?", $topic["topic_id"]);
 $count = $row["stories"];
 
 die("count [$count]");

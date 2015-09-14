@@ -31,7 +31,7 @@ list($clean_body, $dirty_body) = clean_body(true, "story");
 //$icon = http_post_string("icon", array("len" => 50, "valid" => "[a-z][0-9]-_"));
 $keywords = http_post_string("keywords", array("required" => false, "len" => 100, "valid" => "[A-Z][a-z][0-9]+-_. "));
 $keywords = strtolower($keywords);
-$tid = http_post_int("tid");
+$topic_id = http_post_int("topic_id");
 $time = time();
 
 if (http_post("publish")) {
@@ -54,7 +54,7 @@ if (http_post("publish")) {
 	$story["pipe_id"] = $pipe["pipe_id"];
 	$story["publish_time"] = $time;
 	$story["slug"] = clean_url($title);
-	$story["tid"] = $tid;
+	$story["topic_id"] = $topic_id;
 	$story["title"] = $title;
 	$story["tweet_id"] = 0;
 	db_set_rec("story", $story);
@@ -63,4 +63,4 @@ if (http_post("publish")) {
 	die();
 }
 
-print_publish_box($pipe["pipe_id"], $tid, $keywords, $title, $clean_body, $dirty_body, $zid);
+print_publish_box($pipe["pipe_id"], $topic_id, $keywords, $title, $clean_body, $dirty_body, $zid);

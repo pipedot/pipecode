@@ -26,8 +26,8 @@ $story = item_request(TYPE_STORY);
 $zid = $story["author_zid"];
 $keywords = $story["keywords"];
 $title = $story["title"];
-$tid = $story["tid"];
+$topic_id = $story["topic_id"];
 $clean_body = $story["body"];
 $dirty_body = dirty_html($clean_body);
 
-print_story_box($story["story_id"], $tid, $keywords, $title, $clean_body, $dirty_body, $zid);
+print_story_box($story["story_id"], $topic_id, $keywords, $title, $clean_body, $dirty_body, $zid);

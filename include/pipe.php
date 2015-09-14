@@ -23,7 +23,7 @@ function print_pipe($pipe_id)
 
 	$pipe = db_get_rec("pipe", $pipe_id);
 	$date = date("Y-m-d H:i", $pipe["time"]);
-	$topic = db_get_rec("topic", $pipe["tid"]);
+	$topic = db_get_rec("topic", $pipe["topic_id"]);
 	$a["type_id"] = TYPE_STORY;
 	$a["pipe_id"] = $pipe["pipe_id"];
 	$a["body"] = $pipe["body"];
@@ -55,7 +55,7 @@ function print_pipe_small($pipe_id, $full)
 	$pipe_code = crypt_crockford_encode($pipe_id);
 	$date = date("Y-m-d H:i", $pipe["time"]);
 	$score = 0;
-	$topic = db_get_rec("topic", $pipe["tid"]);
+	$topic = db_get_rec("topic", $pipe["topic_id"]);
 	$zid = $pipe["author_zid"];
 	if ($zid == "") {
 		$by = "<b>Anonymous Coward</b>";

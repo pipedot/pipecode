@@ -26,7 +26,7 @@ require_feature("submit");
 
 $title = clean_subject();
 list($clean_body, $dirty_body) = clean_body();
-$tid = http_post_int("tid");
+$topic_id = http_post_int("topic_id");
 $answer = http_post_string("answer", array("required" => false));
 $time = time();
 
@@ -34,10 +34,10 @@ if ($auth_zid == "" && !captcha_verify($answer)) {
 	fatal("Captcha failed");
 }
 
-$topic = db_get_rec("topic", $tid);
+$topic = db_get_rec("topic", $topic_id);
 
 if (http_post("preview")) {
-	print_submit_box($title, $dirty_body, $clean_body, $tid, true);
+	print_submit_box($title, $dirty_body, $clean_body, $topic_id, true);
 	die();
 }
 
@@ -50,7 +50,7 @@ $pipe["edit_zid"] = "";
 $pipe["icon"] = $topic["icon"];
 $pipe["reason"] = "";
 $pipe["slug"] = clean_url($title);
-$pipe["tid"] = $tid;
+$pipe["topic_id"] = $topic_id;
 $pipe["title"] = $title;
 $pipe["time"] = $time;
 db_set_rec("pipe", $pipe);

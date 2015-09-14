@@ -684,7 +684,7 @@ function clean_body($required = true, $definition = "comment")
 	}
 
 	// XXX: ugly hack while submit/publish story is not wysiwyg
-	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && !array_key_exists("tid", $_POST)) {
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && !array_key_exists("topic_id", $_POST)) {
 		$clean_body = $dirty_body;
 	} else {
 		$clean_body = str_replace("\n", "<br>", $dirty_body);
@@ -692,7 +692,7 @@ function clean_body($required = true, $definition = "comment")
 	$clean_body = clean_html($clean_body, $definition);
 	$dirty_body = dirty_html($clean_body);
 	// XXX: ugly hack while submit/publish story is not wysiwyg
-	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && !array_key_exists("tid", $_POST)) {
+	if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"] && !array_key_exists("topic_id", $_POST)) {
 		$dirty_body = $clean_body;
 	}
 

@@ -28,13 +28,12 @@ list($item_start, $page_footer) = page_footer("notification", $items_per_page, [
 
 $row = sql("select notification_id, item_id, parent_id, type_id from notification where zid = ? order by time desc limit $item_start, $items_per_page", $auth_zid);
 for ($i = 0; $i < count($row); $i++) {
-	notification_large($row[$i]["notification_id"], $row[$i]["item_id"], $row[$i]["parent_id"], $row[$i]["type_id"]);
+	print_notification_row($row[$i]["notification_id"], $row[$i]["item_id"], $row[$i]["parent_id"], $row[$i]["type_id"], true);
 }
 
 if (count($row) == 0) {
 	writeln("No notifications yet!");
 } else {
-	//box_right("Clear All");
 	box_right('<a class="icon-16 broom-16" href="clear">Clear All</a>');
 }
 

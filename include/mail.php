@@ -264,6 +264,7 @@ function send_notifications($comment)
 		$new_zid = "Anonymous Coward";
 	}
 	$parent_id = $comment["parent_id"];
+	$article_id = $comment["root_id"];
 
 	$sent_list = array();
 
@@ -290,16 +291,20 @@ function send_notifications($comment)
 //			$body .= "\n";
 //			send_web_mail($zid, $subject, $body, "", false);
 
-			$notification = db_new_rec("notification");
-			$notification["item_id"] = $new_comment_id;
-			$notification["parent_id"] = $parent_id;
-			$notification["type_id"] = TYPE_COMMENT;
-			$notification["zid"] = $zid;
-			db_set_rec("notification", $notification);
-
+			send_notification_comment($new_comment_id, $comment["comment_id"], $zid);
 			$sent_list[] = $zid;
 		}
 
 		$parent_id = $comment["parent_id"];
+	}
+
+	$short = db_get_rec("short", $article_id);
+	$article_type_id = $short["type_id"];
+	if ($article_type_id == TYPE_JOURNAL) {
+		$journal = db_get_rec("journal", $article_id);
+		$zid = $journal["zid"];
+		if (!in_array($zid, $sent_list)) {
+			send_notification_comment($new_comment_id, $article_id, $zid);
+		}
 	}
 }

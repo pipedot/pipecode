@@ -17,12 +17,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_story_box($story_id, $tid, $keywords, $title, $clean_body, $dirty_body, $zid)
+function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $dirty_body, $zid)
 {
 	global $doc_root;
 
 	$story = db_get_rec("story", $story_id);
-	$topic = db_get_rec("topic", $tid);
+	$topic = db_get_rec("topic", $topic_id);
 	$topic = $topic["topic"];
 
 	print_header();
@@ -55,7 +55,7 @@ function print_story_box($story_id, $tid, $keywords, $title, $clean_body, $dirty
 	writeln('<h1>Edit</h1>');
 	beg_tab();
 	print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
-	print_row(array("caption" => "Topic", "option_key" => "tid", "option_value" => $tid, "option_list" => $topic_list, "option_keys" => $topic_keys));
+	print_row(array("caption" => "Topic", "option_key" => "topic_id", "option_value" => $topic_id, "option_list" => $topic_list, "option_keys" => $topic_keys));
 	print_row(array("caption" => "Keywords", "text_key" => "keywords", "text_value" => $story["keywords"]));
 	print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 	end_tab();
@@ -78,7 +78,7 @@ function print_story($story)
 	if (!is_array($story)) {
 		$story = db_get_rec("story", $story);
 	}
-	$topic = db_get_rec("topic", $story["tid"]);
+	$topic = db_get_rec("topic", $story["topic_id"]);
 	$pipe = db_get_rec("pipe", $story["pipe_id"]);
 
 	$a["type_id"] = TYPE_STORY;
