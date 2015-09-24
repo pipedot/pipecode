@@ -264,7 +264,7 @@ function send_notifications($comment)
 		$new_zid = "Anonymous Coward";
 	}
 	$parent_id = $comment["parent_id"];
-	$article_id = $comment["root_id"];
+	$article_id = $comment["article_id"];
 
 	$sent_list = array();
 

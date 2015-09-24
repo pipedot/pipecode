@@ -24,17 +24,17 @@ include("mail.php");
 
 $item = item_request();
 if ($item["short_type_id"] == TYPE_COMMENT) {
-	$root_id = $item["root_id"];
+	$article_id = $item["article_id"];
 	$parent_id = $item["comment_id"];
 	$type_id = $item["short_type_id"];
 } else {
-	$root_id = $item[$item["short_type"] . "_id"];
+	$article_id = $item[$item["short_type"] . "_id"];
 	$parent_id = 0;
 	$type_id = $item["short_type_id"];
 }
 
-$root_item = db_get_rec("short", $root_id);
-$root_type_id = $root_item["type_id"];
+$article_item = db_get_rec("short", $article_id);
+$article_type_id = $article_item["type_id"];
 
 $subject = clean_subject();
 list($clean_body, $dirty_body) = clean_body();
@@ -71,7 +71,7 @@ if (http_post("preview")) {
 	writeln('</article>');
 	writeln('</div>');
 
-	print_post_box($root_id, $subject, $dirty_body, $coward);
+	print_post_box($article_id, $subject, $dirty_body, $coward);
 
 	end_main();
 	print_footer();
@@ -91,12 +91,13 @@ $comment["edit_time"] = $time;
 $comment["parent_id"] = $parent_id;
 $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
-$comment["root_id"] = $root_id;
+$comment["article_id"] = $article_id;
 $comment["subject"] = $subject;
 $comment["zid"] = $zid;
 db_set_rec("comment", $comment);
 
 send_notifications($comment);
+revert_view_time($article_id);
+recount_comments($article_id);
 
-revert_view_time($root_type_id, $root_id);
-header("Location: " . item_link($root_type_id, $root_id));
+header("Location: " . item_link($article_type_id, $article_id));

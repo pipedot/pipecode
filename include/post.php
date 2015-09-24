@@ -17,7 +17,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_post_box($root_id, $subject, $dirty_body, $coward)
+function print_post_box($article_id, $subject, $dirty_body, $coward)
 {
 	global $auth_zid;
 	global $auth_user;
@@ -45,7 +45,7 @@ function print_post_box($root_id, $subject, $dirty_body, $coward)
 	}
 
 	beg_form();
-	writeln('<input type="hidden" name="root_id" value="' . $root_id . '">');
+	writeln('<input type="hidden" name="article_id" value="' . $article_id . '">');
 	writeln('<div class="reply">');
 	writeln('<div class="dialog-title">Post Comment</div>');
 	writeln('<div class="dialog-body">');

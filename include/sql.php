@@ -213,6 +213,15 @@ $db_table["article"] = array(
 	array("name" => "thumb_id", "default" => 0)
 );
 
+$db_table["article_view"] = array(
+	array("name" => "article_id", "default" => 0, "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "comments_clean", "default" => -1),
+	array("name" => "comments_total", "default" => -1),
+	array("name" => "time", "default" => 0),
+	array("name" => "last_time", "default" => 0)
+);
+
 $db_table["avatar"] = array(
 	array("name" => "avatar_id", "key" => true, "default" => 0),
 	array("name" => "hash_64"),
@@ -235,6 +244,8 @@ $db_table["bug"] = array(
 	array("name" => "body"),
 	array("name" => "closed", "default" => 0),
 	array("name" => "closed_zid"),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "priority"),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "title")
@@ -297,6 +308,8 @@ $db_table["captcha_challenge"] = array(
 $db_table["card"] = array(
 	array("name" => "card_id", "default" => 0, "key" => true),
 	array("name" => "body"),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "edit_time", "default" => $now),
 	array("name" => "image_id", "default" => 0),
 	array("name" => "link_subject"),
@@ -332,7 +345,9 @@ $db_table["card_vote"] = array(
 
 $db_table["comment"] = array(
 	array("name" => "comment_id", "default" => 0, "key" => true),
+	array("name" => "article_id", "default" => 0),
 	array("name" => "body"),
+	array("name" => "clean", "default" => 1),
 	array("name" => "edit_time", "default" => $now),
 	array("name" => "junk_status", "default" => 0),
 	array("name" => "junk_time", "default" => 0),
@@ -340,7 +355,6 @@ $db_table["comment"] = array(
 	array("name" => "parent_id", "default" => 0),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "remote_ip"),
-	array("name" => "root_id", "default" => 0),
 	array("name" => "subject"),
 	array("name" => "zid")
 );
@@ -451,6 +465,8 @@ $db_table["ip"] = array(
 $db_table["journal"] = array(
 	array("name" => "journal_id", "default" => 0, "key" => true),
 	array("name" => "body"),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "edit_time", "default" => $now),
 	array("name" => "photo_id", "default" => 0),
 	array("name" => "publish_time", "default" => 0),
@@ -534,6 +550,8 @@ $db_table["pipe"] = array(
 	array("name" => "author_zid"),
 	array("name" => "body"),
 	array("name" => "closed", "default" => 0),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "edit_zid"),
 	//array("name" => "icon"),
 	array("name" => "keywords"),
@@ -567,6 +585,8 @@ $db_table["poll_answer"] = array(
 
 $db_table["poll"] = array(
 	array("name" => "poll_id", "default" => 0, "key" => true),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "promoted", "default" => 0),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "question"),
@@ -630,6 +650,8 @@ $db_table["story"] = array(
 	array("name" => "story_id", "default" => 0, "key" => true),
 	array("name" => "author_zid"),
 	array("name" => "body"),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "edit_time", "default" => $now),
 	array("name" => "edit_zid"),
 	array("name" => "icon"),
@@ -699,4 +721,3 @@ $db_table["user_conf"] = array(
 	array("name" => "name"),
 	array("name" => "value")
 );
-

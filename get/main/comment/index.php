@@ -26,9 +26,9 @@ $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("comment", $items_per_page);
 
 if ($auth_user["show_junk_enabled"]) {
-	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body, zid from comment order by edit_time desc limit $item_start, $items_per_page");
+	$row = sql("select comment_id, article_id, junk_status, subject, edit_time, body, zid from comment order by edit_time desc limit $item_start, $items_per_page");
 } else {
-	$row = sql("select comment_id, root_id, junk_status, subject, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit $item_start, $items_per_page");
+	$row = sql("select comment_id, article_id, junk_status, subject, edit_time, body, zid from comment where junk_status <= 0 order by edit_time desc limit $item_start, $items_per_page");
 }
 for ($i = 0; $i < count($row); $i++) {
 	print_comment($row[$i], true);

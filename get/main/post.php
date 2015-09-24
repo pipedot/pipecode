@@ -29,7 +29,7 @@ beg_main();
 
 if ($item["short_type_id"] == TYPE_COMMENT) {
 	$subject = $item["subject"];
-	$root_id = $item["root_id"];
+	$article_id = $item["article_id"];
 
 	$re = false;
 	if (strlen($subject) >= 4) {
@@ -42,15 +42,15 @@ if ($item["short_type_id"] == TYPE_COMMENT) {
 	}
 } else {
 	$subject = "";
-	$root_id = $item[$item["short_type"] . "_id"];
+	$article_id = $item[$item["short_type"] . "_id"];
 }
 
-$short = db_get_rec("short", $root_id);
+$short = db_get_rec("short", $article_id);
 $article_type_id = $short["type_id"];
 if ($article_type_id == TYPE_STORY) {
-	print_story($root_id);
+	print_story($article_id);
 } else if ($article_type_id == TYPE_JOURNAL) {
-	print_journal($root_id);
+	print_journal($article_id);
 }
 
 if ($item["short_type_id"] == TYPE_COMMENT) {
@@ -61,7 +61,7 @@ if ($item["short_type_id"] == TYPE_COMMENT) {
 	writeln('</div>');
 }
 
-print_post_box($root_id, $subject, "", false);
+print_post_box($article_id, $subject, "", false);
 
 end_main();
 print_footer();

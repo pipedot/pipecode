@@ -649,36 +649,31 @@ function clean_url($dirty)
 }
 
 
-function article_info($comment, $force_https = true)
+function article_info($comment)
 {
 	global $server_name;
 	global $protocol;
 
-	if ($force_https) {
-		$p = "https";
-	} else {
-		$p = $protocol;
-	}
-	$short = db_get_rec("short", $comment["root_id"]);
+	$short = db_get_rec("short", $comment["article_id"]);
 	$type_id = $short["type_id"];
 	$a = array();
 	$a["type_id"] = $type_id;
 	$a["type"] = item_type($type_id);
 	if ($type_id == TYPE_STORY) {
-		$story = db_get_rec("story", $comment["root_id"]);
+		$story = db_get_rec("story", $comment["article_id"]);
 		$a["title"] = $story["title"];
 		$date = gmdate("Y-m-d", $story["publish_time"]);
-		$a["link"] = "$p://$server_name/story/$date/" . $story["slug"];
+		$a["link"] = "$protocol://$server_name/story/$date/" . $story["slug"];
 	} else if ($type_id == TYPE_PIPE) {
-		$pipe = db_get_rec("pipe", $comment["root_id"]);
+		$pipe = db_get_rec("pipe", $comment["article_id"]);
 		$a["title"] = $pipe["title"];
-		$a["link"] = "$p://$server_name/pipe/" . crypt_crockford_encode($pipe["pipe_id"]);
+		$a["link"] = "$protocol://$server_name/pipe/" . crypt_crockford_encode($pipe["pipe_id"]);
 	} else if ($type_id == TYPE_POLL) {
-		$poll = db_get_rec("poll", $comment["root_id"]);
+		$poll = db_get_rec("poll", $comment["article_id"]);
 		$a["title"] = $poll["question"];
-		$a["link"] = "$p://$server_name/poll/" . gmdate("Y-m-d", $poll["publish_time"]) . "/" . $poll["slug"];
+		$a["link"] = "$protocol://$server_name/poll/" . gmdate("Y-m-d", $poll["publish_time"]) . "/" . $poll["slug"];
 	} else if ($type_id == TYPE_JOURNAL) {
-		$journal = db_get_rec("journal", $comment["root_id"]);
+		$journal = db_get_rec("journal", $comment["article_id"]);
 		$a["title"] = $journal["title"];
 		if ($journal["published"]) {
 			$a["link"] = user_link($journal["zid"]) . "journal/" . gmdate("Y-m-d", $journal["publish_time"]) . "/" . $journal["slug"];
@@ -686,9 +681,9 @@ function article_info($comment, $force_https = true)
 			$a["link"] = user_link($journal["zid"]) . "journal/" . crypt_crockford_encode($journal["journal_id"]);
 		}
 	} else if ($type_id == TYPE_CARD) {
-		$card = db_get_rec("card", array("card_id" => $comment["root_id"]));
+		$card = db_get_rec("card", array("card_id" => $comment["article_id"]));
 		$a["title"] = "#" . crypt_crockford_encode($card["card_id"]);
-		$a["link"] = "$p://$server_name/card/" . crypt_crockford_encode($card["card_id"]);
+		$a["link"] = "$protocol://$server_name/card/" . crypt_crockford_encode($card["card_id"]);
 	}
 
 	return $a;
@@ -765,34 +760,35 @@ function is_local_user($zid)
 }
 
 
-function update_view_time($type_id, $root_id)
+function update_view_time($article_id)
 {
 	global $auth_zid;
 
 	if ($auth_zid === "") {
 		$last_seen = 0;
 	} else {
-		$type = item_type($type_id);
-		if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
-			$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
-			$view["last_time"] = $view["time"];
-			$last_seen = $view["time"];
+		$article_view = db_find_rec("article_view", ["article_id" => $article_id, "zid" => $auth_zid]);
+		if ($article_view) {
+			$article_view["last_time"] = $article_view["time"];
+			$last_seen = $article_view["time"];
 		} else {
-			$view = array();
-			$view["{$type}_id"] = $root_id;
-			$view["zid"] = $auth_zid;
-			$view["last_time"] = 0;
+			$article_view = db_new_rec("article_view");
+			$article_view["article_id"] = $article_id;
+			$article_view["zid"] = $auth_zid;
+			$article_view["last_time"] = 0;
 			$last_seen = 0;
 		}
-		$view["time"] = time();
-		db_set_rec("{$type}_view", $view);
+		$article_view["comments_clean"] = 0;
+		$article_view["comments_total"] = 0;
+		$article_view["time"] = time();
+		db_set_rec("article_view", $article_view);
 	}
 
 	return $last_seen;
 }
 
 
-function revert_view_time($type_id, $root_id)
+function revert_view_time($article_id)
 {
 	global $auth_zid;
 
@@ -800,21 +796,20 @@ function revert_view_time($type_id, $root_id)
 		return;
 	}
 
-	$type = item_type($type_id);
-	if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
-		$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
-		$view["time"] = $view["last_time"];
-		db_set_rec("{$type}_view", $view);
+	$article_view = db_find_rec("article_view", ["article_id" => $article_id, "zid" => $auth_zid]);
+	if ($article_view) {
+		$article_view["time"] = $article_view["last_time"];
+		db_set_rec("article_view", $article_view);
 	}
 }
 
 
-function count_comments($type_id = 0, $root_id = "")
+function count_comments($type_id = 0, $article_id = 0)
 {
 	global $auth_zid;
 	global $auth_user;
 
-	if ($type_id == 0 && $root_id === "") {
+	if ($type_id == 0 && $article_id == 0) {
 		$comments["count"] = 0;
 		$comments["label"] = " comments";
 		$comments["new"] = 0;
@@ -822,14 +817,17 @@ function count_comments($type_id = 0, $root_id = "")
 		return;
 	}
 	$type = item_type($type_id);
+	$article = db_get_rec($type, $article_id);
 
-	$comments = array();
+	$comments = [];
 	if ($auth_user["show_junk_enabled"]) {
-		$row = sql("select count(*) as comments from comment where root_id = ?", $root_id);
+		//$row = sql("select count(*) as comments from comment where article_id = ?", $article_id);
+		$comments["count"] = $article["comments_total"];
 	} else {
-		$row = sql("select count(*) as comments from comment where root_id = ? and junk_status <= 0", $root_id);
+		//$row = sql("select count(*) as comments from comment where article_id = ? and junk_status <= 0", $article_id);
+		$comments["count"] = $article["comments_clean"];
 	}
-	$comments["count"] = $row[0]["comments"];
+	//$comments["count"] = $row[0]["comments"];
 	if ($comments["count"] == 1) {
 		$comments["label"] = " comment";
 	} else {
@@ -837,29 +835,110 @@ function count_comments($type_id = 0, $root_id = "")
 	}
 
 	if ($auth_zid === "") {
-		$comments["new"] = 0;
+		$new = 0;
 	} else {
-		$row = sql("select time from {$type}_view where {$type}_id = ? and zid = ?", $root_id, $auth_zid);
-		if (count($row) > 0) {
-		//if (db_has_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid))) {
-			//$view = db_get_rec("{$type}_view", array("{$type}_id" => $root_id, "zid" => $auth_zid));
-			$time = $row[0]["time"];
+		$article_view = db_find_rec("article_view", ["article_id" => $article_id, "zid" => $auth_zid]);
+		if ($article_view) {
 			if ($auth_user["show_junk_enabled"]) {
-				$row = sql("select count(*) as comments from comment where root_id = ? and edit_time > ?", $root_id, $time);
+				$new = $article_view["comments_total"];
 			} else {
-				$row = sql("select count(*) as comments from comment where root_id = ? and edit_time > ? and junk_status <= 0", $root_id, $time);
+				$new = $article_view["comments_clean"];
 			}
-			$comments["new"] = $row[0]["comments"];
 		} else {
-			$comments["new"] = $comments["count"];
+			$article_view = db_new_rec("article_view");
+			$article_view["article_id"] = $article_id;
+			$article_view["zid"] = $auth_zid;
+			$new = -1;
+		}
+		if ($new == -1) {
+			if ($auth_user["show_junk_enabled"]) {
+				$row = sql("select count(*) as comments from comment where article_id = ? and edit_time > ?", $article_id, $article_view["time"]);
+				$new = $row[0]["comments"];
+				$article_view["comments_total"] = $new;
+			} else {
+				$row = sql("select count(*) as comments from comment where article_id = ? and edit_time > ? and clean = 1", $article_id, $article_view["time"]);
+				$new = $row[0]["comments"];
+				$article_view["comments_clean"] = $new;
+			}
+			db_set_rec("article_view", $article_view);
 		}
 	}
+	$comments["new"] = $new;
 	$comments["tag"] = "<b>" . $comments["count"] . "</b> " . $comments["label"];
 	if ($comments["new"] > 0) {
 		$comments["tag"] .= ", <b>" . $comments["new"] . "</b> new";
 	}
 
 	return $comments;
+}
+
+
+function recount_comments_recurse($row, $head_id)
+{
+	$s = "";
+	for ($i = 0; $i < count($row); $i++) {
+		if ($row[$i]["junk_status"] <= 0 && $row[$i]["parent_id"] == $head_id) {
+			$s .= $row[$i]["comment_id"] . "," . recount_comments_recurse($row, $row[$i]["comment_id"]);
+		}
+	}
+
+	return $s;
+}
+
+
+function recount_comments($article_id)
+{
+	$short = db_get_rec("short", $article_id);
+	$article_type_id = $short["type_id"];
+
+	$total = db_get_count("comment", ["article_id" => $article_id]);
+	$clean = 0;
+	$new_clean = [];
+	$old_clean = [];
+	$s = "";
+
+	$row = sql("select comment_id, clean, junk_status, parent_id from comment where article_id = ? order by publish_time", $article_id);
+	for ($i = 0; $i < count($row); $i++) {
+		$comment_id = $row[$i]["comment_id"];
+		if ($row[$i]["junk_status"] <= 0 && $row[$i]["parent_id"] == 0) {
+			$s .= "$comment_id," . recount_comments_recurse($row, $comment_id);
+		}
+		$old_clean[$comment_id] = $row[$i]["clean"];
+	}
+	if (substr($s, -1) == ",") {
+		$s = substr($s, 0, -1);
+	}
+	if ($s === "") {
+		$a = [];
+	} else {
+		$a = explode(",", $s);
+	}
+	for ($i = 0; $i < count($a); $i++) {
+		$new_clean[$a[$i]] = 1;
+	}
+	$clean = count($a);
+	//writeln("total [$total] clean [$clean] s [$s]");
+	$keys = array_keys($old_clean);
+	for ($i = 0; $i < count($keys); $i++) {
+		$comment_id = $keys[$i];
+		$old_value = (int) $old_clean[$comment_id];
+		$new_value = (int) array_key_exists($comment_id, $new_clean);
+		//writeln("checking comment_id [$comment_id] old [$old_value] new [$new_value]");
+		if ($old_value != $new_value) {
+			sql("update comment set clean = ? where comment_id = ?", $new_value, $comment_id);
+			//writeln("updating [$comment_id]");
+		}
+	}
+
+	$article_type = item_type($article_type_id);
+	$article = db_get_rec($article_type, $article_id);
+	if ($article["comments_clean"] != $clean || $article["comments_total"] != $total) {
+		$article["comments_clean"] = $clean;
+		$article["comments_total"] = $total;
+		db_set_rec($article_type, $article);
+	}
+
+	sql("update article_view set comments_clean = -1, comments_total = -1 where article_id = ?", $article_id);
 }
 
 
@@ -894,7 +973,7 @@ function print_comments($type_id, $rec)
 		render_page($type_id, $rec["{$type}_id"], false);
 	}
 
-	$last_seen = update_view_time($type_id, $rec["{$type}_id"]);
+	$last_seen = update_view_time($rec["{$type}_id"]);
 
 	if ($auth_user["javascript_enabled"]) {
 		if ($wysiwyg_enabled && $inline_reply) {

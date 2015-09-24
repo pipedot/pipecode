@@ -61,7 +61,7 @@ if ($needle != "") {
 			$body = $row[$i]["body"];
 			$time = $row[$i]["edit_time"];
 			$zid = $row[$i]["zid"];
-			$a = article_info($row[$i], false);
+			$a = article_info($row[$i]);
 
 			//search_result($title, $link, $zid, $time, $body);
 			print render_comment($row[$i]["subject"], $row[$i]["zid"], $row[$i]["publish_time"], $row[$i]["comment_id"], $row[$i]["body"], 0, $a["link"], $a["title"], $row[$i]["junk_status"]); //, $last_seen = 0, $article_link = "", $article_title = "", $junk_status = 0)

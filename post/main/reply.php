@@ -25,7 +25,7 @@ if ($auth_zid === "") {
 }
 
 $item = item_request(TYPE_COMMENT);
-$root_id = $item["root_id"];
+$article_id = $item["article_id"];
 $parent_id = $item["comment_id"];
 
 $subject = clean_subject();
@@ -41,12 +41,12 @@ $time = time();
 
 $comment = db_new_rec("comment");
 $comment["comment_id"] = create_short(TYPE_COMMENT);
+$comment["article_id"] = $article_id;
 $comment["body"] = $clean_body;
 $comment["edit_time"] = $time;
 $comment["parent_id"] = $parent_id;
 $comment["publish_time"] = $time;
 $comment["remote_ip"] = $remote_ip;
-$comment["root_id"] = $root_id;
 $comment["subject"] = $subject;
 $comment["zid"] = $zid;
 db_set_rec("comment", $comment);

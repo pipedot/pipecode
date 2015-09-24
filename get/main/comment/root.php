@@ -24,7 +24,7 @@ $comment_body = $comment["body"];
 $can_moderate = true;
 $a = article_info($comment);
 $type_id = $a["type_id"];
-$root_code = crypt_crockford_encode($comment["root_id"]);
+$article_code = crypt_crockford_encode($comment["article_id"]);
 
 print_header($comment["subject"]);
 beg_main();
@@ -43,7 +43,7 @@ writeln('<h2>Preview</h2>');
 
 if (!$auth_user["javascript_enabled"]) {
 	beg_form("$protocol://$server_name/moderate_noscript");
-	writeln('<input type="hidden" name="root_code" value="' . $root_code . '">');
+	writeln('<input type="hidden" name="article_code" value="' . $article_code . '">');
 }
 
 $list = array($comment);

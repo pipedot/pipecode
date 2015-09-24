@@ -37,8 +37,10 @@ if ($comment["body"] !== $clean_body || $comment["subject"] !== $subject) {
 	db_set_rec("comment", $comment);
 
 	sql("delete from comment_vote where comment_id = ? and value > 0", $comment["comment_id"]);
+
+	recount_comments($comment["article_id"]);
 }
 
-$short = db_get_rec("short", $comment["root_id"]);
+$short = db_get_rec("short", $comment["article_id"]);
 
-header("Location: " . item_link($short["type_id"], $comment["root_id"]));
+header("Location: " . item_link($short["type_id"], $comment["article_id"]));

@@ -21,8 +21,8 @@ if ($auth_zid === "") {
 	die("error: sign in to moderate");
 }
 
-$root_code = http_post_string("root_code", array("valid" => "[A-Z][0-9]"));
-$root_id = crypt_crockford_decode($root_code);
+$article_code = http_post_string("article_code", array("valid" => "[A-Z][0-9]"));
+$article_id = crypt_crockford_decode($article_code);
 
 
 function moderate($comment_id, $zid, $reason)
@@ -83,4 +83,4 @@ for ($i = 0; $i < count($k); $i++) {
 	}
 }
 
-item_redirect("", $root_id);
+item_redirect("", $article_id);

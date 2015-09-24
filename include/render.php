@@ -20,15 +20,15 @@
 function print_comment($comment, $article = false, $article_type_id = 0, $last_seen = 0)
 {
 	if (($article_type_id == 0) && ((is_bool($article) && $article) || is_array($artcile))) {
-		$short = db_get_rec("short", $comment["root_id"]);
+		$short = db_get_rec("short", $comment["article_id"]);
 		$article_type_id = $short["type_id"];
 	}
 	if (is_bool($article) && $article) {
 		$article_type = item_type($article_type_id);
-		$article = db_get_rec($article_type, $comment["root_id"]);
+		$article = db_get_rec($article_type, $comment["article_id"]);
 	}
 	if (is_array($article)) {
-		$article_link = item_link($article_type_id, $comment["root_id"], $article);
+		$article_link = item_link($article_type_id, $comment["article_id"], $article);
 		if ($article_type_id == TYPE_POLL) {
 			$article_title = $article["question"];
 		} else if ($article_type_id == TYPE_CARD) {
@@ -240,7 +240,7 @@ function recursive_render_json($render, $parent, $keys, $comment_id, $level)
 }
 
 
-function render_page($type_id, $root_id, $json)
+function render_page($type_id, $article_id, $json)
 {
 	global $protocol;
 	global $server_name;
@@ -254,18 +254,18 @@ function render_page($type_id, $root_id, $json)
 	$parent = [];
 	$comments = [];
 
-	$root_code = crypt_crockford_encode($root_id);
+	$article_code = crypt_crockford_encode($article_id);
 
 	if ($auth_zid === "") {
 		$last_seen = 0;
 	} else {
-		$last_seen = update_view_time($type_id, $root_id);
+		$last_seen = update_view_time($article_id);
 	}
 
 	if ($auth_user["show_junk_enabled"]) {
-		$row = sql("select * from comment where root_id = ? order by publish_time", $root_id);
+		$row = sql("select * from comment where article_id = ? order by publish_time", $article_id);
 	} else {
-		$row = sql("select * from comment where root_id = ? and junk_status <= 0 order by publish_time", $root_id);
+		$row = sql("select * from comment where article_id = ? and junk_status <= 0 order by publish_time", $article_id);
 	}
 	$total = count($row);
 
@@ -279,7 +279,7 @@ function render_page($type_id, $root_id, $json)
 		writeln('<div class="comment-header">');
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
-		writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post/' . $root_code . '" class="icon-16 chat-16">Reply</a></td>');
+		writeln('			<td style="width: 30%"><a rel="nofollow" href="' . $protocol . '://' . $server_name . '/post/' . $article_code . '" class="icon-16 chat-16">Reply</a></td>');
 		if ($can_moderate && false) {
 			writeln('			<td style="width: 30%">');
 			writeln('				<table>');
@@ -345,7 +345,7 @@ function render_page($type_id, $root_id, $json)
 
 	if (!$json && $can_moderate) {
 		beg_form("$protocol://$server_name/moderate_noscript");
-		writeln('<input type="hidden" name="root_code" value="' . $root_code . '">');
+		writeln('<input type="hidden" name="article_code" value="' . $article_code . '">');
 	}
 	for ($i = 0; $i < $total; $i++) {
 		$comment = $comments[$keys[$i]];
@@ -373,7 +373,7 @@ function render_page($type_id, $root_id, $json)
 }
 
 
-function print_sliders($type_id, $root_id)
+function print_sliders($type_id, $article_id)
 {
 	global $protocol;
 	global $server_name;
@@ -381,14 +381,14 @@ function print_sliders($type_id, $root_id)
 	global $expand_value;
 
 	$type = item_type($type_id);
-	$comments = count_comments($type_id, $root_id);
-	$rec = db_get_rec($type, $root_id);
-	$root_code = crypt_crockford_encode($root_id);
+	$comments = count_comments($type_id, $article_id);
+	$rec = db_get_rec($type, $article_id);
+	$article_code = crypt_crockford_encode($article_id);
 
 	writeln('<div class="comment-header">');
 	writeln('	<table class="fill">');
 	writeln('		<tr>');
-	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post/' . $root_code . '" class="icon-16 chat-16">Reply</a></td>');
+	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post/' . $article_code . '" class="icon-16 chat-16">Reply</a></td>');
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
 	writeln('					<tr>');

@@ -89,9 +89,9 @@ function make_comment_atom($topic)
 	global $auth_user;
 
 	if ($auth_user["show_junk_enabled"]) {
-		$row = sql("select comment_id, root_id, subject, type_id, edit_time, body, zid from comment inner join short on comment.root_id = short.short_id order by edit_time desc limit 50");
+		$row = sql("select comment_id, article_id, subject, type_id, edit_time, body, zid from comment inner join short on comment.article_id = short.short_id order by edit_time desc limit 50");
 	} else {
-		$row = sql("select comment_id, root_id, subject, type_id, edit_time, body, zid from comment inner join short on comment.root_id = short.short_id where junk_status <= 0 order by edit_time desc limit 50");
+		$row = sql("select comment_id, article_id, subject, type_id, edit_time, body, zid from comment inner join short on comment.article_id = short.short_id where junk_status <= 0 order by edit_time desc limit 50");
 	}
 	if (count($row) > 0) {
 		$updated = $row[0]["edit_time"];
@@ -114,7 +114,7 @@ function make_comment_atom($topic)
 		$comment_code = crypt_crockford_encode($row[$i]["comment_id"]);
 		$type_id = $row[$i]["type_id"];
 		$type = item_type($type_id);
-		$article = db_get_rec($type, $row[$i]["root_id"]);
+		$article = db_get_rec($type, $row[$i]["article_id"]);
 		if ($type_id == TYPE_POLL) {
 			$article_title = $article["question"];
 		} else {

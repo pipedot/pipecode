@@ -26,7 +26,7 @@ beg_main();
 
 writeln('<h1>Junk</h1>');
 
-$row = sql("select comment_vote.comment_id, count(*) as votes, root_id, subject, edit_time, body, junk_status, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
+$row = sql("select comment_vote.comment_id, count(*) as votes, article_id, subject, edit_time, body, junk_status, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
 if (count($row) == 0) {
 	writeln('<p>No unmarked junk comments</p>');
 } else {

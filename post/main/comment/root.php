@@ -31,6 +31,6 @@ $comment["junk_time"] = $now;
 $comment["junk_zid"] = $auth_zid;
 db_set_rec("comment", $comment);
 
-print "setting junk of [{$comment["card_id"]}] to [" . $_POST["junk"] . "]";
+recount_comments($comment["article_id"]);
 
-header("Location: $protocol://$server_name/comment/" . crypt_crockford_encode($comment["card_id"]));
+header("Location: /comment/" . $comment["short_code"]);

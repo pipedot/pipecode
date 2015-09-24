@@ -26,7 +26,7 @@ beg_main();
 
 writeln('<h1>Anonymous Comments</h1>');
 
-$row = sql("select comment_id, body, edit_time, junk_status, root_id, subject, zid from comment where zid = '' and junk_status = 0 order by publish_time desc limit 0, 100");
+$row = sql("select comment_id, article_id, body, edit_time, junk_status, subject, zid from comment where zid = '' and junk_status = 0 order by publish_time desc limit 0, 100");
 if (count($row) == 0) {
 	writeln('<p>No unmarked anonymous comments</p>');
 } else {
