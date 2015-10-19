@@ -18,6 +18,57 @@
 //
 
 
+function item_id($item)
+{
+	if (array_key_exists("article_id", $item)) {
+		return $item["article_id"];
+	}
+	if (array_key_exists("bug_id", $item)) {
+		return $item["bug_id"];
+	}
+	if (array_key_exists("journal_id", $item)) {
+		return $item["journal_id"];
+	}
+	if (array_key_exists("story_id", $item)) {
+		return $item["story_id"];
+	}
+	if (array_key_exists("pipe_id", $item)) {
+		return $item["pipe_id"];
+	}
+	if (array_key_exists("poll_id", $item)) {
+		return $item["poll_id"];
+	}
+
+	return 0;
+}
+
+
+function item_icon($type_id)
+{
+	switch ($type_id) {
+		case TYPE_BUG:
+			$icon = "ladybug";
+			break;
+		case TYPE_JOURNAL:
+			$icon = "notepad";
+			break;
+		case TYPE_PIPE:
+			$icon = "news";
+			break;
+		case TYPE_POLL:
+			$icon = "heart";
+			break;
+		case TYPE_STORY:
+			$icon = "news";
+			break;
+		default:
+			$icon = "news";
+	}
+
+	return $icon;
+}
+
+
 function item_link($type_id, $short_id, $item = "")
 {
 	global $protocol;
@@ -407,6 +458,14 @@ function item_type($type_id)
 		default:
 			fatal("Unknown link type");
 	}
+}
+
+
+function item_type_id($item_id)
+{
+	$short = db_get_rec("short", $item_id);
+
+	return $short["type_id"];
 }
 
 

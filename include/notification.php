@@ -63,8 +63,7 @@ function print_notification_comment($notification_id, $parent_id, $new_comment_i
 {
 	global $auth_zid;
 
-	$short = db_get_rec("short", $parent_id);
-	$parent_type_id = $short["type_id"];
+	$parent_type_id = item_type_id($parent_id);
 	$parent_type = item_type($parent_type_id);
 	$parent = db_get_rec($parent_type, $parent_id);
 	$link = item_link($parent_type_id, $parent_id, $parent);
@@ -84,12 +83,27 @@ function print_notification_comment($notification_id, $parent_id, $new_comment_i
 	}
 
 	if ($large) {
-		writeln('<div class="notification-title2 color-new">New Comment</div>');
-		writeln('<div class="notification-body">');
-		writeln('<div style="margin-bottom: 8px" class="icon-32 ' . $icon . '-32">Reply to <a href="' . $link . '">"' . $parent_title . '"</a></div>');
-		print_comment($new_comment, true);
-		writeln('<div class="right" style="margin-top: 8px"><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">Dismiss</a></div>');
-		writeln('</div>');
+		if ($parent_type_id == TYPE_JOURNAL) {
+			$article_info = "";
+		} else {
+			$article_id = $new_comment["article_id"];
+			$article_type_id = item_type_id($article_id);
+			$article_type = item_type($article_type_id);
+			$article = db_get_rec($article_type, $article_id);
+			$article_link = item_link($article_type_id, $article_id, $article);
+			$article_info = ' in <a href="' . $article_link . '">' . $article["title"] . '</a>';
+		}
+
+		writeln('<article class="notification">');
+		writeln('	<header>');
+		writeln('		<h1>New Comment</h1>');
+		writeln('		<div class="' . $icon . '-32">Reply to <a href="' . $link . '">"' . $parent_title . '"</a>' . $article_info . '</div>');
+		writeln('	</header>');
+		writeln('	<div>');
+		print_comment($new_comment);
+		writeln('	</div>');
+		writeln('	<footer><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">Dismiss</a></footer>');
+		writeln('</article>');
 	} else {
 		writeln('<a href="' . user_link($auth_zid) . 'notification/' . $notification_id . '">');
 		writeln('	<dl class="dl-32 ' . $icon . '-32">');
@@ -139,16 +153,19 @@ function print_notification_moderation($notification_id, $comment_id, $large)
 	$icon = score_icon($score);
 
 	if ($large) {
-		writeln('<div class="notification-title2 color-new">Comment Moderation</div>');
-		writeln('<div class="notification-body">');
-		writeln('<div style="margin-bottom: 8px" class="icon-32 face-smile-32">Score: ' . $score_reason . '</div>');
+		writeln('<article class="notification">');
+		writeln('	<header>');
+		writeln('		<h1>Comment Moderation</h1>');
+		writeln('		<div class="' . $icon . '-32">Score: ' . $score_reason . '</div>');
+		writeln('	</header>');
+		writeln('	<div>');
 		print_comment($comment, true);
-		writeln('<div class="right" style="margin-top: 8px"><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">Dismiss</a></div>');
-		//writeln('<div class="right" style="margin-top: 8px"><input type="submit" name="dismiss_' . $notification_id . '" value="Dismiss"></div>');
-		writeln('</div>');
+		writeln('	</div>');
+		writeln('	<footer><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">Dismiss</a></footer>');
+		writeln('</article>');
 	} else {
 		writeln('<a href="' . user_link($auth_zid) . 'notification/' . $notification_id . '">');
-		writeln('	<dl class="dl-32 ' . score_icon($score_reason) . '-32">');
+		writeln('	<dl class="dl-32 ' . $icon . '-32">');
 		writeln('		<dt>Moderation to "' . $comment["subject"] . '"</dt>');
 		writeln('		<dd>Score: ' . $score_reason . '</dd>');
 		writeln('	</dl>');
@@ -183,6 +200,12 @@ function send_notification_comment($comment_id, $parent_id, $zid)
 function send_notification_moderation($comment_id, $zid)
 {
 	if ($zid == "") {
+		return;
+	}
+
+	$count = db_get_count("comment_vote", ["comment_id" => $comment_id]);
+	if (db_get_count("comment_vote", ["comment_id" => $comment_id]) == 0) {
+		sql("delete from notification where item_id = ?", $comment_id);
 		return;
 	}
 

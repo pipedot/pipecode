@@ -18,7 +18,6 @@
 //
 
 include("clean.php");
-include("stream.php");
 include("image.php");
 
 require_mine();
@@ -56,6 +55,7 @@ beg_tab();
 print_row(array("caption" => "Tags", "text_key" => "tags"));
 end_tab();
 
+/*
 beg_tab();
 print_row(array("caption" => "Link", "text_key" => "link"));
 end_tab();
@@ -70,6 +70,7 @@ writeln('			</div>');
 writeln('		</td>');
 writeln('	</tr>');
 end_tab();
+*/
 
 box_right("Share");
 

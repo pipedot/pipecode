@@ -44,7 +44,7 @@ if ($card["body"] !== $clean_body) {
 	$card["edit_time"] = time();
 	db_set_rec("card", $card);
 
-	sql("delete from card_vote where card_id = ? and value > 0", $card["card_id"]);
+	sql("delete from stream_vote where article_id = ? and value > 0", $card["card_id"]);
 }
 
 header("Location: /card/{$card["short_code"]}");

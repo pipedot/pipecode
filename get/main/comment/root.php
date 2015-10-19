@@ -30,13 +30,7 @@ print_header($comment["subject"]);
 beg_main();
 
 writeln('<h1>' . ucwords(item_type($type_id)) . '</h1>');
-if ($type_id == TYPE_POLL) {
-	$icon = "heart";
-} else if ($type_id == TYPE_JOURNAL) {
-	$icon = "notepad";
-} else {
-	$icon = "news";
-}
+$icon = item_icon($type_id);
 writeln('<a class="icon-16 ' . $icon . '-16" href="' . $a["link"] . '">' . $a["title"] . '</a>');
 
 writeln('<h2>Preview</h2>');

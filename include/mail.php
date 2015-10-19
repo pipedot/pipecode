@@ -303,7 +303,7 @@ function send_notifications($comment)
 	if ($article_type_id == TYPE_JOURNAL) {
 		$journal = db_get_rec("journal", $article_id);
 		$zid = $journal["zid"];
-		if (!in_array($zid, $sent_list)) {
+		if (!in_array($zid, $sent_list) && $zid != $auth_zid) {
 			send_notification_comment($new_comment_id, $article_id, $zid);
 		}
 	}

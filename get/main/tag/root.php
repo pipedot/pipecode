@@ -17,15 +17,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("stream.php");
 include("image.php");
 
 $tag = $s2;
 if (!string_uses($tag, "[a-z][0-9]")) {
 	fatal("Invalid tag");
 }
-//$tag = db_get_rec("tag", array("tag" => $tag));
-//$tag_id = $tag["tag_id"];
 
 if ($auth_zid === "") {
 	print_header("#$tag");
@@ -36,18 +33,9 @@ if ($auth_zid === "") {
 beg_main("stream");
 
 $row = sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id where tag = ? order by edit_time desc", $tag);
-//$row = sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id order by time desc");
-//var_dump($row);
-//print "tag_id [$tag_id]";
-
 for ($i = 0; $i < count($row); $i++) {
-	//print "card_id [" . $row[$i]["card_id"] . "]";
 	print_card($row[$i]["card_id"]);
 }
-
-//writeln('<h1>Tag</h1>');
-
-//print "s2 [$s2]";
 
 end_main("stream");
 print_footer();

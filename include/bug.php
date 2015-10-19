@@ -68,17 +68,27 @@ function bug_priority_icon($priority)
 
 function print_bug($bug)
 {
+	global $auth_user;
 	global $auth_zid;
 
-	$a["body"] = $bug["body"];
-	$a["bug_id"] = $bug["bug_id"];
-	$a["closed"] = $bug["closed"];
-	$a["comments"] = count_comments(TYPE_BUG, $bug["bug_id"]);
-	$a["labels"] = make_bug_labels($bug["bug_id"]);
-	$a["time"] = $bug["publish_time"];
-	$a["title"] = $bug["title"];
-	$a["type_id"] = TYPE_BUG;
-	$a["zid"] = $bug["author_zid"];
+	$bug_id = $bug["bug_id"];
+	$bug_code = crypt_crockford_encode($bug_id);
 
-	print_article($a);
+	$a["body"] = $bug["body"];
+	$a["title"] = $bug["title"];
+	$a["link"] = item_link(TYPE_BUG, $bug_id, $bug);
+	$a["info"] = content_info($bug);
+	$a["comments"] = count_comments($bug_id, TYPE_BUG);
+
+	if ($auth_user["editor"] || $auth_user["admin"]) {
+		$a["actions"][] = "<a href=\"/bug/$bug_code/edit\" class=\"icon-16 notepad-16\">Edit</a>";
+		if (!$bug["closed"]) {
+			$a["actions"][] = "<a href=\"/bug/$bug_code/close\" class=\"icon-16 close-16\">Close</a>";
+		}
+	}
+	if ($auth_zid !== "" && $bug["closed"]) {
+		$a["actions"][] = "<a href=\"/bug/$bug_code/open\" class=\"icon-16 undo-16\">Open</a>";
+	}
+
+	print_content($a);
 }

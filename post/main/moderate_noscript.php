@@ -53,6 +53,7 @@ function moderate($comment_id, $zid, $reason)
 		}
 	}
 	if ($reason == "Normal") {
+		send_notification_moderation($comment_id, $comment["zid"]);
 		return;
 	}
 	$comment_vote = db_new_rec("comment_vote");

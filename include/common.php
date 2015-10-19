@@ -179,7 +179,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 		}
 	}
 
-	writeln("	<div>");
+	writeln("	<ul>");
 	for ($i = 0; $i < count($link_name); $i++) {
 		$name = $link_name[$i];
 		$icon = "";
@@ -220,9 +220,9 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 			$link = $link_url[$i];
 		}
 
-		writeln("		<a href=\"$link\" class=\"icon-16 {$icon}-16\">$name</a>" . ($i == count($link_name) - 1 ? '' : ' | '));
+		writeln("		<li><a href=\"$link\" class=\"icon-16 {$icon}-16\">$name</a></li>");
 	}
-	writeln("	</div>");
+	writeln("	</ul>");
 	writeln('</header>');
 }
 
@@ -354,7 +354,7 @@ function print_user_box()
 //	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td><a class="mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
-	writeln('		<td><a class="tools-32" href="' . $link . 'profile/settings">Settings</a></td>');
+	writeln('		<td><a class="tools-32" href="' . $link . 'settings">Settings</a></td>');
 	writeln('	</tr>');
 //	writeln('	<tr>');
 //	writeln('		<td><a class="reader-32" href="' . $link . 'reader/">Reader</a></td>');
@@ -664,6 +664,10 @@ function article_info($comment)
 		$a["title"] = $story["title"];
 		$date = gmdate("Y-m-d", $story["publish_time"]);
 		$a["link"] = "$protocol://$server_name/story/$date/" . $story["slug"];
+	} else if ($type_id == TYPE_ARTICLE) {
+		$article = db_get_rec("article", $comment["article_id"]);
+		$a["title"] = $article["title"];
+		$a["link"] = "$protocol://$server_name/article/" . crypt_crockford_encode($article["article_id"]);
 	} else if ($type_id == TYPE_PIPE) {
 		$pipe = db_get_rec("pipe", $comment["article_id"]);
 		$a["title"] = $pipe["title"];
@@ -767,21 +771,21 @@ function update_view_time($article_id)
 	if ($auth_zid === "") {
 		$last_seen = 0;
 	} else {
-		$article_view = db_find_rec("article_view", ["article_id" => $article_id, "zid" => $auth_zid]);
-		if ($article_view) {
-			$article_view["last_time"] = $article_view["time"];
-			$last_seen = $article_view["time"];
+		$comment_view = db_find_rec("comment_view", ["article_id" => $article_id, "zid" => $auth_zid]);
+		if ($comment_view) {
+			$comment_view["last_time"] = $comment_view["time"];
+			$last_seen = $comment_view["time"];
 		} else {
-			$article_view = db_new_rec("article_view");
-			$article_view["article_id"] = $article_id;
-			$article_view["zid"] = $auth_zid;
-			$article_view["last_time"] = 0;
+			$comment_view = db_new_rec("comment_view");
+			$comment_view["article_id"] = $article_id;
+			$comment_view["zid"] = $auth_zid;
+			$comment_view["last_time"] = 0;
 			$last_seen = 0;
 		}
-		$article_view["comments_clean"] = 0;
-		$article_view["comments_total"] = 0;
-		$article_view["time"] = time();
-		db_set_rec("article_view", $article_view);
+		$comment_view["comments_clean"] = 0;
+		$comment_view["comments_total"] = 0;
+		$comment_view["time"] = time();
+		db_set_rec("comment_view", $comment_view);
 	}
 
 	return $last_seen;
@@ -796,38 +800,35 @@ function revert_view_time($article_id)
 		return;
 	}
 
-	$article_view = db_find_rec("article_view", ["article_id" => $article_id, "zid" => $auth_zid]);
-	if ($article_view) {
-		$article_view["time"] = $article_view["last_time"];
-		db_set_rec("article_view", $article_view);
+	$comment_view = db_find_rec("comment_view", ["article_id" => $article_id, "zid" => $auth_zid]);
+	if ($comment_view) {
+		$comment_view["time"] = $comment_view["last_time"];
+		db_set_rec("comment_view", $comment_view);
 	}
 }
 
 
-function count_comments($type_id = 0, $article_id = 0)
+function count_comments($article_id, $article_type_id)
 {
 	global $auth_zid;
 	global $auth_user;
 
-	if ($type_id == 0 && $article_id == 0) {
+	if ($article_id == 0) {
 		$comments["count"] = 0;
 		$comments["label"] = " comments";
 		$comments["new"] = 0;
 		$comments["tag"] = "<b>0</b> comments";
 		return;
 	}
-	$type = item_type($type_id);
-	$article = db_get_rec($type, $article_id);
+	$article_type = item_type($article_type_id);
+	$article = db_get_rec($article_type, $article_id);
 
 	$comments = [];
 	if ($auth_user["show_junk_enabled"]) {
-		//$row = sql("select count(*) as comments from comment where article_id = ?", $article_id);
 		$comments["count"] = $article["comments_total"];
 	} else {
-		//$row = sql("select count(*) as comments from comment where article_id = ? and junk_status <= 0", $article_id);
 		$comments["count"] = $article["comments_clean"];
 	}
-	//$comments["count"] = $row[0]["comments"];
 	if ($comments["count"] == 1) {
 		$comments["label"] = " comment";
 	} else {
@@ -837,30 +838,30 @@ function count_comments($type_id = 0, $article_id = 0)
 	if ($auth_zid === "") {
 		$new = 0;
 	} else {
-		$article_view = db_find_rec("article_view", ["article_id" => $article_id, "zid" => $auth_zid]);
-		if ($article_view) {
+		$comment_view = db_find_rec("comment_view", ["article_id" => $article_id, "zid" => $auth_zid]);
+		if ($comment_view) {
 			if ($auth_user["show_junk_enabled"]) {
-				$new = $article_view["comments_total"];
+				$new = $comment_view["comments_total"];
 			} else {
-				$new = $article_view["comments_clean"];
+				$new = $comment_view["comments_clean"];
 			}
 		} else {
-			$article_view = db_new_rec("article_view");
-			$article_view["article_id"] = $article_id;
-			$article_view["zid"] = $auth_zid;
+			$comment_view = db_new_rec("comment_view");
+			$comment_view["article_id"] = $article_id;
+			$comment_view["zid"] = $auth_zid;
 			$new = -1;
 		}
 		if ($new == -1) {
 			if ($auth_user["show_junk_enabled"]) {
-				$row = sql("select count(*) as comments from comment where article_id = ? and edit_time > ?", $article_id, $article_view["time"]);
+				$row = sql("select count(*) as comments from comment where article_id = ? and edit_time > ?", $article_id, $comment_view["time"]);
 				$new = $row[0]["comments"];
-				$article_view["comments_total"] = $new;
+				$comment_view["comments_total"] = $new;
 			} else {
-				$row = sql("select count(*) as comments from comment where article_id = ? and edit_time > ? and clean = 1", $article_id, $article_view["time"]);
+				$row = sql("select count(*) as comments from comment where article_id = ? and edit_time > ? and clean = 1", $article_id, $comment_view["time"]);
 				$new = $row[0]["comments"];
-				$article_view["comments_clean"] = $new;
+				$comment_view["comments_clean"] = $new;
 			}
-			db_set_rec("article_view", $article_view);
+			db_set_rec("comment_view", $comment_view);
 		}
 	}
 	$comments["new"] = $new;
@@ -938,7 +939,7 @@ function recount_comments($article_id)
 		db_set_rec($article_type, $article);
 	}
 
-	sql("update article_view set comments_clean = -1, comments_total = -1 where article_id = ?", $article_id);
+	sql("update comment_view set comments_clean = -1, comments_total = -1 where article_id = ?", $article_id);
 }
 
 
@@ -967,7 +968,7 @@ function print_comments($type_id, $rec)
 
 	$type = item_type($type_id);
 	if ($auth_user["javascript_enabled"]) {
-		print_sliders($type_id, $rec["{$type}_id"]);
+		print_sliders($rec["{$type}_id"], $type_id);
 		print_noscript();
 	} else {
 		render_page($type_id, $rec["{$type}_id"], false);
@@ -988,7 +989,6 @@ function print_comments($type_id, $rec)
 		writeln('var inline_reply = ' . ($inline_reply ? "true" : "false") . ';');
 		writeln('var wysiwyg_enabled = ' . ($wysiwyg_enabled ? "true" : "false") . ';');
 		writeln();
-		//writeln('get_comments("' . $type . '", "' . $rec["{$type}_id"] . '");');
 		writeln('get_comments("' . $type . '", "' . crypt_crockford_encode($rec["{$type}_id"]) . '");');
 		writeln('render_page();');
 		writeln();

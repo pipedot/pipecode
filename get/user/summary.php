@@ -49,7 +49,7 @@ if (count($row) > 0) {
 	writeln('		<th class="right">Date</th>');
 	writeln('	</tr>');
 	for ($i = 0; $i < count($row); $i++) {
-		$comments = count_comments(TYPE_STORY, $row[$i]["story_id"]);
+		$comments = count_comments($row[$i]["story_id"], TYPE_STORY);
 		writeln('	<tr>');
 		writeln('		<td><a href="' . item_link(TYPE_STORY, $row[$i]["story_id"], $row[$i]) . '">' . $row[$i]["title"] . '</a></td>');
 		writeln('		<td class="center">' . $comments["count"] . '</td>');
@@ -69,7 +69,7 @@ if (count($row) > 0) {
 	writeln('		<th class="right">Date</th>');
 	writeln('	</tr>');
 	for ($i = 0; $i < count($row); $i++) {
-		$comments = count_comments(TYPE_JOURNAL, $row[$i]["journal_id"]);
+		$comments = count_comments($row[$i]["journal_id"], TYPE_JOURNAL);
 		writeln('	<tr>');
 		writeln('		<td><a href="' . item_link(TYPE_JOURNAL, $row[$i]["journal_id"], $row[$i]) . '">' . $row[$i]["title"] . '</a></td>');
 		writeln('		<td class="center">' . $comments["count"] . '</td>');

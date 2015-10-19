@@ -31,6 +31,10 @@ $comment["junk_time"] = $now;
 $comment["junk_zid"] = $auth_zid;
 db_set_rec("comment", $comment);
 
+if ($comment["junk_status"] > 0) {
+	sql("delete from notification where item_id = ?", $comment["comment_id"]);
+}
+
 recount_comments($comment["article_id"]);
 
 header("Location: /comment/" . $comment["short_code"]);

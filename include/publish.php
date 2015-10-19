@@ -21,8 +21,8 @@ function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, 
 {
 	global $doc_root;
 
+	$pipe = db_get_rec("pipe", $pipe_id);
 	$topic = db_get_rec("topic", $topic_id);
-	$topic = $topic["topic"];
 
 	print_header("Publish Submission");
 	print_main_nav("pipe");
@@ -47,17 +47,12 @@ function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, 
 	}
 
 	writeln('<h1>Preview</h1>');
-	$a = array();
-	$a["type_id"] = TYPE_PIPE;
-	$a["title"] = $title;
-	$a["pipe_id"] = $pipe_id;
-	$a["zid"] = $zid;
-	$a["topic"] = $topic;
-	//$a["icon"] = $icon;
-	$a["keywords"] = $keywords;
 	$a["body"] = $clean_body;
-	$a["comments"] = count_comments();
-	print_article($a);
+	$a["title"] = $title;
+	$a["link"] = item_link(TYPE_PIPE, $pipe_id, $pipe);
+	$a["info"] = content_info($pipe, $topic);
+	$a["view"] = "<b>0</b> comments";
+	print_content($a);
 
 	writeln('<h1>Publish</h1>');
 	beg_tab();

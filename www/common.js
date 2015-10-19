@@ -327,3 +327,33 @@ function render(c)
 
 	return s;
 }
+
+
+function stream_vote(code, value)
+{
+	data = "code=" + code + "&value=" + value;
+	$.post("/vote", data, function(data) {
+		if (data.indexOf("error:") != -1) {
+			alert(data);
+		} else {
+			var json = $.parseJSON(data);
+			$("#score_" + json.code).html(json.score);
+			if (json.value == -1) {
+				$('#plus_' + code).attr("class", "vote-button down-16");
+				$('#plus_' + code).attr("title", "You Voted Down");
+				$('#minus_' + code).attr("class", "vote-button undo-16");
+				$('#minus_' + code).attr("title", "Undo Vote");
+			} else if (json.value == 1) {
+				$('#plus_' + code).attr("class", "vote-button up-16");
+				$('#plus_' + code).attr("title", "You Voted Up");
+				$('#minus_' + code).attr("class", "vote-button undo-16");
+				$('#minus_' + code).attr("title", "Undo Vote");
+			} else {
+				$('#plus_' + code).attr("class", "vote-button plus-16");
+				$('#plus_' + code).attr("title", "Vote Up");
+				$('#minus_' + code).attr("class", "vote-button minus-16");
+				$('#minus_' + code).attr("title", "Vote Down");
+			}
+		}
+	});
+}

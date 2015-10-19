@@ -27,7 +27,7 @@ $short_code = crypt_crockford_encode($article["article_id"]);
 print_header($article["title"]);
 beg_main();
 
-print_article($article);
+print_news_large($article);
 
 writeln('<div class="external-title">External Content</div>');
 writeln('<table class="external-table">');
@@ -58,6 +58,8 @@ if ($article["feed_id"] > 0) {
 	}
 }
 writeln('</table>');
+
+print_comments(TYPE_ARTICLE, $article);
 
 end_main();
 print_footer();

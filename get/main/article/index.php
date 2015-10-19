@@ -22,7 +22,10 @@ beg_main();
 
 writeln('<h1>Articles</h1>');
 
-$row = sql("select * from article order by publish_time desc limit 0, 50");
+$items_per_page = 50;
+list($item_start, $page_footer) = page_footer("article", $items_per_page);
+
+$row = sql("select * from article order by publish_time desc limit $item_start, $items_per_page");
 beg_tab();
 writeln('	<tr>');
 writeln('		<th>Title</th>');
@@ -37,6 +40,8 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('	</tr>');
 }
 end_tab();
+
+writeln($page_footer);
 
 end_main();
 print_footer();

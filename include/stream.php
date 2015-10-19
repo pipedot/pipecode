@@ -17,106 +17,138 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-function print_card($card_id, $size = "small")
+function print_card($article_id, $size = "small")
 {
 	global $protocol;
 	global $server_name;
 	global $doc_root;
+	global $auth_zid;
 
 	$a = array();
-	$card = db_get_rec("card", $card_id);
-//	$article = db_get_rec("article", $card["article_id"]);
-	if ($card["link_url"] != "") {
-//		$link = db_get_rec("link", $card["link_id"]);
-		$a["link_url"] = $card["link_url"];
-		$a["link_subject"] = $card["link_subject"];
-		$image_id = $card["image_id"];
-		if ($image_id > 0) {
-			$image = db_get_rec("image", $image_id);
-			$path = public_path($image["time"]) . "/i$image_id.256x256.jpg";
-			$a["image_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
-		}
-	}
-
 	$tags = array();
-	$row = sql("select tag from card_tags where card_id = ? order by tag", $card_id);
-	for ($i = 0; $i < count($row); $i++) {
-		$tags[] = $row[$i]["tag"];
-	}
+	$short = db_get_rec("short", $article_id);
+	$article_type_id = $short["type_id"];
+	$article_type = item_type($article_type_id);
 
-	$a["card_id"] = $card_id;
-	$a["zid"] = $card["zid"];
-	$a["time"] = $card["edit_time"];
-	$a["votes"] = 0;
-	$a["body"] = $card["body"];
-
-	$photo_id = $card["photo_id"];
-	if ($photo_id > 0) {
-		$photo = db_get_rec("photo", $photo_id);
-		$info = photo_info($photo);
-		$a["photo_code"] = crypt_crockford_encode($photo_id);
-		$a["photo_class"] = $info["small_class"];
-		/*$a["photo_id"] = $photo_id;
-		$photo = db_get_rec("photo", $photo_id);
-		$width = 320;
-		if ($photo["aspect_width"] == 9 && $photo["aspect_height"] == 16) {
-			$width = 320;
-			$height = 569;
-			if ($photo["has_medium"]) {
-				$width = 640;
-				$height = 1138;
+	if ($article_type_id == TYPE_CARD) {
+		$article = db_get_rec("card", $article_id);
+		if ($article["link_url"] != "") {
+			$a["link_url"] = $article["link_url"];
+			$a["link_subject"] = $article["link_subject"];
+			$image_id = $article["image_id"];
+			if ($image_id > 0) {
+				$image = db_get_rec("image", $image_id);
+				$path = public_path($image["time"]) . "/i$image_id.256x256.jpg";
+				$a["image_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
 			}
-			$a["photo_class"] = "card_photo_9x16";
-		} else if ($photo["aspect_width"] == 3 && $photo["aspect_height"] == 4) {
-			$width = 320;
-			$height = 427;
-			if ($photo["has_medium"]) {
-				$width = 640;
-				$height = 853;
-			}
-			$a["photo_class"] = "card_photo_3x4";
-		} else if ($photo["aspect_width"] == 1 && $photo["aspect_height"] == 1) {
-			$width = 320;
-			$height = 320;
-			if ($photo["has_medium"]) {
-				$width = 640;
-				$height = 640;
-			}
-			$a["photo_class"] = "card_photo_1x1";
-		} else if ($photo["aspect_width"] == 4 && $photo["aspect_height"] == 3) {
-			$width = 320;
-			$height = 240;
-			if ($photo["has_medium"]) {
-				$width = 640;
-				$height = 480;
-			}
-			$a["photo_class"] = "card_photo_4x3";
-		} else if ($photo["aspect_width"] == 16 && $photo["aspect_height"] == 9) {
-			$width = 320;
-			$height = 180;
-			if ($photo["has_medium"]) {
-				$width = 640;
-				$height = 360;
-			}
-			$a["photo_class"] = "card_photo-16x9";
 		}
-		$path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
-		$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");*/
-		$retina = true;
-		if ($retina && $photo["has_medium"]) {
-			$a["photo_link"] = $info["medium_link"];
+
+		$row = sql("select tag from card_tags where card_id = ? order by tag", $article_id);
+		for ($i = 0; $i < count($row); $i++) {
+			$tags[] = $row[$i]["tag"];
+		}
+		$a["comments"] = count_comments($article_id, TYPE_CARD);
+		$a["body"] = $article["body"];
+		$a["time"] = $article["edit_time"];
+		$a["zid"] = $article["zid"];
+
+		$photo_id = $article["photo_id"];
+		if ($photo_id > 0) {
+			$photo = db_get_rec("photo", $photo_id);
+			$info = photo_info($photo);
+			$a["photo_code"] = crypt_crockford_encode($photo_id);
+			$a["photo_class"] = $info["small_class"];
+			/*$a["photo_id"] = $photo_id;
+			$photo = db_get_rec("photo", $photo_id);
+			$width = 320;
+			if ($photo["aspect_width"] == 9 && $photo["aspect_height"] == 16) {
+				$width = 320;
+				$height = 569;
+				if ($photo["has_medium"]) {
+					$width = 640;
+					$height = 1138;
+				}
+				$a["photo_class"] = "card_photo_9x16";
+			} else if ($photo["aspect_width"] == 3 && $photo["aspect_height"] == 4) {
+				$width = 320;
+				$height = 427;
+				if ($photo["has_medium"]) {
+					$width = 640;
+					$height = 853;
+				}
+				$a["photo_class"] = "card_photo_3x4";
+			} else if ($photo["aspect_width"] == 1 && $photo["aspect_height"] == 1) {
+				$width = 320;
+				$height = 320;
+				if ($photo["has_medium"]) {
+					$width = 640;
+					$height = 640;
+				}
+				$a["photo_class"] = "card_photo_1x1";
+			} else if ($photo["aspect_width"] == 4 && $photo["aspect_height"] == 3) {
+				$width = 320;
+				$height = 240;
+				if ($photo["has_medium"]) {
+					$width = 640;
+					$height = 480;
+				}
+				$a["photo_class"] = "card_photo_4x3";
+			} else if ($photo["aspect_width"] == 16 && $photo["aspect_height"] == 9) {
+				$width = 320;
+				$height = 180;
+				if ($photo["has_medium"]) {
+					$width = 640;
+					$height = 360;
+				}
+				$a["photo_class"] = "card_photo-16x9";
+			}
+			$path = public_path($photo["time"]) . "/p$photo_id.{$width}x{$height}.jpg";
+			$a["photo_url"] = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");*/
+			$retina = true;
+			if ($retina && $photo["has_medium"]) {
+				$a["photo_link"] = $info["medium_link"];
+			} else {
+				$a["photo_link"] = $info["small_link"];
+			}
+		}
+	} else if ($article_type_id == TYPE_ARTICLE) {
+		$article = db_get_rec("article", $article_id);
+		$a["body"] = "";
+		$a["link_url"] = $article["link"];
+		$a["link_subject"] = $article["title"];
+		$thumb_id = $article["thumb_id"];
+		if ($thumb_id > 0) {
+			$a["image_url"] = "$protocol://$server_name/thumb/" . crypt_crockford_encode($thumb_id) . ".jpg";
+		}
+		$a["comments"] = count_comments($article_id, TYPE_ARTICLE);
+		$a["time"] = $article["publish_time"];
+		$feed_id = $article["feed_id"];
+		$feed_code = crypt_crockford_encode($feed_id);
+		$feed = db_get_rec("feed", $feed_id);
+		$a["feed_title"] = $feed["title"];
+		$a["feed_link"] = $feed["link"];
+		$a["feed_slug"] = $feed["slug"];
+		if (fs_is_file("$doc_root/www/pub/favicon/$feed_code.png")) {
+			$a["feed_icon"] = "$protocol://$server_name/pub/favicon/$feed_code.png";
 		} else {
-			$a["photo_link"] = $info["small_link"];
+			$a["feed_icon"] = "$protocol://$server_name/images/globe-32.png";
 		}
 	}
 
-	$a["comments"] = count_comments(TYPE_CARD, $card["card_id"]);
+	$a["article_id"] = $article_id;
+	$a["votes"] = get_stream_score($article_id);
+	$stream_vote = db_find_rec("stream_vote", ["zid" => $auth_zid, "article_id" => $article_id]);
+	if (!$stream_vote) {
+		$a["value"] = 0;
+	} else {
+		$a["value"] = $stream_vote["value"];
+	}
 	$a["tags"] = $tags;
 
 	if ($size == "small") {
 		print_card_small($a);
 	} else {
-		$row = sql("select count(*) as edit_count from card_edit where card_id = ?", $card["card_id"]);
+		$row = sql("select count(*) as edit_count from card_edit where card_id = ?", $article["card_id"]);
 		if ($row[0]["edit_count"] > 0) {
 			$a["history"] = true;
 		}
@@ -125,20 +157,90 @@ function print_card($card_id, $size = "small")
 }
 
 
+function stream_vote_box($article_id, $votes = false, $value = 0)
+{
+	global $auth_user;
+	global $auth_zid;
+	global $server_name;
+	global $protocol;
+
+	if ($auth_zid == "") {
+		return;
+	}
+	if ($votes === false) {
+		$votes = get_stream_score($article_id);
+		$stream_vote = db_find_rec("stream_vote", ["zid" => $auth_zid, "article_id" => $article_id]);
+		if (!$stream_vote) {
+			$value = 0;
+		} else {
+			$value = $stream_vote["value"];
+		}
+	}
+	$article_code = crypt_crockford_encode($article_id);
+
+	if ($auth_user["javascript_enabled"]) {
+		$s = "<div class=\"vote-box\">";
+		if ($value == -1) {
+			$s .= "<div id=\"plus_$article_code\" class=\"vote-button down-16\" title=\"You Voted Down\" onclick=\"stream_vote('$article_code', 1)\"></div>";
+			$s .= "<div id=\"score_$article_code\" class=\"vote-count\">$votes</div>";
+			$s .= "<div id=\"minus_$article_code\" class=\"vote-button undo-16\" title=\"Undo Vote\" onclick=\"stream_vote('$article_code', -1)\"></div>";
+		} else if ($value == 1) {
+			$s .= "<div id=\"plus_$article_code\" class=\"vote-button up-16\" title=\"You Voted Up\" onclick=\"stream_vote('$article_code', 1)\"></div>";
+			$s .= "<div id=\"score_$article_code\" class=\"vote-count\">$votes</div>";
+			$s .= "<div id=\"minus_$article_code\" class=\"vote-button undo-16\" title=\"Undo Vote\" onclick=\"stream_vote('$article_code', -1)\"></div>";
+		} else {
+			$s .= "<div id=\"plus_$article_code\" class=\"vote-button plus-16\" title=\"Vote Up\" onclick=\"stream_vote('$article_code', 1)\"></div>";
+			$s .= "<div id=\"score_$article_code\" class=\"vote-count\">$votes</div>";
+			$s .= "<div id=\"minus_$article_code\" class=\"vote-button minus-16\" title=\"Vote Down\" onclick=\"stream_vote('$article_code', -1)\"></div>";
+		}
+		$s .= "</div>";
+	} else {
+		$s = "<form action=\"$protocol://$server_name/vote\" method=\"post\">";
+		$s .= "<input type=\"hidden\" name=\"code\" value=\"$article_code\">";
+		$s .= "<input type=\"hidden\" name=\"noscript\" value=\"1\">";
+		$s .= "<div class=\"vote-box\">";
+		if ($value == -1) {
+			$s .= "<button class=\"vote-button down-16\" title=\"You Voted Down\"></button>";
+			$s .= "<div class=\"vote-count\">$votes</div>";
+			$s .= "<button class=\"vote-button undo-16\" title=\"Undo Vote\"></button>";
+		} else if ($value == 1) {
+			$s .= "<button class=\"vote-button up-16\" title=\"You Voted Up\"></button>";
+			$s .= "<div class=\"vote-count\">$votes</div>";
+			$s .= "<button class=\"vote-button undo-16\" title=\"Undo Vote\"></button>";
+		} else {
+			$s .= "<button class=\"vote-button plus-16\" name=\"value\" title=\"Vote Up\" type=\"submit\" value=\"1\"></button>";
+			$s .= "<div class=\"vote-count\">$votes</div>";
+			$s .= "<button class=\"vote-button minus-16\" name=\"value\" title=\"Vote Down\" type=\"submit\" value=\"-1\"></button>";
+		}
+		$s .= "</div>";
+		$s .= "</form>";
+	}
+
+	return $s;
+}
+
+
 function print_card_small($a)
 {
 	global $server_name;
 	global $protocol;
 
-	$card_id = $a["card_id"];
-	$card_code = crypt_crockford_encode($card_id);
-	$zid = $a["zid"];
-	list($user, $host) = explode("@", $zid);
-	$user_link = user_link($zid);
-	$avatar_picture = avatar_picture($zid, 64);
+	$article_id = $a["article_id"];
+	$article_code = crypt_crockford_encode($article_id);
+	if (array_key_exists("zid", $a)) {
+		$author_name = $a["zid"];
+		list($user, $host) = explode("@", $author_name);
+		$author_link = user_link($author_name);
+		$author_icon = avatar_picture($author_name, 64);
+	} else {
+		$author_name = $a["feed_title"];
+		$author_link = "$protocol://$server_name/feed/" . $a["feed_slug"];
+		$author_icon = $a["feed_icon"];
+	}
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
 	$votes = $a["votes"];
+	$value = $a["value"];
 	$body = make_clickable($a["body"]);
 	if (array_key_exists("link_url", $a)) {
 		$link_url = $a["link_url"];
@@ -152,6 +254,11 @@ function print_card_small($a)
 		$link_site = $u["host"];
 	} else {
 		$link_url = "";
+	}
+	if (array_key_exists("feed_link", $a)) {
+		$site_url = $a["feed_link"];
+	} else {
+		$site_url = $link_url;
 	}
 	if (array_key_exists("photo_code", $a)) {
 		$photo_code = $a["photo_code"];
@@ -174,18 +281,28 @@ function print_card_small($a)
 	writeln("<table class=\"card\">");
 	writeln("	<tr>");
 	writeln("		<td class=\"card-row\">");
-	writeln("			<a href=\"$user_link\"><img class=\"card-profile\" src=\"$avatar_picture\"></a>");
+	writeln("			<a href=\"$author_link\"><img class=\"card-profile\" src=\"$author_icon\"></a>");
 	writeln("			<div class=\"card-by-box\">");
-	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
+	writeln("				<a class=\"card-by\" href=\"$author_link\">$author_name</a>");
 	writeln("				<div class=\"card-time\">$date</div>");
 	writeln("			</div>");
-	writeln("			<div class=\"card-vote\">");
-	writeln("				<div class=\"card-vote-box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\">");
-	writeln("					<div class=\"card-vote-count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\">");
-	writeln("				</div>");
-	writeln("			</div>");
+	writeln("			<div class=\"card-vote\">" . stream_vote_box($article_id, $votes, $value) . "</div>");
+//	writeln("				<div class=\"vote-box\">");
+//	if ($value == -1) {
+//		writeln("					<div id=\"plus_$card_code\" class=\"vote-button down-16\" title=\"You Voted Down\" onclick=\"stream_vote('$card_code', 1)\"></div>");
+//		writeln("					<div id=\"score_$card_code\" class=\"vote-count\">$votes</div>");
+//		writeln("					<div id=\"minus_$card_code\" class=\"vote-button undo-16\" title=\"Undo Vote\" onclick=\"stream_vote('$card_code', -1)\"></div>");
+//	} else if ($value == 1) {
+//		writeln("					<div id=\"plus_$card_code\" class=\"vote-button up-16\" title=\"You Voted Up\" onclick=\"stream_vote('$card_code', 1)\"></div>");
+//		writeln("					<div id=\"score_$card_code\" class=\"vote-count\">$votes</div>");
+//		writeln("					<div id=\"minus_$card_code\" class=\"vote-button undo-16\" title=\"Undo Vote\" onclick=\"stream_vote('$card_code', -1)\"></div>");
+//	} else {
+//		writeln("					<div id=\"plus_$card_code\" class=\"vote-button plus-16\" title=\"Vote Up\" onclick=\"stream_vote('$card_code', 1)\"></div>");
+//		writeln("					<div id=\"score_$card_code\" class=\"vote-count\">$votes</div>");
+//		writeln("					<div id=\"minus_$card_code\" class=\"vote-button minus-16\" title=\"Vote Down\" onclick=\"stream_vote('$card_code', -1)\"></div>");
+//	}
+//	writeln("				</div>");
+//	writeln("			</div>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	if ($body != "") {
@@ -206,14 +323,18 @@ function print_card_small($a)
 		}
 		writeln("			<div class=\"card-story-box\">");
 		writeln("				<a class=\"card-story-link\" href=\"$link_url\">$link_subject</a>");
-		writeln("				<a class=\"card-story-site\" href=\"$link_url\">$link_site</a>");
+		writeln("				<a class=\"card-story-site\" href=\"$site_url\">$link_site</a>");
 		writeln("			</div>");
 		writeln("		</td>");
 		writeln("	</tr>");
 	}
 	writeln("	<tr>");
 	writeln("		<td class=\"card-footer\">");
-	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$card_code\">{$a["comments"]["tag"]}</a>");
+	if (array_key_exists("zid", $a)) {
+		writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$article_code\">{$a["comments"]["tag"]}</a>");
+	} else {
+		writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/article/$article_code\">{$a["comments"]["tag"]}</a>");
+	}
 	writeln("			<div class=\"card-tags\">$tag_links</div>");
 	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\">");
 	writeln("		</td>");
@@ -228,8 +349,8 @@ function print_card_large($a)
 	global $protocol;
 	global $auth_zid;
 
-	$card_id = $a["card_id"];
-	$card_code = crypt_crockford_encode($card_id);
+	$article_id = $a["article_id"];
+	$article_code = crypt_crockford_encode($article_id);
 	$zid = $a["zid"];
 	list($user, $host) = explode("@", $zid);
 	$user_link = user_link($zid);
@@ -237,6 +358,7 @@ function print_card_large($a)
 	$time = $a["time"];
 	$date = date("Y-m-d H:i", $time);
 	$votes = $a["votes"];
+	$value = $a["value"];
 	$body = make_clickable($a["body"]);
 	if (array_key_exists("link_url", $a)) {
 		$link_url = $a["link_url"];
@@ -282,13 +404,7 @@ function print_card_large($a)
 	writeln("				<a class=\"card-by\" href=\"$user_link\">$zid</a>");
 	writeln("				<div class=\"card-time\">$date</div>");
 	writeln("			</div>");
-	writeln("			<div class=\"card-vote\">");
-	writeln("				<div class=\"card-vote-box\">");
-	writeln("					<img alt=\"Vote Up\" class=\"card-button\" src=\"/images/plus-16.png\" title=\"Vote Up\">");
-	writeln("					<div class=\"card-vote-count\">$votes</div>");
-	writeln("					<img alt=\"Vote Down\" class=\"card-button\" src=\"/images/minus-16.png\" title=\"Vote Down\">");
-	writeln("				</div>");
-	writeln("			</div>");
+	writeln("			<div class=\"card-vote\">" . stream_vote_box($article_id, $votes, $value) . "</div>");
 	writeln("		</td>");
 	writeln("	</tr>");
 	if ($body != "") {
@@ -316,15 +432,15 @@ function print_card_large($a)
 	}
 	writeln("	<tr>");
 	writeln("		<td class=\"card-footer\">");
-	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$card_code\">{$a["comments"]["tag"]}</a>");
+	writeln("			<a class=\"card-comments\" href=\"$protocol://$server_name/card/$article_code\">{$a["comments"]["tag"]}</a>");
 	writeln("			<div class=\"card-tags\">$tag_links</div>");
 	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\">"); <a class=\"icon-16 picture-16\" href=\"/card/$card_code/image\">Image</a> |
 	$options = array();
 	if ($history) {
-		$options[] = "<a class=\"icon-16 calendar-16\" href=\"/card/$card_code/history\">History</a>";
+		$options[] = "<a class=\"icon-16 calendar-16\" href=\"/card/$article_code/history\">History</a>";
 	}
 	if ($zid === $auth_zid) {
-		$options[] = "<a class=\"icon-16 notepad-16\" href=\"/card/$card_code/edit\">Edit</a>";
+		$options[] = "<a class=\"icon-16 notepad-16\" href=\"/card/$article_code/edit\">Edit</a>";
 		//$options[] = "<a class=\"icon-16 tag-16\" href=\"/card/$short_code/tag\">Tag</a>";
 	}
 	writeln("			<div class=\"card-options\">" . implode(" | ", $options) . "</div>");
@@ -391,6 +507,13 @@ function print_card_large($a)
 	writeln('</table>');
 }
 */
+
+function get_stream_score($article_id)
+{
+	$row = sql("select sum(value) as score from stream_vote where article_id = ?", $article_id);
+	return (int) $row[0]["score"];
+}
+
 
 function slurp_title($url)
 {

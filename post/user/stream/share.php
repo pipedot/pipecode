@@ -18,7 +18,6 @@
 //
 
 include("clean.php");
-include("stream.php");
 include("image.php");
 
 require_mine();
@@ -72,6 +71,11 @@ for ($i = 0; $i < count($tags); $i++) {
 	$card_tags["tag"] = $tags[$i];
 	db_set_rec("card_tags", $card_tags);
 }
+
+$stream_user = db_new_rec("stream_user");
+$stream_user["zid"] = $auth_zid;
+$stream_user["article_id"] = $card["card_id"];
+db_set_rec("stream_user", $stream_user);
 
 if ($link_url == "") {
 	header("Location: " . user_link($auth_zid) . "stream/");

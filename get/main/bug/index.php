@@ -35,7 +35,7 @@ for ($i = 0; $i < count($row); $i++) {
 	$bug_code = crypt_crockford_encode($row[$i]["bug_id"]);
 	$icon = bug_priority_icon($row[$i]["priority"]);
 	$labels = make_bug_labels($row[$i]["bug_id"]);
-	$comments = count_comments(TYPE_BUG, $row[$i]["bug_id"]);
+	$comments = count_comments($row[$i]["bug_id"], TYPE_BUG);
 
 	writeln('	<tr>');
 	writeln('		<td>');

@@ -33,7 +33,7 @@ function vote_box($poll_id, $vote)
 	$poll_answer = db_get_list("poll_answer", "position", array("poll_id" => $poll["poll_id"]));
 	$k = array_keys($poll_answer);
 
-	$comments = count_comments(TYPE_POLL, $poll_id);
+	$comments = count_comments($poll_id, TYPE_POLL);
 
 	if ($vote) {
 		beg_form("/poll/$poll_code/vote");

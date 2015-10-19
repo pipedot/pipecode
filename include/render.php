@@ -19,7 +19,7 @@
 
 function print_comment($comment, $article = false, $article_type_id = 0, $last_seen = 0)
 {
-	if (($article_type_id == 0) && ((is_bool($article) && $article) || is_array($artcile))) {
+	if (($article_type_id == 0) && ((is_bool($article) && $article) || is_array($article))) {
 		$short = db_get_rec("short", $comment["article_id"]);
 		$article_type_id = $short["type_id"];
 	}
@@ -373,16 +373,16 @@ function render_page($type_id, $article_id, $json)
 }
 
 
-function print_sliders($type_id, $article_id)
+function print_sliders($article_id, $article_type_id)
 {
 	global $protocol;
 	global $server_name;
 	global $hide_value;
 	global $expand_value;
 
-	$type = item_type($type_id);
-	$comments = count_comments($type_id, $article_id);
-	$rec = db_get_rec($type, $article_id);
+	$article_type = item_type($article_type_id);
+	$comments = count_comments($article_id, $article_type_id);
+	$rec = db_get_rec($article_type, $article_id);
 	$article_code = crypt_crockford_encode($article_id);
 
 	writeln('<div class="comment-header">');

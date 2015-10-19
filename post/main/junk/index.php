@@ -47,6 +47,7 @@ for ($i = 0; $i < count($keys); $i++) {
 
 			if ($value == "spam") {
 				$comment["junk_status"] = 1;
+				sql("delete from notification where item_id = ?", $comment["comment_id"]);
 			} else if ($value == "not-junk") {
 				$comment["junk_status"] = -1;
 			}

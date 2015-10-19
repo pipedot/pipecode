@@ -52,6 +52,8 @@ $comment["zid"] = $zid;
 db_set_rec("comment", $comment);
 
 send_notifications($comment);
+revert_view_time($article_id);
+recount_comments($article_id);
 
 //writeln("clean_body [$clean_body] dirty_body [$dirty_body] raw_body [" . $_POST["body"] . "]");
 //$s = "{\n";

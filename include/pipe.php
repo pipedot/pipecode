@@ -19,29 +19,43 @@
 
 function print_pipe($pipe_id)
 {
+	global $auth_user;
+	global $protocol;
 	global $server_name;
 
 	$pipe = db_get_rec("pipe", $pipe_id);
-	$date = date("Y-m-d H:i", $pipe["time"]);
 	$topic = db_get_rec("topic", $pipe["topic_id"]);
-	$a["type_id"] = TYPE_STORY;
-	$a["pipe_id"] = $pipe["pipe_id"];
+	$pipe_id = $pipe["pipe_id"];
+	$pipe_code = crypt_crockford_encode($pipe_id);
+
 	$a["body"] = $pipe["body"];
-	//$a["icon"] = $pipe["icon"];
-	$a["keywords"] = $pipe["keywords"];
-	$a["time"] = $pipe["time"];
 	$a["title"] = $pipe["title"];
-	$a["topic"] = $topic["topic"];
-	$a["zid"] = $pipe["author_zid"];
-	$a["comments"] = count_comments(TYPE_PIPE, $pipe_id);
+	$a["link"] = item_link(TYPE_PIPE, $pipe_id, $pipe);
+	$a["info"] = content_info($pipe, $topic);
+	$a["image"] = content_image($topic);
+	//$a["comments"] = count_comments($pipe_id, TYPE_PIPE);
 
 	$row = sql("select sum(value) as score from pipe_vote where pipe_id = ?", $pipe_id);
-	$a["score"] = (int) $row[0]["score"];
-	if ($a["score"] > 0) {
-		$a["score"] = "+" . $a["score"];
+	$score = (int) $row[0]["score"];
+	if ($score > 0) {
+		$score = "+$score";
+	}
+	$a["view"] = "score <b>$score</b>";
+
+	if ($auth_user["editor"] && !$pipe["closed"]) {
+		$a["actions"][] = "<a href=\"/pipe/$pipe_code/publish\" class=\"icon-16 certificate-16\">Publish</a>";
+		$a["actions"][] = "<a href=\"/pipe/$pipe_code/close\" class=\"icon-16 delete-16\">Close</a>";
+	} else if ($pipe["closed"]) {
+		$status = "Closed";
+		$story = db_find_rec("story", ["pipe_id" => $pipe_id]);
+		if ($story) {
+			$a["actions"][] = "<a class=\"icon-16 news-16\" href=\"" . item_link(TYPE_STORY, $story["story_id"], $story) . "\">Story</a>";
+		} else {
+			$a["actions"][] = "<span class=\"icon-16 stop-16\">Closed (" . $pipe["reason"] . ")</span>";
+		}
 	}
 
-	print_article($a);
+	print_content($a);
 }
 
 
@@ -63,7 +77,7 @@ function print_pipe_small($pipe_id, $full)
 		$by = "<b>$zid</b>";
 	}
 
-	$comments = count_comments(TYPE_PIPE, $pipe_id);
+	$comments = count_comments($pipe_id, TYPE_PIPE);
 
 	$row = sql("select value from pipe_vote where pipe_id = ? and zid = ?", $pipe_id, $auth_zid);
 	if (count($row) == 0) {

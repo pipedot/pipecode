@@ -22,6 +22,7 @@ include("geoip.php");
 include("link.php");
 include("notification.php");
 include("render.php");
+include("stream.php");
 
 $a = explode("/", $request_script);
 if (count($a) >= 2) {

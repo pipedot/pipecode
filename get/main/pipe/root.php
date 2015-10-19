@@ -22,22 +22,28 @@ include("story.php");
 include("diff.php");
 
 $pipe = item_request(TYPE_PIPE);
-$status = "Voting";
-$story_id = "";
-if ($pipe["closed"]) {
-	$status = "Closed";
-	if (db_has_rec("story", array("pipe_id" => $pipe["pipe_id"]))) {
-		$story = db_get_rec("story", array("pipe_id" => $pipe["pipe_id"]));
-		$story_id = $story["story_id"];
-		$story_code = crypt_crockford_encode($story_id);
-		$status = "<a href=\"/story/$story_code\">Published</a>";
-	}
-}
-if ($pipe["reason"] == "") {
-	$reason = "";
-} else {
-	$reason = " (" . $pipe["reason"] . ")";
-}
+$story = db_find_rec("story", ["pipe_id" => $pipe["pipe_id"]]);
+//if ($story) {
+//	$story_id = $story["story_id"];
+//} else {
+//	$story_id = 0;
+//}
+//$status = "Voting";
+//$story_id = "";
+//if ($pipe["closed"]) {
+//	$status = "Closed";
+//	if (db_has_rec("story", array("pipe_id" => $pipe["pipe_id"]))) {
+//		$story = db_get_rec("story", array("pipe_id" => $pipe["pipe_id"]));
+//		$story_id = $story["story_id"];
+//		$story_code = crypt_crockford_encode($story_id);
+//		$status = "<a href=\"/story/$story_code\">Published</a>";
+//	}
+//}
+//if ($pipe["reason"] == "") {
+//	$reason = "";
+//} else {
+//	$reason = " (" . $pipe["reason"] . ")";
+//}
 
 print_header($pipe["title"]);
 print_main_nav("pipe");
@@ -45,9 +51,9 @@ beg_main("cell");
 
 print_pipe($pipe["pipe_id"]);
 
-if ($story_id > 0) {
+if ($story) {
 	writeln('<h2>History</h2>');
-	$row = sql("select * from story_edit where story_id = ? order by edit_time", $story_id);
+	$row = sql("select * from story_edit where story_id = ? order by edit_time", $story["story_id"]);
 	for ($i = 0; $i <= count($row); $i++) {
 		if ($i == 0) {
 			$old_body = $pipe["body"];
@@ -81,20 +87,20 @@ print_comments(TYPE_PIPE, $pipe);
 
 end_main();
 
-writeln('<aside>');
-writeln('<div class="dialog-title">Status</div>');
-writeln('<div class="dialog-body">');
-writeln('	<div class="pipe-status">' . $status . $reason . '</div>');
-writeln('</div>');
+//writeln('<aside>');
+//writeln('<div class="dialog-title">Status</div>');
+//writeln('<div class="dialog-body">');
+//writeln('	<div class="pipe-status">' . $status . $reason . '</div>');
+//writeln('</div>');
 
-if (!$pipe["closed"]) {
-	if ($auth_user["editor"]) {
-		writeln('<div class="dialog-title">Editor</div>');
-		writeln('<div class="dialog-body">');
-		writeln('	<div class="pipe-editor"><a href="/pipe/' . $pipe["short_code"] . '/publish">Publish</a> | <a href="/pipe/' . $pipe["short_code"] . '/close">Close</a></div>');
-		writeln('</div>');
-	}
-}
-writeln('</aside>');
+//if (!$pipe["closed"]) {
+//	if ($auth_user["editor"]) {
+//		writeln('<div class="dialog-title">Editor</div>');
+//		writeln('<div class="dialog-body">');
+//		writeln('	<div class="pipe-editor"><a href="/pipe/' . $pipe["short_code"] . '/publish">Publish</a> | <a href="/pipe/' . $pipe["short_code"] . '/close">Close</a></div>');
+//		writeln('</div>');
+//	}
+//}
+//writeln('</aside>');
 
 print_footer();

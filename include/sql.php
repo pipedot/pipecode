@@ -196,12 +196,13 @@ $default_conf["user_conf"] = [
 ];
 
 
-
 $db_table["article"] = array(
 	array("name" => "article_id", "key" => true, "default" => 0),
 	array("name" => "author_link"),
 	array("name" => "author_name"),
 	array("name" => "body"),
+	array("name" => "comments_clean", "default" => 0),
+	array("name" => "comments_total", "default" => 0),
 	array("name" => "description"),
 	array("name" => "feed_html"),
 	array("name" => "feed_id", "default" => 0),
@@ -211,15 +212,6 @@ $db_table["article"] = array(
 	array("name" => "redirect_link"),
 	array("name" => "title"),
 	array("name" => "thumb_id", "default" => 0)
-);
-
-$db_table["article_view"] = array(
-	array("name" => "article_id", "default" => 0, "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "comments_clean", "default" => -1),
-	array("name" => "comments_total", "default" => -1),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
 );
 
 $db_table["avatar"] = array(
@@ -278,13 +270,6 @@ $db_table["bug_labels"] = array(
 	array("name" => "label_id", "default" => 0)
 );
 
-$db_table["bug_view"] = array(
-	array("name" => "bug_id", "default" => 0, "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
 $db_table["cache"] = array(
 	array("name" => "cache_id", "key" => true, "auto" => true),
 	array("name" => "access_time", "default" => $now),
@@ -316,7 +301,7 @@ $db_table["card"] = array(
 	array("name" => "link_url"),
 	array("name" => "photo_id", "default" => 0),
 	array("name" => "publish_time", "default" => $now),
-	array("name" => "zid"),
+	array("name" => "zid")
 );
 
 $db_table["card_edit"] = array(
@@ -328,19 +313,6 @@ $db_table["card_edit"] = array(
 $db_table["card_tags"] = array(
 	array("name" => "card_id", "default" => 0, "key" => true),
 	array("name" => "tag", "key" => true)
-);
-
-$db_table["card_view"] = array(
-	array("name" => "card_id", "default" => 0, "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => $now),
-	array("name" => "last_time", "default" => 0)
-);
-
-$db_table["card_vote"] = array(
-	array("name" => "card_id", "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "value", "default" => 0)
 );
 
 $db_table["comment"] = array(
@@ -364,6 +336,15 @@ $db_table["comment_edit"] = array(
 	array("name" => "edit_time", "key" => true, "default" => $now),
 	array("name" => "body"),
 	array("name" => "subject")
+);
+
+$db_table["comment_view"] = array(
+	array("name" => "article_id", "default" => 0, "key" => true),
+	array("name" => "zid", "key" => true),
+	array("name" => "comments_clean", "default" => -1),
+	array("name" => "comments_total", "default" => -1),
+	array("name" => "time", "default" => 0),
+	array("name" => "last_time", "default" => 0)
 );
 
 $db_table["comment_vote"] = array(
@@ -482,13 +463,6 @@ $db_table["journal_photo"] = array(
 	array("name" => "photo_id", "key" => true, "default" => 0)
 );
 
-$db_table["journal_view"] = array(
-	array("name" => "journal_id", "default" => 0, "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
 $db_table["login"] = array(
 	array("name" => "zid", "key" => true),
 	array("name" => "login_key", "key" => true),
@@ -562,13 +536,6 @@ $db_table["pipe"] = array(
 	array("name" => "title")
 );
 
-$db_table["pipe_view"] = array(
-	array("name" => "pipe_id", "default" => 0, "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
-);
-
 $db_table["pipe_vote"] = array(
 	array("name" => "pipe_id", "key" => true),
 	array("name" => "zid", "key" => true),
@@ -593,13 +560,6 @@ $db_table["poll"] = array(
 	array("name" => "slug"),
 	array("name" => "type_id", "default" => 0),
 	array("name" => "zid")
-);
-
-$db_table["poll_view"] = array(
-	array("name" => "poll_id", "default" => 0, "key" => true),
-	array("name" => "zid", "key" => true),
-	array("name" => "time", "default" => 0),
-	array("name" => "last_time", "default" => 0)
 );
 
 $db_table["poll_vote"] = array(
@@ -677,11 +637,22 @@ $db_table["story_edit"] = array(
 	array("name" => "title")
 );
 
-$db_table["story_view"] = array(
-	array("name" => "story_id", "default" => 0, "key" => true),
+$db_table["stream_main"] = array(
+	array("name" => "article_id", "default" => 0, "key" => true),
+	array("name" => "time", "default" => $now)
+);
+
+$db_table["stream_user"] = array(
+	array("name" => "zid", "key" => true),
+	array("name" => "article_id", "default" => 0, "key" => true),
+	array("name" => "time", "default" => $now)
+);
+
+$db_table["stream_vote"] = array(
+	array("name" => "article_id", "key" => true),
 	array("name" => "zid", "key" => true),
 	array("name" => "time", "default" => $now),
-	array("name" => "last_time", "default" => 0)
+	array("name" => "value", "default" => 0)
 );
 
 $db_table["tag"] = array(

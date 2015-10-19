@@ -19,6 +19,7 @@
 
 include("clean.php");
 include("captcha.php");
+include("image.php");
 include("post.php");
 include("story.php");
 

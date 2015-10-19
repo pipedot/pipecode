@@ -17,7 +17,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("stream.php");
 include("image.php");
 
 if ($auth_zid === "") {
@@ -28,15 +27,14 @@ if ($auth_zid === "") {
 
 beg_main("stream");
 
-$row = sql("select card_id from card order by edit_time desc");
+$items_per_page = 50;
+list($item_start, $page_footer) = page_footer("stream_main", $items_per_page);
 
+$row = sql("select article_id from stream_main order by time desc limit $item_start, $items_per_page");
 for ($i = 0; $i < count($row); $i++) {
-	print_card($row[$i]["card_id"]);
+	print_card($row[$i]["article_id"]);
 }
 
 end_main("stream");
-
+writeln($page_footer);
 print_footer();
-
-
-

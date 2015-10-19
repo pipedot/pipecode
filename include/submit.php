@@ -19,24 +19,28 @@
 
 function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 {
-	global $auth_zid;
 	global $auth_user;
+	global $auth_zid;
+	global $protocol;
+	global $server_name;
 
 	print_header("Submit Story");
 	print_main_nav("pipe");
 	beg_main("cell");
 
 	if ($preview) {
-		$a["type_id"] = TYPE_STORY;
-		$a["zid"] = $auth_zid;
-		$topic = db_get_rec("topic", $topic_id);
-		$a["title"] = $title;
-		$a["topic"] = $topic["topic"];
-		$a["icon"] = $topic["icon"];
-		$a["body"] = $body;
 		writeln('<h1>Preview</h1>');
 		writeln('<p>Check your links before you post!</p>');
-		print_article($a);
+
+		$story["zid"] = $auth_zid;
+		$story["time"] = time();
+		$topic = db_get_rec("topic", $topic_id);
+		$a["body"] = $body;
+		$a["title"] = $title;
+		$a["info"] = content_info($story, $topic);
+		$a["image"] = content_image($topic);
+		$a["view"] = "<b>0</b> comments";
+		print_content($a);
 	}
 
 	beg_form();
