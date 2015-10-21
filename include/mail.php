@@ -165,7 +165,7 @@ function print_mail_dir($location)
 
 	require_mine();
 
-	print_header($location, ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $location], ["/mail/", ($location == "Inbox" ? "/mail/" : strtolower("/mail/$location"))]);
+	print_header($location, ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $location], ["/mail/", strtolower("/mail/$location/")]);
 
 	beg_main();
 	writeln('<table class="fill">');
@@ -174,16 +174,22 @@ function print_mail_dir($location)
 
 	beg_tab();
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/" class="icon-16 inbox-16">Inbox</a></td>');
+	writeln('		<td><a href="/mail/inbox/" class="icon-16 inbox-16">Inbox</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/sent" class="icon-16 sent-16">Sent</a></td>');
+	writeln('		<td><a href="/mail/drafts/" class="icon-16 accessories-16">Drafts</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/junk" class="icon-16 junk-16">Junk</a></td>');
+	writeln('		<td><a href="/mail/junk/" class="icon-16 junk-16">Junk</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a href="/mail/trash" class="icon-16 trash-16">Trash</a></td>');
+	writeln('		<td><a href="/mail/outbox/" class="icon-16 send-16">Outbox</a></td>');
+	writeln('	</tr>');
+	writeln('	<tr>');
+	writeln('		<td><a href="/mail/sent/" class="icon-16 sent-16">Sent</a></td>');
+	writeln('	</tr>');
+	writeln('	<tr>');
+	writeln('		<td><a href="/mail/trash/" class="icon-16 trash-16">Trash</a></td>');
 	writeln('	</tr>');
 	end_tab();
 
@@ -210,11 +216,11 @@ function print_mail_dir($location)
 		}
 
 		writeln('	<tr>');
-		writeln('		<td><a href="view?mid=' . $message["mail_id"] . '" class="icon-16 mail-16">' . $message["subject"] . '</a></td>');
+		writeln('		<td><a href="/mail/view/' . $message["mail_id"] . '" class="icon-16 mail-16">' . $message["subject"] . '</a></td>');
 		if (string_has($address["email"], "no-reply@")) {
 			writeln('		<td class="center">' . $address["email"] . '</td>');
 		} else {
-			writeln('		<td class="center"><a href="compose?to=' . $address["email"] . '">' . $address["email"] . '</a></td>');
+			writeln('		<td class="center"><a href="/mail/compose?to=' . $address["email"] . '">' . $address["email"] . '</a></td>');
 		}
 		writeln('		<td class="right">' . date("Y-m-d H:i", $message["received_time"]) . '</td>');
 		writeln('	</tr>');

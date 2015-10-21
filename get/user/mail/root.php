@@ -17,4 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-header("Location: /mail/inbox/");
+include("mail.php");
+
+$location = ucwords($s2);
+
+$locations = ["Inbox", "Drafts", "Junk", "Outbox", "Sent", "Trash"];
+if (!in_array($location, $locations)) {
+	fatal("Directory not found");
+}
+
+print_mail_dir($location);

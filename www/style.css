@@ -2604,6 +2604,12 @@ del {
 /**
  * Icon
  */
+.accessories-16 {
+	background-image: url(/images/accessories-16.png);
+}
+.accessories-32 {
+	background-image: url(/images/accessories-32.png);
+}
 .aphone-32 {
 	background-image: url(/images/aphone-32.png);
 }
@@ -3000,6 +3006,9 @@ del {
 .safari-64 {
 	background-image: url(/images/safari-64.png);
 }
+.send-16 {
+	background-image: url(/images/send-16.png);
+}
 .sent-16 {
 	background-image: url(/images/sent-16.png);
 }
@@ -3014,6 +3023,12 @@ del {
 }
 .soccer-64 {
 	background-image: url(/images/soccer-64.png);
+}
+.sort-ascending-16 {
+	background-image: url(/images/sort-ascending-16.png);
+}
+.sort-descending-16 {
+	background-image: url(/images/sort-descending-16.png);
 }
 .spreadsheet-32 {
 	background-image: url(/images/spreadsheet-32.png);
@@ -3097,6 +3112,12 @@ del {
 	background-image: url(/images/workgroup-32.png);
 }
 @media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+	.accessories-16 {
+		background-image: url(/images/accessories-32.png);
+	}
+	.accessories-32 {
+		background-image: url(/images/accessories-64.png);
+	}
 	.aphone-32 {
 		background-image: url(/images/aphone-64.png);
 	}
@@ -3493,6 +3514,9 @@ del {
 	.safari-64 {
 		background-image: url(/images/safari-128.png);
 	}
+	.send-16 {
+		background-image: url(/images/sent-32.png);
+	}
 	.sent-16 {
 		background-image: url(/images/sent-32.png);
 	}
@@ -3507,6 +3531,12 @@ del {
 	}
 	.soccer-64 {
 		background-image: url(/images/soccer-128.png);
+	}
+	.sort-ascending-16 {
+		background-image: url(/images/sort-ascending-32.png);
+	}
+	.sort-descending-16 {
+		background-image: url(/images/sort-descending-32.png);
 	}
 	.spreadsheet-32 {
 		background-image: url(/images/spreadsheet-64.png);

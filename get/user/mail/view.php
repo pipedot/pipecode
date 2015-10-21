@@ -44,7 +44,10 @@ include("mail.php");
 //writeln('<div class="tool_button" style="background-image: url(/images/mail-reply-16.png)">Reply</div></a>');
 //writeln('<div class="tool_button" style="background-image: url(/images/mail-forward-16.png)">Forward</div></a>');
 
-$mail_id = http_get_int("mid");
+$mail_id = $s3;
+if (!string_uses($mail_id, "[0-9]")) {
+	fatal("Message not found");
+}
 
 $message = db_get_rec("mail", $mail_id);
 require_mine($message["zid"]);
@@ -80,9 +83,9 @@ require_mine($message["zid"]);
 
 //print_header($message["subject"], $name, $icon, $link);
 if (string_has($message["mail_from"], "no-reply@")) {
-	print_header($message["subject"], ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view?mid=$mail_id"]);
+	print_header($message["subject"], ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view/$mail_id"]);
 } else {
-	print_header($message["subject"], ["Reply", "Compose"], ["mail-reply", "mail-compose"], ["/mail/compose?mid=$mail_id", "/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view?mid=$mail_id"]);
+	print_header($message["subject"], ["Reply", "Compose"], ["mail-reply", "mail-compose"], ["/mail/compose?mid=$mail_id", "/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view/$mail_id"]);
 }
 beg_main();
 

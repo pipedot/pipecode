@@ -1,0 +1,7 @@
+designer: Gnome
+icon-pack: Gnome Desktop Icons
+website: http://www.gnome.org/
+license: GPL
+free: 1
+commercial: 1
+trademark: 0
