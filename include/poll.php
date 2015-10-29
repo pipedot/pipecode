@@ -46,13 +46,13 @@ function vote_box($poll_id, $vote)
 			$aid = str_replace("-", "_", $aid);
 			writeln('		<tr>');
 			if ($type_id == 1) {
-				$units = "votes";
+//				$units = "votes";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id" value="' . $answer["answer_id"] . '" type="radio"></td>');
 			} else if ($type_id == 2) {
-				$units = "votes";
+//				$units = "votes";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id[]" value="' . $answer["answer_id"] . '" type="checkbox"></td>');
 			} else if ($type_id == 3) {
-				$units = "points";
+//				$units = "points";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id[' . $answer["answer_id"] . ']" type="text"></td>');
 			} else {
 				fatal("Unknown poll type");
@@ -65,16 +65,18 @@ function vote_box($poll_id, $vote)
 		if ($type_id == 1 || $type_id == 2) {
 			$row = sql("select count(zid) as votes from poll_vote where poll_id = ?", $poll_id);
 			$votes = $row[0]["votes"];
+			$tag = nget_text("<b>$1</b> vote", "<b>$1</b> votes", $votes, [$votes]);
 		} else {
 			$row = sql("select sum(points) as votes from poll_vote where poll_id = ?", $poll_id);
 			$votes = (int) $row[0]["votes"];
+			$tag = nget_text("<b>$1</b> point", "<b>$1</b> points", $votes, [$votes]);
 		}
 
 		writeln('	<table class="fill">');
 		writeln('		<tr>');
 		writeln('			<td style="width: 40px"><input type="submit" value="Vote"></td>');
 		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></td>');
-		writeln('			<td class="right" style="white-space: nowrap;"><b>' . $votes . '</b> ' . $units . '</td>');
+		writeln('			<td class="right" style="white-space: nowrap;">' . $tag . '</td>');
 		writeln('		</tr>');
 		writeln('	</table>');
 
@@ -95,10 +97,13 @@ function vote_box($poll_id, $vote)
 				$total += $row[0]["votes"];
 			}
 			//if ($total == 1) {
-				$units = "votes";
+//				$units = "votes";
 			//} else {
 			//	$units = "votes";
 			//}
+//			$singular = "<b>$1</b> vote ($2%)";
+//			$plural = "<b>$1</b> votes ($2%)";
+			$total_tag = nget_text("<b>$1</b> vote", "<b>$1</b> votes", $total, [$total]);
 		} else if ($type_id == 3) {
 			for ($i = 0; $i < count($poll_answer); $i++) {
 				$answer = $poll_answer[$k[$i]];
@@ -108,10 +113,13 @@ function vote_box($poll_id, $vote)
 				$total += $row[0]["votes"];
 			}
 			//if ($total == 1) {
-				$units = "points";
+//				$units = "points";
 			//} else {
 			//	$units = "points";
 			//}
+//			$singular = "<b>$1</b> point ($2%)";
+//			$plural = "<b>$1</b> points ($2%)";
+			$total_tag = nget_text("<b>$1</b> point", "<b>$1</b> points", $total, [$total]);
 		}
 
 		for ($i = 0; $i < count($poll_answer); $i++) {
@@ -121,12 +129,18 @@ function vote_box($poll_id, $vote)
 			} else {
 				$percent = round(($votes[$i] / $total) * 100);
 			}
+			if ($type_id == 1 || $type_id == 2) {
+				$tag = nget_text("<b>$1</b> vote ($2%)", "<b>$1</b> votes ($2%)", $votes[$i], [$votes[$i], $percent]);
+			} else {
+				$tag = nget_text("<b>$1</b> point ($2%)", "<b>$1</b> points ($2%)", $votes[$i], [$votes[$i], $percent]);
+			}
 
 			writeln('		<tr>');
 			writeln('			<td class="poll-answer">' . $answer["answer"] . '</td>');
 			writeln('		</tr>');
 			writeln('		<tr>');
-			writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $votes[$i] . " $units ($percent%)" . '</td></tr></table></td>');
+			//writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $votes[$i] . " $units ($percent%)" . '</td></tr></table></td>');
+			writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $tag . '</td></tr></table></td>');
 			writeln('		</tr>');
 		}
 		writeln('	</table>');
@@ -137,9 +151,9 @@ function vote_box($poll_id, $vote)
 		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></div>');
 		writeln('		<div class="poll-short">(<a href="/' . $poll_code . '">#' . $poll_code . '</a>)</div>');
 		if ($auth_zid === "") {
-			writeln('		<div class="right"><b>' . $total . '</b> ' . $units . '</div>');
+			writeln('		<div class="right">' . $total_tag . '</div>');
 		} else {
-			writeln('		<div class="right"><a href="/poll/' . $poll_code . '/vote"><b>' . $total . '</b> ' . $units . '</a></div>');
+			writeln('		<div class="right"><a href="/poll/' . $poll_code . '/vote">' . $total_tag . '</a></div>');
 		}
 		writeln('	</div>');
 	}

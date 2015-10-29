@@ -813,9 +813,8 @@ function count_comments($article_id, $article_type_id)
 
 	if ($article_id == 0) {
 		$comments["count"] = 0;
-		$comments["label"] = " comments";
 		$comments["new"] = 0;
-		$comments["tag"] = "<b>0</b> comments";
+		$comments["tag"] = nget_text("<b>$1</b> comment", "<b>$1</b> comments");
 		return;
 	}
 	$article_type = item_type($article_type_id);
@@ -827,11 +826,11 @@ function count_comments($article_id, $article_type_id)
 	} else {
 		$comments["count"] = $article["comments_clean"];
 	}
-	if ($comments["count"] == 1) {
-		$comments["label"] = " comment";
-	} else {
-		$comments["label"] = " comments";
-	}
+//	if ($comments["count"] == 1) {
+//		$comments["label"] = " comment";
+//	} else {
+//		$comments["label"] = " comments";
+//	}
 
 	if ($auth_zid === "") {
 		$new = 0;
@@ -863,9 +862,10 @@ function count_comments($article_id, $article_type_id)
 		}
 	}
 	$comments["new"] = $new;
-	$comments["tag"] = "<b>" . $comments["count"] . "</b> " . $comments["label"];
+//	$comments["tag"] = "<b>" . $comments["count"] . "</b> " . $comments["label"];
+	$comments["tag"] = nget_text("<b>$1</b> comment", "<b>$1</b> comments", $comments["count"], [$comments["count"]]);
 	if ($comments["new"] > 0) {
-		$comments["tag"] .= ", <b>" . $comments["new"] . "</b> new";
+		$comments["tag"] .= ", " . nget_text("<b>$1</b> new", "<b>$1</b> new", $comments["new"], [$comments["new"]]);
 	}
 
 	return $comments;

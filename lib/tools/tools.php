@@ -1993,13 +1993,15 @@ function menu_row($a)
 }
 
 
-function nget_text($singular, $plural, $num = 1, $arg = [])
+function nget_text($singular, $plural, $num = 0, $arg = [])
 {
 	global $lang;
 	global $msg_str;
 
 	if ($lang == "en" || $lang == "" || !array_key_exists($singular, $msg_str)) {
-		if ($n == 1) {
+		// XXX: only works for english-like plural languages ("n = 1", "n != 1")
+		// should eventually parse and eval other plural forms
+		if ($num == 1) {
 			$t = $singular;
 		} else {
 			$t = $plural;

@@ -146,7 +146,7 @@ function print_pipe_small($pipe_id, $full)
 	writeln('				</tr>');
 	writeln('			</table>');
 	writeln('		</td>');
-	writeln('		<td style="padding-right: 8px; text-align: right; white-space: nowrap;"><a href="/pipe/' . $pipe_code . '" class="icon-16 chat-16"><b>' . $comments["count"] . '</b> ' . $comments["label"] . '</a></td>');
+	writeln('		<td style="padding-right: 8px; text-align: right; white-space: nowrap;"><a href="/pipe/' . $pipe_code . '" class="icon-16 chat-16">' . $comments["tag"] . '</a></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
