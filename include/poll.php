@@ -46,13 +46,10 @@ function vote_box($poll_id, $vote)
 			$aid = str_replace("-", "_", $aid);
 			writeln('		<tr>');
 			if ($type_id == 1) {
-//				$units = "votes";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id" value="' . $answer["answer_id"] . '" type="radio"></td>');
 			} else if ($type_id == 2) {
-//				$units = "votes";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id[]" value="' . $answer["answer_id"] . '" type="checkbox"></td>');
 			} else if ($type_id == 3) {
-//				$units = "points";
 				writeln('			<td><input id="a_' . $aid . '" name="answer_id[' . $answer["answer_id"] . ']" type="text"></td>');
 			} else {
 				fatal("Unknown poll type");
@@ -96,13 +93,6 @@ function vote_box($poll_id, $vote)
 				$votes[] = $row[0]["votes"];
 				$total += $row[0]["votes"];
 			}
-			//if ($total == 1) {
-//				$units = "votes";
-			//} else {
-			//	$units = "votes";
-			//}
-//			$singular = "<b>$1</b> vote ($2%)";
-//			$plural = "<b>$1</b> votes ($2%)";
 			$total_tag = nget_text("<b>$1</b> vote", "<b>$1</b> votes", $total, [$total]);
 		} else if ($type_id == 3) {
 			for ($i = 0; $i < count($poll_answer); $i++) {
@@ -112,13 +102,6 @@ function vote_box($poll_id, $vote)
 				$votes[] = $row[0]["votes"];
 				$total += $row[0]["votes"];
 			}
-			//if ($total == 1) {
-//				$units = "points";
-			//} else {
-			//	$units = "points";
-			//}
-//			$singular = "<b>$1</b> point ($2%)";
-//			$plural = "<b>$1</b> points ($2%)";
 			$total_tag = nget_text("<b>$1</b> point", "<b>$1</b> points", $total, [$total]);
 		}
 
@@ -139,13 +122,10 @@ function vote_box($poll_id, $vote)
 			writeln('			<td class="poll-answer">' . $answer["answer"] . '</td>');
 			writeln('		</tr>');
 			writeln('		<tr>');
-			//writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $votes[$i] . " $units ($percent%)" . '</td></tr></table></td>');
 			writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $tag . '</td></tr></table></td>');
 			writeln('		</tr>');
 		}
 		writeln('	</table>');
-
-		//$poll_code = crypt_crockford_encode($poll["poll_id"]);
 
 		writeln('	<div class="poll-footer">');
 		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></div>');

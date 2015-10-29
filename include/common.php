@@ -278,13 +278,6 @@ function print_user_nav($selected)
 	global $server_name;
 	global $zid;
 
-//	if ($auth_zid === $zid) {
-//		$section_name = array("overview", "karma", "comments", "journal", "topics", "feed", "reader", "stream");
-//		$section_link = array("", "karma/", "comments", "journal/", "topic", "feed/", "reader/", "stream/");
-//	} else {
-//		$section_name = array("overview", "journal", "stream", "comments", "feed", "karma");
-//		$section_link = array("", "journal/", "stream/", "comments", "feed/", "karma/");
-//	}
 	$section_name = array("journal");
 	$section_link = array("journal/");
 
@@ -328,9 +321,9 @@ function print_user_box()
 	$row = sql("select count(*) as mail_count from mail where zid = ? and location = 'Inbox'", $auth_zid);
 	$mail_count = (int) $row[0]["mail_count"];
 	if ($mail_count > 0) {
-		$mail = "Mail ($mail_count)";
+		$mail = nget_text("Mail ($1)", "Mail ($1)", $mail_count, [$mail_count]);
 	} else {
-		$mail = "Mail";
+		$mail = get_text("Mail");
 	}
 	$link = user_link($auth_zid);
 
@@ -338,26 +331,17 @@ function print_user_box()
 	writeln('<div class="dialog-body">');
 	writeln('<table class="side-link-two">');
 	writeln('	<tr>');
-	//writeln('		<td><a href="' . $link . 'comments"><div class="chat-32">Comments</div></a></td>');
-	writeln('		<td><a class="news-32" href="' . $link . 'feed/">Feed</a></td>');
-	writeln('		<td><a class="notepad-32" href="' . $link . 'journal/">Journal</a></td>');
+	writeln('		<td><a class="news-32" href="' . $link . 'feed/">' . get_text("Feed") . '</a></td>');
+	writeln('		<td><a class="notepad-32" href="' . $link . 'journal/">' . get_text("Journal") . '</a></td>');
 	writeln('	</tr>');
-//	writeln('	<tr>');
-//	writeln('		<td><a class="news-32" href="' . $link . 'karma/"><div class="user-box-icon" style="background-image: url(/images/karma-good-32.png)">Karma</div></a></td>');
-//	writeln('		<td><a class="news-32" href="' . $link . '"><div class="user-box-icon" style="background-image: url(/images/news-32.png)">Feed</div></a></td>');
-//	writeln('	</tr>');
-//	writeln('	<tr>');
-//	writeln('		<td><a class="news-32" href="' . $link . 'comments"><div class="user-box-icon" style="background-image: url(/images/chat-32.png)">Comments</div></a></td>');
-//	writeln('		<td><a class="news-32" href="http://' . $auth_user["username"] . '.' . $server_name . '/friends/"><div class="user-box-icon" style="background-image: url(/images/users-32.png)">Friends</div></a></td>');
-//	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td><a class="mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
-	writeln('		<td><a class="tools-32" href="' . $link . 'settings">Settings</a></td>');
+	writeln('		<td><a class="tools-32" href="' . $link . 'settings">' . get_text("Settings") . '</a></td>');
 	writeln('	</tr>');
-//	writeln('	<tr>');
-//	writeln('		<td><a class="reader-32" href="' . $link . 'reader/">Reader</a></td>');
-//	writeln('		<td><a class="internet-32" href="' . $link . 'stream/">Stream</a></td>');
-//	writeln('	</tr>');
+	writeln('	<tr>');
+	writeln('		<td><a class="reader-32" href="' . $link . 'reader/">' . get_text("Reader") . '</a></td>');
+	writeln('		<td><a class="internet-32" href="' . $link . 'stream/">' . get_text("Stream") . '</a></td>');
+	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
 }
@@ -485,7 +469,7 @@ function page_footer($table, $items_per_page, $where = array())
 
 	$s = "";
 	if ($page > 1) {
-		$s .= "<a class=\"pages-left\" href=\"?page=" . ($page - 1) . "\" title=\"Back\"></a>";
+		$s .= "<a class=\"pages-left\" href=\"?page=" . ($page - 1) . "\" title=\"" . get_text("Back") . "\"></a>";
 	}
 	if ($pages_count > 10) {
 		if ($page > 5) {
@@ -519,7 +503,7 @@ function page_footer($table, $items_per_page, $where = array())
 		}
 	}
 	if ($page < $pages_count) {
-		$s .= "<a class=\"pages-right\" href=\"?page=" . ($page + 1) . "\" title=\"Next\"></a>";
+		$s .= "<a class=\"pages-right\" href=\"?page=" . ($page + 1) . "\" title=\"" . get_text("Next") . "\"></a>";
 	}
 
 	return array($item_start, "<div class=\"pages\">$s</div>");

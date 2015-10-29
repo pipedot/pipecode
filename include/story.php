@@ -93,18 +93,19 @@ function print_story($story)
 	$a["actions"] = [];
 	$count = similar_count($story);
 	if ($count > 0) {
-		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/similar\" class=\"icon-16 news-16\">Similar</a>";
+		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/similar\" class=\"icon-16 news-16\">" . get_text("Similar") . "</a>";
 	}
 	if ($auth_user["editor"]) {
 		if ($twitter_enabled && $story["tweet_id"] == 0) {
 			if (is_file("$doc_root/www/images/tweet-16.png")) {
-				$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/tweet\" class=\"icon-16 tweet-16\">Tweet</a>";
+				$icon = "tweet";
 			} else {
-				$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/tweet\" class=\"icon-16 music-16\">Tweet</a>";
+				$icon = "music";
 			}
+			$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/tweet\" class=\"icon-16 $icon-16\">" . get_text("Tweet") . "</a>";
 		}
-		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/image\" class=\"icon-16 picture-16\">Image</a>";
-		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/edit\" class=\"icon-16 notepad-16\">Edit</a>";
+		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/image\" class=\"icon-16 picture-16\">" . get_text("Image") . "</a>";
+		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/edit\" class=\"icon-16 notepad-16\">" . get_text("Edit") . "</a>";
 	}
 
 	print_content($a);
@@ -126,10 +127,10 @@ function print_journal($journal_id)
 	$a["comments"] = count_comments($journal_id, TYPE_JOURNAL);
 
 	if ($zid == $auth_zid) {
-		$a["actions"][] = "<a href=\"/journal/$journal_code/edit\" class=\"icon-16 notepad-16\">Edit</a>";
-		$a["actions"][] = "<a href=\"/journal/$journal_code/media\" class=\"icon-16 clip-16\">Media</a>";
+		$a["actions"][] = "<a href=\"/journal/$journal_code/edit\" class=\"icon-16 notepad-16\">" . get_text("Edit") . "</a>";
+		$a["actions"][] = "<a href=\"/journal/$journal_code/media\" class=\"icon-16 clip-16\">" . get_text("Media") . "</a>";
 		if ($journal["publish_time"] == 0) {
-			$a["actions"][] = "<a href=\"/journal/$journal_code/publish\" class=\"icon-16 certificate-16\">Publish</a>";
+			$a["actions"][] = "<a href=\"/journal/$journal_code/publish\" class=\"icon-16 certificate-16\">" . get_text("Publish") . "</a>";
 		}
 	} else {
 		$a["actions"] = [];
@@ -152,7 +153,7 @@ function print_news_large($article)
 	$a["link"] = item_link(TYPE_ARTICLE, $article_id, $article);
 	$a["info"] = content_info($article, $feed);
 	//$a["comments"] = count_comments($article_id, TYPE_ARTICLE);
-	$a["view"] = "<a class=\"icon-16 globe-16\" href=\"" . $article["link"] . "\">View Site</a>";
+	$a["view"] = "<a class=\"icon-16 globe-16\" href=\"" . $article["link"] . "\">" . get_text("View Site") . "</a>";
 
 	if ($article["thumb_id"] > 0 && !string_has($a["body"], "<img ")) {
 		$image = "$protocol://$server_name/thumb/" . crypt_crockford_encode($article["thumb_id"]) . ".jpg";
@@ -224,7 +225,7 @@ function print_news($a)
 		writeln('</article>');
 	} else {
 		writeln('<article class="news-text">');
-		writeln('			<div class="article-preview">');
+		writeln('	<div class="article-preview">');
 		writeln('		<div class="article-link"><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $a["title"] . '</a></div>');
 		writeln('		<div class="article-info">' . $info . '</div>');
 		writeln('		<div class="article-description">' . $a["description"] . '</div>');
