@@ -220,7 +220,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 			$link = $link_url[$i];
 		}
 
-		writeln("		<li><a href=\"$link\" class=\"icon-16 {$icon}-16\">$name</a></li>");
+		writeln("		<li><a href=\"$link\" class=\"icon-16 {$icon}-16\">" . get_text($name) . "</a></li>");
 	}
 	writeln("	</ul>");
 	writeln('</header>');
@@ -238,8 +238,6 @@ function print_main_nav($selected)
 		$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
 		$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "feed/", "stream/");
 	} else {
-		//$section_name = array("stories", "pipe", "poll", "search", "topics", "reader", "stream");
-		//$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "reader/", "stream/");
 		$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
 		$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "stream/");
 	}
@@ -249,9 +247,9 @@ function print_main_nav($selected)
 	for ($i = 0; $i < count($section_name); $i++) {
 		$link = "/" . $section_link[$i];
 		if ($selected == $section_name[$i]) {
-			writeln('	<a class="active" href="' . $link . '">' . $section_name[$i] . '</a>');
+			writeln('	<a class="active" href="' . $link . '">' . get_text($section_name[$i]) . '</a>');
 		} else {
-			writeln('	<a href="' . $link . '">' . $section_name[$i] . '</a>');
+			writeln('	<a href="' . $link . '">' . get_text($section_name[$i]) . '</a>');
 		}
 	}
 
@@ -1599,6 +1597,7 @@ if ($https_redirect_enabled && $protocol != "https") {
 }
 $user_page = "";
 $meta = "";
+$mine = false;
 $a = explode(".", $server_name);
 $server_level = count($a);
 $a = explode(".", $http_host);
@@ -1633,4 +1632,9 @@ check_auth();
 
 if ($auth_zid != "") {
 	date_default_timezone_set($auth_user["time_zone"]);
+	$lang = $auth_user["lang"];
+	include("$doc_root/lang/$lang.php");
+	if ($user_page != "") {
+		$mine = ($zid === $auth_zid);
+	}
 }

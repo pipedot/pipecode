@@ -2,7 +2,7 @@
 --
 -- Host: 192.168.1.15    Database: pipedot
 -- ------------------------------------------------------
--- Server version	5.6.25-0ubuntu0.15.04.1
+-- Server version	5.6.25-0ubuntu1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -352,6 +352,22 @@ CREATE TABLE `comment_vote` (
   `time` int(11) NOT NULL,
   `value` int(11) NOT NULL,
   PRIMARY KEY (`comment_id`,`zid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `contact`
+--
+
+DROP TABLE IF EXISTS `contact`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `contact` (
+  `contact_id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(50) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`contact_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -725,6 +741,24 @@ CREATE TABLE `mail` (
   `subject` varchar(250) NOT NULL,
   `zid` varchar(50) NOT NULL,
   PRIMARY KEY (`mail_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `mail_dir`
+--
+
+DROP TABLE IF EXISTS `mail_dir`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mail_dir` (
+  `dir_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `slug` varchar(50) NOT NULL,
+  `zid` varchar(50) NOT NULL,
+  PRIMARY KEY (`dir_id`),
+  UNIQUE KEY `slug_unique` (`zid`,`slug`),
+  KEY `zid_index` (`zid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1334,4 +1368,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-19  4:32:38
+-- Dump completed on 2015-10-28 23:13:02

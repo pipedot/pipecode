@@ -18,41 +18,25 @@
 //
 
 print_header();
-beg_main("dual-table");
-writeln('<div class="dual-left">');
+beg_main();
 
-beg_tab();
-if ($zid === $auth_zid) {
-	print_row(array("caption" => "Avatar", "description" => "Change your avatar", "icon" => "user", "link" => "/avatar/"));
-}
-if ($zid === $auth_zid) {
-	print_row(array("caption" => "Feed", "description" => "Show news page", "icon" => "html", "link" => "/feed/"));
-}
-print_row(array("caption" => "Karma", "description" => "Show karma rating", "icon" => "face-smile", "link" => "/karma/"));
-if ($zid === $auth_zid) {
-	print_row(array("caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/"));
-	print_row(array("caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/"));
-}
-print_row(array("caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"));
-print_row(array("caption" => "Summary", "description" => "View user overview", "icon" => "spreadsheet", "link" => "/summary"));
-end_tab();
+menu_beg();
+menu_row(["caption" => "Avatar", "description" => "Change your avatar", "icon" => "user", "link" => "/avatar/", "visible" => $mine]);
+menu_row(["caption" => "Comments", "description" => "View past comments", "icon" => "chat", "link" => "/comments"]);
+menu_row(["caption" => "Contacts", "description" => "Edit your address book", "icon" => "binder", "link" => "/contact/", "visible" => $mine]);
+//menu_row(["caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/", "visible" => $mine]);
+menu_row(["caption" => "Feed", "description" => "Show news page", "icon" => "html", "link" => "/feed/", "visible" => $mine]);
+menu_row(["caption" => "Journal", "description" => "View journal entries", "icon" => "notepad", "link" => "/journal/"]);
+menu_row(["caption" => "Karma", "description" => "Show karma rating", "icon" => "face-smile", "link" => "/karma/"]);
+menu_row(["caption" => "Login", "description" => "Monitor your active sessions", "icon" => "lock", "link" => "/login/", "visible" => $mine]);
+menu_row(["caption" => "Mail", "description" => "Send and receive mail", "icon" => "mail", "link" => "/mail/", "visible" => $mine]);
+menu_row(["caption" => "Notifications", "description" => "View your notification messages", "icon" => "bulb", "link" => "/notification/", "visible" => $mine]);
+menu_row(["caption" => "Reader", "description" => "Read news feeds", "icon" => "reader", "link" => "/reader/", "visible" => $mine]);
+menu_row(["caption" => "Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/settings", "visible" => $mine]);
+menu_row(["caption" => "Stream", "description" => "Browse news stream", "icon" => "internet", "link" => "/stream/"]);
+menu_row(["caption" => "Submissions", "description" => "View story submissions", "icon" => "news", "link" => "/submissions"]);
+menu_row(["caption" => "Summary", "description" => "View user overview", "icon" => "spreadsheet", "link" => "/summary"]);
+menu_end();
 
-writeln('</div>');
-writeln('<div class="dual-right">');
-
-beg_tab();
-print_row(array("caption" => "Comments", "description" => "View past comments", "icon" => "chat", "link" => "/comments"));
-print_row(array("caption" => "Journal", "description" => "View journal entries", "icon" => "notepad", "link" => "/journal/"));
-if ($zid === $auth_zid) {
-	print_row(array("caption" => "Login", "description" => "Monitor your active sessions", "icon" => "lock", "link" => "/login/"));
-	print_row(array("caption" => "Notifications", "description" => "View your notification messages", "icon" => "bulb", "link" => "/notification/"));
-	print_row(array("caption" => "Settings", "description" => "Configure your account settings", "icon" => "tools", "link" => "/settings"));
-	//print_row(array("caption" => "Drive", "description" => "Browse your files", "icon" => "drive", "link" => "/drive/"));
-}
-print_row(array("caption" => "Submissions", "description" => "View story submissions", "icon" => "news", "link" => "/submissions"));
-end_tab();
-
-writeln('</div>');
 end_main();
 print_footer();
-

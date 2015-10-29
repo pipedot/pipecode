@@ -182,6 +182,7 @@ $default_conf["user_conf"] = [
 	"inline_reply_enabled" => "0",
 	"javascript_enabled" => "1",
 	"joined" => "0",
+	"lang" => "en",
 	"large_text_enabled" => "0",
 	"list_enabled" => "0",
 	"password" => "",
@@ -353,6 +354,13 @@ $db_table["comment_vote"] = array(
 	array("name" => "reason"),
 	array("name" => "time", "default" => $now),
 	array("name" => "value", "default" => 0)
+);
+
+$db_table["contact"] = array(
+	array("name" => "contact_id", "key" => true, "auto" => true),
+	array("name" => "name"),
+	array("name" => "email"),
+	array("name" => "zid")
 );
 
 $db_table["country"] = array(

@@ -260,18 +260,18 @@ function content_info($article, $area = false)
 		}
 		$by = user_link($zid, ["tag" => true, "author" => true]);
 	}
-	$info = "by <address>$by</address>";
+	$info = get_text("by") . " <address>$by</address>";
 	if (array_key_exists("feed_title", $article)) {
 		$info .= " from <a href=\"$protocol://$server_name/feed/" . $article["feed_slug"] . "\"><b>" . $article["feed_title"] . "</b></a>";
 	}
 	if (is_array($area)) {
 		if (array_key_exists("feed_id", $area)) {
-			$info .= " from <a href=\"$protocol://$server_name/feed/" . $area["slug"] . "\"><b>" . $area["title"] . "</b></a>";
+			$info .= " " . get_text("from") . " <a href=\"$protocol://$server_name/feed/" . $area["slug"] . "\"><b>" . $area["title"] . "</b></a>";
 		} else {
-			$info .= " in <a href=\"$protocol://$server_name/topic/" . $area["slug"] . "\"><b>" . $area["topic"] . "</b></a>";
+			$info .= " " . get_text("in") . " <a href=\"$protocol://$server_name/topic/" . $area["slug"] . "\"><b>" . $area["topic"] . "</b></a>";
 		}
 	} else if ($area) {
-		$info .= " in <a href=\"" . user_link($zid) . "topic/" . clean_url($area) . "\"><b>" . $article["topic"] . "</b></a>";
+		$info .= " " . get_text("in") . " <a href=\"" . user_link($zid) . "topic/" . clean_url($area) . "\"><b>" . $article["topic"] . "</b></a>";
 	}
 
 	if (array_key_exists("time", $article)) {
@@ -282,13 +282,13 @@ function content_info($article, $area = false)
 		$time = -1;
 	}
 	if ($time == 0) {
-		$info .= " as draft";
+		$info .= " " . get_text("as draft");
 	} else if ($time > 0) {
 		$date = "<time datetime=\"" .  date("c", $time) . "\">" . date("Y-m-d H:i", $time) . "</time>";
 		if (array_key_exists("story_id", $article) && array_key_exists("pipe_id", $article)) {
 			$date = "<a href=\"/pipe/" . crypt_crockford_encode($article["pipe_id"]) . "\">$date</a>";
 		}
-		$info .= " on $date";
+		$info .= " " . get_text("on") . " $date";
 	}
 
 	$article_id = item_id($article);

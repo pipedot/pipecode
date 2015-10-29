@@ -21,10 +21,16 @@ require_mine();
 
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 
+$a = fs_dir("$doc_root/lang");
+for ($i = 0; $i < count($a); $i++) {
+	if (strlen($a[$i]) == 6 && fs_ext($a[$i]) == "php") {
+		$languages[] = substr($a[$i], 0, 2);
+	}
+}
+
 print_header("Settings", [], [], [], ["Settings"], ["/settings"]);
 beg_main();
 beg_form();
-//writeln('<h1>Profile Settings</h1>');
 
 beg_tab("Information");
 print_row(array("caption" => "Display Name", "text_key" => "display_name", "text_value" => $user_conf["display_name"]));
@@ -33,16 +39,9 @@ print_row(array("caption" => "External Email", "text_key" => "email", "text_valu
 end_tab();
 
 beg_tab("Display");
-//$row = sql("select image_style_id, description from image_style order by image_style_id");
-//$image_styles = array();
-//$image_descriptions = array();
-//for ($i = 0; $i < count($row); $i++) {
-//	$image_styles[] = $row[$i]["image_style_id"];
-//	$image_descriptions[] = $row[$i]["description"];
-//}
-//print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => $image_styles, "option_list" => $image_descriptions, "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Story Image Style", "option_key" => "story_image_style", "option_keys" => array_keys($story_image_style), "option_list" => array_values($story_image_style), "option_value" => $user_conf["story_image_style"]));
 print_row(array("caption" => "Time Zone", "option_key" => "time_zone", "option_list" => $zones, "option_value" => $user_conf["time_zone"]));
+print_row(array("caption" => "Language", "option_key" => "lang", "option_list" => $languages, "option_value" => $user_conf["lang"]));
 print_row(array("caption" => "Large Text", "check_key" => "large_text_enabled", "checked" => $user_conf["large_text_enabled"]));
 end_tab();
 

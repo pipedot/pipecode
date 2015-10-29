@@ -17,9 +17,34 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_mine();
 
-$location = "Sent";
-sql("update mail set location = 'Trash' where zid = ? and location = ?", $auth_zid, $location);
+$contact_id = $s2;
+if (!string_uses($contact_id, "[0-9]")) {
+	fatal("Invalid contact");
+}
+$contact = db_get_rec("contact", $contact_id);
+if ($contact["zid"] !== $auth_zid) {
+	fatal("Not your contact");
+}
+$name = $contact["name"];
+if ($name == "") {
+	$name = "(blank)";
+}
 
-header("Location: /mail/sent");
+print_header("Edit Contact", ["Add"], ["plus"], ["/contact/add"], ["Contact", $name], ["/contact/", "/contact/$contact_id"]);
+beg_main();
+beg_form();
+
+beg_tab();
+print_row(["caption" => "Name", "text_key" => "name", "text_value" => $contact["name"]]);
+print_row(["caption" => "Email", "text_key" => "email", "text_value" => $contact["email"]]);
+end_tab();
+
+box_right("Save");
+
+end_form();
+end_main();
+print_footer();
+
+

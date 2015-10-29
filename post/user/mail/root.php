@@ -19,7 +19,20 @@
 
 include("mail.php");
 
-$location = "Trash";
-sql("delete from mail where zid = ? and location = ?", $auth_zid, $location);
+require_mine();
 
-header("Location: /mail/trash");
+$location = ucwords($s2);
+
+$locations = ["Inbox", "Drafts", "Junk", "Outbox", "Sent", "Trash"];
+if (!in_array($location, $locations)) {
+	fatal("Directory not found");
+}
+
+if (http_post("delete_all")) {
+	sql("update mail set location = 'Trash' where zid = ? and location = ?", $auth_zid, $location);
+} else if (http_post("empty")) {
+	sql("delete from mail where zid = ? and location = ?", $auth_zid, $location);
+}
+
+header("Location: /mail/$s2/");
+

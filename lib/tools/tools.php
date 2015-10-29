@@ -1386,6 +1386,24 @@ function fs_unlink($path)
 }
 
 
+function get_text($singular)
+{
+	global $lang;
+	global $msg_str;
+
+	if ($lang == "en" || $lang == "" || !array_key_exists($singular, $msg_str)) {
+		return $singular;
+	}
+
+	$a = $msg_str[$singular];
+	if (is_array($a)) {
+		return $a[0];
+	}
+
+	return $a;
+}
+
+
 function header_expires($delta = 0)
 {
 	if ($delta == 0) {
@@ -1942,6 +1960,66 @@ function map_to_url_string($map)
 	}
 
 	return $s;
+}
+
+
+function menu_beg()
+{
+	writeln('<ul class="menu">');
+}
+
+function menu_end()
+{
+	writeln('</ul>');
+}
+
+
+function menu_row($a)
+{
+	if (array_key_exists("visible", $a)) {
+		if (!$a["visible"]) {
+			return;
+		}
+	}
+
+	writeln('<li>');
+	writeln('	<a href="' . $a["link"] . '">');
+	writeln('		<dl class="' . $a["icon"] . '-32">');
+	writeln('			<dt>' . $a["caption"] . '</dt>');
+	writeln('			<dd>' . $a["description"] . '</dd>');
+	writeln('		</dl>');
+	writeln('	</a>');
+	writeln('</li>');
+}
+
+
+function nget_text($singular, $plural, $num = 1, $arg = [])
+{
+	global $lang;
+	global $msg_str;
+
+	if ($lang == "en" || $lang == "" || !array_key_exists($singular, $msg_str)) {
+		if ($n == 1) {
+			$t = $singular;
+		} else {
+			$t = $plural;
+		}
+	} else {
+		$a = $msg_str[$singular];
+		if (is_array($a)) {
+			if ($num == 1) {
+				$t = $a[0];
+			} else {
+				$t = $a[1];
+			}
+		}
+	}
+
+	for ($i = 0; $i < count($arg); $i++) {
+		$t = str_replace('$' . ($i + 1), $arg[$i], $t);
+	}
+
+	return $t;
 }
 
 

@@ -17,9 +17,15 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_mine();
 
-$location = "Inbox";
-sql("update mail set location = 'Trash' where zid = ? and location = ?", $auth_zid, $location);
+$name = http_post_string("name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_. "));
+$email = http_post_string("email", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_.@ "));
 
-header("Location: /mail/");
+$contact = db_new_rec("contact");
+$contact["name"] = $name;
+$contact["email"] = $email;
+$contact["zid"] = $auth_zid;
+db_set_rec("contact", $contact);
+
+header("Location: /contact/");

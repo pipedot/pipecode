@@ -17,9 +17,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_mine();
 
-$location = "Junk";
-sql("delete from mail where zid = ? and location = ?", $auth_zid, $location);
+$contact_id = $s2;
+if (!string_uses($contact_id, "[0-9]")) {
+	fatal("Invalid contact");
+}
+$contact = db_get_rec("contact", $contact_id);
+if ($contact["zid"] !== $auth_zid) {
+	fatal("Not your contact");
+}
 
-header("Location: /mail/junk");
+$name = http_post_string("name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_. "));
+$email = http_post_string("email", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_.@ "));
+
+$contact["name"] = $name;
+$contact["email"] = $email;
+db_set_rec("contact", $contact);
+
+header("Location: /contact/");
+

@@ -18,31 +18,21 @@
 //
 
 print_header("Tools");
-beg_main("dual-table");
+beg_main();
 
-writeln('<div class="dual-left">');
-
-beg_tab();
-print_row(array("caption" => "Ban IP", "description" => "Manage banned IP addresses", "icon" => "error", "link" => "/ban_ip/"));
-if ($auth_user["admin"]) print_row(array("caption" => "Drive", "description" => "View storage information", "icon" => "drive", "link" => "/drive/"));
-if ($auth_user["editor"]) print_row(array("caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/"));
-if ($auth_user["editor"]) print_row(array("caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create"));
-if ($auth_user["admin"]) print_row(array("caption" => "Story Topics", "description" => "Add and remove story topics", "icon" => "news", "link" => "/topic/list"));
-print_row(array("caption" => "Users", "description" => "List local users", "icon" => "users", "link" => "/user/"));
-end_tab();
-
-writeln('</div>');
-writeln('<div class="dual-right">');
-
-beg_tab();
-print_row(array("caption" => "Ban User", "description" => "Manage banned users", "icon" => "devil", "link" => "/ban_user/"));
-if ($auth_user["admin"]) print_row(array("caption" => "Feed Topics", "description" => "Add and remove feed topics", "icon" => "reader", "link" => "/feed/topic/list"));
-if ($auth_user["admin"]) print_row(array("caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/"));
-if ($auth_user["admin"]) print_row(array("caption" => "Settings", "description" => "Configure the server settings", "icon" => "tools", "link" => "settings"));
-print_row(array("caption" => "Tools", "description" => "Tools for short codes", "icon" => "hardhat", "link" => "short"));
-end_tab();
-
-writeln('</div>');
+menu_beg();
+menu_row(["caption" => "Ban IP", "description" => "Manage banned IP addresses", "icon" => "error", "link" => "/ban_ip/"]);
+menu_row(["caption" => "Ban User", "description" => "Manage banned users", "icon" => "devil", "link" => "/ban_user/"]);
+menu_row(["caption" => "Drive", "description" => "View storage information", "icon" => "drive", "link" => "/drive/", "visible" => $auth_user["admin"]]);
+menu_row(["caption" => "Feed Topics", "description" => "Add and remove feed topics", "icon" => "reader", "link" => "/feed/topic/list", "visible" => $auth_user["admin"]]);
+menu_row(["caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/", "visible" => $auth_user["editor"]]);
+menu_row(["caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/", "visible" => $auth_user["admin"]]);
+menu_row(["caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create", "visible" => $auth_user["editor"]]);
+menu_row(["caption" => "Settings", "description" => "Configure the server settings", "icon" => "tools", "link" => "settings", "visible" => $auth_user["admin"]]);
+menu_row(["caption" => "Story Topics", "description" => "Add and remove story topics", "icon" => "news", "link" => "/topic/list", "visible" => $auth_user["admin"]]);
+menu_row(["caption" => "Tools", "description" => "Tools for short codes", "icon" => "hardhat", "link" => "short"]);
+menu_row(["caption" => "Users", "description" => "List local users", "icon" => "users", "link" => "/user/"]);
+menu_end();
 
 end_main();
 print_footer();

@@ -17,38 +17,20 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_mine();
 
-$mail_id = $s3;
-if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Invalid message");
-}
+print_header("Add Contact", [], [], [], ["Contact", "Add"], ["/contact/", "/contact/add"]);
+beg_main();
+beg_form();
 
-$message = db_get_rec("mail", $mail_id);
+beg_tab();
+print_row(["caption" => "Name", "text_key" => "name", "text_value" => ""]);
+print_row(["caption" => "Email", "text_key" => "email", "text_value" => ""]);
+end_tab();
 
-require_mine($message["zid"]);
+box_right("Add");
 
-if (http_post("junk")) {
-	$message["location"] = "Junk";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	die();
-}
-if (http_post("delete")) {
-	$message["location"] = "Trash";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	die();
-}
-if (http_post("restore")) {
-	$message["location"] = "Inbox";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	die();
-}
-if (http_post("expunge")) {
-	$message["location"] = "Trash";
-	db_del_rec("mail", $message["mail_id"]);
-	header("Location: /mail/trash");
-	die();
-}
+end_form();
+end_main();
+print_footer();
+

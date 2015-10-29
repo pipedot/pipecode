@@ -207,6 +207,41 @@ textarea {
 	color: #000000;
 	text-decoration: none;
 }
+.menu {
+	border: 1px #d3d3d3 solid;
+	display: flex;
+	flex-wrap: wrap;
+	list-style-type: none;
+	margin-bottom: 8px;
+	margin-top: 0px;
+	padding-left: 0px;
+	width: 100%;
+}
+.menu a {
+	color: #000000;
+	text-decoration: none;
+}
+.menu dl {
+	background-position: 4px 50%;
+	background-repeat: no-repeat;
+	background-size: 32px 32px;
+	margin: 0px;
+	padding-left: 44px;
+	padding-right: 4px;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+.menu dt {
+	font-size: 1.6rem;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+.menu dd {
+	font-size: 1.1rem;
+	margin: 0;
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
 .icon-16 {
 	background-position: left;
 	background-repeat: no-repeat;
@@ -2015,6 +2050,18 @@ del {
 		margin-right: auto;
 		margin-bottom: 8px;
 	}
+	.menu li {
+		flex-basis: 100%;
+	}
+	.menu li:nth-child(even) {
+		background-color: #ffffff;
+	}
+	.menu li:nth-child(odd) {
+		background-color: #eeeeee;
+	}
+	.menu li:hover {
+		background-color: #aebcd4;
+	}
 	.search {
 		display: block;
 	}
@@ -2110,6 +2157,24 @@ del {
 		display: table-cell;
 		text-align: center;
 		width: 50%;
+	}
+	.menu li {
+		flex-basis: 50%;
+	}
+	.menu li:nth-child(4n) {
+		background-color: #eeeeee;
+	}
+	.menu li:nth-child(4n+1) {
+		background-color: #eeeeee;
+	}
+	.menu li:nth-child(4n+2) {
+		background-color: #ffffff;
+	}
+	.menu li:nth-child(4n+3) {
+		background-color: #ffffff;
+	}
+	.menu li:hover {
+		background-color: #aebcd4;
 	}
 	.dual-table {
 		display: table;

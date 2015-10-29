@@ -19,69 +19,14 @@
 
 include("mail.php");
 
-/*
-.tool_button {
-	background-color: #ffffff;
-	background-position: left center;
-	background-repeat: no-repeat;
-	border: 1px #d3d3d3 solid;
-	border-radius: 4px;
-	display: inline-block;
-	height: 24px;
-	cursor: pointer;
-	line-height: 20px;
-	padding: 0px;
-	padding-left: 20px;
-	padding-right: 2px;
-	margin-right: 2px;
-	vertical-align: middle;
-}
-.tool_button:hover {
-	background-color: #aebcd4;
-}
-*/
-//writeln('<div class="tool_button" style="background-image: url(/images/mail-compose-16.png)">Compose</div></a>');
-//writeln('<div class="tool_button" style="background-image: url(/images/mail-reply-16.png)">Reply</div></a>');
-//writeln('<div class="tool_button" style="background-image: url(/images/mail-forward-16.png)">Forward</div></a>');
-
 $mail_id = $s3;
 if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Message not found");
+	fatal("Invalid message");
 }
 
 $message = db_get_rec("mail", $mail_id);
 require_mine($message["zid"]);
 
-//$address = parse_mail_address($message["mail_from"]);
-
-//$name = array();
-//$icon = array();
-//$link = array();
-
-//if ($message["location"] != "Junk") {
-//	$name[] = "Reply";
-//	$icon[] = "mail-reply";
-//	$link[] = "/mail/compose?mid=$mail_id";
-
-	//$name[] = "Junk";
-	//$icon[] = "junk";
-	//$link[] = "/mail/mark?mid=$mail_id";
-//}
-//if ($message["location"] == "Trash") {
-	//$name[] = "Delete";
-	//$icon[] = "shred";
-	//$link[] = "/mail/delete?mid=$mail_id";
-//} else {
-//	$name[] = "Delete";
-//	$icon[] = "delete";
-//	$link[] = "/mail/delete?mid=$mail_id";
-//}
-
-//$name[] = "Inbox";
-//$icon[] = "inbox";
-//$link[] = "/mail/";
-
-//print_header($message["subject"], $name, $icon, $link);
 if (string_has($message["mail_from"], "no-reply@")) {
 	print_header($message["subject"], ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view/$mail_id"]);
 } else {

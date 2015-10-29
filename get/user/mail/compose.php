@@ -20,8 +20,12 @@
 include("mail.php");
 
 $to = http_get_string("to", array("required" => false, "len" => 250, "valid" => "[a-z][A-Z][0-9]-_.<>@+ "));
+$cid = http_get_int("cid", array("required" => false));
 $mid = http_get_int("mid", array("required" => false));
 
+$to = "";
+$in_reply_to = "";
+$subject = "";
 if ($mid > 0) {
 	$message = db_get_rec("mail", $mid);
 	$in_reply_to = $message["message_id"];
@@ -31,9 +35,9 @@ if ($mid > 0) {
 	if (substr($subject, 0, 4) != "Re: ") {
 		$subject = "Re: $subject";
 	}
-} else {
-	$in_reply_to = "";
-	$subject = "";
+} else if ($cid > 0) {
+	$contact = db_get_rec("contact", $cid);
+	$to = $contact["email"];
 }
 
 print_header("Compose", [], [], [], ["Mail", "Compose"], ["/mail/", "/mail/compose"]);
