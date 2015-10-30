@@ -20,24 +20,7 @@
 $row = sql("select sum(value) as karma from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ?", $zid);
 $karma = (int) $row[0]["karma"];
 $description = karma_description($karma);
-
-switch ($description) {
-	case "Excellent":
-		$icon = "face-grin";
-		break;
-	case "Good":
-		$icon = "face-smile";
-		break;
-	case "Neutral":
-		$icon = "face-plain";
-		break;
-	case "Bad":
-		$icon = "face-sad";
-		break;
-	case "Terrible":
-		$icon = "face-crying";
-		break;
-}
+$icon = karma_icon($karma);
 
 $page = http_get_int("page", array("default" => 1, "required" => false));
 $items_per_page = 100;
@@ -50,7 +33,7 @@ writeln('<h1>' . get_text("Current") . '</h1>');
 writeln('<div class="icon-32 ' . $icon . '-32">' . get_text($description) . ' (' . $karma . ')</div>');
 
 $row = sql("select comment_vote.time, value, comment.comment_id, comment_vote.zid from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0 order by comment_vote.time desc limit $item_start, $items_per_page", $zid);
-writeln('<h2>Log</h2>');
+writeln('<h2>' . get_text("Log") . '</h2>');
 writeln('<table class="zebra">');
 writeln('	<tr>');
 writeln('		<th>' . get_text("Time") . '</th>');

@@ -50,6 +50,13 @@ print_row(array("caption" => "Story Submissions", "check_key" => "submit_enabled
 print_row(array("caption" => "Bug Tracker", "check_key" => "bug_enabled", "checked" => $server_conf["bug_enabled"]));
 end_tab();
 
+beg_tab("SMTP");
+print_row(array("caption" => "Server Name", "text_key" => "smtp_server", "text_value" => $server_conf["smtp_server"]));
+print_row(array("caption" => "Email Address", "text_key" => "smtp_address", "text_value" => $server_conf["smtp_address"]));
+print_row(array("caption" => "Username", "text_key" => "smtp_username", "text_value" => $server_conf["smtp_username"]));
+print_row(array("caption" => "Password", "password_key" => "smtp_password", "password_value" => $server_conf["smtp_password"]));
+end_tab();
+
 beg_tab("Twitter");
 print_row(array("caption" => "Enable story tweets", "check_key" => "twitter_enabled", "checked" => $server_conf["twitter_enabled"]));
 print_row(array("caption" => "Consumer Key", "text_key" => "twitter_consumer_key", "text_value" => $server_conf["twitter_consumer_key"]));

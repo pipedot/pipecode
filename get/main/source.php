@@ -20,8 +20,8 @@
 print_header("Source Code");
 beg_main();
 
-writeln('<h1>Source Code</h1>');
-writeln('<p>This source code of this site is licensed under the GNU Affero General Public License</p>');
+writeln('<h1>' . get_text("Source Code") . '</h1>');
+writeln('<p>' . get_text("This source code of this site is licensed under the GNU Affero General Public License") . '</p>');
 
 $body = fs_slurp("$doc_root/license.html");
 $beg = strpos($body, "<body>") + 6;
@@ -38,20 +38,11 @@ end_tab();
 
 $tarball = substr($server_name, 0, strpos($server_name, ".")) . "-" . gmdate("Y-m-d") . ".tar.gz";
 
-beg_tab("Download", array("colspan" => 2));
-writeln('	<tr>');
-writeln('		<td>Offical Webpage</td>');
-writeln('		<td class="right"><a href="https://pipecode.org/">https://pipecode.org/</a></td>');
-writeln('	</tr>');
-writeln('	<tr>');
-writeln('		<td>GitHub Repository</td>');
-writeln('		<td class="right"><a href="https://github.com/pipedot/pipecode">https://github.com/pipedot/pipecode</a></td>');
-writeln('	</tr>');
-writeln('	<tr>');
-writeln('		<td>This Site</td>');
-writeln('		<td class="right"><a href="/download" rel="nofollow">' . $tarball . '</a></td>');
-writeln('	</tr>');
-end_tab();
+dict_beg("Download");
+dict_row("Offical Webpage", '<a href="https://pipecode.org/">https://pipecode.org/</a>');
+dict_row("GitHub Repository", '<a href="https://github.com/pipedot/pipecode">https://github.com/pipedot/pipecode</a>');
+dict_row("This Site", '<a href="/download" rel="nofollow">' . $tarball . '</a>');
+dict_end();
 
 end_main();
 print_footer();

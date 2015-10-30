@@ -431,6 +431,12 @@ $db_table["feed_user"] = array(
 	array("name" => "pos", "default" => 0)
 );
 
+$db_table["footer_link"] = array(
+	array("name" => "title", "key" => true),
+	array("name" => "icon"),
+	array("name" => "link")
+);
+
 $db_table["image"] = array(
 	array("name" => "image_id", "key" => true),
 	array("name" => "hash"),

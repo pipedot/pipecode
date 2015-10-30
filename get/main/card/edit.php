@@ -33,7 +33,7 @@ print_header("Edit Card");
 beg_main();
 beg_form();
 
-writeln('<h1>Edit Card</h1>');
+writeln('<h1>' . get_text("Edit Card") . '</h1>');
 
 $tags = array();
 $row = sql("select tag from card_tags where card_id = ?", $card["card_id"]);
@@ -42,7 +42,6 @@ for ($i = 0; $i < count($row); $i++) {
 }
 $tags = implode(" ", $tags);
 
-//writeln('<h2>Tags</h2>');
 beg_tab();
 print_row(array("caption" => "Tags", "text_key" => "tags", "text_value" => $tags));
 end_tab();

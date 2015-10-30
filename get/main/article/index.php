@@ -20,26 +20,17 @@
 print_header("Articles");
 beg_main();
 
-writeln('<h1>Articles</h1>');
+writeln('<h1>' . get_text("Articles") . '</h1>');
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("article", $items_per_page);
 
+dict_beg();
 $row = sql("select * from article order by publish_time desc limit $item_start, $items_per_page");
-beg_tab();
-writeln('	<tr>');
-writeln('		<th>Title</th>');
-writeln('		<th class="right">Time</th>');
-writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
-	$short_code = crypt_crockford_encode($row[$i]["article_id"]);
-
-	writeln('	<tr>');
-	writeln('		<td><a href="/article/' . $short_code . '">' . $row[$i]["title"] . '</a></td>');
-	writeln('		<td class="right">' . date("Y-m-d H:i", $row[$i]["publish_time"]) . '</td>');
-	writeln('	</tr>');
+	dict_row('<a href="/article/' . crypt_crockford_encode($row[$i]["article_id"]) . '">' . $row[$i]["title"] . '</a>', date("Y-m-d H:i", $row[$i]["publish_time"]));
 }
-end_tab();
+dict_end();
 
 writeln($page_footer);
 

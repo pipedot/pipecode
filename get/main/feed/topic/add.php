@@ -24,7 +24,7 @@ $icons = icon_list(true, true, true);
 print_header("New Topic");
 beg_main();
 beg_form();
-writeln('<h1>New Topic</h1>');
+writeln('<h1>' . get_text("New Topic") . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name"));

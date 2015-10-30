@@ -29,7 +29,7 @@ if ($contact["zid"] !== $auth_zid) {
 }
 
 $name = http_post_string("name", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_. "));
-$email = http_post_string("email", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_.@ "));
+$email = http_post_string("email", array("len" => 50, "required" => false, "valid" => "[a-z][A-Z][0-9]-_.@+ "));
 
 $contact["name"] = $name;
 $contact["email"] = $email;

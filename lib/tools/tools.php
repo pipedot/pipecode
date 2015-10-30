@@ -93,7 +93,7 @@ function beg_form($action = "", $method = "post")
 }
 
 
-function beg_tab($caption = "", $a = array())
+function beg_tab($caption = "", $a = [])
 {
 	$s = '<table';
 	if (array_key_exists("id", $a)) {
@@ -110,9 +110,9 @@ function beg_tab($caption = "", $a = array())
 	if ($caption != "") {
 		writeln('	<tr>');
 		if (array_key_exists("colspan", $a)) {
-			writeln('		<th colspan="' . $a["colspan"] . '">' . $caption . '</th>');
+			writeln('		<th colspan="' . $a["colspan"] . '">' . get_text($caption) . '</th>');
 		} else {
-			writeln('		<th>' . $caption . '</th>');
+			writeln('		<th>' . get_text($caption) . '</th>');
 		}
 		writeln('	</tr>');
 	}
@@ -1094,12 +1094,12 @@ function dict_beg($caption1 = "", $caption2 = "")
 	writeln('<table class="dict">');
 	if ($caption2 != "") {
 		writeln('	<tr>');
-		writeln('		<th>' . $caption1 . '</th>');
-		writeln('		<th>' . $caption2 . '</th>');
+		writeln('		<th>' . get_text($caption1) . '</th>');
+		writeln('		<th>' . get_text($caption2) . '</th>');
 		writeln('	</tr>');
 	} else if ($caption1 != "") {
 		writeln('	<tr>');
-		writeln('		<th colspan="2">' . $caption1 . '</th>');
+		writeln('		<th colspan="2">' . get_text($caption1) . '</th>');
 		writeln('	</tr>');
 	}
 }
@@ -1158,8 +1158,8 @@ function dict_row($name, $value = "")
 	}
 
 	writeln('	<tr>');
-	writeln('		<td>' . $name . '</td>');
-	writeln('		<td>' . $value . '</td>');
+	writeln('		<td>' . get_text($name) . '</td>');
+	writeln('		<td>' . get_text($value) . '</td>');
 	writeln('	</tr>');
 }
 
@@ -1167,7 +1167,7 @@ function dict_row($name, $value = "")
 function dict_none($caption = "none")
 {
 	writeln('	<tr>');
-	writeln('		<td colspan="2">(' . $caption . ')</td>');
+	writeln('		<td colspan="2">(' . get_text($caption) . ')</td>');
 	writeln('	</tr>');
 }
 
@@ -1822,7 +1822,7 @@ function box_buttons($buttons)
 			$value = trim($a[$i]);
 			$name = strtolower($value);
 			$name = str_replace(" ", "_", $name);
-			$s .= '<input type="submit" name="' . $name . '" value="' . $value .'"> ';
+			$s .= '<input type="submit" name="' . $name . '" value="' . get_text($value) .'"> ';
 		}
 		return trim($s);
 	}

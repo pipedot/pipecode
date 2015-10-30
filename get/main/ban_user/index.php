@@ -20,7 +20,7 @@
 print_header("Banned Users");
 beg_main();
 
-writeln('<h1>Banned Users</h1>');
+writeln('<h1>' . get_text("Banned Users") . '</h1>');
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("ban_user", $items_per_page);
@@ -29,13 +29,13 @@ $row = sql("select zid, short_id, time, editor_zid from ban_user order by time d
 
 beg_tab();
 writeln('	<tr>');
-writeln('		<th>Time</th>');
-writeln('		<th class="center">User</th>');
-writeln('		<th class="center">Example</th>');
-writeln('		<th class="right">Editor</th>');
+writeln('		<th>' . get_text("Time") . '</th>');
+writeln('		<th class="center">' . get_text("User") . '</th>');
+writeln('		<th class="center">' . get_text("Example") . '</th>');
+writeln('		<th class="right">' . get_text("Editor") . '</th>');
 writeln('	</tr>');
 if (count($row) == 0) {
-	writeln('	<tr><td colspan="4">(none)</td></tr>');
+	writeln('	<tr><td colspan="4">(' . get_text("none") . ')</td></tr>');
 }
 for ($i = 0; $i < count($row); $i++) {
 	$short_code = crypt_crockford_encode($row[$i]["short_id"]);

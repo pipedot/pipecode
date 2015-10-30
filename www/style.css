@@ -20,29 +20,24 @@ a:hover {
 body {
 	background-color: #ffffff;
 	font-family: sans-serif;
-	xfont-size: 9pt;
 	font-size: 1.2rem;
 	margin: 0px;
 }
 div {
 	font-family: sans-serif;
-	xfont-size: 9pt;
 	font-size: 1.2rem;
 }
 h1 {
 	font-family: sans-serif;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 	margin-top: 0px;
 }
 h2 {
 	font-family: sans-serif;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 }
 h3 {
 	font-family: sans-serif;
-	xfont-size: 9pt;
 	font-size: 1.3rem;
 	font-weight: bolder;
 }
@@ -177,12 +172,10 @@ textarea {
 	background-size: 32px 32px;
 	margin: 0px;
 	padding-left: 40px;
-	xheight: 40px;
 	height: 4rem;
 }
 .dl-32 dd {
 	color: #000000;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	margin: 0px;
 	padding-top: 2px;
@@ -426,7 +419,6 @@ textarea {
 	color: #888888;
 	position: relative;
 	height: 24px;
-	xpadding-right: 4px;
 }
 .breadcrumbs a:hover {
 	color: #ffffff;
@@ -459,7 +451,6 @@ textarea {
 .breadcrumbs a:hover::after {
 	background-image: url(/images/crumb-after.png);
 	width: 12px;
-	xpadding-right: -4px;
 }
 
 
@@ -534,21 +525,16 @@ article address {
 .news-image .article-footer .article-footer-left {
 	display: table-cell;
 	padding-left: 8px;
-	xpadding-bottom: 32px;
-	xwidth: 50%;
 	vertical-align: middle;
 }
 .news-image .article-footer .article-footer-right {
 	border-collapse: separate;
 	display: table-cell;
-	xwidth: 50%;
 	text-align: right;
 	vertical-align: middle;
 }
 .news-image .article-preview {
-	xheight: 128px;
 	height: 102px;
-	xbackground-color: green;
 	overflow: hidden;
 }
 .article-image {
@@ -557,20 +543,14 @@ article address {
 }
 .article-link {
 	display: block;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	margin-left: 8px;
 	margin-bottom: 8px;
 }
-.article-preview {
-	xdisplay: table-cell;
-}
 .article-info {
 	display: block;
-	xcolor: #666666 !important;
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	margin-left: 8px;
 	margin-bottom: 8px;
@@ -581,8 +561,6 @@ article address {
 .article-description {
 	margin-left: 8px;
 	overflow: hidden;
-	xwhite-space: nowrap;
-	xwidth: 250px;
 }
 .external-title {
 	background-color: #d3d3d3;
@@ -601,7 +579,6 @@ article address {
 	border: 1px #888888 solid;
 	border-spacing: 0px;
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	margin-bottom: 8px;
 	padding: 4px;
@@ -688,12 +665,9 @@ article address {
 	padding-bottom: 2px;
 }
 .bug-title {
-	xdisplay: table;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	padding-bottom: 6px;
-	xpadding-top: 2px;
 }
 .bug-title a {
 	color: #000000;
@@ -705,7 +679,6 @@ article address {
 }
 .bug-subtitle {
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.4rem;
 	font-weight: normal;
 }
@@ -745,7 +718,6 @@ article address {
 .label {
 	border-radius: 2px;
 	box-shadow: -1px -1px 0 rgba(0, 0, 0, 0.2) inset;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	font-weight: bolder;
 	padding-top: 3px;
@@ -771,14 +743,12 @@ article address {
 }
 .comment-header a {
 	color: #666666;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 }
 .comment h3 {
 	border-top-left-radius: 10px;
 	color: #ffffff;
-	xfont-size: 9pt;
 	font-size: 1.2rem;
 	padding: 4px;
 	padding-left: 16px;
@@ -797,7 +767,6 @@ article address {
 .comment h4 {
 	background-color: #d3d3d3;
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	font-weight: normal;
 	padding: 4px;
@@ -816,7 +785,6 @@ article address {
 	border-top-left-radius: 10px;
 	border-bottom: 0px;
 	cursor: pointer;
-	xfont-size: 9pt;
 	font-size: 1.2rem;
 	font-weight: normal;
 	height: 24px;
@@ -982,7 +950,6 @@ del {
 	border-bottom: 0px;
 	border-spacing: 0px;
 	font-weight: bolder;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	padding: 4px;
 	spacing: 8px;
@@ -1296,14 +1263,12 @@ del {
 .pipe-minus {
 	background-image: url(/images/minus-32.png);
 	cursor: pointer;
-	xmargin-top: 2px;
 	width: 32px;
 	height: 32px;
 }
 .pipe-plus {
 	background-image: url(/images/plus-32.png);
 	cursor: pointer;
-	xmargin-top: 2px;
 	width: 32px;
 	height: 32px;
 }
@@ -1476,7 +1441,6 @@ del {
 	margin-right: 4px;
 }
 .recent-journal-title {
-	xfont-size: 9pt;
 	font-size: 1.2rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -1498,7 +1462,6 @@ del {
 	border: 1px solid #ffffff;
 	border-radius: 4px;
 	display: block;
-	xfont-size: 9pt;
 	font-size: 1.2rem;
 	font-weight: bolder;
 	height: 48px;
@@ -1514,21 +1477,12 @@ del {
 .side-link-one {
 }
 .side-link-one a {
-	xbackground-position: 5% 50%;
-	xbackground-repeat: no-repeat;
 	border: 1px solid #ffffff;
 	border-radius: 4px;
 	display: block;
-	xfont-size: 9pt;
-	xfont-size: 1.2rem;
-	xfont-weight: bolder;
 	height: 48px;
-	xline-height: 32px;
 	padding-top: 4px;
-	xpadding-left: 48px;
-	xvertical-align: middle;
 	width: 282px;
-	xwidth: auto;
 }
 .side-link-one a:hover {
 	border: 1px solid #888888;
@@ -1635,7 +1589,6 @@ del {
 	background-color: #506890;
 	border-top-left-radius: 10px;
 	color: #ffffff;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	margin: 0px;
@@ -1648,7 +1601,6 @@ del {
 .story header div {
 	background-color: #d3d3d3;
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	font-weight: normal;
 	margin: 0px;
@@ -1678,7 +1630,6 @@ del {
 	border-bottom-left-radius: 10px;
 	border-bottom-right-radius: 10px;
 	display: table;
-	xdisplay: block;
 	padding-top: 0px;
 	padding-bottom: 10px;
 	padding-left: 10px;
@@ -1689,9 +1640,7 @@ del {
 .story footer > div {
 	border-width: 0px;
 	display: table-cell;
-	xdisplay: inline-block;
 	padding: 0px;
-	xwidth: 50%;
 }
 .story footer div a {
 	text-decoration: none;
@@ -1704,19 +1653,11 @@ del {
 	text-align: right;
 }
 .story footer li {
-	xborder-right: solid 1px #666666;
 	border-right: solid 1px #d3d3d3;
 	display: inline-block;
-	xpadding-left: 6px;
 	padding-right: 6px;
-	xmargin-left: 6px;
 	margin-right: 6px;
-	xpadding-right: 4px;
 	vertical-align: middle;
-}
-.xstory footer li+li {
-	border-left: solid 1px #666666;
-	xborder-left: solid 1px #d3d3d3;
 }
 .story footer li:last-child {
 	border-right: 0px;
@@ -1801,7 +1742,6 @@ del {
 	background-color: #d3d3d3;
 	border: 1px solid #888888;
 	border-top-right-radius: 10px;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	padding: 8px;
@@ -2104,7 +2044,6 @@ del {
 	nav.sections a {
 		display: block;
 		padding: 4px;
-		xwidth: 80px;
 		width: 8rem;
 	}
 	nav.sections a.active {
@@ -2217,57 +2156,6 @@ del {
 
 
 /**
- * Search
- */
-.xsearch a {
-	text-decoration: underline;
-}
-.xsearch h1 {
-	xfont-size: 12pt;
-	font-size: 1.6rem;
-	margin: 0px;
-	margin-bottom: 2px;
-	margin-top: 16px;
-}
-.xsearch h2 {
-	color: darkgreen;
-	display: inline;
-	xfont-size: 9pt;
-	font-size: 1.2rem;
-	font-weight: normal;
-}
-.xsearch h3 {
-	color: #666666;
-	display: inline;
-	xfont-size: 9pt;
-	font-size: 1.2rem;
-	font-weight: normal;
-}
-.xsearch h3 a {
-	color: #666666;
-	font-weight: bolder;
-	text-decoration: none;
-}
-.xsearch h3 a:link {
-	xcolor: #888888;
-}
-.xsearch h3 a:visited {
-	xcolor: #888888;
-}
-.xsearch h3 a:hover {
-	text-decoration: underline;
-}
-.xsearch p {
-	color: #333333;
-	margin: 0px;
-	margin-top: 2px;
-	height: 47px;
-	overflow: hidden;
-	line-height: 15px;
-}
-
-
-/**
  * Spinner
  */
 .spinner {
@@ -2280,7 +2168,6 @@ del {
 }
 .spinner > .txt {
 	color: #000000;
-	xcolor: #1e3c82;
 	display: table-cell;
 	font-size: 1.5rem;
 	font-weight: bold;
@@ -2319,7 +2206,6 @@ del {
 .spinner > .sep {
 	background-image: url(/images/spinner-sep-64.png);
 	background-repeat: repeat-x;
-	xdisplay: block;
 	display: table-cell;
 	height: 64px;
 	width: 8px;
@@ -2358,24 +2244,20 @@ del {
  */
 .store-item-title {
 	font-weight: bolder;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 }
 .store-item-tag {
 	font-weight: bolder;
 }
 .store-item-price {
-	xfont-size: 20pt;
 	font-size: 2.6rem;
 	line-height: 1.0;
 }
 .store-item-price sup {
 	vertical-align: top;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 }
 .store-item-shipping {
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	color: #008000;
 	white-space: nowrap;
@@ -2383,19 +2265,16 @@ del {
 	padding-bottom: 9px;
 }
 .store-item-feature {
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	white-space: nowrap;
 }
 .store-cart-price {
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	text-align: right;
 }
 .store-cart-title {
 	font-weight: bolder;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 }
 .store-sort-by {
@@ -2457,7 +2336,6 @@ del {
 }
 .icon-title {
 	color: #000000;
-	xfont-size: 12pt;
 	font-size: 1.6rem;
 	padding-top: 2px;
 	padding-bottom: 2px;
@@ -2518,14 +2396,12 @@ del {
 }
 .card-by {
 	display: block;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	padding-top: 2px;
 }
 .card-time {
 	color: #666666;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 }
 .card-vote {
@@ -2540,11 +2416,6 @@ del {
 }
 .vote-box {
 	display: table;
-	xposition: relative
-	xposition: absolute;
-	xright: 0;
-	xfloat: right;
-	xmargin-bottom: 8px;
 }
 .vote-button {
 	background-position: center center;
@@ -2554,9 +2425,7 @@ del {
 	border-radius: 4px;
 	cursor: pointer;
 	display: table-cell;
-	xdisplay: inline-block;
 	height: 24px;
-	xpadding: 3px;
 	width: 24px;
 }
 .vote-button:hover {
@@ -2586,7 +2455,6 @@ del {
 }
 .card-story-link {
 	display: block;
-	xfont-size: 10pt;
 	font-size: 1.4rem;
 	font-weight: bolder;
 	padding-bottom: 8px;
@@ -2594,7 +2462,6 @@ del {
 .card-story-site {
 	display: block;
 	color: #666666 !important;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 }
 .card-photo-9x16 {
@@ -2626,14 +2493,12 @@ del {
 }
 .card-comments {
 	display: table-cell;
-	xfont-weight: bolder;
 	padding-top: 5px;
 	white-space: nowrap;
 	vertical-align: top;
 }
 .card-tags {
 	display: table-cell;
-	xfont-size: 8pt;
 	font-size: 1.1rem;
 	padding-top: 6px;
 	text-align: right;
@@ -2663,1025 +2528,4 @@ del {
 	border-top: 1px #d3d3d3 solid;
 	display: block;
 	margin-bottom: 8px;
-}
-
-
-/**
- * Icon
- */
-.accessories-16 {
-	background-image: url(/images/accessories-16.png);
-}
-.accessories-32 {
-	background-image: url(/images/accessories-32.png);
-}
-.aphone-32 {
-	background-image: url(/images/aphone-32.png);
-}
-.aphone-64 {
-	background-image: url(/images/aphone-64.png);
-}
-.apple-16 {
-	background-image: url(/images/apple-16.png);
-}
-.apple-32 {
-	background-image: url(/images/apple-32.png);
-}
-.apple-64 {
-	background-image: url(/images/apple-64.png);
-}
-.beakers-16 {
-	background-image: url(/images/beakers-16.png);
-}
-.beakers-32 {
-	background-image: url(/images/beakers-32.png);
-}
-.beakers-64 {
-	background-image: url(/images/beakers-64.png);
-}
-.binder-16 {
-	background-image: url(/images/binder-16.png);
-}
-.binder-32 {
-	background-image: url(/images/binder-32.png);
-}
-.binder-64 {
-	background-image: url(/images/binder-64.png);
-}
-.broom-16 {
-	background-image: url(/images/broom-16.png);
-}
-.broom-32 {
-	background-image: url(/images/broom-32.png);
-}
-.broom-64 {
-	background-image: url(/images/broom-64.png);
-}
-.bulb-16 {
-	background-image: url(/images/bulb-16.png);
-}
-.bulb-32 {
-	background-image: url(/images/bulb-32.png);
-}
-.cake-16 {
-	background-image: url(/images/cake-16.png);
-}
-.cake-16 {
-	background-image: url(/images/cake-16.png);
-}
-.cake-32 {
-	background-image: url(/images/cake-32.png);
-}
-.cake-64 {
-	background-image: url(/images/cake-64.png);
-}
-.calendar-16 {
-	background-image: url(/images/calendar-16.png);
-}
-.certificate-16 {
-	background-image: url(/images/certificate-16.png);
-}
-.chalkboard-16 {
-	background-image: url(/images/chalkboard-16.png);
-}
-.chalkboard-32 {
-	background-image: url(/images/chalkboard-32.png);
-}
-.chalkboard-64 {
-	background-image: url(/images/chalkboard-64.png);
-}
-.chat-16 {
-	background-image: url(/images/chat-16.png);
-}
-.chat-32 {
-	background-image: url(/images/chat-32.png);
-}
-.check-16 {
-	background-image: url(/images/check-16.png);
-}
-.chrome-32 {
-	background-image: url(/images/chrome-32.png);
-}
-.chrome-64 {
-	background-image: url(/images/chrome-64.png);
-}
-.clip-16 {
-	background-image: url(/images/clip-16.png);
-}
-.close-16 {
-	background-image: url(/images/close-16.png);
-}
-.coins-16 {
-	background-image: url(/images/coins-16.png);
-}
-.coins-32 {
-	background-image: url(/images/coins-32.png);
-}
-.coins-64 {
-	background-image: url(/images/coins-64.png);
-}
-.computers-32 {
-	background-image: url(/images/computers-32.png);
-}
-.computers-64 {
-	background-image: url(/images/computers-64.png);
-}
-.delete-16 {
-	background-image: url(/images/delete-16.png);
-}
-.down-16 {
-	background-image: url(/images/down-16.png);
-}
-.down-32 {
-	background-image: url(/images/down-32.png);
-}
-.devil-16 {
-	background-image: url(/images/devil-16.png);
-}
-.devil-32 {
-	background-image: url(/images/devil-32.png);
-}
-.devil-64 {
-	background-image: url(/images/devil-64.png);
-}
-.drive-16 {
-	background-image: url(/images/drive-16.png);
-}
-.drive-32 {
-	background-image: url(/images/drive-32.png);
-}
-.drive-64 {
-	background-image: url(/images/drive-64.png);
-}
-.error-16 {
-	background-image: url(/images/error-16.png);
-}
-.error-32 {
-	background-image: url(/images/error-32.png);
-}
-.exit-16 {
-	background-image: url(/images/exit-16.png);
-}
-.face-crying-32 {
-	background-image: url(/images/face-crying-32.png);
-}
-.face-grin-32 {
-	background-image: url(/images/face-grin-32.png);
-}
-.face-plain-32 {
-	background-image: url(/images/face-plain-32.png);
-}
-.face-sad-32 {
-	background-image: url(/images/face-sad-32.png);
-}
-.face-smile-16 {
-	background-image: url(/images/face-smile-16.png);
-}
-.face-smile-32 {
-	background-image: url(/images/face-smile-32.png);
-}
-.feed-16 {
-	background-image: url(/images/feed-16.png);
-}
-.firefox-32 {
-	background-image: url(/images/firefox-32.png);
-}
-.folder-16 {
-	background-image: url(/images/folder-16.png);
-}
-.folder-home-16 {
-	background-image: url(/images/folder-home-16.png);
-}
-.folder-new-16 {
-	background-image: url(/images/folder-new-16.png);
-}
-.gavel-16 {
-	background-image: url(/images/gavel-16.png);
-}
-.gavel-32 {
-	background-image: url(/images/gavel-32.png);
-}
-.gavel-64 {
-	background-image: url(/images/gavel-64.png);
-}
-.gear-16 {
-	background-image: url(/images/gear-16.png);
-}
-.gear-32 {
-	background-image: url(/images/gear-32.png);
-}
-.gear-64 {
-	background-image: url(/images/gear-64.png);
-}
-.globe-16 {
-	background-image: url(/images/globe-16.png);
-}
-.globe-32 {
-	background-image: url(/images/globe-32.png);
-}
-.globe-64 {
-	background-image: url(/images/globe-64.png);
-}
-.hardhat-32 {
-	background-image: url(/images/hardhat-32.png);
-}
-.hardhat-64 {
-	background-image: url(/images/hardhat-64.png);
-}
-.heart-16 {
-	background-image: url(/images/heart-16.png);
-}
-.heart-32 {
-	background-image: url(/images/heart-32.png);
-}
-.home-16 {
-	background-image: url(/images/home-16.png);
-}
-.home-32 {
-	background-image: url(/images/home-32.png);
-}
-.html-32 {
-	background-image: url(/images/html-32.png);
-}
-.ie-32 {
-	background-image: url(/images/ie-32.png);
-}
-.important-32 {
-	background-image: url(/images/important-32.png);
-}
-.inbox-16 {
-	background-image: url(/images/inbox-16.png);
-}
-.internet-32 {
-	background-image: url(/images/internet-32.png);
-}
-.internet-64 {
-	background-image: url(/images/internet-64.png);
-}
-.joystick-32 {
-	background-image: url(/images/joystick-32.png);
-}
-.joystick-64 {
-	background-image: url(/images/joystick-64.png);
-}
-.junk-16 {
-	background-image: url(/images/junk-16.png);
-}
-.junk-32 {
-	background-image: url(/images/junk-32.png);
-}
-.ladybug-16 {
-	background-image: url(/images/ladybug-16.png);
-}
-.lock-32 {
-	background-image: url(/images/lock-32.png);
-}
-.lock-64 {
-	background-image: url(/images/lock-64.png);
-}
-.logo-16 {
-	background-image: url(/images/logo-16.png);
-}
-.logo-32 {
-	background-image: url(/images/logo-32.png);
-}
-.mail-16 {
-	background-image: url(/images/mail-16.png);
-}
-.mail-32 {
-	background-image: url(/images/mail-32.png);
-}
-.mail-compose-16 {
-	background-image: url(/images/mail-compose-16.png);
-}
-.mail-forward-16 {
-	background-image: url(/images/mail-forward-16.png);
-}
-.mail-reply-16 {
-	background-image: url(/images/mail-reply-16.png);
-}
-.microphone-32 {
-	background-image: url(/images/microphone-32.png);
-}
-.microphone-64 {
-	background-image: url(/images/microphone-64.png);
-}
-.microsoft-32 {
-	background-image: url(/images/microsoft-32.png);
-}
-.microsoft-64 {
-	background-image: url(/images/microsoft-64.png);
-}
-.minus-16 {
-	background-image: url(/images/minus-16.png);
-}
-.moon-32 {
-	background-image: url(/images/moon-32.png);
-}
-.moon-64 {
-	background-image: url(/images/moon-64.png);
-}
-.movies-16 {
-	background-image: url(/images/movies-16.png);
-}
-.movies-32 {
-	background-image: url(/images/movies-32.png);
-}
-.movies-64 {
-	background-image: url(/images/movies-64.png);
-}
-.music-16 {
-	background-image: url(/images/music-16.png);
-}
-.music-32 {
-	background-image: url(/images/music-32.png);
-}
-.news-16 {
-	background-image: url(/images/news-16.png);
-}
-.news-32 {
-	background-image: url(/images/news-32.png);
-}
-.news-64 {
-	background-image: url(/images/news-64.png);
-}
-.notepad-16 {
-	background-image: url(/images/notepad-16.png);
-}
-.notepad-32 {
-	background-image: url(/images/notepad-32.png);
-}
-.opml-16 {
-	background-image: url(/images/opml-16.png);
-}
-.opml-32 {
-	background-image: url(/images/opml-32.png);
-}
-.opml-64 {
-	background-image: url(/images/opml-64.png);
-}
-.package-16 {
-	background-image: url(/images/package-16.png);
-}
-.palemoon-32 {
-	background-image: url(/images/palemoon-32.png);
-}
-.palemoon-64 {
-	background-image: url(/images/palemoon-64.png);
-}
-.picture-16 {
-	background-image: url(/images/picture-16.png);
-}
-.picture-32 {
-	background-image: url(/images/picture-32.png);
-}
-.pipedot-32 {
-	background-image: url(/images/pipedot-32.png);
-}
-.pipedot-64 {
-	background-image: url(/images/pipedot-64.png);
-}
-.plus-16 {
-	background-image: url(/images/plus-16.png);
-}
-.plus-32 {
-	background-image: url(/images/plus-32.png);
-}
-.question-32 {
-	background-image: url(/images/question-32.png);
-}
-.reader-16 {
-	background-image: url(/images/reader-16.png);
-}
-.reader-32 {
-	background-image: url(/images/reader-32.png);
-}
-.register-16 {
-	background-image: url(/images/register-16.png);
-}
-.robot-desktop-32 {
-	background-image: url(/images/robot-desktop-32.png);
-}
-.robot-desktop-64 {
-	background-image: url(/images/robot-desktop-64.png);
-}
-.safari-32 {
-	background-image: url(/images/safari-32.png);
-}
-.safari-64 {
-	background-image: url(/images/safari-64.png);
-}
-.send-16 {
-	background-image: url(/images/send-16.png);
-}
-.sent-16 {
-	background-image: url(/images/sent-16.png);
-}
-.share-16 {
-	background-image: url(/images/share-16.png);
-}
-.shirts-32 {
-	background-image: url(/images/shirts-32.png);
-}
-.soccer-32 {
-	background-image: url(/images/soccer-32.png);
-}
-.soccer-64 {
-	background-image: url(/images/soccer-64.png);
-}
-.sort-ascending-16 {
-	background-image: url(/images/sort-ascending-16.png);
-}
-.sort-descending-16 {
-	background-image: url(/images/sort-descending-16.png);
-}
-.spreadsheet-32 {
-	background-image: url(/images/spreadsheet-32.png);
-}
-.stop-16 {
-	background-image: url(/images/stop-16.png);
-}
-.stop-32 {
-	background-image: url(/images/stop-32.png);
-}
-.tag-16 {
-	background-image: url(/images/tag-16.png);
-}
-.tools-16 {
-	background-image: url(/images/tools-16.png);
-}
-.tools-32 {
-	background-image: url(/images/tools-32.png);
-}
-.trash-16 {
-	background-image: url(/images/trash-16.png);
-}
-.tweet-16 {
-	background-image: url(/images/tweet-16.png);
-}
-.tux-16 {
-	background-image: url(/images/tux-16.png);
-}
-.tux-32 {
-	background-image: url(/images/tux-32.png);
-}
-.tux-64 {
-	background-image: url(/images/tux-64.png);
-}
-.ubunchu-16 {
-	background-image: url(/images/ubunchu-16.png);
-}
-.ubunchu-32 {
-	background-image: url(/images/ubunchu-32.png);
-}
-.ubunchu-64 {
-	background-image: url(/images/ubunchu-64.png);
-}
-.undo-16 {
-	background-image: url(/images/undo-16.png);
-}
-.up-16 {
-	background-image: url(/images/up-16.png);
-}
-.up-32 {
-	background-image: url(/images/up-32.png);
-}
-.update-32 {
-	background-image: url(/images/update-32.png);
-}
-.usb-32 {
-	background-image: url(/images/usb-32.png);
-}
-.user-16 {
-	background-image: url(/images/user-16.png);
-}
-.user-32 {
-	background-image: url(/images/user-32.png);
-}
-.users-16 {
-	background-image: url(/images/users-16.png);
-}
-.users-32 {
-	background-image: url(/images/users-32.png);
-}
-.users-64 {
-	background-image: url(/images/users-64.png);
-}
-.vsort-16 {
-	background-image: url(/images/vsort-16.png);
-}
-.warning-32 {
-	background-image: url(/images/warning-32.png);
-}
-.workgroup-32 {
-	background-image: url(/images/workgroup-32.png);
-}
-@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
-	.accessories-16 {
-		background-image: url(/images/accessories-32.png);
-	}
-	.accessories-32 {
-		background-image: url(/images/accessories-64.png);
-	}
-	.aphone-32 {
-		background-image: url(/images/aphone-64.png);
-	}
-	.aphone-64 {
-		background-image: url(/images/aphone-128.png);
-	}
-	.apple-16 {
-		background-image: url(/images/apple-32.png);
-	}
-	.apple-32 {
-		background-image: url(/images/apple-64.png);
-	}
-	.apple-64 {
-		background-image: url(/images/apple-128.png);
-	}
-	.beakers-16 {
-		background-image: url(/images/beakers-32.png);
-	}
-	.beakers-32 {
-		background-image: url(/images/beakers-64.png);
-	}
-	.beakers-64 {
-		background-image: url(/images/beakers-128.png);
-	}
-	.binder-16 {
-		background-image: url(/images/binder-32.png);
-	}
-	.binder-32 {
-		background-image: url(/images/binder-64.png);
-	}
-	.binder-64 {
-		background-image: url(/images/binder-128.png);
-	}
-	.bulb-16 {
-		background-image: url(/images/bulb-32.png);
-	}
-	.bulb-32 {
-		background-image: url(/images/bulb-64.png);
-	}
-	.broom-16 {
-		background-image: url(/images/broom-32.png);
-	}
-	.broom-32 {
-		background-image: url(/images/broom-64.png);
-	}
-	.broom-64 {
-		background-image: url(/images/broom-128.png);
-	}
-	.cake-16 {
-		background-image: url(/images/cake-32.png);
-	}
-	.cake-32 {
-		background-image: url(/images/cake-64.png);
-	}
-	.cake-64 {
-		background-image: url(/images/cake-128.png);
-	}
-	.calendar-16 {
-		background-image: url(/images/calendar-32.png);
-	}
-	.certificate-16 {
-		background-image: url(/images/certificate-32.png);
-	}
-	.chalkboard-16 {
-		background-image: url(/images/chalkboard-32.png);
-	}
-	.chalkboard-32 {
-		background-image: url(/images/chalkboard-64.png);
-	}
-	.chalkboard-64 {
-		background-image: url(/images/chalkboard-128.png);
-	}
-	.chat-16 {
-		background-image: url(/images/chat-32.png);
-	}
-	.chat-32 {
-		background-image: url(/images/chat-64.png);
-	}
-	.check-16 {
-		background-image: url(/images/check-32.png);
-	}
-	.chrome-32 {
-		background-image: url(/images/chrome-64.png);
-	}
-	.chrome-64 {
-		background-image: url(/images/chrome-128.png);
-	}
-	.clip-16 {
-		background-image: url(/images/clip-32.png);
-	}
-	.close-16 {
-		background-image: url(/images/close-32.png);
-	}
-	.coins-16 {
-		background-image: url(/images/coins-32.png);
-	}
-	.coins-32 {
-		background-image: url(/images/coins-64.png);
-	}
-	.coins-64 {
-		background-image: url(/images/coins-128.png);
-	}
-	.computers-32 {
-		background-image: url(/images/computers-64.png);
-	}
-	.computers-64 {
-		background-image: url(/images/computers-128.png);
-	}
-	.delete-16 {
-		background-image: url(/images/delete-32.png);
-	}
-	.devil-16 {
-		background-image: url(/images/devil-32.png);
-	}
-	.devil-32 {
-		background-image: url(/images/devil-64.png);
-	}
-	.devil-64 {
-		background-image: url(/images/devil-128.png);
-	}
-	.down-16 {
-		background-image: url(/images/down-32.png);
-	}
-	.down-32 {
-		background-image: url(/images/down-64.png);
-	}
-	.drive-16 {
-		background-image: url(/images/drive-32.png);
-	}
-	.drive-32 {
-		background-image: url(/images/drive-64.png);
-	}
-	.drive-64 {
-		background-image: url(/images/drive-128.png);
-	}
-	.edit-16 {
-		background-image: url(/images/edit-32.png);
-	}
-	.error-16 {
-		background-image: url(/images/error-32.png);
-	}
-	.error-32 {
-		background-image: url(/images/error-64.png);
-	}
-	.exit-16 {
-		background-image: url(/images/exit-32.png);
-	}
-	.face-crying-32 {
-		background-image: url(/images/face-crying-64.png);
-	}
-	.face-grin-32 {
-		background-image: url(/images/face-grin-64.png);
-	}
-	.face-plain-32 {
-		background-image: url(/images/face-plain-64.png);
-	}
-	.face-sad-32 {
-		background-image: url(/images/face-sad-64.png);
-	}
-	.face-smile-16 {
-		background-image: url(/images/face-smile-32.png);
-	}
-	.face-smile-32 {
-		background-image: url(/images/face-smile-64.png);
-	}
-	.feed-16 {
-		background-image: url(/images/feed-32.png);
-	}
-	.firefox-32 {
-		background-image: url(/images/firefox-64.png);
-	}
-	.folder-16 {
-		background-image: url(/images/folder-32.png);
-	}
-	.folder-home-16 {
-		background-image: url(/images/folder-home-32.png);
-	}
-	.folder-new-16 {
-		background-image: url(/images/folder-new-32.png);
-	}
-	.gavel-16 {
-		background-image: url(/images/gavel-32.png);
-	}
-	.gavel-32 {
-		background-image: url(/images/gavel-64.png);
-	}
-	.gavel-64 {
-		background-image: url(/images/gavel-128.png);
-	}
-	.gear-16 {
-		background-image: url(/images/gear-32.png);
-	}
-	.gear-32 {
-		background-image: url(/images/gear-64.png);
-	}
-	.gear-64 {
-		background-image: url(/images/gear-128.png);
-	}
-	.globe-16 {
-		background-image: url(/images/globe-32.png);
-	}
-	.globe-32 {
-		background-image: url(/images/globe-64.png);
-	}
-	.globe-64 {
-		background-image: url(/images/globe-128.png);
-	}
-	.hardhat-32 {
-		background-image: url(/images/hardhat-64.png);
-	}
-	.hardhat-64 {
-		background-image: url(/images/hardhat-128.png);
-	}
-	.heart-16 {
-		background-image: url(/images/heart-32.png);
-	}
-	.heart-32 {
-		background-image: url(/images/heart-64.png);
-	}
-	.home-16 {
-		background-image: url(/images/home-32.png);
-	}
-	.home-32 {
-		background-image: url(/images/home-64.png);
-	}
-	.html-32 {
-		background-image: url(/images/html-64.png);
-	}
-	.ie-32 {
-		background-image: url(/images/ie-64.png);
-	}
-	.important-32 {
-		background-image: url(/images/important-64.png);
-	}
-	.inbox-16 {
-		background-image: url(/images/inbox-32.png);
-	}
-	.internet-32 {
-		background-image: url(/images/internet-64.png);
-	}
-	.internet-64 {
-		background-image: url(/images/internet-128.png);
-	}
-	.joystick-32 {
-		background-image: url(/images/joystick-64.png);
-	}
-	.joystick-64 {
-		background-image: url(/images/joystick-128.png);
-	}
-	.junk-16 {
-		background-image: url(/images/junk-32.png);
-	}
-	.junk-32 {
-		background-image: url(/images/junk-64.png);
-	}
-	.ladybug-16 {
-		background-image: url(/images/ladybug-32.png);
-	}
-	.lock-32 {
-		background-image: url(/images/lock-64.png);
-	}
-	.lock-64 {
-		background-image: url(/images/lock-128.png);
-	}
-	.logo-16 {
-		background-image: url(/images/logo-32.png);
-	}
-	.logo-32 {
-		background-image: url(/images/logo-64.png);
-	}
-	.mail-16 {
-		background-image: url(/images/mail-32.png);
-	}
-	.mail-32 {
-		background-image: url(/images/mail-64.png);
-	}
-	.mail-compose-16 {
-		background-image: url(/images/mail-compose-32.png);
-	}
-	.mail-forward-16 {
-		background-image: url(/images/mail-forward-32.png);
-	}
-	.mail-reply-16 {
-		background-image: url(/images/mail-reply-32.png);
-	}
-	.microphone-32 {
-		background-image: url(/images/microphone-64.png);
-	}
-	.microphone-64 {
-		background-image: url(/images/microphone-128.png);
-	}
-	.microsoft-32 {
-		background-image: url(/images/microsoft-64.png);
-	}
-	.microsoft-64 {
-		background-image: url(/images/microsoft-128.png);
-	}
-	.minus-16 {
-		background-image: url(/images/minus-32.png);
-	}
-	.moon-32 {
-		background-image: url(/images/moon-64.png);
-	}
-	.moon-64 {
-		background-image: url(/images/moon-128.png);
-	}
-	.movies-16 {
-		background-image: url(/images/movies-32.png);
-	}
-	.movies-32 {
-		background-image: url(/images/movies-64.png);
-	}
-	.movies-64 {
-		background-image: url(/images/movies-128.png);
-	}
-	.music-16 {
-		background-image: url(/images/movies-32.png);
-	}
-	.music-32 {
-		background-image: url(/images/movies-64.png);
-	}
-	.news-16 {
-		background-image: url(/images/news-32.png);
-	}
-	.news-32 {
-		background-image: url(/images/news-64.png);
-	}
-	.news-64 {
-		background-image: url(/images/news-128.png);
-	}
-	.notepad-16 {
-		background-image: url(/images/notepad-32.png);
-	}
-	.notepad-32 {
-		background-image: url(/images/notepad-64.png);
-	}
-	.opml-16 {
-		background-image: url(/images/opml-32.png);
-	}
-	.opml-32 {
-		background-image: url(/images/opml-64.png);
-	}
-	.opml-64 {
-		background-image: url(/images/opml-128.png);
-	}
-	.package-16 {
-		background-image: url(/images/package-32.png);
-	}
-	.palemoon-32 {
-		background-image: url(/images/palemoon-64.png);
-	}
-	.palemoon-64 {
-		background-image: url(/images/palemoon-128.png);
-	}
-	.picture-16 {
-		background-image: url(/images/picture-32.png);
-	}
-	.picture-32 {
-		background-image: url(/images/picture-64.png);
-	}
-	.pipedot-32 {
-		background-image: url(/images/pipedot-64.png);
-	}
-	.pipedot-64 {
-		background-image: url(/images/pipedot-128.png);
-	}
-	.plus-16 {
-		background-image: url(/images/plus-32.png);
-	}
-	.plus-32 {
-		background-image: url(/images/plus-64.png);
-	}
-	.question-32 {
-		background-image: url(/images/question-64.png);
-	}
-	.reader-16 {
-		background-image: url(/images/reader-32.png);
-	}
-	.reader-32 {
-		background-image: url(/images/reader-64.png);
-	}
-	.register-16 {
-		background-image: url(/images/register-32.png);
-	}
-	.robot-desktop-32 {
-		background-image: url(/images/robot-desktop-64.png);
-	}
-	.robot-desktop-64 {
-		background-image: url(/images/robot-desktop-128.png);
-	}
-	.safari-32 {
-		background-image: url(/images/safari-64.png);
-	}
-	.safari-64 {
-		background-image: url(/images/safari-128.png);
-	}
-	.send-16 {
-		background-image: url(/images/sent-32.png);
-	}
-	.sent-16 {
-		background-image: url(/images/sent-32.png);
-	}
-	.share-16 {
-		background-image: url(/images/share-32.png);
-	}
-	.shirts-32 {
-		background-image: url(/images/shirts-64.png);
-	}
-	.soccer-32 {
-		background-image: url(/images/soccer-64.png);
-	}
-	.soccer-64 {
-		background-image: url(/images/soccer-128.png);
-	}
-	.sort-ascending-16 {
-		background-image: url(/images/sort-ascending-32.png);
-	}
-	.sort-descending-16 {
-		background-image: url(/images/sort-descending-32.png);
-	}
-	.spreadsheet-32 {
-		background-image: url(/images/spreadsheet-64.png);
-	}
-	.stop-16 {
-		background-image: url(/images/stop-32.png);
-	}
-	.stop-32 {
-		background-image: url(/images/stop-64.png);
-	}
-	.tag-16 {
-		background-image: url(/images/tag-32.png);
-	}
-	.tools-16 {
-		background-image: url(/images/tools-32.png);
-	}
-	.tools-32 {
-		background-image: url(/images/tools-64.png);
-	}
-	.trash-16 {
-		background-image: url(/images/trash-32.png);
-	}
-	.tux-16 {
-		background-image: url(/images/tux-32.png);
-	}
-	.tux-32 {
-		background-image: url(/images/tux-64.png);
-	}
-	.tux-64 {
-		background-image: url(/images/tux-128.png);
-	}
-	.tweet-16 {
-		background-image: url(/images/tweet-32.png);
-	}
-	.ubunchu-16 {
-		background-image: url(/images/ubunchu-32.png);
-	}
-	.ubunchu-32 {
-		background-image: url(/images/ubunchu-64.png);
-	}
-	.ubunchu-64 {
-		background-image: url(/images/ubunchu-128.png);
-	}
-	.undo-16 {
-		background-image: url(/images/undo-32.png);
-	}
-	.up-16 {
-		background-image: url(/images/up-32.png);
-	}
-	.up-32 {
-		background-image: url(/images/up-64.png);
-	}
-	.update-32 {
-		background-image: url(/images/update-64.png);
-	}
-	.users-16 {
-		background-image: url(/images/users-32.png);
-	}
-	.user-16 {
-		background-image: url(/images/user-32.png);
-	}
-	.user-32 {
-		background-image: url(/images/user-64.png);
-	}
-	.users-32 {
-		background-image: url(/images/users-64.png);
-	}
-	.users-64 {
-		background-image: url(/images/users-128.png);
-	}
-	.usb-32 {
-		background-image: url(/images/usb-64.png);
-	}
-	.vsort-16 {
-		background-image: url(/images/vsort-32.png);
-	}
-	.warning-32 {
-		background-image: url(/images/warning-64.png);
-	}
-	.workgroup-32 {
-		background-image: url(/images/workgroup-64.png);
-	}
 }

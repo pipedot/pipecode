@@ -76,7 +76,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 	writeln('<head>');
 
 	if ($title != "") {
-		$title .= " - ";
+		$title = get_text($title) . " - ";
 	}
 	if ($user_page == "") {
 		$title .= $server_title;
@@ -96,6 +96,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 	}
 
 	writeln('<link rel="stylesheet" href="' . $protocol . '://' . $server_name . '/style.css?t=' . fs_time("$doc_root/www/style.css") . '">');
+	writeln('<link rel="stylesheet" href="' . $protocol . '://' . $server_name . '/icon.css?t=' . fs_time("$doc_root/www/icon.css") . '">');
 	if ($auth_user["large_text_enabled"]) {
 		writeln('<style>');
 		writeln('html { font-size: 80%; }');
@@ -518,21 +519,31 @@ function print_footer()
 	global $server_slogan;
 
 	if ($user_page == "") {
+		$row = sql("select title, icon, link from footer_link order by title");
+		for ($i = 0; $i < count($row); $i++) {
+			$links[$row[$i]["title"]] = ["icon" => $row[$i]["icon"], "link" => $row[$i]["link"]];
+		}
+
+		$links["Feed"] = ["icon" => "feed", "link" => "/atom"];
+		$links["Source"] = ["icon" => "", "link" => "/source"];
+
 		writeln('<footer class="footer">');
-		writeln('<div>');
-		writeln('	<a href="/about">About</a>');
-		//writeln('	<a href="/bug/">Bugs</a>');
-		writeln('	<a href="http://bugs.pipedot.org/">Bugs</a>');
-		writeln('	<a href="/faq">FAQ</a>');
-		writeln('	<a href="/atom" class="icon-16 feed-16">Feed</a>');
-		//writeln('	<a href="/privacy">Privacy</a>');
-		//writeln('	<a href="/terms">Terms</a>');
-		writeln('	<a href="/source">Source</a>');
-		writeln('</div>');
-		writeln('<div>' . $server_title . ': ' . $server_slogan . '</div>');
+		writeln('	<div>');
+
+		ksort($links);
+		$keys = array_keys($links);
+		for ($i = 0; $i < count($links); $i++) {
+			$title = $keys[$i];
+			$icon = $links[$title]["icon"];
+			if ($icon) {
+				$icon = " class=\"icon-16 $icon-16\"";
+			}
+			writeln('		<a' . $icon . ' href="' . $links[$title]["link"] . '">' . get_text($title) . '</a>');
+		}
+
+		writeln('	</div>');
+		writeln('	<div>' . $server_title . ': ' . $server_slogan . '</div>');
 		writeln('</footer>');
-	} else {
-		// user page footer
 	}
 
 	writeln('</body>');
@@ -721,6 +732,22 @@ function karma_description($karma)
 		return "Good";
 	} else {
 		return "Excellent";
+	}
+}
+
+
+function karma_icon($karma)
+{
+	if ($karma < -25) {
+		return "face-crying";
+	} else if ($karma < 0) {
+		return "face-sad";
+	} else if ($karma == 0) {
+		return "face-plain";
+	} else if ($karma < 25) {
+		return "face-smile";
+	} else {
+		return "face-grin";
 	}
 }
 
@@ -1534,8 +1561,8 @@ function fatal($title, $icon = "error", $name = "", $value = "", $code = 200)
 	beg_main();
 	writeln('<div class="balloon">');
 	writeln('	<dl class="dl-32 ' . $icon . '-32">');
-	writeln('		<dt>' . $name . '</dt>');
-	writeln('		<dd>' . $value . '</dd>');
+	writeln('		<dt>' . get_text($name) . '</dt>');
+	writeln('		<dd>' . get_text($value) . '</dd>');
 	writeln('	</dl>');
 	writeln('</div>');
 	end_main();

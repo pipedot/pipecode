@@ -34,6 +34,11 @@ $register_enabled = http_post_bool("register_enabled", array("numeric" => true))
 $submit_enabled = http_post_bool("submit_enabled", array("numeric" => true));
 $bug_enabled = http_post_bool("bug_enabled", array("numeric" => true));
 
+$smtp_server = http_post_string("smtp_server", array("len" => 50, "valid" => "[a-z][0-9]-."));
+$smtp_address = http_post_string("smtp_address", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@-_.+"));
+$smtp_username = http_post_string("smtp_username", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@-_.+"));
+$smtp_password = http_post_string("smtp_password", array("len" => 50, "valid" => "[KEYBOARD]"));
+
 $twitter_enabled = http_post_bool("twitter_enabled", array("numeric" => true));
 $twitter_consumer_key = http_post_string("twitter_consumer_key", array("len" => 100, "required" => false, "valid" => "[KEYBOARD]"));
 $twitter_consumer_secret = http_post_string("twitter_consumer_secret", array("len" => 100, "required" => false, "valid" => "[KEYBOARD]"));
@@ -51,6 +56,10 @@ $server_conf["https_redirect_enabled"] = $https_redirect_enabled;
 $server_conf["register_enabled"] = $register_enabled;
 $server_conf["submit_enabled"] = $submit_enabled;
 $server_conf["bug_enabled"] = $bug_enabled;
+$server_conf["smtp_server"] = $smtp_server;
+$server_conf["smtp_address"] = $smtp_address;
+$server_conf["smtp_username"] = $smtp_username;
+$server_conf["smtp_password"] = $smtp_password;
 $server_conf["twitter_enabled"] = $twitter_enabled;
 $server_conf["twitter_consumer_key"] = $twitter_consumer_key;
 $server_conf["twitter_consumer_secret"] = $twitter_consumer_secret;

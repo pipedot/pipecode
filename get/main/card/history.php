@@ -25,13 +25,13 @@ print_header("Card History");
 beg_main();
 beg_form();
 
-writeln('<h1>Card</h1>');
+writeln('<h1>' . get_text("Card") . '</h1>');
 
 print_card($card["card_id"], "large");
 
 $row = sql("select * from card_edit where card_id = ? order by edit_time", $card["card_id"]);
 if (count($row) > 0) {
-	writeln('<h2>History</h2>');
+	writeln('<h2>' . get_text("History") . '</h2>');
 	for ($i = 0; $i < count($row); $i++) {
 		$old_body = $row[$i]["body"];
 		if ($i == count($row) - 1) {

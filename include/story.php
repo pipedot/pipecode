@@ -216,7 +216,7 @@ function print_news($a)
 		writeln('				<div class="article-description">' . $a["description"] . '</div>');
 		writeln('			</div>');
 		writeln('			<div class="article-footer">');
-		writeln('				<div class="article-footer-left"><a href=""><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $comments["tag"] . '</a></a></div>');
+		writeln('				<div class="article-footer-left"><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $comments["tag"] . '</a></div>');
 		writeln('				<div class="article-footer-right"><div style="display: inline-block">' . stream_vote_box($article_id) . '</div></div>');
 		writeln('			</div>');
 		writeln('		</td>');
@@ -231,7 +231,7 @@ function print_news($a)
 		writeln('		<div class="article-description">' . $a["description"] . '</div>');
 		writeln('	</div>');
 		writeln('	<div class="article-footer">');
-		writeln('		<div class="article-footer-left"><a href=""><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $comments["tag"] . '</a></a></div>');
+		writeln('		<div class="article-footer-left"><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $comments["tag"] . '</a></div>');
 		writeln('		<div class="article-footer-right"><div style="display: inline-block">' . stream_vote_box($article_id) . '</div></div>');
 		writeln('	</div>');
 		writeln('</article>');
