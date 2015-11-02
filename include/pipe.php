@@ -40,18 +40,18 @@ function print_pipe($pipe_id)
 	if ($score > 0) {
 		$score = "+$score";
 	}
-	$a["view"] = "score <b>$score</b>";
+	$a["view"] = get_text('score') . " <b>$score</b>";
 
 	if ($auth_user["editor"] && !$pipe["closed"]) {
-		$a["actions"][] = "<a href=\"/pipe/$pipe_code/publish\" class=\"icon-16 certificate-16\">Publish</a>";
-		$a["actions"][] = "<a href=\"/pipe/$pipe_code/close\" class=\"icon-16 delete-16\">Close</a>";
+		$a["actions"][] = "<a href=\"/pipe/$pipe_code/publish\" class=\"icon-16 certificate-16\">" . get_text('Publish') . "</a>";
+		$a["actions"][] = "<a href=\"/pipe/$pipe_code/close\" class=\"icon-16 delete-16\">" . get_text('Close') . "</a>";
 	} else if ($pipe["closed"]) {
 		$status = "Closed";
 		$story = db_find_rec("story", ["pipe_id" => $pipe_id]);
 		if ($story) {
-			$a["actions"][] = "<a class=\"icon-16 news-16\" href=\"" . item_link(TYPE_STORY, $story["story_id"], $story) . "\">Story</a>";
+			$a["actions"][] = "<a class=\"icon-16 news-16\" href=\"" . item_link(TYPE_STORY, $story["story_id"], $story) . "\">" . get_text('Story') . "</a>";
 		} else {
-			$a["actions"][] = "<span class=\"icon-16 stop-16\">Closed (" . $pipe["reason"] . ")</span>";
+			$a["actions"][] = "<span class=\"icon-16 stop-16\">" . get_text('Closed ($1)', $pipe["reason"]) . "</span>";
 		}
 	}
 

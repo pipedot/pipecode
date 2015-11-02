@@ -20,7 +20,7 @@
 print_header();
 beg_main();
 
-writeln('<h1>' . get_text("Cards") . '</h1>');
+writeln('<h1>' . get_text('Cards') . '</h1>');
 
 end_main();
 print_footer();

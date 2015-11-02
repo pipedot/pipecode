@@ -27,7 +27,7 @@ if ($auth_zid === "") {
 	print_header("Card", ["Share"], ["share"], [user_link($auth_zid) . "stream/share"]);
 }
 beg_main();
-writeln('<h1>' . get_text("Card") . '</h1>');
+writeln('<h1>' . get_text('Card') . '</h1>');
 
 print_card($card["card_id"], "large");
 print_comments(TYPE_CARD, $card);

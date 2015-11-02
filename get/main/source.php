@@ -20,8 +20,8 @@
 print_header("Source Code");
 beg_main();
 
-writeln('<h1>' . get_text("Source Code") . '</h1>');
-writeln('<p>' . get_text("This source code of this site is licensed under the GNU Affero General Public License") . '</p>');
+writeln('<h1>' . get_text('Source Code') . '</h1>');
+writeln('<p>' . get_text('This source code of this site is licensed under the GNU Affero General Public License') . '</p>');
 
 $body = fs_slurp("$doc_root/license.html");
 $beg = strpos($body, "<body>") + 6;

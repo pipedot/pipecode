@@ -25,7 +25,7 @@ $icons = icon_list(true, true, true);
 print_header("Edit Topic", [], [], [], ["Reader", "Topic", $topic["name"], "Edit"], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"], "/reader/topic/" . $topic["slug"] . "/edit"]);
 beg_main();
 beg_form();
-writeln('<h1>Edit Topic</h1>');
+writeln('<h1>' . get_text('Edit Topic') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name", "text_value" => $topic["name"]));

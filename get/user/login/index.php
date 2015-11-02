@@ -39,9 +39,10 @@ for ($i = 0; $i < count($row); $i++) {
 	}
 	$ip = $row[$i]["address"];
 	if ($row[$i]["login_key"] == $current_key) {
-		$last_time = " (current session)";
+		$last_time = ' (' . get_text('current session') . ')';
 	} else {
-		$last_time = " (" . human_diff($now - $row[$i]["last_time"]) . " ago)";
+		$diff = human_diff($now - $row[$i]["last_time"]);
+		$last_time = ' (' . get_text('$1 ago', $diff) . ')';
 	}
 	$icon = strtolower($agent);
 	if ($icon == "pipecode server" || $icon == "pipedot app") {
@@ -51,7 +52,7 @@ for ($i = 0; $i < count($row); $i++) {
 	} else if ($icon == "internet explorer") {
 		$icon = "ie";
 	} else if ($icon == "unknown") {
-		$agent = "Unknown Browser";
+		$agent = get_text('Unknown Browser');
 		$icon = "globe";
 	}
 

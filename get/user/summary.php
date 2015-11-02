@@ -23,30 +23,30 @@ writeln('<div class="dual-left">');
 
 dict_beg("Information");
 if ($user_conf["show_name_enabled"] && $user_conf["display_name"] != "") {
-	dict_row('<span class="icon-16 user-16">Name</span>', $user_conf["display_name"]);
+	dict_row('<span class="icon-16 user-16">' . get_text('Name') . '</span>', $user_conf["display_name"]);
 }
 if ($user_conf["show_birthday_enabled"] && $user_conf["birthday"] != 0) {
-	dict_row('<span class="icon-16 cake-16">Birthday</span>', gmdate("F j", $user_conf["birthday"]));
+	dict_row('<span class="icon-16 cake-16">' . get_text('Birthday') . '</span>', gmdate("F j", $user_conf["birthday"]));
 }
 if ($user_conf["show_email_enabled"] && $user_conf["email"] != "") {
-	dict_row('<span class="icon-16 mail-16">Email</span>', '<a href="mailto:' . $user_conf["email"] . '">' . $user_conf["email"] . '</a>');
+	dict_row('<span class="icon-16 mail-16">' . get_text('Email') . '</span>', '<a href="mailto:' . $user_conf["email"] . '">' . $user_conf["email"] . '</a>');
 }
 if ($user_conf["joined"] != 0) {
-	dict_row('<span class="icon-16 calendar-16">Joined</span>', date("Y-m-d", $user_conf["joined"]));
+	dict_row('<span class="icon-16 calendar-16">' . get_text('Joined') . '</span>', date("Y-m-d", $user_conf["joined"]));
 }
 dict_end();
 
 if ($zid === $auth_zid) {
-	box_right('<a class="icon-16 tools-16" href="settings">Settings</a>');
+	box_right('<a class="icon-16 tools-16" href="settings">' . get_text('Settings') . '</a>');
 }
 
 $row = sql("select story_id, publish_time, slug, title from story where author_zid = ? order by publish_time desc limit 10", $zid);
 if (count($row) > 0) {
 	beg_tab();
 	writeln('	<tr>');
-	writeln('		<th>Recent Submissions</th>');
-	writeln('		<th class="center">Comments</th>');
-	writeln('		<th class="right">Date</th>');
+	writeln('		<th>' . get_text('Recent Submissions') . '</th>');
+	writeln('		<th class="center">' . get_text('Comments') . '</th>');
+	writeln('		<th class="right">' . get_text('Date') . '</th>');
 	writeln('	</tr>');
 	for ($i = 0; $i < count($row); $i++) {
 		$comments = count_comments($row[$i]["story_id"], TYPE_STORY);
@@ -57,16 +57,16 @@ if (count($row) > 0) {
 		writeln('	</tr>');
 	}
 	end_tab();
-	box_right('<a class="icon-16 news-16" href="/submissions">Submissions</a>');
+	box_right('<a class="icon-16 news-16" href="/submissions">' . get_text('Submissions') . '</a>');
 }
 
 $row = sql("select journal_id, published, publish_time, slug, title, zid from journal where zid = ? and published = 1 order by publish_time desc limit 10", $zid);
 if (count($row) > 0) {
 	beg_tab();
 	writeln('	<tr>');
-	writeln('		<th>Recent Journals</th>');
-	writeln('		<th class="center">Comments</th>');
-	writeln('		<th class="right">Date</th>');
+	writeln('		<th>' . get_text('Recent Journals') . '</th>');
+	writeln('		<th class="center">' . get_text('Comments') . '</th>');
+	writeln('		<th class="right">' . get_text('Date') . '</th>');
 	writeln('	</tr>');
 	for ($i = 0; $i < count($row); $i++) {
 		$comments = count_comments($row[$i]["journal_id"], TYPE_JOURNAL);
@@ -77,7 +77,7 @@ if (count($row) > 0) {
 		writeln('	</tr>');
 	}
 	end_tab();
-	box_right('<a class="icon-16 notepad-16" href="/journal/">Journals</a>');
+	box_right('<a class="icon-16 notepad-16" href="/journal/">' . get_text('Journals') . '</a>');
 }
 
 writeln('</div>');
@@ -85,10 +85,10 @@ writeln('<div class="dual-right">');
 
 beg_tab("Avatar");
 writeln('	<tr>');
-writeln('		<td class="center"><a href="/avatar/"><img alt="Avatar" class="thumb" src="' . avatar_picture($zid, 256) . '"></a></td>');
+writeln('		<td class="center"><a href="/avatar/"><img alt="' . get_text('Avatar') . '" class="thumb" src="' . avatar_picture($zid, 256) . '"></a></td>');
 writeln('	</tr>');
 writeln('</table>');
-box_right('<a class="icon-16 picture-16" href="/avatar/">Avatars</a>');
+box_right('<a class="icon-16 picture-16" href="/avatar/">' . get_text('Avatars') . '</a>');
 
 if ($auth_user["show_junk_enabled"]) {
 	$row = sql("select comment_id, article_id, junk_status, subject, edit_time, body from comment where zid = ? order by edit_time desc limit 20", $zid);
@@ -98,10 +98,10 @@ if ($auth_user["show_junk_enabled"]) {
 if (count($row) > 0) {
 	beg_tab();
 	writeln('	<tr>');
-	writeln('		<th>Recent Comments</th>');
-	writeln('		<th class="center">Score</th>');
-	//writeln('		<th class="center">Replies</th>');
-	writeln('		<th class="right">Date</th>');
+	writeln('		<th>' . get_text('Recent Comments') . '</th>');
+	writeln('		<th class="center">' . get_text('Score') . '</th>');
+	//writeln('		<th class="center">' . get_text('Replies') . '</th>');
+	writeln('		<th class="right">' . get_text('Date') . '</th>');
 	writeln('	</tr>');
 	for ($i = 0; $i < count($row); $i++) {
 		list($score, $reason) = get_comment_score($row[$i]["comment_id"]);
@@ -118,7 +118,7 @@ if (count($row) > 0) {
 		writeln('	</tr>');
 	}
 	end_tab();
-	box_right('<a class="icon-16 chat-16" href="/comments">Comments</a>');
+	box_right('<a class="icon-16 chat-16" href="/comments">' . get_text('Comments') . '</a>');
 }
 
 writeln('</div>');

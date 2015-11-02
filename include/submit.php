@@ -29,8 +29,8 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 	beg_main("cell");
 
 	if ($preview) {
-		writeln('<h1>Preview</h1>');
-		writeln('<p>Check your links before you post!</p>');
+		writeln('<h1>' . get_text('Preview') . '</h1>');
+		writeln('<p>' . get_text('Check your links before you post!') . '</p>');
 
 		$story["zid"] = $auth_zid;
 		$story["time"] = time();
@@ -44,16 +44,16 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 	}
 
 	beg_form();
-	writeln('<div class="dialog-title">Submit Story</div>');
+	writeln('<div class="dialog-title">' . get_text('Submit Story') . '</div>');
 	writeln('<div class="dialog-body">');
 
 	writeln('<table class="fill" style="padding: 0px">');
 	writeln('	<tr>');
-	writeln('		<td style="width: 80px">Title</td>');
+	writeln('		<td style="width: 80px">' . get_text('Title') . '</td>');
 	writeln('		<td colspan="2"><input name="title" type="text" value="' . $title . '" required></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td style="width: 80px">Topic</td>');
+	writeln('		<td style="width: 80px">' . get_text('Topic') . '</td>');
 	writeln('		<td colspan="2">');
 	writeln('			<select name="topic_id">');
 	$topics = db_get_list("topic", "topic");
@@ -70,7 +70,7 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 	writeln('		</td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">Story</td>');
+	writeln('		<td style="width: 80px; vertical-align: top; padding-top: 12px">' . get_text('Story') . '</td>');
 	writeln('		<td colspan="2"><textarea name="story" style="height: 200px" required>' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
@@ -78,9 +78,9 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 		$question = captcha_challenge();
 		writeln('		<td>Captcha</td>');
 		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"></td></tr></table></td>');
-		writeln('		<td class="right"><input type="submit" value="Submit"> <input name="preview" type="submit" value="Preview"></td>');
+		writeln('		<td class="right"><input type="submit" value="' . get_text('Submit') . '"> <input name="preview" type="submit" value="' . get_text('Preview') . '"></td>');
 	} else {
-		writeln('		<td colspan="3" class="right"><input type="submit" value="Submit"> <input name="preview" type="submit" value="Preview"></td>');
+		writeln('		<td colspan="3" class="right"><input type="submit" value="' . get_text('Submit') . '"> <input name="preview" type="submit" value="' . get_text('Preview') . '"></td>');
 	}
 	writeln('	</tr>');
 	writeln('</table>');

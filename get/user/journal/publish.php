@@ -25,8 +25,8 @@ print_header("Publish", ["Write"], ["notepad"], ["/journal/write"], ["Journal", 
 beg_main();
 beg_form();
 
-writeln('<h1>Publish</h1>');
-writeln('<p>Ready to publish the journal entry [<b>' . $journal["title"] . '</b>]?</p>');
+writeln('<h1>' . get_text('Publish') . '</h1>');
+writeln('<p>' . get_text('Ready to publish the journal entry [<b>$1</b>]?', $journal["title"]) . '</p>');
 
 box_left("Publish");
 

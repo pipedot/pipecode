@@ -37,7 +37,7 @@ beg_form();
 print_main_nav("stories");
 beg_main("cell");
 
-writeln('<h1>' . get_text("Edit Comment") . '</h1>');
+writeln('<h1>' . get_text('Edit Comment') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Subject", "text_key" => "subject", "text_value" => $comment["subject"]));

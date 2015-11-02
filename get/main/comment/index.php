@@ -20,7 +20,7 @@
 print_header("Comments");
 beg_main();
 
-writeln('<h1>' . get_text("Recent Comments") . '</h1>');
+writeln('<h1>' . get_text('Recent Comments') . '</h1>');
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("comment", $items_per_page);

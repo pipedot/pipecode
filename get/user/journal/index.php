@@ -49,7 +49,7 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-box_center('<a class="icon-16 feed-16" href="atom">Journal Feed</a>');
+box_center('<a class="icon-16 feed-16" href="atom">' . get_text('Journal Feed') . '</a>');
 
 end_main();
 print_footer();

@@ -31,15 +31,15 @@ print_user_nav("feed");
 beg_main("cell");
 beg_form();
 
-writeln('<div class="dialog-title">Add Feed</div>');
+writeln('<div class="dialog-title">' . get_text('Add Feed') . '</div>');
 writeln('<div class="dialog-body">');
 
 writeln('<table style="width: 100%">');
 writeln('	<tr>');
-writeln('		<td style="width: 120px">Use existing feed:</td>');
+writeln('		<td style="width: 120px">' . get_text('Use existing feed:') . '</td>');
 writeln('		<td>');
 writeln('			<select name="feed_id" style="width: 100%">');
-writeln('				<option value="0">(select feed)</option>');
+writeln('				<option value="0">' . get_text('(select feed)') . '</option>');
 
 $existing = array();
 $row = sql("select feed_id from feed_user where zid = ?", $auth_zid);
@@ -57,11 +57,11 @@ writeln('			</select>');
 writeln('		</td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td style="width: 120px">Or add new feed:</td>');
+writeln('		<td style="width: 120px">' . get_text('Or add new feed:') . '</td>');
 writeln('		<td><input name="uri" type="text" style="width: 100%"></td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td colspan="2" class="right"><input type="submit" value="Add"></td>');
+writeln('		<td colspan="2" class="right"><input type="submit" value="' . get_text('Add') . '"></td>');
 writeln('	</tr>');
 writeln('</table>');
 

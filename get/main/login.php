@@ -24,20 +24,20 @@ print_header("Login");
 writeln('<hr>');
 beg_main();
 beg_form();
-writeln('<h1>Login</h1>');
+writeln('<h1>' . get_text('Login') . '</h1>');
 
 writeln('<table class="login">');
 writeln('	<tr>');
-writeln('		<td>Username</td>');
+writeln('		<td>' . get_text('Username') . '</td>');
 writeln('		<td><input name="username" type="text" autofocus required></td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td>Password</td>');
+writeln('		<td>' . get_text('Password') . '</td>');
 writeln('		<td><input name="password" type="password" required></td>');
 writeln('	</tr>');
 writeln('</table>');
 
-box_left('<input type="submit" value="Login"> <a href="/forgot">Forgot Password?</a>');
+box_left('<input type="submit" value="' . get_text('Login') . '"> <a href="/forgot">' . get_text('Forgot Password?') . '</a>');
 
 end_form();
 end_main();

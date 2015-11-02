@@ -52,12 +52,12 @@ $thumb = item_request(TYPE_THUMB);
 $short_code = crypt_crockford_encode($thumb["thumb_id"]);
 
 if ($thumb["low_res"]) {
-	$size = "Small (128x128)";
+	$size = get_text('Small') . ' (128x128)';
 } else {
-	$size = "Large (256x256)";
+	$size = get_text('Large') . ' (256x256)';
 }
 
-writeln('<h1>Thumbnail</h1>');
+writeln('<h1>' . get_text('Thumbnail') . '</h1>');
 writeln('<div class="photo-frame">');
 writeln('	<img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg">');
 writeln('	<div><a href="' . $short_code . '.jpg">' . $size . '</a></div>');

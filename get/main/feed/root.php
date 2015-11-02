@@ -20,13 +20,13 @@
 include("story.php");
 
 $feed = item_request(TYPE_FEED);
-$short_code = crypt_crockford_encode($feed["feed_id"]);
+$feed_code = crypt_crockford_encode($feed["feed_id"]);
 
 print_header($feed["title"]);
 beg_main();
 
-if (fs_is_file("$doc_root/www/pub/favicon/$short_code.png")) {
-	$icon = ' style="background-image: url(/pub/favicon/' . $short_code . '.png)"';
+if (fs_is_file("$doc_root/www/pub/favicon/$feed_code.png")) {
+	$icon = ' style="background-image: url(/pub/favicon/' . $feed_code . '.png)"';
 } else {
 	$icon = "";
 }
@@ -43,7 +43,7 @@ dict_row("Updated", date("Y-m-d H:i", $feed["time"]));
 dict_end();
 
 if ($auth_user["admin"]) {
-	box_right("<a class=\"icon-16 notepad-16\" href=\"/feed/$short_code/edit\">Edit</a>");
+	box_right('<a class="icon-16 notepad-16" href="/feed/' . $feed_code . '/edit">' . get_text('Edit') . '</a>');
 }
 
 $items_per_page = 50;

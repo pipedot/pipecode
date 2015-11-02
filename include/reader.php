@@ -25,7 +25,7 @@ function print_reader_nav()
 	writeln('<nav class="reader">');
 
 	dict_beg();
-	dict_row('<a class="icon-16 reader-16" href="/reader/">All</a>', '');
+	dict_row('<a class="icon-16 reader-16" href="/reader/">' . get_text('All') . '</a>', '');
 	$feed_row = sql("select feed_id, name, slug from reader_user where zid = ? and topic_id = 0 order by name", $auth_zid);
 	for ($f = 0; $f < count($feed_row); $f++) {
 		dict_row('<a class="favicon-16" href="/reader/' . $feed_row[$f]["slug"] . '" style="background-image: url(/pub/favicon/' . crypt_crockford_encode($feed_row[$f]["feed_id"]) . '.png)">' . $feed_row[$f]["name"] . '</a>', '');

@@ -26,7 +26,7 @@ print_header("Edit Feed");
 beg_main();
 beg_form();
 
-writeln('<h1>Edit Feed</h1>');
+writeln('<h1>' . get_text('Edit Feed') . '</h1>');
 
 dict_beg();
 dict_row("Title", $feed["title"]);

@@ -147,6 +147,7 @@ $default_conf["server_conf"] = [
 	"captcha_key" => "",
 	"https_enabled" => "0",
 	"https_redirect_enabled" => "0",
+	"lang" => "en",
 	"register_enabled" => "1",
 	"server_name" => "example.com",
 	"server_redirect_enabled" => "0",

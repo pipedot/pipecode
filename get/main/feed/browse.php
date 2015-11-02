@@ -23,12 +23,8 @@ beg_main();
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("feed", $items_per_page);
 
+dict_beg();
 $row = sql("select * from feed order by title limit $item_start, $items_per_page");
-beg_tab();
-writeln('	<tr>');
-writeln('		<th>Title</th>');
-writeln('		<th class="right">Updated</th>');
-writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
 	$short_code = crypt_crockford_encode($row[$i]["feed_id"]);
 	if ($row[$i]["title"] == "") {
@@ -42,12 +38,9 @@ for ($i = 0; $i < count($row); $i++) {
 		$icon = "";
 	}
 
-	writeln('	<tr>');
-	writeln('		<td><a class="favicon-16"' . $icon . ' href="/feed/' . $row[$i]["slug"] . '">' . $title . '</a></td>');
-	writeln('		<td class="right">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('	</tr>');
+	dict_row('<a class="favicon-16"' . $icon . ' href="/feed/' . $row[$i]["slug"] . '">' . $title . '</a>', date("Y-m-d H:i", $row[$i]["time"]));
 }
-end_tab();
+dict_end();
 
 writeln($page_footer);
 

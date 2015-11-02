@@ -41,7 +41,7 @@ function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $
 	}
 
 	beg_form();
-	writeln('<h1>Preview</h1>');
+	writeln('<h1>' . get_text('Preview') . '</h1>');
 	$a["body"] = $story["body"];
 	$a["title"] = $title;
 	$a["link"] = item_link(TYPE_STORY, $story_id, $story);
@@ -50,7 +50,7 @@ function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $
 	$a["comments"] = count_comments($story_id, TYPE_STORY);
 	print_content($a);
 
-	writeln('<h1>Edit</h1>');
+	writeln('<h1>' . get_text('Edit') . '</h1>');
 	beg_tab();
 	print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
 	print_row(array("caption" => "Topic", "option_key" => "topic_id", "option_value" => $topic_id, "option_list" => $topic_list, "option_keys" => $topic_keys));
@@ -58,7 +58,7 @@ function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $
 	print_row(array("caption" => "Story", "textarea_key" => "story", "textarea_value" => $dirty_body, "textarea_height" => "400"));
 	end_tab();
 
-	box_two('<a href="/similar">Keyword Search</a>', 'Publish,Preview');
+	box_two('<a href="/similar">' . get_text('Keyword Search') . '</a>', 'Publish,Preview');
 
 	end_form();
 	end_main();
@@ -93,7 +93,7 @@ function print_story($story)
 	$a["actions"] = [];
 	$count = similar_count($story);
 	if ($count > 0) {
-		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/similar\" class=\"icon-16 news-16\">" . get_text("Similar") . "</a>";
+		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/similar\" class=\"icon-16 news-16\">" . get_text('Similar') . "</a>";
 	}
 	if ($auth_user["editor"]) {
 		if ($twitter_enabled && $story["tweet_id"] == 0) {
@@ -102,10 +102,10 @@ function print_story($story)
 			} else {
 				$icon = "music";
 			}
-			$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/tweet\" class=\"icon-16 $icon-16\">" . get_text("Tweet") . "</a>";
+			$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/tweet\" class=\"icon-16 $icon-16\">" . get_text('Tweet') . "</a>";
 		}
-		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/image\" class=\"icon-16 picture-16\">" . get_text("Image") . "</a>";
-		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/edit\" class=\"icon-16 notepad-16\">" . get_text("Edit") . "</a>";
+		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/image\" class=\"icon-16 picture-16\">" . get_text('Image') . "</a>";
+		$a["actions"][] = "<a href=\"$protocol://$server_name/story/$story_code/edit\" class=\"icon-16 notepad-16\">" . get_text('Edit') . "</a>";
 	}
 
 	print_content($a);
@@ -127,10 +127,10 @@ function print_journal($journal_id)
 	$a["comments"] = count_comments($journal_id, TYPE_JOURNAL);
 
 	if ($zid == $auth_zid) {
-		$a["actions"][] = "<a href=\"/journal/$journal_code/edit\" class=\"icon-16 notepad-16\">" . get_text("Edit") . "</a>";
-		$a["actions"][] = "<a href=\"/journal/$journal_code/media\" class=\"icon-16 clip-16\">" . get_text("Media") . "</a>";
+		$a["actions"][] = "<a href=\"/journal/$journal_code/edit\" class=\"icon-16 notepad-16\">" . get_text('Edit') . "</a>";
+		$a["actions"][] = "<a href=\"/journal/$journal_code/media\" class=\"icon-16 clip-16\">" . get_text('Media') . "</a>";
 		if ($journal["publish_time"] == 0) {
-			$a["actions"][] = "<a href=\"/journal/$journal_code/publish\" class=\"icon-16 certificate-16\">" . get_text("Publish") . "</a>";
+			$a["actions"][] = "<a href=\"/journal/$journal_code/publish\" class=\"icon-16 certificate-16\">" . get_text('Publish') . "</a>";
 		}
 	} else {
 		$a["actions"] = [];
@@ -153,11 +153,11 @@ function print_news_large($article)
 	$a["link"] = item_link(TYPE_ARTICLE, $article_id, $article);
 	$a["info"] = content_info($article, $feed);
 	//$a["comments"] = count_comments($article_id, TYPE_ARTICLE);
-	$a["view"] = "<a class=\"icon-16 globe-16\" href=\"" . $article["link"] . "\">" . get_text("View Site") . "</a>";
+	$a["view"] = "<a class=\"icon-16 globe-16\" href=\"" . $article["link"] . "\">" . get_text('View Site') . "</a>";
 
 	if ($article["thumb_id"] > 0 && !string_has($a["body"], "<img ")) {
 		$image = "$protocol://$server_name/thumb/" . crypt_crockford_encode($article["thumb_id"]) . ".jpg";
-		$a["image"] = "<a href=\"" . $a["link"] . "\"><img class=\"story-image-128\" src=\"$image\" alt=\"story image\"></a>";
+		$a["image"] = "<a href=\"" . $a["link"] . "\"><img class=\"story-image-128\" src=\"$image\" alt=\"" . get_text('Story Image') . "\"></a>";
 	}
 
 	$a["actions"][] = stream_vote_box($article_id);
@@ -191,13 +191,13 @@ function print_news($a)
 		if ($a["author_link"] != "") {
 			$by = '<a href="' . $a["author_link"] . '" rel="author">' . $by . '</a>';
 		}
-		$info = "by <address>$by</address>";
+		$info = get_text('by') . " <address>$by</address>";
 	}
 	if (array_key_exists("feed_title", $a)) {
-		$info .= " from <a href=\"$protocol://$server_name/feed/" . $a["feed_slug"] . "\"><b>" . $a["feed_title"] . "</b></a>";
+		$info .= " " . get_text('from') . " <a href=\"$protocol://$server_name/feed/" . $a["feed_slug"] . "\"><b>" . $a["feed_title"] . "</b></a>";
 	}
 	if ($a["publish_time"] > 0) {
-		$info .= " on <time datetime=\"" .  date("c", $a["publish_time"]) . "\">" . date("Y-m-d H:i", $a["publish_time"]) . "</time>";
+		$info .= " " . get_text('on') . " <time datetime=\"" .  date("c", $a["publish_time"]) . "\">" . date("Y-m-d H:i", $a["publish_time"]) . "</time>";
 	}
 	$info .= " (<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>)";
 	$info = trim($info);
@@ -261,18 +261,18 @@ function content_info($article, $area = false)
 		}
 		$by = user_link($zid, ["tag" => true, "author" => true]);
 	}
-	$info = get_text("by") . " <address>$by</address>";
+	$info = get_text('by') . " <address>$by</address>";
 	if (array_key_exists("feed_title", $article)) {
 		$info .= " from <a href=\"$protocol://$server_name/feed/" . $article["feed_slug"] . "\"><b>" . $article["feed_title"] . "</b></a>";
 	}
 	if (is_array($area)) {
 		if (array_key_exists("feed_id", $area)) {
-			$info .= " " . get_text("from") . " <a href=\"$protocol://$server_name/feed/" . $area["slug"] . "\"><b>" . $area["title"] . "</b></a>";
+			$info .= " " . get_text('from') . " <a href=\"$protocol://$server_name/feed/" . $area["slug"] . "\"><b>" . $area["title"] . "</b></a>";
 		} else {
-			$info .= " " . get_text("in") . " <a href=\"$protocol://$server_name/topic/" . $area["slug"] . "\"><b>" . $area["topic"] . "</b></a>";
+			$info .= " " . get_text('in') . " <a href=\"$protocol://$server_name/topic/" . $area["slug"] . "\"><b>" . $area["topic"] . "</b></a>";
 		}
 	} else if ($area) {
-		$info .= " " . get_text("in") . " <a href=\"" . user_link($zid) . "topic/" . clean_url($area) . "\"><b>" . $article["topic"] . "</b></a>";
+		$info .= " " . get_text('in') . " <a href=\"" . user_link($zid) . "topic/" . clean_url($area) . "\"><b>" . $article["topic"] . "</b></a>";
 	}
 
 	if (array_key_exists("time", $article)) {
@@ -283,13 +283,13 @@ function content_info($article, $area = false)
 		$time = -1;
 	}
 	if ($time == 0) {
-		$info .= " " . get_text("as draft");
+		$info .= " " . get_text('as draft');
 	} else if ($time > 0) {
 		$date = "<time datetime=\"" .  date("c", $time) . "\">" . date("Y-m-d H:i", $time) . "</time>";
 		if (array_key_exists("story_id", $article) && array_key_exists("pipe_id", $article)) {
 			$date = "<a href=\"/pipe/" . crypt_crockford_encode($article["pipe_id"]) . "\">$date</a>";
 		}
-		$info .= " " . get_text("on") . " $date";
+		$info .= " " . get_text('on') . " $date";
 	}
 
 	$article_id = item_id($article);

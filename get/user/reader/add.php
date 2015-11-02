@@ -24,7 +24,7 @@ require_mine();
 print_header("Add Feed", [], [], [], ["Reader", "Add Feed"], ["/reader/", "/reader/add"]);
 beg_main();
 beg_form();
-writeln('<h1>New Feed</h1>');
+writeln('<h1>' . get_text('New Feed') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Feed URL", "text_key" => "feed_url"));
@@ -32,7 +32,7 @@ end_tab();
 
 box_right("Add");
 
-writeln('<h2>Browse Feeds</h2>');
+writeln('<h2>' . get_text('Browse Feeds') . '</h2>');
 
 $list = db_get_list("feed_topic", "name");
 $k = array_keys($list);

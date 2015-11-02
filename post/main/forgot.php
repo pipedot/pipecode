@@ -41,18 +41,18 @@ $email_challenge["expires"] = time() + DAYS * 3;
 $email_challenge["username"] = $username;
 db_set_rec("email_challenge", $email_challenge);
 
-$subject = "Forgot Password";
-$body = "Did you forget your password for \"$username\" on $server_name?\n";
+$subject = get_text('Forgot Password');
+$body = get_text('Did you forget your password for \"$1\" on $2?', [$username, $server_name]) . "\n";
 $body .= "\n";
-$body .= "To reset your password, use the verification code:\n";
+$body .= get_text('To reset your password, use the verification code:') . "\n";
 $body .= "\n";
 $body .= "$code\n";
 $body .= "\n";
-$body .= "Or visit the following link:\n";
+$body .= get_text('Or visit the following link:') . "\n";
 $body .= "\n";
 $body .= "$protocol://$server_name/verify/$code\n";
 $body .= "\n";
-$body .= "This code will expire in 3 days.\n";
+$body .= get_text('This code will expire in 3 days.') . "\n";
 
 send_mail($user_conf["email"], $subject, $body);
 

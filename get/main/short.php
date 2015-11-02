@@ -31,7 +31,7 @@ $link = item_link($type_id, $short_id);
 print_header();
 beg_main();
 
-writeln('<h1>Short Link</h1>');
+writeln('<h1>' . get_text('Short Link') . '</h1>');
 
 dict_beg();
 dict_row("Code", $short_code);

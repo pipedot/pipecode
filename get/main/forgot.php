@@ -23,11 +23,11 @@ print_header("Forgot Password");
 writeln('<hr>');
 beg_main();
 beg_form();
-writeln('<h1>Forgot Password?</h1>');
+writeln('<h1>' . get_text('Forgot Password?') . '</h1>');
 
 writeln('<table class="login">');
 writeln('	<tr>');
-writeln('		<td class="right">Username</td>');
+writeln('		<td class="right">' . get_text('Username') . '</td>');
 writeln('		<td><input name="username" type="text"></td>');
 writeln('	</tr>');
 writeln('</table>');

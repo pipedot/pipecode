@@ -22,12 +22,12 @@ require_admin();
 $slug = http_get_string("slug", array("len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
 $page = db_get_rec("page", $slug);
 
-print_header();
+print_header("Remove Page");
 beg_main();
 beg_form();
 
-writeln('<h1>Remove Page</h1>');
-writeln('<p>Are you sure you want to the <b>' . $slug . '</b> page?</p>');
+writeln('<h1>' . get_text('Remove Page') . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] page?', [$slug]) . '</p>');
 
 box_left("Remove");
 

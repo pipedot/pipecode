@@ -437,10 +437,10 @@ function print_card_large($a)
 	//writeln("			<img alt=\"Options\" class=\"card-button\" src=\"/images/gear-16.png\" title=\"Options\">"); <a class=\"icon-16 picture-16\" href=\"/card/$card_code/image\">Image</a> |
 	$options = array();
 	if ($history) {
-		$options[] = "<a class=\"icon-16 calendar-16\" href=\"/card/$article_code/history\">History</a>";
+		$options[] = "<a class=\"icon-16 calendar-16\" href=\"/card/$article_code/history\">" . get_text('History') . "</a>";
 	}
 	if ($zid === $auth_zid) {
-		$options[] = "<a class=\"icon-16 notepad-16\" href=\"/card/$article_code/edit\">Edit</a>";
+		$options[] = "<a class=\"icon-16 notepad-16\" href=\"/card/$article_code/edit\">" . get_text('Edit') . "</a>";
 		//$options[] = "<a class=\"icon-16 tag-16\" href=\"/card/$short_code/tag\">Tag</a>";
 	}
 	writeln("			<div class=\"card-options\">" . implode(" | ", $options) . "</div>");
@@ -449,64 +449,6 @@ function print_card_large($a)
 	writeln('</table>');
 }
 
-/*
-function print_card_medium($a)
-{
-	writeln('<table class="card" style="width: 684px; border: 1px solid #9f9f9f; border-radius: 10px; border-collapse: separate; border-spacing: 0px; margin: 4px; background-color: #ffffff">');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 2px;">');
-	writeln('			<table style="width: 100%">');
-	writeln('				<tr>');
-	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"></td>');
-	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px"><a href="https://bryan.pipedot.org/">Bryan Beicker</a></div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
-	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row-button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row-button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
-	writeln('				</tr>');
-	writeln('			</table>');
-	writeln('		</td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;">Pipecode is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 21px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px;"><img src="/pub/2014/05/31/i29.640x360.jpg"></td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 10px; padding-right: 8px; padding-top: 4px; padding-bottom: 8px;"><table style="width: 100%"><tr><td style="font-weight: bolder; padding: 0px;"><a href="">123 comments</a></td><td style="padding: 0px; font-size: 8pt; color: #666666; text-align: right">#pizza</td><td style="width: 24px; padding: 0px; padding-left: 4px;"><div class="row_button" style="background-image: url(/images/gear-16.png)" title="Reset"></div></td></tr></table></td>');
-	writeln('	</tr>');
-	writeln('</table>');
-}
-
-
-function print_card_large($a)
-{
-	writeln('<table class="card" style="width: 1030px; border: 1px solid #9f9f9f; border-radius: 10px; border-collapse: separate; border-spacing: 0px; margin: 4px; background-color: #ffffff">');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 2px;">');
-	writeln('			<table style="width: 100%">');
-	writeln('				<tr>');
-	writeln('					<td style="padding: 2px;"><img style="width: 32px; border-radius: 4px;" src="/pub/profile/bryan.png"></td>');
-	writeln('					<td style="padding: 0px; padding-left: 8px; width: 100%;"><div style="font-weight: bolder; font-size: 10pt; padding-top: 0px">Bryan Beicker</div><div style="font-size: 8pt; color: #666666">2014-05-12 12:45</div></td>');
-	writeln('					<td style="padding: 2px; vertical-align: top"><table style="float: right"><tr><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/plus-16.png)" title="Reset"></div></td><td style="font-weight: bolder; vertical-align: middle">12</td><td style="padding: 0px"><div class="row_button" style="background-image: url(/images/minus-16.png)" title="Reset"></div></td></tr></table></td>');
-	writeln('				</tr>');
-	writeln('			</table>');
-	writeln('		</td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 10px; padding-right: 10px; padding-top: 4px; padding-bottom: 8px;">');
-	writeln('			<table style="width: 100%">');
-	writeln('				<tr>');
-	writeln('					<td style="padding-left: 0px; padding-right: 4px; padding-top: 0px; padding-bottom: 0px;"><img src="/pub/2014/05/31/i29.640x360.jpg"></td>');
-	writeln('					<td style="padding-left: 4px; padding-right: 0px; padding-top: 0px; padding-bottom: 0px; vertical-align: top;">Pipecode is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</td>');
-	writeln('				</tr>');
-	writeln('			</table>');
-	writeln('		</td>');
-	writeln('	</tr>');
-	writeln('	<tr>');
-	writeln('		<td style="padding-left: 10px; padding-right: 8px; padding-top: 4px; padding-bottom: 8px;"><table style="width: 100%"><tr><td style="font-weight: bolder; padding: 0px;"><a href="">123 comments</a></td><td style="padding: 0px; font-size: 8pt; color: #666666; text-align: right">#pizza</td><td style="width: 24px; padding: 0px; padding-left: 4px;"><div class="row_button" style="background-image: url(/images/gear-16.png)" title="Reset"></div></td></tr></table></td>');
-	writeln('	</tr>');
-	writeln('</table>');
-}
-*/
 
 function get_stream_score($article_id)
 {

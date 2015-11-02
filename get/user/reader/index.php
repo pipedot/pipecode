@@ -32,7 +32,6 @@ list($item_start, $page_footer) = page_footer("select count(*) as item_count fro
 $row = sql("select article_id, author_link, author_name, body, article.description, article.link, publish_time, article.title, thumb_id, feed.feed_id, feed.title as feed_title, feed.slug as feed_slug from article inner join feed on article.feed_id = feed.feed_id inner join reader_user on article.feed_id = reader_user.feed_id where reader_user.zid = ? order by publish_time desc limit $item_start, $items_per_page", $auth_zid);
 for ($i = 0; $i < count($row); $i++) {
 	print_news($row[$i]);
-	//print_article($row[$i]);
 }
 
 writeln($page_footer);

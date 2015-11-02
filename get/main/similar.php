@@ -27,7 +27,7 @@ print_header("Keyword Search");
 beg_main();
 beg_form("", "get");
 
-writeln("<h1>Keyword Search</h1>");
+writeln('<h1>' . get_text('Keyword Search') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Keywords", "text_key" => "keywords", "text_value" => $keywords));

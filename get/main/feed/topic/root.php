@@ -33,7 +33,7 @@ for ($i = 0; $i < count($list); $i++) {
 	$feed = $list[$k[$i]];
 	$short_code = crypt_crockford_encode($feed["feed_id"]);
 	if ($feed["title"] == "") {
-		$title = "(none)";
+		$title = get_text('(none)');
 	} else {
 		$title = $feed["title"];
 	}
@@ -42,7 +42,7 @@ for ($i = 0; $i < count($list); $i++) {
 	} else {
 		$icon = "";
 	}
-	dict_row('<a class="favicon-16"' . $icon . ' href="/feed/' . $feed["slug"] . '">' . $title . '</a>', '<a class="icon-16 plus-16" href="/feed/' . $feed["slug"] . '/add">Add</a>');
+	dict_row('<a class="favicon-16"' . $icon . ' href="/feed/' . $feed["slug"] . '">' . $title . '</a>', '<a class="icon-16 plus-16" href="/feed/' . $feed["slug"] . '/add">' . get_text('Add') . '</a>');
 }
 dict_end();
 

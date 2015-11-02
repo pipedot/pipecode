@@ -55,7 +55,7 @@ if ($zid === $auth_zid) {
 	beg_form("gravatar");
 	beg_tab("Gravatar");
 	writeln('	<tr>');
-	writeln('		<td class="center"><img alt="Gravatar Picture" class="thumb" src="' . $protocol . '://www.gravatar.com/avatar/' . md5($user_conf["email"]) . '.jpg?d=mm&s=256"></td>');
+	writeln('		<td class="center"><img alt="' . get_text('Gravatar Picture') . '" class="thumb" src="' . $protocol . '://www.gravatar.com/avatar/' . md5($user_conf["email"]) . '.jpg?d=mm&s=256"></td>');
 	writeln('	</tr>');
 	end_tab();
 

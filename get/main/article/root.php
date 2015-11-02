@@ -29,30 +29,30 @@ beg_main();
 
 print_news_large($article);
 
-writeln('<div class="external-title">' . get_text("External Content") . '</div>');
+writeln('<div class="external-title">' . get_text('External Content') . '</div>');
 writeln('<table class="external-table">');
 if ($article["feed_id"] > 0) {
 	$feed = db_get_rec("feed", $article["feed_id"]);
 
 	writeln('	<tr>');
-	writeln('		<td>' . get_text("Source") . '</td>');
-	writeln('		<td>' . get_text("RSS or Atom Feed") . '</td>');
+	writeln('		<td>' . get_text('Source') . '</td>');
+	writeln('		<td>' . get_text('RSS or Atom Feed') . '</td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td>' . get_text("Feed Location") . '</td>');
+	writeln('		<td>' . get_text('Feed Location') . '</td>');
 	writeln('		<td><a href="' . $feed["uri"] . '">' . $feed["uri"] . '</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td>' . get_text("Feed Title") . '</td>');
+	writeln('		<td>' . get_text('Feed Title') . '</td>');
 	writeln('		<td>' . $feed["title"] . '</td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td>' . get_text("Feed Link") . '</td>');
+	writeln('		<td>' . get_text('Feed Link') . '</td>');
 	writeln('		<td><a href="' . $feed["link"] . '">' . $feed["link"] . '</a></td>');
 	writeln('	</tr>');
 	if ($feed["copyright"] != "") {
 		writeln('	<tr>');
-		writeln('		<td>' . get_text("Feed Copyright") . '</td>');
+		writeln('		<td>' . get_text('Feed Copyright') . '</td>');
 		writeln('		<td>' . $feed["copyright"] . '</td>');
 		writeln('	</tr>');
 	}

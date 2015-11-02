@@ -20,13 +20,7 @@
 require_mine();
 
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
-
-$a = fs_dir("$doc_root/lang");
-for ($i = 0; $i < count($a); $i++) {
-	if (strlen($a[$i]) == 6 && fs_ext($a[$i]) == "php") {
-		$languages[] = substr($a[$i], 0, 2);
-	}
-}
+$languages = lang_list();
 
 print_header("Settings", [], [], [], ["Settings"], ["/settings"]);
 beg_main();
@@ -52,10 +46,6 @@ print_row(array("caption" => "Expand Threshold", "option_key" => "expand_thresho
 print_row(array("caption" => "Show Junk Comments", "check_key" => "show_junk_enabled", "checked" => $user_conf["show_junk_enabled"]));
 end_tab();
 
-//beg_tab("Gravatar");
-//print_row(array("caption" => "Use Gravatar for profile picture", "check_key" => "gravatar_enabled", "checked" => $user_conf["gravatar_enabled"]));
-//end_tab();
-
 beg_tab("Features");
 print_row(array("caption" => "Enable JavaScript", "check_key" => "javascript_enabled", "checked" => $user_conf["javascript_enabled"]));
 print_row(array("caption" => "WYSIWYG Editor", "check_key" => "wysiwyg_enabled", "checked" => $user_conf["wysiwyg_enabled"]));
@@ -67,10 +57,6 @@ print_row(array("caption" => "Show Name", "check_key" => "show_name_enabled", "c
 print_row(array("caption" => "Show Birthday", "check_key" => "show_birthday_enabled", "checked" => $user_conf["show_birthday_enabled"]));
 print_row(array("caption" => "Show Email", "check_key" => "show_email_enabled", "checked" => $user_conf["show_email_enabled"]));
 end_tab();
-
-//beg_tab("Mailing List");
-//print_row(array("caption" => "Subscribe to Mailing List (list@$server_name)", "check_key" => "list_enabled", "checked" => $user_conf["list_enabled"]));
-//end_tab();
 
 //
 // Eastern: America/New_York

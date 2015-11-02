@@ -32,9 +32,9 @@ for ($i = 0; $i < count($row); $i++) {
 }
 
 if (count($row) == 0) {
-	writeln("No notifications yet!");
+	writeln('<p>' . get_text('No notifications yet!') . '</p>');
 } else {
-	box_right('<a class="icon-16 broom-16" href="clear">Clear All</a>');
+	box_right('<a class="icon-16 broom-16" href="clear">' . get_text('Clear All') . '</a>');
 }
 
 writeln($page_footer);

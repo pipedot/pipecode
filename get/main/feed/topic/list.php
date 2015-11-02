@@ -23,19 +23,19 @@ print_header("Feed Topics");
 beg_main();
 beg_form();
 
-writeln('<h1>Topics</h1>');
+writeln('<h1>' . get_text('Topics') . '</h1>');
 
 dict_beg();
 $list = db_get_list("feed_topic", "name");
 $k = array_keys($list);
 for ($i = 0; $i < count($list); $i++) {
 	$topic = $list[$k[$i]];
-	dict_row('<a class="icon-16 ' . $topic["icon"] . '-16" href="' . $topic["slug"] . '/edit">' . $topic["name"] . '</a>', '<a class="icon-16 minus-16" href="' . $topic["slug"] . '/delete">Delete</a>');
+	dict_row('<a class="icon-16 ' . $topic["icon"] . '-16" href="' . $topic["slug"] . '/edit">' . $topic["name"] . '</a>', '<a class="icon-16 minus-16" href="' . $topic["slug"] . '/delete">' . get_text('Delete') . '</a>');
 
 }
 dict_end();
 
-box_right('<a class="icon-16 plus-16" href="add">Add</a>');
+box_right('<a class="icon-16 plus-16" href="add">' . get_text('Add') . '</a>');
 
 end_form();
 end_main();

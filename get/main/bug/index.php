@@ -23,7 +23,7 @@ require_feature("bug");
 
 print_header("Open Bugs", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
-writeln("<h1>Open Bugs</h1>");
+writeln('<h1>' . get_text('Open Bugs') . '</h1>');
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 0));
@@ -50,7 +50,7 @@ for ($i = 0; $i < count($row); $i++) {
 end_tab();
 
 writeln($page_footer);
-box_center('<a class="icon-16 calendar-16" href="history">History</a>');
+box_center('<a class="icon-16 calendar-16" href="history">' . get_text('History') . '</a>');
 
 end_main();
 print_footer();

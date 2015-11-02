@@ -33,7 +33,7 @@ writeln('<h1>' . ucwords(item_type($type_id)) . '</h1>');
 $icon = item_icon($type_id);
 writeln('<a class="icon-16 ' . $icon . '-16" href="' . $a["link"] . '">' . $a["title"] . '</a>');
 
-writeln('<h2>' . get_text("Preview") . '</h2>');
+writeln('<h2>' . get_text('Preview') . '</h2>');
 
 if (!$auth_user["javascript_enabled"]) {
 	beg_form("$protocol://$server_name/moderate_noscript");
@@ -77,14 +77,14 @@ if (count($row) > 0) {
 
 $row = sql("select * from comment_vote where comment_id = ?", $comment["comment_id"]);
 if (count($row) > 0) {
-	writeln('<h2>' . get_text("Moderation") . '</h2>');
+	writeln('<h2>' . get_text('Moderation') . '</h2>');
 
 	beg_tab();
 	writeln('	<tr>');
-	writeln('		<th>' . get_text("Time") . '</th>');
-	writeln('		<th>' . get_text("Reason") . '</th>');
-	writeln('		<th>' . get_text("Points") . '</th>');
-	writeln('		<th>' . get_text("Voter") . '</th>');
+	writeln('		<th>' . get_text('Time') . '</th>');
+	writeln('		<th>' . get_text('Reason') . '</th>');
+	writeln('		<th>' . get_text('Points') . '</th>');
+	writeln('		<th>' . get_text('Voter') . '</th>');
 	writeln('	</tr>');
 	for ($i = 0; $i < count($row); $i++) {
 		$value = (int) $row[$i]["value"];
@@ -101,7 +101,7 @@ if (count($row) > 0) {
 	end_tab();
 }
 
-writeln('<h2>' . get_text("Junk Status") . '</h2>');
+writeln('<h2>' . get_text('Junk Status') . '</h2>');
 
 if ($comment["junk_status"] == -1) {
 	writeln("<p>Marked as [<b>Not Junk</b>] by " . user_link($comment["junk_zid"], ["tag" => true]) . " on " . date("Y-m-d H:i", $comment["junk_time"]) . "</p>");

@@ -47,9 +47,9 @@ print_row(array("caption" => "Promoted", "check_key" => "promoted", "checked" =>
 end_tab();
 
 if ($s2 === "edit") {
-	box_two('<a href="/icons">Icons</a>', "Save");
+	box_two('<a href="/icons">' . get_text('Icons') . '</a>', "Save");
 } else {
-	box_two('<a href="/icons">Icons</a>', "Delete,Save");
+	box_two('<a href="/icons">' . get_text('Icons') . '</a>', "Delete,Save");
 }
 
 end_form();

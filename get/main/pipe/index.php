@@ -23,13 +23,13 @@ print_header("Pipe");
 print_main_nav("pipe");
 beg_main("cell");
 
-writeln('<h1>Stories in the Pipe</h1>');
-writeln('<p>These are stories waiting to be published to the main page. Remember, anyone can <a href="/submit">submit</a> a new story!</p>');
+writeln('<h1>' . get_text('Stories in the Pipe') . '</h1>');
+writeln('<p>' . get_text('These are stories waiting to be published to the main page. Remember, anyone can <a href="/submit">submit</a> a new story!') . '</p>');
 
 $pipes = db_get_list("pipe", "time desc", array("closed" => 0));
 if (count($pipes) == 0) {
-	writeln('<h1>No stories in the pipe!</h1>');
-	writeln('<p><a href="/submit">Submit</a> one now or <a href="history">view the history</a>.</p>');
+	writeln('<h1>' . get_text('No stories in the pipe!') . '</h1>');
+	writeln('<p>' . get_text('<a href="/submit">Submit</a> one now or <a href="history">view the history</a>.') . '</p>');
 } else {
 	writeln('<div class="box">');
 	$k = array_keys($pipes);
@@ -42,7 +42,7 @@ if (count($pipes) == 0) {
 }
 
 if (count($pipes) > 0) {
-	box_center('<a class="icon-16 calendar-16" href="history">History</a>');
+	box_center('<a class="icon-16 calendar-16" href="history">' . get_text('History') . '</a>');
 }
 end_main();
 

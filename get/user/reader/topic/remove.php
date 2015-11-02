@@ -24,8 +24,8 @@ $topic = item_request(TYPE_READER_TOPIC);
 print_header("Remove Topic", [], [], [], ["Reader", "Topic", $topic["name"], "Remove"], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"], "/reader/topic/" . $topic["slug"] . "/remove"]);
 beg_main();
 beg_form();
-writeln('<h1>Remove Topic</h1>');
-writeln('<p>Are you sure you want to remove the [<b>' . $topic["name"] . '</b>] topic?</p>');
+writeln('<h1>' . get_text('Remove Topic') . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] topic?', $topic["name"]) . '</p>');
 
 box_left("Remove");
 

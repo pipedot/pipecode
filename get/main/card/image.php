@@ -31,7 +31,7 @@ print_header();
 
 beg_main();
 beg_form();
-writeln('<h1>' . get_text("Select Image") . '</h1>');
+writeln('<h1>' . get_text('Select Image') . '</h1>');
 
 writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
 writeln('	<table>');

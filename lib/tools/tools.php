@@ -1164,10 +1164,10 @@ function dict_row($name, $value = "")
 }
 
 
-function dict_none($caption = "none")
+function dict_none($caption = "(none)")
 {
 	writeln('	<tr>');
-	writeln('		<td colspan="2">(' . get_text($caption) . ')</td>');
+	writeln('		<td colspan="2">' . get_text($caption) . '</td>');
 	writeln('	</tr>');
 }
 
@@ -1386,21 +1386,31 @@ function fs_unlink($path)
 }
 
 
-function get_text($singular)
+function get_text($singular, $arg = [])
 {
 	global $lang;
 	global $msg_str;
 
 	if ($lang == "en" || $lang == "" || !array_key_exists($singular, $msg_str)) {
-		return $singular;
+		$t = $singular;
+	} else {
+		$a = $msg_str[$singular];
+		if (is_array($a)) {
+			$t = $a[0];
+		} else {
+			$t = $a;
+		}
 	}
 
-	$a = $msg_str[$singular];
-	if (is_array($a)) {
-		return $a[0];
+	if (is_array($arg)) {
+		for ($i = 0; $i < count($arg); $i++) {
+			$t = str_replace('$' . ($i + 1), $arg[$i], $t);
+		}
+	} else {
+		$t = str_replace('$1', $arg, $t);
 	}
 
-	return $a;
+	return $t;
 }
 
 

@@ -26,8 +26,8 @@ print_header();
 beg_main();
 beg_form();
 
-writeln('<h1>Remove Feed</h1>');
-writeln('<p>Are you sure you want to remove <b>' . $feed["title"] . '</b> from your page?</p>');
+writeln('<h1>' . get_text('Remove Feed') . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to remove [<b>$1</b>] from your page?', $feed["title"]) . '</p>');
 
 box_left("Remove");
 

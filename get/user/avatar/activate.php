@@ -26,7 +26,7 @@ print_header("Activate Avatar", [], [], [], ["Avatar", $avatar_code, "Activate"]
 beg_main();
 beg_form();
 
-writeln("<h2>Set current avatar?</h2>");
+writeln('<h2>' . get_text('Set current avatar?') . '</h2>');
 writeln('<div class="box"><img alt="avatar" class="thumb" src="' . $protocol . '://' . $server_name . '/avatar/' . $avatar_code . '-256.jpg"></div>');
 
 box_left("Activate");

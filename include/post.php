@@ -31,9 +31,9 @@ function print_post_box($article_id, $subject, $dirty_body, $coward)
 		$ban_ip = db_get_rec("ban_ip", $remote_ip);
 		$short_code = crypt_crockford_encode($ban_ip["short_id"]);
 		writeln('<div class="balloon">');
-		writeln('<h1>Banned IP Address</h1>');
-		writeln("<p>Your IP address [<b>$remote_ip</b>] is banned for sending junk messages. Anonymous posting is disabled.</p>");
-		writeln("<p>An example junk message can be found here: <a href=\"$protocol://$server_name/$short_code\">#$short_code</a></p>");
+		writeln('<h1>' . get_text('Banned IP Address') . '</h1>');
+		writeln('<p>' . get_text('Your IP address [<b>$1</b>] is banned for sending junk messages. Anonymous posting is disabled.', $remote_ip) . '</p>');
+		writeln('<p>' . get_text('An example junk message can be found here: $1', "<a href=\"$protocol://$server_name/$short_code\">#$short_code</a>") . '</p>');
 		writeln('</div>');
 		if ($auth_zid === "") {
 			end_main();
@@ -47,31 +47,31 @@ function print_post_box($article_id, $subject, $dirty_body, $coward)
 	beg_form();
 	writeln('<input type="hidden" name="article_id" value="' . $article_id . '">');
 	writeln('<div class="reply">');
-	writeln('<div class="dialog-title">Post Comment</div>');
+	writeln('<div class="dialog-title">' . get_text('Post Comment') . '</div>');
 	writeln('<div class="dialog-body">');
 	writeln('<table>');
 	writeln('	<tr>');
-	writeln('		<td>Subject</td>');
+	writeln('		<td>' . get_text('Subject') . '</td>');
 	writeln('		<td colspan="2"><input name="subject" type="text" value="' . $subject . '" required></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td>Comment</td>');
+	writeln('		<td>' . get_text('Comment') . '</td>');
 	writeln('		<td colspan="2"><textarea name="comment" required>' . $dirty_body . '</textarea></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	if ($auth_zid === "") {
 		$question = captcha_challenge();
-		writeln('		<td>Captcha</td>');
+		writeln('		<td>' . get_text('Captcha') . '</td>');
 		writeln('		<td><table><tr><td>' . $question . '</td><td><input name="answer" type="text" style="margin-left: 8px; width: 100px"></td></tr></table></td>');
 	} else {
 		writeln('		<td></td>');
 		if ($banned) {
 			writeln('		<td></td>');
 		} else {
-			writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked' : '') . '>Post Anonymously</label></td>');
+			writeln('		<td><label><input name="coward" type="checkbox"' . ($coward ? ' checked' : '') . '>' . get_text('Post Anonymously') . '</label></td>');
 		}
 	}
-	writeln('		<td><input name="post" type="submit" value="Post"> <input name="preview" type="submit" value="Preview"></td>');
+	writeln('		<td><input name="post" type="submit" value="' . get_text('Post') . '"> <input name="preview" type="submit" value="' . get_text('Preview') . '"></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');

@@ -20,7 +20,7 @@
 print_header("Tags", array("Share"), array("notepad"), array("/stream/share"));
 beg_main();
 
-writeln('<h1>Tags</h1>');
+writeln('<h1>' . get_text('Tags') . '</h1>');
 
 end_main();
 print_footer();

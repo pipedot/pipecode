@@ -28,7 +28,6 @@ $tiny_key = substr($key, 0, 8);
 print_header("Login", [], [], [], ["Login", $tiny_key], ["/login/", "/login/$key"]);
 beg_main();
 beg_form();
-//writeln('<h1>Active Sessions</h1>');
 
 beg_tab();
 $row = sql("select agent_id, os_id, last_time, country_name, address, latitude, longitude from login inner join ip on login.ip_id = ip.ip_id inner join country on ip.country_id = country.country_id where zid = ? and login_key = ?", $zid, $key);

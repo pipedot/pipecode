@@ -19,7 +19,7 @@
 
 print_header("Topics");
 beg_main();
-writeln('<h1>Topics</h1>');
+writeln('<h1>' . get_text('Topics') . '</h1>');
 
 $list = db_get_list("feed_topic", "name");
 $k = array_keys($list);

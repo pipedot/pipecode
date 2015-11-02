@@ -60,7 +60,9 @@ if (string_has($s2, "-") && $s3 === "") {
 	$meta .= "<meta property=\"og:url\" content=\"http://$server_name/story/$short_code\">\n";
 	$meta .= "<meta property=\"og:description\" content=\"" . make_description($story["body"]) . "\">\n";
 	$meta .= "<meta property=\"og:image\" content=\"http://$server_name$image_path\">\n";
-	$meta .= "<meta property=\"og:image:secure_url\" content=\"https://$server_name$image_path\">\n";
+	if ($https_enabled) {
+		$meta .= "<meta property=\"og:image:secure_url\" content=\"https://$server_name$image_path\">\n";
+	}
 	//$meta .= "<meta property=\"og:image:type\" content=\"$image_type\">\n";
 	//$meta .= "<meta property=\"og:image:width\" content=\"256\">\n";
 	//$meta .= "<meta property=\"og:image:height\" content=\"256\">\n";

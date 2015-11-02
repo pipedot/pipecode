@@ -33,7 +33,7 @@ print_header("Edit Card");
 beg_main();
 beg_form();
 
-writeln('<h1>' . get_text("Edit Card") . '</h1>');
+writeln('<h1>' . get_text('Edit Card') . '</h1>');
 
 $tags = array();
 $row = sql("select tag from card_tags where card_id = ?", $card["card_id"]);

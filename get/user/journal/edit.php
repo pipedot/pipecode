@@ -33,7 +33,7 @@ print_header("Edit", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $jo
 beg_main();
 beg_form();
 
-writeln('<h1>Edit</h1>');
+writeln('<h1>' . get_text('Edit') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $journal["title"]));

@@ -32,14 +32,12 @@ if ($topic == "") {
 }
 
 if ($topic != "") {
-	//print_user_nav("topics");
-//} else {
 	print_user_nav($topic);
 }
 
 beg_main("cell");
 if ($topic == "") {
-	writeln('<h1>Topics</h1>');
+	writeln('<h1>' . get_text('Topics') . '</h1>');
 
 	$row = sql("select distinct topic from journal where zid = ? order by topic", $zid);
 	for ($i = 0; $i < count($row); $i++) {

@@ -20,7 +20,7 @@
 print_header("Users");
 beg_main();
 
-writeln("<h1>Users</h1>");
+writeln('<h1>' . get_text('Users') . '</h1>');
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("select count(distinct zid) as item_count from user_conf", $items_per_page);

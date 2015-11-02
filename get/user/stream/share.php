@@ -26,7 +26,7 @@ print_header("Share");
 beg_main();
 beg_form("", "file");
 
-writeln('<h1>Share</h1>');
+writeln('<h1>' . get_text('Share') . '</h1>');
 
 writeln('<div class="box">');
 writeln('<textarea name="body" style="width: 100%; height: 100px"></textarea>');

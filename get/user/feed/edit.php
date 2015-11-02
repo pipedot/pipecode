@@ -30,16 +30,16 @@ for ($c = 0; $c < 3; $c++) {
 	writeln('			<table class="zebra">');
 	$row = sql("select feed_user.feed_id, title from feed_user inner join feed on feed_user.feed_id = feed.feed_id where zid = ? and col = ? order by pos", $auth_zid, $c);
 	if (count($row) == 0) {
-		writeln('				<tr><td>(no feeds)</td></tr>');
+		writeln('				<tr><td>' . get_text('(none)') . '</td></tr>');
 	}
 	for ($i = 0; $i < count($row); $i++) {
 		writeln('				<tr>');
 		writeln('					<td>' . $row[$i]["title"] . '</td>');
-		writeln('					<td class="right"><a href="remove?feed_id=' . $row[$i]["feed_id"] . '" class="icon-16 minus-16">Remove</a></td>');
+		writeln('					<td class="right"><a href="remove?feed_id=' . $row[$i]["feed_id"] . '" class="icon-16 minus-16">' . get_text('Remove') . '</a></td>');
 		writeln('				</tr>');
 	}
 	writeln('			</table>');
-	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon-16 plus-16">Add</a></div>');
+	writeln('			<div class="right"><a href="add?col=' . $c . '" class="icon-16 plus-16">' . get_text('Add') . '</a></div>');
 	writeln('		</td>');
 }
 writeln('	</tr>');

@@ -26,24 +26,24 @@ $ban_ip = db_get_rec("ban_ip", $ip);
 print_header("Banned IP Address");
 beg_main();
 
-writeln('<h1>' . get_text("Banned IP Address") . '</h1>');
+writeln('<h1>' . get_text('Banned IP Address') . '</h1>');
 
 beg_tab();
 writeln('	<tr>');
-writeln('		<td>' . get_text("IP Address") . '</td>');
+writeln('		<td>' . get_text('IP Address') . '</td>');
 writeln('		<td class="right">' . $ip . '</td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td>' . get_text("Time") . '</td>');
+writeln('		<td>' . get_text('Time') . '</td>');
 writeln('		<td class="right">' . date("Y-m-d H:i", $ban_ip["time"]) . '</td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td>' . get_text("Editor") . '</td>');
+writeln('		<td>' . get_text('Editor') . '</td>');
 writeln('		<td class="right">' . user_link($ban_ip["zid"], ["tag" => true]) . '</td>');
 writeln('	</tr>');
 end_tab();
 
-writeln('<h2>' . get_text("Example Comment") . '</h2>');
+writeln('<h2>' . get_text('Example Comment') . '</h2>');
 
 $comment = db_get_rec("comment", $ban_ip["short_id"]);
 

@@ -81,13 +81,13 @@ function print_bug($bug)
 	$a["comments"] = count_comments($bug_id, TYPE_BUG);
 
 	if ($auth_user["editor"] || $auth_user["admin"]) {
-		$a["actions"][] = "<a href=\"/bug/$bug_code/edit\" class=\"icon-16 notepad-16\">Edit</a>";
+		$a["actions"][] = "<a href=\"/bug/$bug_code/edit\" class=\"icon-16 notepad-16\">" . get_text('Edit') . "</a>";
 		if (!$bug["closed"]) {
-			$a["actions"][] = "<a href=\"/bug/$bug_code/close\" class=\"icon-16 close-16\">Close</a>";
+			$a["actions"][] = "<a href=\"/bug/$bug_code/close\" class=\"icon-16 close-16\">" . get_text('Close') . "</a>";
 		}
 	}
 	if ($auth_zid !== "" && $bug["closed"]) {
-		$a["actions"][] = "<a href=\"/bug/$bug_code/open\" class=\"icon-16 undo-16\">Open</a>";
+		$a["actions"][] = "<a href=\"/bug/$bug_code/open\" class=\"icon-16 undo-16\">" . get_text('Open') . "</a>";
 	}
 
 	print_content($a);

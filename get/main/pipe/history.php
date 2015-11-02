@@ -19,7 +19,7 @@
 
 print_header("Pipe History");
 beg_main();
-writeln("<h1>Pipe History</h1>");
+writeln('<h1>' . get_text('Pipe History') . '</h1>');
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("pipe", $items_per_page);
@@ -27,11 +27,11 @@ list($item_start, $page_footer) = page_footer("pipe", $items_per_page);
 $row = sql("select pipe.pipe_id, pipe.time, pipe.title, pipe.author_zid, pipe.edit_zid, closed, reason, story_id from pipe left join story on pipe.pipe_id = story.pipe_id order by time desc limit $item_start, $items_per_page");
 beg_tab();
 writeln('	<tr>');
-writeln('		<th>Date</th>');
-writeln('		<th>Title</th>');
-writeln('		<th>Submitter</th>');
-writeln('		<th>Editor</th>');
-writeln('		<th>Status</th>');
+writeln('		<th>' . get_text('Date') . '</th>');
+writeln('		<th>' . get_text('Title') . '</th>');
+writeln('		<th>' . get_text('Submitter') . '</th>');
+writeln('		<th>' . get_text('Editor') . '</th>');
+writeln('		<th>' . get_text('Status') . '</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
 	$pipe_code = crypt_crockford_encode($row[$i]["pipe_id"]);
@@ -40,11 +40,16 @@ for ($i = 0; $i < count($row); $i++) {
 	$author = user_link($row[$i]["author_zid"], ["tag" => true]);
 	$editor = user_link($row[$i]["edit_zid"], ["tag" => true, "ac" => false]);
 	if ($story_id > 0) {
-		$status = '<a href="/story/' . $story_code . '">Published</a>';
+		$status = '<a href="/story/' . $story_code . '">' . get_text('Published') . '</a>';
 	} else if ($row[$i]["closed"] == 1) {
-		$status = "Closed (" . ($row[$i]["reason"] == "" ? "no reason" : $row[$i]["reason"]) . ")";
+		if ($row[$i]["reason"] == "") {
+			$reason = get_text('no reason');
+		} else {
+			$reason = $row[$i]["reason"];
+		}
+		$status = get_text('Closed ($1)', $reason);
 	} else {
-		$status = "Voting";
+		$status = get_text('Voting');
 	}
 
 	writeln('	<tr>');

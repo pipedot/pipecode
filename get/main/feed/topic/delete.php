@@ -27,8 +27,8 @@ $topic = db_get_rec("feed_topic", array("slug" => $s3));
 print_header($topic["name"]);
 beg_main();
 beg_form();
-writeln('<h1>Delete ' . $topic["name"] . '</h1>');
-writeln('<p>Are you sure you want to delete the [<b>' . $topic["name"] . '</b>] topic?</p>');
+writeln('<h1>' . get_text('Delete $1', [$topic["name"]]) . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to delete the [<b>$1</b>] topic?', [$topic["name"]]) . '</p>');
 
 box_left("Delete");
 

@@ -23,7 +23,7 @@ print_header("Write", [], [], [], ["Journal", "Write"], ["/journal/", "/journal/
 beg_main();
 beg_form();
 
-writeln('<h1>Write</h1>');
+writeln('<h1>' . get_text('Write') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title"));

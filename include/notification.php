@@ -26,7 +26,7 @@ function print_notification_box()
 		return;
 	}
 
-	writeln('<div class="dialog-title">Notifications</div>');
+	writeln('<div class="dialog-title">' . get_text('Notifications') . '</div>');
 	writeln('<div class="dialog-middle side-link-one">');
 
 	$row = sql("select notification_id, item_id, parent_id, type_id from notification where zid = ? order by time desc limit 5", $auth_zid);
@@ -36,7 +36,7 @@ function print_notification_box()
 
 	writeln('</div>');
 	writeln('<div class="dialog-body center">');
-	writeln('<a class="icon-16 bulb-16" href="' . user_link($auth_zid) . 'notification/">More (' . $notification_count . ')</a> | <a class="icon-16 broom-16" href="' . user_link($auth_zid) . 'notification/clear">Clear</a>');
+	writeln('<a class="icon-16 bulb-16" href="' . user_link($auth_zid) . 'notification/">' . get_text('More ($1)', $notification_count) . ')</a> | <a class="icon-16 broom-16" href="' . user_link($auth_zid) . 'notification/clear">' . get_text('Clear') . '</a>');
 	writeln('</div>');
 }
 
@@ -91,23 +91,23 @@ function print_notification_comment($notification_id, $parent_id, $new_comment_i
 			$article_type = item_type($article_type_id);
 			$article = db_get_rec($article_type, $article_id);
 			$article_link = item_link($article_type_id, $article_id, $article);
-			$article_info = ' in <a href="' . $article_link . '">' . $article["title"] . '</a>';
+			$article_info = ' ' . get_text('in') . ' <a href="' . $article_link . '">' . $article["title"] . '</a>';
 		}
 
 		writeln('<article class="notification">');
 		writeln('	<header>');
-		writeln('		<h1>New Comment</h1>');
-		writeln('		<div class="' . $icon . '-32">Reply to <a href="' . $link . '">"' . $parent_title . '"</a>' . $article_info . '</div>');
+		writeln('		<h1>' . get_text('New Comment') . '</h1>');
+		writeln('		<div class="' . $icon . '-32">' . get_text('Reply to') . ' <a href="' . $link . '">"' . $parent_title . '"</a>' . $article_info . '</div>');
 		writeln('	</header>');
 		writeln('	<div>');
 		print_comment($new_comment);
 		writeln('	</div>');
-		writeln('	<footer><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">Dismiss</a></footer>');
+		writeln('	<footer><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">' . get_text('Dismiss') . '</a></footer>');
 		writeln('</article>');
 	} else {
 		writeln('<a href="' . user_link($auth_zid) . 'notification/' . $notification_id . '">');
 		writeln('	<dl class="dl-32 ' . $icon . '-32">');
-		writeln('		<dt>Reply to "' . $parent_title . '"</dt>');
+		writeln('		<dt>' . get_text('Reply to') . ' "' . $parent_title . '"</dt>');
 		writeln('		<dd>' . $new_comment_zid . '</dd>');
 		writeln('	</dl>');
 		writeln('</a>');
@@ -155,19 +155,19 @@ function print_notification_moderation($notification_id, $comment_id, $large)
 	if ($large) {
 		writeln('<article class="notification">');
 		writeln('	<header>');
-		writeln('		<h1>Comment Moderation</h1>');
-		writeln('		<div class="' . $icon . '-32">Score: ' . $score_reason . '</div>');
+		writeln('		<h1>' . get_text('Comment Moderation') . '</h1>');
+		writeln('		<div class="' . $icon . '-32">' . get_text('Score: $1', $score_reason) . '</div>');
 		writeln('	</header>');
 		writeln('	<div>');
 		print_comment($comment, true);
 		writeln('	</div>');
-		writeln('	<footer><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">Dismiss</a></footer>');
+		writeln('	<footer><a class="icon-16 delete-16" href="' . $notification_id . '/dismiss">' . get_text('Dismiss') . '</a></footer>');
 		writeln('</article>');
 	} else {
 		writeln('<a href="' . user_link($auth_zid) . 'notification/' . $notification_id . '">');
 		writeln('	<dl class="dl-32 ' . $icon . '-32">');
-		writeln('		<dt>Moderation to "' . $comment["subject"] . '"</dt>');
-		writeln('		<dd>Score: ' . $score_reason . '</dd>');
+		writeln('		<dt>' . get_text('Moderation to "$1"', $comment["subject"]) . '</dt>');
+		writeln('		<dd>' . get_text('Score: $1', $score_reason) . '</dd>');
 		writeln('	</dl>');
 		writeln('</a>');
 	}

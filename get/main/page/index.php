@@ -21,26 +21,24 @@ require_admin();
 
 print_header("Pages");
 beg_main();
-writeln('<h1>Pages</h1>');
+writeln('<h1>' . get_text('Pages') . '</h1>');
 
-beg_tab();
+dict_beg();
 $list = db_get_list("page", "slug");
 $keys = array_keys($list);
 if (count($keys) == 0) {
 	writeln('	<tr>');
-	writeln('		<td>(no pages)</td>');
+	writeln('		<td>' . get_text('(none)') . '</td>');
 	writeln('	</tr>');
 }
 for ($i = 0; $i < count($keys); $i++) {
 	$page = $list[$keys[$i]];
-	writeln('	<tr>');
-	writeln('		<td><a href="edit?slug=' . $page["slug"] . '" class="icon-16 notepad-16">' . $page["title"] . '</a></td>');
-	writeln('		<td class="right"><a href="remove?slug=' . $page["slug"] . '" class="icon-16 minus-16">Remove</a></td>');
-	writeln('	</tr>');
-}
-end_tab();
 
-box_right('<a class="icon-16 plus-16" href="add">Add</a>');
+	dict_row('<a href="edit?slug=' . $page["slug"] . '" class="icon-16 notepad-16">' . $page["title"] . '</a>', '<a href="remove?slug=' . $page["slug"] . '" class="icon-16 minus-16">' . get_text('Remove') . '</a>');
+}
+dict_end();
+
+box_right('<a class="icon-16 plus-16" href="add">' . get_text('Add') . '</a>');
 
 end_main();
 print_footer();

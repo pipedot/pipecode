@@ -24,22 +24,22 @@ $junk = true;
 print_header("Junk");
 beg_main();
 
-writeln('<h1>Junk</h1>');
+writeln('<h1>' . get_text('Junk') . '</h1>');
 
 $row = sql("select comment_vote.comment_id, count(*) as votes, article_id, subject, edit_time, body, junk_status, comment.zid from comment_vote inner join comment on comment_vote.comment_id = comment.comment_id where reason = 'Spam' and junk_status = 0 group by comment_id");
 if (count($row) == 0) {
-	writeln('<p>No unmarked junk comments</p>');
+	writeln('<p>' . get_text('No unmarked junk comments') . '</p>');
 } else {
 	beg_form();
 	for ($i = 0; $i < count($row); $i++) {
 		print_comment($row[$i], true);
 	}
 
-	box_two('<a href="?default=spam">Default to Spam</a>', "Save");
+	box_two('<a href="?default=spam">' . get_text('Default to Spam') . '</a>', "Save");
 	end_form();
 }
 
-box_center('<a href="anonymous">Show All Anonymous</a>');
+box_center('<a href="anonymous">' . get_text('Show All Anonymous') . '</a>');
 
 end_main();
 print_footer();

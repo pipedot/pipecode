@@ -19,22 +19,18 @@
 
 print_header("Archive");
 beg_main();
-writeln('<h1>Archive</h1>');
+writeln('<h1>' . get_text('Archive') . '</h1>');
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("story", $items_per_page);
 
-writeln('<table class="zebra">');
+dict_beg();
 $row = sql("select title, slug, publish_time from story order by publish_time desc limit $item_start, $items_per_page");
 for ($i = 0; $i < count($row); $i++) {
 	$date = gmdate("Y-m-d", $row[$i]["publish_time"]);
-
-	writeln('	<tr>');
-	writeln('		<td><a href="/story/' . $date . "/" . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a></td>');
-	writeln('		<td style="text-align: right; white-space: nowrap;">' . $date . '</td>');
-	writeln('	</tr>');
+	dict_row('<a href="/story/' . $date . "/" . $row[$i]["slug"] . '">' . $row[$i]["title"] . '</a>', $date);
 }
-writeln('</table>');
+dict_end();
 
 writeln($page_footer);
 

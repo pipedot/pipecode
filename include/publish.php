@@ -46,7 +46,7 @@ function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, 
 		}
 	}
 
-	writeln('<h1>Preview</h1>');
+	writeln('<h1>' . get_text('Preview') . '</h1>');
 	$a["body"] = $clean_body;
 	$a["title"] = $title;
 	$a["link"] = item_link(TYPE_PIPE, $pipe_id, $pipe);
@@ -54,7 +54,7 @@ function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, 
 	$a["view"] = "<b>0</b> comments";
 	print_content($a);
 
-	writeln('<h1>Publish</h1>');
+	writeln('<h1>' . get_text('Publish') . '</h1>');
 	beg_tab();
 	print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $title));
 	print_row(array("caption" => "Topic", "option_key" => "topic_id", "option_value" => $topic_id, "option_list" => $topic_list, "option_keys" => $topic_keys));
@@ -64,7 +64,7 @@ function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, 
 	end_tab();
 
 	//box_two('<a href="/icons">Icons</a>', "Publish,Preview");
-	box_two('<a href="/similar">Keyword Search</a>', "Publish,Preview");
+	box_two('<a href="/similar">' . get_text('Keyword Search') . '</a>', "Publish,Preview");
 
 	end_form();
 	end_main();

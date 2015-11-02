@@ -29,21 +29,21 @@ list($item_start, $page_footer) = page_footer("select count(*) as item_count fro
 print_header("Karma", [], [], [], ["Karma"], ["/karma/"]);
 beg_main();
 
-writeln('<h1>' . get_text("Current") . '</h1>');
+writeln('<h1>' . get_text('Current') . '</h1>');
 writeln('<div class="icon-32 ' . $icon . '-32">' . get_text($description) . ' (' . $karma . ')</div>');
 
 $row = sql("select comment_vote.time, value, comment.comment_id, comment_vote.zid from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0 order by comment_vote.time desc limit $item_start, $items_per_page", $zid);
-writeln('<h2>' . get_text("Log") . '</h2>');
+writeln('<h2>' . get_text('Log') . '</h2>');
 writeln('<table class="zebra">');
 writeln('	<tr>');
-writeln('		<th>' . get_text("Time") . '</th>');
-writeln('		<th class="center">' . get_text("Points") . '</th>');
-writeln('		<th>' . get_text("Comment") . '</th>');
-writeln('		<th>' . get_text("Voter") . '</th>');
+writeln('		<th>' . get_text('Time') . '</th>');
+writeln('		<th class="center">' . get_text('Points') . '</th>');
+writeln('		<th>' . get_text('Comment') . '</th>');
+writeln('		<th>' . get_text('Voter') . '</th>');
 writeln('	</tr>');
 if (count($row) == 0) {
 	writeln('	<tr>');
-	writeln('		<td colspan="3">(' . get_text("none") . ')</td>');
+	writeln('		<td colspan="3">' . get_text('(none)') . '</td>');
 	writeln('	</tr>');
 }
 for ($i = 0; $i < count($row); $i++) {

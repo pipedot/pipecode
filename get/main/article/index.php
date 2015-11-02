@@ -20,7 +20,7 @@
 print_header("Articles");
 beg_main();
 
-writeln('<h1>' . get_text("Articles") . '</h1>');
+writeln('<h1>' . get_text('Articles') . '</h1>');
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("article", $items_per_page);

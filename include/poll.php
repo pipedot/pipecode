@@ -62,11 +62,11 @@ function vote_box($poll_id, $vote)
 		if ($type_id == 1 || $type_id == 2) {
 			$row = sql("select count(zid) as votes from poll_vote where poll_id = ?", $poll_id);
 			$votes = $row[0]["votes"];
-			$tag = nget_text("<b>$1</b> vote", "<b>$1</b> votes", $votes, [$votes]);
+			$tag = nget_text('<b>$1</b> vote', '<b>$1</b> votes', $votes, [$votes]);
 		} else {
 			$row = sql("select sum(points) as votes from poll_vote where poll_id = ?", $poll_id);
 			$votes = (int) $row[0]["votes"];
-			$tag = nget_text("<b>$1</b> point", "<b>$1</b> points", $votes, [$votes]);
+			$tag = nget_text('<b>$1</b> point', '<b>$1</b> points', $votes, [$votes]);
 		}
 
 		writeln('	<table class="fill">');
@@ -93,7 +93,7 @@ function vote_box($poll_id, $vote)
 				$votes[] = $row[0]["votes"];
 				$total += $row[0]["votes"];
 			}
-			$total_tag = nget_text("<b>$1</b> vote", "<b>$1</b> votes", $total, [$total]);
+			$total_tag = nget_text('<b>$1</b> vote', '<b>$1</b> votes', $total, [$total]);
 		} else if ($type_id == 3) {
 			for ($i = 0; $i < count($poll_answer); $i++) {
 				$answer = $poll_answer[$k[$i]];
@@ -102,7 +102,7 @@ function vote_box($poll_id, $vote)
 				$votes[] = $row[0]["votes"];
 				$total += $row[0]["votes"];
 			}
-			$total_tag = nget_text("<b>$1</b> point", "<b>$1</b> points", $total, [$total]);
+			$total_tag = nget_text('<b>$1</b> point', '<b>$1</b> points', $total, [$total]);
 		}
 
 		for ($i = 0; $i < count($poll_answer); $i++) {
@@ -113,9 +113,9 @@ function vote_box($poll_id, $vote)
 				$percent = round(($votes[$i] / $total) * 100);
 			}
 			if ($type_id == 1 || $type_id == 2) {
-				$tag = nget_text("<b>$1</b> vote ($2%)", "<b>$1</b> votes ($2%)", $votes[$i], [$votes[$i], $percent]);
+				$tag = nget_text('<b>$1</b> vote ($2%)', '<b>$1</b> votes ($2%)', $votes[$i], [$votes[$i], $percent]);
 			} else {
-				$tag = nget_text("<b>$1</b> point ($2%)", "<b>$1</b> points ($2%)", $votes[$i], [$votes[$i], $percent]);
+				$tag = nget_text('<b>$1</b> point ($2%)', '<b>$1</b> points ($2%)', $votes[$i], [$votes[$i], $percent]);
 			}
 
 			writeln('		<tr>');

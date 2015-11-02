@@ -21,7 +21,7 @@ print_header("Reader");
 print_main_nav("reader");
 beg_main("cell");
 
-writeln('<h1>Reader</h1>');
+writeln('<h1>' . get_text('Reader') . '</h1>');
 
 $list = db_get_list("reader_topic", "name");
 $k = array_keys($list);
@@ -31,7 +31,7 @@ for ($i = 0; $i < count($list); $i++) {
 }
 
 if ($auth_user["admin"]) {
-	box_left('<a class="icon-16 plus-16" href="edit">Add</a>');
+	box_left('<a class="icon-16 plus-16" href="edit">' . get_text('Add') . '</a>');
 }
 
 end_main();

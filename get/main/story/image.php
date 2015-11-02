@@ -31,7 +31,7 @@ print_header();
 print_main_nav("stories");
 beg_main("cell");
 beg_form();
-writeln('<h1>Select Image</h1>');
+writeln('<h1>' . get_text('Select Image') . '</h1>');
 
 writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
 writeln('	<table>');
@@ -40,7 +40,7 @@ writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value
 writeln('			<td><img alt="thumbnail" src="/images/missing-128.png"></td>');
 writeln('		</tr>');
 writeln('		<tr>');
-writeln('			<td colspan="2" style="padding-top: 4px; text-align: center">No Image</td>');
+writeln('			<td colspan="2" style="padding-top: 4px; text-align: center">' . get_text('No Image') . '</td>');
 writeln('		</tr>');
 writeln('	</table>');
 writeln('</label>');
@@ -50,12 +50,6 @@ for ($i = 0; $i < count($images); $i++) {
 	$path = public_path($tmp_image["time"]);
 
 	writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
-	//writeln('	<div style="display: table;">');
-	//writeln('		<div style="display: table-cell; vertical-align: middle;"><input name="tmp_image_id" value="' . $images[$i] . '" type="radio"></div>');
-	//writeln('		<img alt="thumbnail" src="' . $path . '/t' . $images[$i] . '.128x128.jpg" style="display: table-cell;">');
-	//writeln('		<div style="text-align: center">' . $tmp_image["original_width"] . ' x ' . $tmp_image["original_height"] . '</div>');
-	//writeln('	</div>');
-
 	writeln('	<table>');
 	writeln('		<tr>');
 	writeln('			<td style="vertical-align: middle;"><input name="tmp_image_id" value="' . $images[$i] . '" type="radio"></td>');

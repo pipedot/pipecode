@@ -23,7 +23,7 @@ print_header("Create Poll");
 print_main_nav("poll");
 beg_main("cell");
 
-writeln('<h1>Create Poll</h1>');
+writeln('<h1>' . get_text('Create Poll') . '</h1>');
 
 beg_form();
 
@@ -32,16 +32,16 @@ print_row(array("caption" => "Question", "text_key" => "question"));
 print_row(array("caption" => "Type", "option_key" => "type_id", "option_keys" => array(1, 2, 3), "option_list" => array("Multiple Choice", "Approval Voting", "Borda Count")));
 end_tab();
 
-$li = '<li><div class="icon-16 vsort-16" title="Drag to Reorder"></div><div><input type="text" name="answer[]" value=""></div><div><a class="icon-16 minus-16" href="javascript:remove_answer()">Remove</a></div></li>';
+$li = '<li><div class="icon-16 vsort-16" title="' . get_text('Drag to Reorder') . '"></div><div><input type="text" name="answer[]" value=""></div><div><a class="icon-16 minus-16" href="javascript:remove_answer()">' . get_text('Remove') . '</a></div></li>';
 
-writeln('<h2>Answers</h2>');
+writeln('<h2>' . get_text('Answers') . '</h2>');
 writeln('<ul id="sortable" class="poll-sortable">');
 writeln($li);
 writeln($li);
 writeln($li);
 writeln('</ul>');
 
-box_right('<a class="icon-16 plus-16" href="javascript:add_answer()">Add</a>');
+box_right('<a class="icon-16 plus-16" href="javascript:add_answer()">' . get_text('Add') . '</a>');
 box_right("Publish");
 
 ?>

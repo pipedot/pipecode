@@ -50,7 +50,7 @@ if ($topic_new) {
 print_header("Add Feed");
 beg_main();
 beg_form();
-writeln('<h1>Add Feed</h1>');
+writeln('<h1>' . get_text('Add Feed') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name", "text_value" => $feed["title"]));

@@ -28,16 +28,16 @@ if ($auth_zid === "") {
 }
 beg_main();
 
-writeln('<h1>Photo</h1>');
+writeln('<h1>' . get_text('Photo') . '</h1>');
 
 $info = photo_info($photo);
 
-$res = array("<a href=\"" . $info["small_link"] . "\">Small ({$info["small_width"]}x{$info["small_height"]})</a>");
+$res = array("<a href=\"" . $info["small_link"] . "\">" . get_text('Small') . " ({$info["small_width"]}x{$info["small_height"]})</a>");
 if ($photo["has_medium"]) {
-	$res[] = "<a href=\"" . $info["medium_link"] . "\">Medium ({$info["medium_width"]}x{$info["medium_height"]})</a>";
+	$res[] = "<a href=\"" . $info["medium_link"] . "\">" . get_text('Medium') . " ({$info["medium_width"]}x{$info["medium_height"]})</a>";
 }
 if ($photo["has_large"]) {
-	$res[] = "<a href=\"" . $info["large_link"] . "\">Large ({$info["large_width"]}x{$info["large_height"]})</a>";
+	$res[] = "<a href=\"" . $info["large_link"] . "\">" . get_text('Large') . " ({$info["large_width"]}x{$info["large_height"]})</a>";
 }
 
 writeln('<div class="photo-frame">');

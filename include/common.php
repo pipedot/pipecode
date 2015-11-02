@@ -322,9 +322,9 @@ function print_user_box()
 	$row = sql("select count(*) as mail_count from mail where zid = ? and location = 'Inbox'", $auth_zid);
 	$mail_count = (int) $row[0]["mail_count"];
 	if ($mail_count > 0) {
-		$mail = nget_text("Mail ($1)", "Mail ($1)", $mail_count, [$mail_count]);
+		$mail = get_text('Mail ($1)', $mail_count);
 	} else {
-		$mail = get_text("Mail");
+		$mail = get_text('Mail');
 	}
 	$link = user_link($auth_zid);
 
@@ -332,16 +332,16 @@ function print_user_box()
 	writeln('<div class="dialog-body">');
 	writeln('<table class="side-link-two">');
 	writeln('	<tr>');
-	writeln('		<td><a class="news-32" href="' . $link . 'feed/">' . get_text("Feed") . '</a></td>');
-	writeln('		<td><a class="notepad-32" href="' . $link . 'journal/">' . get_text("Journal") . '</a></td>');
+	writeln('		<td><a class="news-32" href="' . $link . 'feed/">' . get_text('Feed') . '</a></td>');
+	writeln('		<td><a class="notepad-32" href="' . $link . 'journal/">' . get_text('Journal') . '</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
 	writeln('		<td><a class="mail-32" href="' . $link . 'mail/">' . $mail . '</a></td>');
-	writeln('		<td><a class="tools-32" href="' . $link . 'settings">' . get_text("Settings") . '</a></td>');
+	writeln('		<td><a class="tools-32" href="' . $link . 'settings">' . get_text('Settings') . '</a></td>');
 	writeln('	</tr>');
 	writeln('	<tr>');
-	writeln('		<td><a class="reader-32" href="' . $link . 'reader/">' . get_text("Reader") . '</a></td>');
-	writeln('		<td><a class="internet-32" href="' . $link . 'stream/">' . get_text("Stream") . '</a></td>');
+	writeln('		<td><a class="reader-32" href="' . $link . 'reader/">' . get_text('Reader') . '</a></td>');
+	writeln('		<td><a class="internet-32" href="' . $link . 'stream/">' . get_text('Stream') . '</a></td>');
 	writeln('	</tr>');
 	writeln('</table>');
 	writeln('</div>');
@@ -470,7 +470,7 @@ function page_footer($table, $items_per_page, $where = array())
 
 	$s = "";
 	if ($page > 1) {
-		$s .= "<a class=\"pages-left\" href=\"?page=" . ($page - 1) . "\" title=\"" . get_text("Back") . "\"></a>";
+		$s .= '<a class="pages-left" href="?page=' . ($page - 1) . '" title="' . get_text('Back') . '"></a>';
 	}
 	if ($pages_count > 10) {
 		if ($page > 5) {
@@ -504,7 +504,7 @@ function page_footer($table, $items_per_page, $where = array())
 		}
 	}
 	if ($page < $pages_count) {
-		$s .= "<a class=\"pages-right\" href=\"?page=" . ($page + 1) . "\" title=\"" . get_text("Next") . "\"></a>";
+		$s .= '<a class="pages-right" href="?page=' . ($page + 1) . '" title="' . get_text('Next') . '"></a>';
 	}
 
 	return array($item_start, "<div class=\"pages\">$s</div>");
@@ -825,7 +825,7 @@ function count_comments($article_id, $article_type_id)
 	if ($article_id == 0) {
 		$comments["count"] = 0;
 		$comments["new"] = 0;
-		$comments["tag"] = nget_text("<b>$1</b> comment", "<b>$1</b> comments");
+		$comments["tag"] = nget_text('<b>$1</b> comment', '<b>$1</b> comments');
 		return;
 	}
 	$article_type = item_type($article_type_id);
@@ -873,10 +873,9 @@ function count_comments($article_id, $article_type_id)
 		}
 	}
 	$comments["new"] = $new;
-//	$comments["tag"] = "<b>" . $comments["count"] . "</b> " . $comments["label"];
-	$comments["tag"] = nget_text("<b>$1</b> comment", "<b>$1</b> comments", $comments["count"], [$comments["count"]]);
+	$comments["tag"] = nget_text('<b>$1</b> comment', '<b>$1</b> comments', $comments["count"], [$comments["count"]]);
 	if ($comments["new"] > 0) {
-		$comments["tag"] .= ", " . nget_text("<b>$1</b> new", "<b>$1</b> new", $comments["new"], [$comments["new"]]);
+		$comments["tag"] .= ", " . nget_text('<b>$1</b> new', '<b>$1</b> new', $comments["new"], [$comments["new"]]);
 	}
 
 	return $comments;
@@ -1211,7 +1210,7 @@ function icon_list($require_16, $require_32, $require_64)
 {
 	global $doc_root;
 
-	$data = fs_slurp("$doc_root/www/style.css");
+	$data = fs_slurp("$doc_root/www/icon.css");
 	$icons = [];
 
 	if ($require_16) {
@@ -1267,6 +1266,21 @@ function icon_list($require_16, $require_32, $require_64)
 	}
 
 	return $a;
+}
+
+
+function lang_list()
+{
+	global $doc_root;
+
+	$a = fs_dir("$doc_root/lang");
+	for ($i = 0; $i < count($a); $i++) {
+		if (strlen($a[$i]) == 6 && fs_ext($a[$i]) == "php") {
+			$languages[] = substr($a[$i], 0, 2);
+		}
+	}
+
+	return $languages;
 }
 
 
@@ -1644,8 +1658,13 @@ check_auth();
 if ($auth_zid != "") {
 	date_default_timezone_set($auth_user["time_zone"]);
 	$lang = $auth_user["lang"];
-	include("$doc_root/lang/$lang.php");
 	if ($user_page != "") {
 		$mine = ($zid === $auth_zid);
 	}
+} else {
+	$lang = $server_conf["lang"];
+}
+
+if ($lang != "en") {
+	include("$doc_root/lang/$lang.php");
 }

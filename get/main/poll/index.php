@@ -21,22 +21,18 @@ print_header("Polls");
 print_main_nav("poll");
 beg_main("cell");
 
-writeln('<h1>Polls</h1>');
+writeln('<h1>' . get_text('Polls') . '</h1>');
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("poll", $items_per_page);
 
-writeln('<table class="zebra">');
+dict_beg();
 $row = sql("select question, slug, publish_time from poll order by publish_time desc limit $item_start, $items_per_page");
 for ($i = 0; $i < count($row); $i++) {
 	$date = gmdate("Y-m-d", $row[$i]["publish_time"]);
-
-	writeln('	<tr>');
-	writeln('		<td><a href="' . $date . "/" . $row[$i]["slug"] . '">' . $row[$i]["question"] . '</a></td>');
-	writeln('		<td style="text-align: right; white-space: nowrap;">' . $date . '</td>');
-	writeln('	</tr>');
+	dict_row('<a href="' . $date . "/" . $row[$i]["slug"] . '">' . $row[$i]["question"] . '</a>', $date);
 }
-writeln('</table>');
+dict_end();
 
 writeln($page_footer);
 

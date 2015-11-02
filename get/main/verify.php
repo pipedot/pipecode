@@ -28,11 +28,11 @@ if ($code == "") {
 	writeln('<hr>');
 	beg_main();
 	beg_form("/verify", "get");
-	writeln('<h1>Verification Code</h1>');
+	writeln('<h1>' . get_text('Verification Code') . '</h1>');
 
 	writeln('<table class="login">');
 	writeln('	<tr>');
-	writeln('		<td>Code</td>');
+	writeln('		<td>' . get_text('Code') . '</td>');
 	writeln('		<td><input name="code" type="text" autofocus required></td>');
 	writeln('	</tr>');
 	writeln('</table>');
@@ -65,20 +65,20 @@ writeln('<hr>');
 beg_main();
 beg_form();
 if ($new) {
-	writeln('<h1>Set Password</h1>');
+	writeln('<h1>' . get_text('Set Password') . '</h1>');
 } else {
-	writeln('<h1>Reset Password</h1>');
+	writeln('<h1>' . get_text('Reset Password') . '</h1>');
 }
 
 writeln('<input type="hidden" name="code" value="' . $code . '">');
-writeln('<p>Please choose a password.</p>');
+writeln('<p>' . get_text('Please choose a password.') . '</p>');
 writeln('<table class="login">');
 writeln('	<tr>');
-writeln('		<td>Password</td>');
+writeln('		<td>' . get_text('Password') . '</td>');
 writeln('		<td><input name="password_1" type="password" autofocus required></td>');
 writeln('	</tr>');
 writeln('	<tr>');
-writeln('		<td>Password (again)</td>');
+writeln('		<td>' . get_text('Password (again)') . '</td>');
 writeln('		<td><input name="password_2" type="password" required></td>');
 writeln('	</tr>');
 writeln('</table>');

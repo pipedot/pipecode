@@ -34,19 +34,19 @@ beg_form("", "file");
 //}
 
 //writeln('<h2>Photos</h2>');
-writeln('<h1>Photos</h1>');
+writeln('<h1>' . get_text('Photos') . '</h1>');
 
 beg_tab();
 writeln('	<tr>');
-writeln('		<th>Name</th>');
-writeln('		<th class="center">Size</th>');
-writeln('		<th class="center">Date</th>');
+writeln('		<th>' . get_text('Name') . '</th>');
+writeln('		<th class="center">' . get_text('Size') . '</th>');
+writeln('		<th class="center">' . get_text('Date') . '</th>');
 writeln('		<th></th>');
 writeln('	</tr>');
 $row = sql("select journal_photo.photo_id, original_name, size, time from journal_photo inner join photo on journal_photo.photo_id = photo.photo_id where journal_id = ? order by original_name", $journal["journal_id"]);
 if (count($row) == 0) {
 	writeln('	<tr>');
-	writeln('		<td colspan="4">(no photos)</th>');
+	writeln('		<td colspan="4">' . get_text('(none)') . '</th>');
 	writeln('	</tr>');
 }
 for ($i = 0; $i < count($row); $i++) {
@@ -55,7 +55,7 @@ for ($i = 0; $i < count($row); $i++) {
 	writeln('		<td><a class="icon-16 picture-16" href="' . $protocol . "://" . $server_name . "/photo/" . $photo_code . '">' . $row[$i]["original_name"] . '</a></td>');
 	writeln('		<td class="center">' . sys_format_size($row[$i]["size"]) . '</td>');
 	writeln('		<td class="center">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
-	writeln('		<td class="right"><a class="icon-16 minus-16" href="' . $protocol . '://' . $server_name . '/photo/' . $photo_code . '/delete">Delete</a></td>');
+	writeln('		<td class="right"><a class="icon-16 minus-16" href="' . $protocol . '://' . $server_name . '/photo/' . $photo_code . '/delete">' . get_text('Delete') . '</a></td>');
 	writeln('	</tr>');
 }
 end_tab();

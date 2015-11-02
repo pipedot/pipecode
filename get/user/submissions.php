@@ -28,9 +28,9 @@ list($item_start, $page_footer) = page_footer("story", $items_per_page, ["author
 $row = sql("select story_id from story where author_zid = ? order by publish_time desc limit $item_start, $items_per_page", $zid);
 if (count($row) == 0) {
 	if ($auth_zid === $zid) {
-		writeln('<p>You have no accepted story submissions yet. <a href="' . $protocol . '://' . $server_name . '/submit">Submit</a> one now!</p>');
+		writeln('<p>' . get_text('You have no accepted story submissions yet. <a href="$1">Submit</a> one now!', "$protocol://$server_name/submit") . '</p>');
 	} else {
-		writeln('<p>This user has no accepted submissions yet.</p>');
+		writeln('<p>' . get_text('This user has no accepted submissions yet.') . '</p>');
 	}
 }
 for ($i = 0; $i < count($row); $i++) {

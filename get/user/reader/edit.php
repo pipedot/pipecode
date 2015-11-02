@@ -34,7 +34,6 @@ for ($i = 0; $i < count($list); $i++) {
 print_header("Edit Feed", [], [], [], ["Reader", $feed["name"], "Edit Feed"], ["/reader/", "/reader/" . $feed["slug"], "/reader/" . $feed["slug"] . "/edit"]);
 beg_main();
 beg_form();
-//writeln('<h1>Edit Feed</h1>');
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name", "text_value" => $feed["name"]));

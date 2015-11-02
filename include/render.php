@@ -80,7 +80,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	$date = date("Y-m-d H:i", $time);
 
 	if ($article_link != "") {
-		$in = " in <a href=\"$article_link\"><b>$article_title</b></a>";
+		$in = " " . get_text('in') . " <a href=\"$article_link\"><b>$article_title</b></a>";
 	} else {
 		$in = "";
 	}
@@ -89,7 +89,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 	} else {
 		$code = " (<a href=\"$protocol://$server_name/$comment_code\">#$comment_code</a>)";
 	}
-	$s .= "<h4>by " . user_link($zid, ["tag" => true]) . "$in on $date$code</h4>\n";
+	$s .= "<h4>" . get_text('by') . " " . user_link($zid, ["tag" => true]) . "$in " . get_text('on') . " $date$code</h4>\n";
 	$s .= "<div class=\"comment-outline\">\n";
 	$s .= "<div>";
 	$s .= "<div class=\"comment-body\">$body</div>\n";
@@ -102,7 +102,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 			$selected = $row[0]["reason"];
 		}
 
-		$s .= "<footer><a href=\"$protocol://$server_name/post/$comment_code\">Reply</a>";
+		$s .= "<footer><a href=\"$protocol://$server_name/post/$comment_code\">" . get_text('Reply') . "</a>";
 		if ($auth_user["javascript_enabled"]) {
 			$s .= "<select name=\"comment_$comment_code\" onchange=\"moderate(this, '$comment_code')\">";
 		} else {
@@ -118,7 +118,7 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		}
 		$s .= "</select>";
 		if (!$auth_user["javascript_enabled"]) {
-			$s .= " <input type=\"submit\" value=\"Moderate\"></footer>\n";
+			$s .= " <input type=\"submit\" value=\"" . get_text('Moderate') . "\"></footer>\n";
 		}
 	} else if ($junk) {
 		if ($query == "default=spam") {
@@ -129,18 +129,18 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$s .= "<footer>\n";
 		$s .= "<div>\n";
 		if ($junk_default) {
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\" checked>Spam</label>\n";
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\">Not Junk</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\" checked>" . get_text('Spam') . "</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\">" . get_text('Not Junk') . "</label>\n";
 		} else {
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\">Spam</label>\n";
-			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\" checked>Not Junk</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"spam\">" . get_text('Spam') . "</label>\n";
+			$s .= "	<label><input name=\"junk_$comment_code\" type=\"radio\" value=\"not-junk\" checked>" . get_text('Not Junk') . "</label>\n";
 		}
 		$s .= "</div>\n";
 		$s .= "<div class=\"right\">\n";
 		if ($junk_default) {
-			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\" checked>Ban IP</label>\n";
+			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\" checked>" . get_text('Ban IP') . "</label>\n";
 		} else {
-			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\">Ban IP</label>\n";
+			$s .= "	<label><input name=\"ban_$comment_code\" type=\"checkbox\">" . get_text('Ban IP') . "</label>\n";
 		}
 		$s .= "</div>\n";
 		//$s .= "	<label><input type=\"radio\">Spam</label>\n";
@@ -149,11 +149,11 @@ function render_comment($subject, $zid, $time, $comment_id, $body, $last_seen = 
 		$s .= "</footer>\n";
 	} else {
 		$s .= "<footer>\n";
-		$s .= "	<div><a href=\"$protocol://$server_name/post/$comment_code\">Reply</a></div>\n";
+		$s .= "	<div><a href=\"$protocol://$server_name/post/$comment_code\">" . get_text('Reply') . "</a></div>\n";
 		//$s .= "	<div class=\"right\">\n";
 		//$s .= "	<div>\n";
 		if ($auth_zid !== "" && $auth_zid === $zid && $comment_id > 0) {
-			$s .= "	<div><a class=\"icon-16 notepad-16\" href=\"$protocol://$server_name/comment/$comment_code/edit\">Edit</a></div>\n";
+			$s .= "	<div><a class=\"icon-16 notepad-16\" href=\"$protocol://$server_name/comment/$comment_code/edit\">" . get_text('Edit') . "</a></div>\n";
 		}
 		//$s .= "	</div>\n";
 		$s .= "</footer>\n";
@@ -388,11 +388,11 @@ function print_sliders($article_id, $article_type_id)
 	writeln('<div class="comment-header">');
 	writeln('	<table class="fill">');
 	writeln('		<tr>');
-	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post/' . $article_code . '" class="icon-16 chat-16">Reply</a></td>');
+	writeln('			<td style="width: 20%"><a href="' . $protocol . '://' . $server_name . '/post/' . $article_code . '" class="icon-16 chat-16">' . get_text('Reply') . '</a></td>');
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
 	writeln('					<tr>');
-	writeln('						<td>Hide</td>');
+	writeln('						<td>' . get_text('Hide') . '</td>');
 	writeln('						<td><input id="slider_hide" name="slider_hide" type="range" value="' . $hide_value . '" min="-1" max="5" onchange="update_hide_slider()"></td>');
 	writeln('						<td id="label_hide">' . $hide_value . '</td>');
 	writeln('					</tr>');
@@ -401,7 +401,7 @@ function print_sliders($article_id, $article_type_id)
 	writeln('			<td style="width: 30%">');
 	writeln('				<table>');
 	writeln('					<tr>');
-	writeln('						<td>Expand</td>');
+	writeln('						<td>' . get_text('Expand') . '</td>');
 	writeln('						<td><input id="slider_expand" name="slider_expand" type="range" value="' . $expand_value . '" min="-1" max="5" onchange="update_expand_slider()"></td>');
 	writeln('						<td id="label_expand">' . $expand_value . '</td>');
 	writeln('					</tr>');

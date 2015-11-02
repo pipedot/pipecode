@@ -56,7 +56,7 @@ if (count($row) > 0) {
 	vote_box($poll_id, $vote);
 }
 
-writeln('<div class="dialog-title">Recent Journals</div>');
+writeln('<div class="dialog-title">' . get_text('Recent Journals') . '</div>');
 writeln('<div class="dialog-body">');
 $row = sql("select publish_time, slug, title, zid from journal where published = 1 order by publish_time desc limit 0, 5");
 for ($i = 0; $i < count($row); $i++) {
@@ -72,9 +72,8 @@ for ($i = 0; $i < count($row); $i++) {
 }
 writeln('</div>');
 
-writeln('<div class="dialog-title">Most Discussed</div>');
+writeln('<div class="dialog-title">' . get_text('Most Discussed') . '</div>');
 writeln('<div class="dialog-body">');
-//$row = sql("select * from (select * from (select story_id, title, slug, story.publish_time, count(comment_id) as comments from story left join comment on story.story_id = comment.article_id group by story_id order by story.publish_time desc limit 100) as most_discussed order by comments desc limit 5) as top_five order by publish_time desc");
 if ($auth_user["show_junk_enabled"]) {
 	$row = sql("select * from (select * from (select comments_total as comments, title, slug, publish_time from story order by publish_time desc limit 100) as last_hundred order by comments desc, publish_time desc limit 5) as top_five order by publish_time desc");
 } else {

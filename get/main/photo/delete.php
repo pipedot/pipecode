@@ -30,8 +30,8 @@ print_header("Delete Photo");
 beg_main();
 beg_form();
 
-writeln('<h1>Delete Photo</h1>');
-writeln('<p>Are you sure you want to delete this photo?</p>');
+writeln('<h1>' . get_text('Delete Photo') . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to delete this photo?') . '</p>');
 
 writeln('<table style="border: 1px #d3d3d3 solid; margin-bottom: 8px;">');
 writeln('	<tr>');

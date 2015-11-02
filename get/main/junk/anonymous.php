@@ -24,18 +24,18 @@ $junk = true;
 print_header("Junk");
 beg_main();
 
-writeln('<h1>Anonymous Comments</h1>');
+writeln('<h1>' . get_text('Anonymous Comments') . '</h1>');
 
 $row = sql("select comment_id, article_id, body, edit_time, junk_status, subject, zid from comment where zid = '' and junk_status = 0 order by publish_time desc limit 0, 100");
 if (count($row) == 0) {
-	writeln('<p>No unmarked anonymous comments</p>');
+	writeln('<p>' . get_text('No unmarked anonymous comments') . '</p>');
 } else {
 	beg_form();
 	for ($i = 0; $i < count($row); $i++) {
 		print_comment($row[$i], true);
 	}
 
-	box_two("<a href=\"?default=spam\">Default to Spam</a>", "Save");
+	box_two('<a href="?default=spam">' . get_text('Default to Spam') . '</a>', "Save");
 	end_form();
 }
 

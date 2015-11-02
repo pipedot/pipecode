@@ -22,7 +22,7 @@ require_admin();
 print_header("Topics");
 beg_main();
 
-writeln('<h1>Topics</h1>');
+writeln('<h1>' . get_text('Topics') . '</h1>');
 
 beg_tab();
 $list = db_get_list("topic", "topic");
@@ -40,7 +40,7 @@ foreach ($list as $topic) {
 }
 end_tab();
 
-box_right('<a class="icon-16 plus-16" href="edit">Add</a>');
+box_right('<a class="icon-16 plus-16" href="edit">' . get_text('Add') . '</a>');
 
 end_main();
 print_footer();

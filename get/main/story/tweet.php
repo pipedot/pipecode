@@ -33,7 +33,7 @@ print_header();
 print_main_nav("stories");
 beg_main("cell");
 beg_form();
-writeln('<h1>Send Tweet</h1>');
+writeln('<h1>' . get_text('Send Tweet') . '</h1>');
 
 $status_text = $story["title"] . " https://$server_name/{$story["short_code"]} #$topic";
 beg_tab();

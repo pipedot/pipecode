@@ -23,11 +23,6 @@ $photo_id = $photo["photo_id"];
 
 require_mine($photo["zid"]);
 
-//$journal = item_request("journal");
-//if (!db_has_rec("journal_photo", array("journal_id" => $journal["journal_id"], "photo_id" => $photo_id))) {
-//	die("photo_id not found in journal [$photo_id]");
-//}
-
 $path = "$doc_root/www" . public_path($photo["time"]);
 $photos = array("photo_{$photo_code}_128x128.jpg", "photo_{$photo_code}_256x256.jpg");
 $width = 320;
@@ -79,7 +74,6 @@ for ($i = 0; $i < count($photos); $i++) {
 
 sql("delete from journal_photo where photo_id = ?", $photo_id);
 sql("update card set photo_id = 0 where photo_id = ?", $photo_id);
-//db_del_rec("journal_photo", array("journal_id" => $journal["journal_id"], "photo_id" => $photo_id));
 db_del_rec("photo", $photo_id);
 
-header("Location: " . user_link($auth_zid) . "menu/");
+header("Location: " . user_link($auth_zid));

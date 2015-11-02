@@ -25,9 +25,9 @@ $bug = item_request(TYPE_BUG);
 print_header("Close Bug");
 beg_main();
 beg_form();
-writeln("<h1>Close Bug</h1>");
+writeln('<h1>' . get_text('Close Bug') . '</h1>');
 
-writeln('<p>Are you sure you want to close this bug?</p>');
+writeln('<p>' . get_text('Are you sure you want to close this bug?') . '</p>');
 
 box_left("Close");
 

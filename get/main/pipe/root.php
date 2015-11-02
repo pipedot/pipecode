@@ -31,7 +31,7 @@ beg_main("cell");
 print_pipe($pipe["pipe_id"]);
 
 if ($story) {
-	writeln('<h2>History</h2>');
+	writeln('<h2>' . get_text('History') . '</h2>');
 	$row = sql("select * from story_edit where story_id = ? order by edit_time", $story["story_id"]);
 	for ($i = 0; $i <= count($row); $i++) {
 		if ($i == 0) {

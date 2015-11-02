@@ -24,11 +24,11 @@ $pipe = item_request(TYPE_PIPE);
 print_header("Close Submission");
 beg_main();
 beg_form();
-writeln("<h1>Close Submission</h1>");
+writeln('<h1>' . get_text('Close Submission') . '</h1>');
 
-writeln('<p>Are you sure you want to close this submission? The article will no longer show in the pipe, voting will be disabled, and comments will be locked.</p>');
-writeln('<h2>Reason</h2>');
-writeln('<p>Give a short reason for closing the article.</p>');
+writeln('<p>' . get_text('Are you sure you want to close this submission? The article will no longer show in the pipe and voting will be disabled.') . '</p>');
+writeln('<h2>' . get_text('Reason') . '</h2>');
+writeln('<p>' . get_text('Give a short reason for closing the article.') . '</p>');
 writeln('<input name="reason" type="text" len="50" required>');
 
 box_left("Close");

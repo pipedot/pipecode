@@ -86,7 +86,7 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 
 	print_header("Label = " . $bug_label["label_name"], array("Report"), array("ladybug"), array("/bug/report"));
 	beg_main();
-	writeln("<h1>Label = " . $bug_label["label_name"] . "</h1>");
+	writeln('<h1>Label = ' . $bug_label["label_name"] . '</h1>');
 
 	$items_per_page = 100;
 	list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 0));

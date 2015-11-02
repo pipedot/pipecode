@@ -22,7 +22,7 @@ include("drive.php");
 print_header("Thumbnail");
 beg_main();
 
-writeln('<h1>Thumbnails</h1>');
+writeln('<h1>' . get_text('Thumbnails') . '</h1>');
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("thumb", $items_per_page);

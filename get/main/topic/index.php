@@ -21,7 +21,7 @@ print_header("Topics");
 print_main_nav("topics");
 beg_main("cell");
 
-writeln('<h1>Topics</h1>');
+writeln('<h1>' . get_text('Topics') . '</h1>');
 
 $list = db_get_list("topic", "topic");
 $k = array_keys($list);

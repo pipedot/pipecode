@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.25, for debian-linux-gnu (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.27, for debian-linux-gnu (x86_64)
 --
 -- Host: 192.168.1.15    Database: pipedot
 -- ------------------------------------------------------
--- Server version	5.6.25-0ubuntu1
+-- Server version	5.6.27-0ubuntu1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -574,6 +574,21 @@ CREATE TABLE `feed_user` (
   `col` int(11) NOT NULL,
   `pos` int(11) NOT NULL,
   PRIMARY KEY (`zid`,`feed_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `footer_link`
+--
+
+DROP TABLE IF EXISTS `footer_link`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `footer_link` (
+  `title` varchar(20) NOT NULL,
+  `icon` varchar(20) NOT NULL,
+  `link` varchar(200) NOT NULL,
+  PRIMARY KEY (`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1368,4 +1383,4 @@ CREATE TABLE `user_conf` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-10-28 23:13:02
+-- Dump completed on 2015-10-30  3:00:11

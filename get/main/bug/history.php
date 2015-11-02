@@ -21,7 +21,7 @@ require_feature("bug");
 
 print_header("Closed Bugs", array("Report"), array("ladybug"), array("/bug/report"));
 beg_main();
-writeln("<h1>Closed Bugs</h1>");
+writeln('<h1>' . get_text('Closed Bugs') . '</h1>');
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("closed" => 1));
@@ -29,11 +29,11 @@ list($item_start, $page_footer) = page_footer("bug", $items_per_page, array("clo
 $row = sql("select bug_id, author_zid, body, publish_time, title from bug where closed = 1 order by publish_time desc limit $item_start, $items_per_page");
 beg_tab();
 writeln('	<tr>');
-writeln('		<th>Bug</th>');
-writeln('		<th>Title</th>');
-writeln('		<th>Reporter</th>');
-writeln('		<th>Labels</th>');
-writeln('		<th>Date</th>');
+writeln('		<th>' . get_text('Bug') . '</th>');
+writeln('		<th>' . get_text('Title') . '</th>');
+writeln('		<th>' . get_text('Reporter') . '</th>');
+writeln('		<th>' . get_text('Labels') . '</th>');
+writeln('		<th>' . get_text('Date') . '</th>');
 writeln('	</tr>');
 for ($i = 0; $i < count($row); $i++) {
 	$author_zid = user_link($row[$i]["author_zid"], ["tag" => true]);
@@ -51,7 +51,7 @@ for ($i = 0; $i < count($row); $i++) {
 end_tab();
 
 writeln($page_footer);
-box_center('<a class="icon-16 calendar-16" href="history">History</a>');
+box_center('<a class="icon-16 calendar-16" href="history">' . get_text('History') . '</a>');
 
 end_main();
 print_footer();
