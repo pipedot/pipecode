@@ -17,15 +17,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("clean.php");
-
 require_admin();
 
 print_header("Add Page");
 beg_main();
 beg_form();
+writeln('<h1>' . get_text("Add Page") . '</h1>');
 
-beg_tab("Add Page");
+beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title"));
 print_row(array("caption" => "Slug", "text_key" => "slug"));
 end_tab();

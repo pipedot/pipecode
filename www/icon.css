@@ -265,6 +265,9 @@
 .ladybug-16 {
 	background-image: url(/images/ladybug-16.png);
 }
+.link-32 {
+	background-image: url(/images/link-32.png);
+}
 .lock-32 {
 	background-image: url(/images/lock-32.png);
 }
@@ -772,6 +775,9 @@
 	}
 	.ladybug-16 {
 		background-image: url(/images/ladybug-32.png);
+	}
+	.link-32 {
+		background-image: url(/images/link-64.png);
 	}
 	.lock-32 {
 		background-image: url(/images/lock-64.png);

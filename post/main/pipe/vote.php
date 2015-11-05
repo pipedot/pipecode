@@ -57,7 +57,7 @@ if (db_has_rec("pipe_vote", array("pipe_id" => $pipe_id, "zid" => $auth_zid))) {
 
 if ($redirect) {
 	header("Location: /pipe/");
-	die();
+	finish();
 }
 
 $row = sql("select sum(value) as score from pipe_vote where pipe_id = ?", $pipe_id);

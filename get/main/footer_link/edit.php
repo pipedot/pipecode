@@ -17,38 +17,26 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_admin();
 
-$mail_id = $s3;
-if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Invalid message");
-}
+$title = http_get_string("title", ["len" => 100, "valid" => "[A-Z][a-z][0-9]_-. "]);
 
-$message = db_get_rec("mail", $mail_id);
+$footer_link = db_get_rec("footer_link", $title);
+$icons = icon_list(true, true, false, true);
 
-require_mine($message["zid"]);
+print_header("Edit Footer Link");
+beg_main();
+beg_form();
+writeln('<h1>' . get_text("Edit Footer Link") . '</h1>');
 
-if (http_post("junk")) {
-	$message["location"] = "Junk";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("delete")) {
-	$message["location"] = "Trash";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("restore")) {
-	$message["location"] = "Inbox";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("expunge")) {
-	$message["location"] = "Trash";
-	db_del_rec("mail", $message["mail_id"]);
-	header("Location: /mail/trash");
-	finish();
-}
+beg_tab();
+print_row(["caption" => "Title", "text_key" => "title", "text_value" => $title]);
+print_row(["caption" => "Icon", "option_key" => "icon", "option_list" => $icons, "option_value" => $footer_link["icon"]]);
+print_row(["caption" => "Link", "text_key" => "link", "text_value" => $footer_link["link"]]);
+end_tab();
+
+box_right("Save");
+
+end_form();
+end_main();
+print_footer();

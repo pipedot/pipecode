@@ -34,6 +34,7 @@ $https_redirect_enabled = http_post_bool("https_redirect_enabled", array("numeri
 $register_enabled = http_post_bool("register_enabled", array("numeric" => true));
 $submit_enabled = http_post_bool("submit_enabled", array("numeric" => true));
 $bug_enabled = http_post_bool("bug_enabled", array("numeric" => true));
+$access_log_enabled = http_post_bool("access_log_enabled", array("numeric" => true));
 
 $smtp_server = http_post_string("smtp_server", array("len" => 50, "valid" => "[a-z][0-9]-."));
 $smtp_address = http_post_string("smtp_address", array("len" => 50, "valid" => "[a-z][A-Z][0-9]@-_.+"));
@@ -58,6 +59,7 @@ $server_conf["https_redirect_enabled"] = $https_redirect_enabled;
 $server_conf["register_enabled"] = $register_enabled;
 $server_conf["submit_enabled"] = $submit_enabled;
 $server_conf["bug_enabled"] = $bug_enabled;
+$server_conf["access_log_enabled"] = $access_log_enabled;
 $server_conf["smtp_server"] = $smtp_server;
 $server_conf["smtp_address"] = $smtp_address;
 $server_conf["smtp_username"] = $smtp_username;

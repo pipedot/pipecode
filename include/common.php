@@ -29,8 +29,10 @@ if (fs_is_file("$doc_root/conf.php")) {
 	die();
 }
 
+$time_beg = (int) (microtime(true) * 1000);
 $now = time();
 $year = gmdate("Y");
+$drive_count = 0;
 
 include("sql.php");
 
@@ -1206,7 +1208,7 @@ function format_money($cents)
 }
 
 
-function icon_list($require_16, $require_32, $require_64)
+function icon_list($require_16, $require_32, $require_64, $none = false)
 {
 	global $doc_root;
 
@@ -1241,7 +1243,11 @@ function icon_list($require_16, $require_32, $require_64)
 		}
 	}
 
-	$a = [];
+	if ($none) {
+		$a = [""];
+	} else {
+		$a = [];
+	}
 	$k = array_keys($icons);
 	for ($i = 0; $i < count($icons); $i++) {
 		$icon = $k[$i];
@@ -1581,7 +1587,46 @@ function fatal($title, $icon = "error", $name = "", $value = "", $code = 200)
 	writeln('</div>');
 	end_main();
 	print_footer();
-	die();
+	finish();
+}
+
+
+function access_log()
+{
+	global $auth_zid;
+	global $cache_count;
+	global $drive_count;
+	global $http_host;
+	global $protocol;
+	global $request_uri;
+	global $sql_count;
+	global $time_beg;
+	global $writeln_size;
+
+	$time_end = (int) (microtime(true) * 1000);
+	$render_time = $time_end - $time_beg;
+
+	$access_log = db_new_rec("access_log");
+	$access_log["cache_count"] = $cache_count;
+	$access_log["drive_count"] = $drive_count;
+	$access_log["ip_id"] = get_ip_id();
+	$access_log["render_time"] = $render_time;
+	$access_log["size"] = $writeln_size;
+	$access_log["sql_count"] = $sql_count;
+	$access_log["url"] = "$protocol://$http_host$request_uri";
+	$access_log["zid"] = $auth_zid;
+	db_set_rec("access_log", $access_log);
+}
+
+
+function finish($msg = "")
+{
+	global $server_conf;
+
+	if ($server_conf["access_log_enabled"]) {
+		access_log();
+	}
+	die($msg);
 }
 
 
@@ -1618,7 +1663,7 @@ if (array_key_exists("HTTP_HOST", $_SERVER)) {
 load_server_conf();
 if ($https_redirect_enabled && $protocol != "https") {
 	header("Location: https://$server_name$request_uri");
-	die();
+	finish();
 }
 $user_page = "";
 $meta = "";
@@ -1629,16 +1674,16 @@ $a = explode(".", $http_host);
 if (count($a) == $server_level) {
 	if ($server_redirect_enabled && $http_host != $server_name) {
 		header("Location: $protocol://$server_name$request_uri");
-		die();
+		finish();
 	}
 } else if (count($a) == $server_level + 1) {
 	if ($server_redirect_enabled && $a[1] . "." . $a[2] != $server_name) {
 		header("Location: $protocol://" . $a[0] . ".$server_name$request_uri");
-		die();
+		finish();
 	}
 	if ($server_redirect_enabled && $a[0] == "www") {
 		header("Location: $protocol://$server_name$request_uri");
-		die();
+		finish();
 	}
 	$user_page = strtolower($a[0]);
 	if (!string_uses($user_page, "[a-z][0-9]")) {

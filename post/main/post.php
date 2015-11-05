@@ -75,7 +75,7 @@ if (http_post("preview")) {
 
 	end_main();
 	print_footer();
-	die();
+	finish();
 }
 
 if ($auth_zid === "" || $zid === "") {

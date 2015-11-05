@@ -50,6 +50,7 @@ print_row(array("caption" => "HTTPS Required", "check_key" => "https_redirect_en
 print_row(array("caption" => "User Registration", "check_key" => "register_enabled", "checked" => $server_conf["register_enabled"]));
 print_row(array("caption" => "Story Submissions", "check_key" => "submit_enabled", "checked" => $server_conf["submit_enabled"]));
 print_row(array("caption" => "Bug Tracker", "check_key" => "bug_enabled", "checked" => $server_conf["bug_enabled"]));
+print_row(array("caption" => "Access Log", "check_key" => "access_log_enabled", "checked" => $server_conf["access_log_enabled"]));
 end_tab();
 
 beg_tab("SMTP");

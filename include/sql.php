@@ -142,6 +142,7 @@ const TYPE_PALEMOON = 216;
 
 
 $default_conf["server_conf"] = [
+	"access_log_enabled" => "0",
 	"auth_key" => "",
 	"bug_enabled" => "0",
 	"captcha_key" => "",
@@ -197,6 +198,19 @@ $default_conf["user_conf"] = [
 	"wysiwyg_enabled" => "1"
 ];
 
+
+$db_table["access_log"] = array(
+	array("name" => "access_id", "key" => true, "auto" => true),
+	array("name" => "access_time", "default" => $now),
+	array("name" => "cache_count", "default" => 0),
+	array("name" => "drive_count", "default" => 0),
+	array("name" => "ip_id", "default" => 0),
+	array("name" => "render_time", "default" => 0),
+	array("name" => "size", "default" => 0),
+	array("name" => "sql_count", "default" => 0),
+	array("name" => "url"),
+	array("name" => "zid")
+);
 
 $db_table["article"] = array(
 	array("name" => "article_id", "key" => true, "default" => 0),

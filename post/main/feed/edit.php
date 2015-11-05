@@ -32,7 +32,7 @@ if (http_post("delete")) {
 	end_form();
 	end_main();
 	print_footer();
-	die();
+	finish();
 }
 if (http_post("sure")) {
 	sql("delete from article where feed_id = ?", $feed["feed_id"]);
@@ -41,7 +41,7 @@ if (http_post("sure")) {
 	sql("delete from short where short_id = ?", $feed["feed_id"]);
 
 	header("Location: /feed/browse");
-	die();
+	finish();
 }
 
 $slug = http_post_string("slug", array("valid" => "[a-z][0-9]-", "len" => 200));

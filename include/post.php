@@ -38,7 +38,7 @@ function print_post_box($article_id, $subject, $dirty_body, $coward)
 		if ($auth_zid === "") {
 			end_main();
 			print_footer();
-			die();
+			finish();
 		}
 	} else {
 		$banned = false;

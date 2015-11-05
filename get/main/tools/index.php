@@ -25,6 +25,7 @@ menu_row(["caption" => "Ban IP", "description" => "Manage banned IP addresses", 
 menu_row(["caption" => "Ban User", "description" => "Manage banned users", "icon" => "devil", "link" => "/ban_user/"]);
 menu_row(["caption" => "Drive", "description" => "View storage information", "icon" => "drive", "link" => "/drive/", "visible" => $auth_user["admin"]]);
 menu_row(["caption" => "Feed Topics", "description" => "Add and remove feed topics", "icon" => "reader", "link" => "/feed/topic/list", "visible" => $auth_user["admin"]]);
+menu_row(["caption" => "Footer Links", "description" => "Edit the links at the bottom of the page", "icon" => "link", "link" => "/footer_link/", "visible" => $auth_user["admin"]]);
 menu_row(["caption" => "Junk", "description" => "Mark junk messages", "icon" => "junk", "link" => "/junk/", "visible" => $auth_user["editor"]]);
 menu_row(["caption" => "Pages", "description" => "Manage static pages", "icon" => "html", "link" => "/page/", "visible" => $auth_user["admin"]]);
 menu_row(["caption" => "Poll", "description" => "Create a new poll", "icon" => "heart", "link" => "/poll/create", "visible" => $auth_user["editor"]]);

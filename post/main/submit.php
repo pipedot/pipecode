@@ -38,7 +38,7 @@ $topic = db_get_rec("topic", $topic_id);
 
 if (http_post("preview")) {
 	print_submit_box($title, $dirty_body, $clean_body, $topic_id, true);
-	die();
+	finish();
 }
 
 $pipe = db_new_rec("pipe");

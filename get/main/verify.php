@@ -42,7 +42,7 @@ if ($code == "") {
 	end_form();
 	end_main();
 	print_footer();
-	die();
+	finish();
 }
 
 if (!db_has_rec("email_challenge", $code)) {

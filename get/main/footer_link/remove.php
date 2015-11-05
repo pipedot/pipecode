@@ -17,38 +17,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_admin();
 
-$mail_id = $s3;
-if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Invalid message");
-}
+$title = http_get_string("title", ["len" => 100, "valid" => "[A-Z][a-z][0-9]_-. "]);
 
-$message = db_get_rec("mail", $mail_id);
+$footer_link = db_get_rec("footer_link", $title);
 
-require_mine($message["zid"]);
+print_header("Remove Footer Link");
+beg_main();
+beg_form();
 
-if (http_post("junk")) {
-	$message["location"] = "Junk";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("delete")) {
-	$message["location"] = "Trash";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("restore")) {
-	$message["location"] = "Inbox";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("expunge")) {
-	$message["location"] = "Trash";
-	db_del_rec("mail", $message["mail_id"]);
-	header("Location: /mail/trash");
-	finish();
-}
+writeln('<h1>' . get_text('Remove Footer Link') . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] link?', $title) . '</p>');
+
+box_left("Remove");
+
+end_form();
+end_main();
+print_footer();

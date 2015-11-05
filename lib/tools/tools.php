@@ -24,6 +24,10 @@ const DAYS = 86400;
 const WEEKS = 604800;
 const YEARS = 31536000;
 
+$cache_count = 0;
+$sql_count = 0;
+$writeln_size = 0;
+
 
 function assert_equal($x, $y)
 {
@@ -2272,10 +2276,12 @@ function sql($sql)
 	global $sql_dbh;
 	global $sql_server;
 	global $sql_error;
+	global $sql_count;
 
 	if (!$sql_open) {
 		open_database();
 	}
+	$sql_count++;
 	$sth = $sql_dbh->prepare($sql);
 
 	try {
@@ -2426,10 +2432,12 @@ function writeln($s = "")
 {
 	global $writeln_cache;
 	global $writeln_buffer;
+	global $writeln_size;
 
 	print "$s\n";
 
 	if ($writeln_cache) {
 		$writeln_buffer[] = $s;
 	}
+	$writeln_size += strlen($s) + 1;
 }

@@ -28,7 +28,7 @@ if (db_has_rec("page", $slug)) {
 	fatal("Page already exists");
 }
 
-$page = array();
+$page = db_new_rec("page");
 $page["slug"] = $slug;
 $page["title"] = $title;
 $page["body"] = "";

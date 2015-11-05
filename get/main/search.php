@@ -99,7 +99,7 @@ if ($needle != "") {
 	end_main();
 
 	print_footer();
-	die();
+	finish();
 }
 
 print_header("Search");

@@ -66,28 +66,28 @@ if ($s1 === "drive") {
 	if (string_uses($query, "[a-z]")) {
 		if (fs_is_file("$root/$s1/$query.php")) {
 			include("$root/$s1/$query.php");
-			die();
+			finish();
 		} else {
 			fatal("Unknown action");
 		}
 	}
 	if (substr($request_script, -1) !== "/") {
 		header("Location: $request_script/");
-		die();
+		finish();
 	}
 	include("$root/$s1/index.php");
-	die();
+	finish();
 } else if (!string_uses($request_script, "[A-Z][a-z][0-9]_-./+")) {
 	fatal("Invalid request");
 }
 
 if ($s1 === "") {
 	include("$root/index.php");
-	die();
+	finish();
 }
 if (fs_is_file("$root/$s1.php")) {
 	include("$root/$s1.php");
-	die();
+	finish();
 }
 if (fs_is_dir("$root/$s1")) {
 	if ($s2 === "") {
@@ -97,7 +97,7 @@ if (fs_is_dir("$root/$s1")) {
 			} else {
 				include("$root/$s1/index.php");
 			}
-			die();
+			finish();
 		}
 	} else {
 		if (fs_is_dir("$root/$s1/$s2")) {
@@ -108,34 +108,34 @@ if (fs_is_dir("$root/$s1")) {
 					} else {
 						include("$root/$s1/$s2/index.php");
 					}
-					die();
+					finish();
 				}
 			} else {
 				if (fs_is_file("$root/$s1/$s2/$s3.php")) {
 					include("$root/$s1/$s2/$s3.php");
-					die();
+					finish();
 				}
 				if ($s4 !== "" && fs_is_file("$root/$s1/$s2/$s4.php")) {
 					include("$root/$s1/$s2/$s4.php");
-					die();
+					finish();
 				}
 				if (fs_is_file("$root/$s1/$s2/root.php")) {
 					include("$root/$s1/$s2/root.php");
-					die();
+					finish();
 				}
 			}
 		}
 		if (fs_is_file("$root/$s1/$s2.php")) {
 			include("$root/$s1/$s2.php");
-			die();
+			finish();
 		}
 		if ($s3 !== "" && fs_is_file("$root/$s1/$s3.php")) {
 			include("$root/$s1/$s3.php");
-			die();
+			finish();
 		}
 		if (fs_is_file("$root/$s1/root.php")) {
 			include("$root/$s1/root.php");
-			die();
+			finish();
 		}
 	}
 }
@@ -149,7 +149,7 @@ if (string_uses($slug, "[A-Z][a-z][0-9]-_.")) {
 		writeln($page["body"]);
 		end_main();
 		print_footer();
-		die();
+		finish();
 	}
 }
 
@@ -161,7 +161,7 @@ if (substr($slug, -1) === "+") {
 	$slug = substr($slug, 0, -1);
 	if (string_uses($slug, "[A-Z][a-z][0-9]")) {
 		include("$root/short.php");
-		die();
+		finish();
 	}
 }
 

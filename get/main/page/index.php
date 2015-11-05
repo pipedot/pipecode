@@ -27,9 +27,7 @@ dict_beg();
 $list = db_get_list("page", "slug");
 $keys = array_keys($list);
 if (count($keys) == 0) {
-	writeln('	<tr>');
-	writeln('		<td>' . get_text('(none)') . '</td>');
-	writeln('	</tr>');
+	dict_none();
 }
 for ($i = 0; $i < count($keys); $i++) {
 	$page = $list[$keys[$i]];

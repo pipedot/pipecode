@@ -17,38 +17,21 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_admin();
 
-$mail_id = $s3;
-if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Invalid message");
+$title = http_post_string("title", ["valid" => "[A-Z][a-z][0-9]_-. ", "len" => 20]);
+$icon = http_post_string("icon", ["valid" => "[a-z][0-9]-", "len" => 20, "required" => false]);
+$link = http_post_string("link", ["valid" => "[a-z][A-Z][0-9]~@#$%&()-_=+[];:,./?", "len" => 200]);
+
+if (db_has_rec("footer_link", $title)) {
+	fatal("Link already exists");
 }
 
-$message = db_get_rec("mail", $mail_id);
+$footer_link = db_new_rec("footer_link");
+$footer_link["title"] = $title;
+$footer_link["icon"] = $icon;
+$footer_link["link"] = $link;
+db_set_rec("footer_link", $footer_link);
 
-require_mine($message["zid"]);
+header("Location: ./");
 
-if (http_post("junk")) {
-	$message["location"] = "Junk";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("delete")) {
-	$message["location"] = "Trash";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("restore")) {
-	$message["location"] = "Inbox";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("expunge")) {
-	$message["location"] = "Trash";
-	db_del_rec("mail", $message["mail_id"]);
-	header("Location: /mail/trash");
-	finish();
-}

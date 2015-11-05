@@ -121,7 +121,7 @@ function item_link($type_id, $short_id, $item = "")
 function item_redirect($type_id, $short_id, $item = "")
 {
 	header("Location: " . item_link($type_id, $short_id, $item));
-	die();
+	finish();
 }
 
 
@@ -165,11 +165,11 @@ function item_request($type_id = 0)
 				$row = sql("select story.story_id from story inner join story_edit on story.story_id = story_edit.story_id where publish_time > ? and publish_time < ? and story_edit.slug = ?", $time_beg, $time_end, $slug);
 				if (count($row) > 0) {
 					header("Location: " . item_link(TYPE_STORY, $row[0]["story_id"]));
-					die();
+					finish();
 				}
 			}
 			header("Location: ./");
-			die();
+			finish();
 		}
 		$short_id = $row[0]["{$type}_id"];
 		$short_code = crypt_crockford_encode($short_id);
@@ -569,7 +569,7 @@ function short_redirect($short_code)
 		db_set_rec("short_view", $short_view);
 
 		header("Location: " . item_link($short["type_id"], $short_id));
-		die();
+		finish();
 	}
 	fatal("Unknown short code");
 }

@@ -17,38 +17,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_admin();
 
-$mail_id = $s3;
-if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Invalid message");
-}
+$icons = icon_list(true, true, false, true);
 
-$message = db_get_rec("mail", $mail_id);
+print_header("Add Footer Link");
+beg_main();
+beg_form();
+writeln('<h1>' . get_text("Add Footer Link") . '</h1>');
 
-require_mine($message["zid"]);
+beg_tab();
+print_row(["caption" => "Title", "text_key" => "title"]);
+print_row(["caption" => "Icon", "option_key" => "icon", "option_list" => $icons]);
+print_row(["caption" => "Link", "text_key" => "link"]);
+end_tab();
 
-if (http_post("junk")) {
-	$message["location"] = "Junk";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("delete")) {
-	$message["location"] = "Trash";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("restore")) {
-	$message["location"] = "Inbox";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("expunge")) {
-	$message["location"] = "Trash";
-	db_del_rec("mail", $message["mail_id"]);
-	header("Location: /mail/trash");
-	finish();
-}
+box_right("Add");
+
+end_form();
+end_main();
+print_footer();
+

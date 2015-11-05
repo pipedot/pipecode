@@ -17,38 +17,24 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("mail.php");
+require_admin();
 
-$mail_id = $s3;
-if (!string_uses($mail_id, "[0-9]")) {
-	fatal("Invalid message");
-}
+print_header("Footer Links");
+beg_main();
+writeln('<h1>' . get_text('Footer Links') . '</h1>');
 
-$message = db_get_rec("mail", $mail_id);
+dict_beg();
+$row = sql("select title, icon, link from footer_link order by title");
+for ($i = 0; $i < count($row); $i++) {
+	$icon = $row[$i]["icon"];
+	if (!$icon) {
+		$icon = "globe";
+	}
+	dict_row('<a class="icon-16 ' . $icon . '-16" href="edit?title=' . urlencode($row[$i]["title"]) . '">' . $row[$i]["title"] . '</a>', '<a class="icon-16 minus-16" href="remove?title=' . urlencode($row[$i]["title"]) . '">Remove</a>');
+}
+dict_end();
+box_right('<a class="icon-16 plus-16" href="add">Add</a>');
 
-require_mine($message["zid"]);
+end_main();
+print_footer();
 
-if (http_post("junk")) {
-	$message["location"] = "Junk";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("delete")) {
-	$message["location"] = "Trash";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("restore")) {
-	$message["location"] = "Inbox";
-	db_set_rec("mail", $message);
-	header("Location: /mail/");
-	finish();
-}
-if (http_post("expunge")) {
-	$message["location"] = "Trash";
-	db_del_rec("mail", $message["mail_id"]);
-	header("Location: /mail/trash");
-	finish();
-}

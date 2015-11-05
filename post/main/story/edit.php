@@ -47,7 +47,7 @@ if (http_post("publish")) {
 	db_set_rec("story", $story);
 
 	header("Location: /story/{$story["short_code"]}");
-	die();
+	finish();
 }
 
 print_story_box($story["story_id"], $topic_id, $keywords, $title, $clean_body, $dirty_body, $zid);

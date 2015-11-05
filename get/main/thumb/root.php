@@ -42,7 +42,7 @@ if ($ext == "jpg") {
 
 		print $data;
 	}
-	die();
+	finish();
 }
 
 print_header("Thumbnail");

@@ -266,6 +266,7 @@ function drive_set($data)
 function drive_get($hash)
 {
 	global $doc_root;
+	global $drive_count;
 	global $server_id;
 
 	if (strlen($hash) != 64 || !string_uses($hash, "[0-9]abcdef")) {
@@ -282,6 +283,7 @@ function drive_get($hash)
 		return false;
 	}
 
+	$drive_count++;
 	$path = "$doc_root/drive/" . substr($hash, 0, 3);
 	$file = substr($hash, 3) . ".gz";
 

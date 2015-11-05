@@ -41,7 +41,7 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 
 	end_main();
 	print_footer();
-	die();
+	finish();
 }
 
 $ext = fs_ext($s2);

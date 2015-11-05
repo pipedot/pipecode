@@ -19,7 +19,7 @@
 
 require_admin();
 
-$slug = http_get_string("slug", array("len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+$slug = http_get_string("slug", ["len" => 100, "valid" => "[a-z][A-Z][0-9]-_."]);
 $page = db_get_rec("page", $slug);
 
 print_header("Remove Page");
