@@ -19,7 +19,7 @@
 
 require_admin();
 
-$icons = icon_list(true, true, false, true);
+$icons = icon_list(true, false, false, true);
 
 print_header("Add Footer Link");
 beg_main();

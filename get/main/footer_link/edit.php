@@ -22,7 +22,7 @@ require_admin();
 $title = http_get_string("title", ["len" => 100, "valid" => "[A-Z][a-z][0-9]_-. "]);
 
 $footer_link = db_get_rec("footer_link", $title);
-$icons = icon_list(true, true, false, true);
+$icons = icon_list(true, false, false, true);
 
 print_header("Edit Footer Link");
 beg_main();

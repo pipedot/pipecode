@@ -22,19 +22,19 @@ include("clean.php");
 
 if (string_has($s2, "-") && $s3 === "") {
 	$date = $s2;
-	$time_beg = strtotime("$date GMT");
-	if ($time_beg === false) {
+	$date_beg = strtotime("$date GMT");
+	if ($date_beg === false) {
 		fatal("Invalid date");
 	}
-	$time_end = $time_beg + DAYS;
+	$date_end = $date_beg + DAYS;
 
 	print_header();
 	print_main_nav("stories");
 	beg_main("cell");
 
-	$row = sql("select story_id from story where publish_time > ? and publish_time < ? order by publish_time desc", $time_beg, $time_end);
+	$row = sql("select story_id from story where publish_time > ? and publish_time < ? order by publish_time desc", $date_beg, $date_end);
 	if (count($row) == 0) {
-		writeln("No stories published on [" . gmdate("Y-m-d", $time_beg) . "]");
+		writeln("No stories published on [" . gmdate("Y-m-d", $date_beg) . "]");
 	}
 	for ($i = 0; $i < count($row); $i++) {
 		print_story($row[$i]["story_id"]);

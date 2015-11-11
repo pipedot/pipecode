@@ -18,7 +18,6 @@
 //
 
 include("../include/common.php");
-include("geoip.php");
 include("link.php");
 include("notification.php");
 include("render.php");

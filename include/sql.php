@@ -583,7 +583,6 @@ $db_table["poll"] = array(
 	array("name" => "poll_id", "default" => 0, "key" => true),
 	array("name" => "comments_clean", "default" => 0),
 	array("name" => "comments_total", "default" => 0),
-	array("name" => "promoted", "default" => 0),
 	array("name" => "publish_time", "default" => $now),
 	array("name" => "question"),
 	array("name" => "slug"),

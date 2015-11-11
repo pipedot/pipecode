@@ -35,6 +35,7 @@ $year = gmdate("Y");
 $drive_count = 0;
 
 include("sql.php");
+include("geoip.php");
 
 $reasons["Normal"] = 0;
 $reasons["Offtopic"] = -1;
@@ -158,7 +159,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 				$link_name[] = "Submit";
 			}
 			$link_name[] = "Menu";
-			if (($auth_user["admin"] || $auth_user["editor"]) && $request_script != "/menu/") {
+			if (($auth_user["admin"] || $auth_user["editor"]) && $request_script != "/tools/") {
 				$link_name[] = "Tools";
 			}
 			if ($notification_count > 0) {
@@ -171,9 +172,6 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 			$link_name[] = "Server";
 			$link_name[] = "Login";
 		} else {
-			//if ($request_script != "/menu/") {
-			//	$link_name[] = "Menu";
-			//}
 			$link_name[] = "Server";
 			if ($notification_count > 0) {
 				$link_name[] = "Notifications";
@@ -1671,12 +1669,7 @@ $mine = false;
 $a = explode(".", $server_name);
 $server_level = count($a);
 $a = explode(".", $http_host);
-if (count($a) == $server_level) {
-	if ($server_redirect_enabled && $http_host != $server_name) {
-		header("Location: $protocol://$server_name$request_uri");
-		finish();
-	}
-} else if (count($a) == $server_level + 1) {
+if (count($a) == $server_level + 1) {
 	if ($server_redirect_enabled && $a[1] . "." . $a[2] != $server_name) {
 		header("Location: $protocol://" . $a[0] . ".$server_name$request_uri");
 		finish();
@@ -1692,6 +1685,9 @@ if (count($a) == $server_level) {
 	if (!is_local_user("$user_page@$server_name")) {
 		fatal("User not found");
 	}
+} else if ($server_redirect_enabled && $http_host != $server_name) {
+	header("Location: $protocol://$server_name$request_uri");
+	finish();
 }
 if ($user_page != "") {
 	$zid = "$user_page@$server_name";

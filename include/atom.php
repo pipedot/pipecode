@@ -48,7 +48,7 @@ function make_atom($topic)
 
 		$body .= "	<entry>\n";
 		$body .= "		<id>$protocol://$server_name/story/$story_code</id>\n";
-		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
+		$body .= "		<title>" . xml_encode($row[$i]["title"]) . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
 		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/story/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
 		$body .= "		<author>\n";
@@ -114,14 +114,17 @@ function make_comment_atom($topic)
 		$comment_code = crypt_crockford_encode($row[$i]["comment_id"]);
 		$type_id = $row[$i]["type_id"];
 		$type = item_type($type_id);
-		$article = db_get_rec($type, $row[$i]["article_id"]);
+		$article_id = $row[$i]["article_id"];
+		$article = db_get_rec($type, $article_id);
+		$article_code = crypt_crockford_encode($article_id);
 		if ($type_id == TYPE_POLL) {
 			$article_title = $article["question"];
 		} else {
 			$article_title = $article["title"];
 		}
+		$article_title = xml_encode($article_title);
 		if ($type_id == TYPE_PIPE) {
-			$artitle_time = gmdate(DATE_ATOM, $article["time"]);
+			$article_time = gmdate(DATE_ATOM, $article["time"]);
 		} else {
 			$article_time = gmdate(DATE_ATOM, $article["publish_time"]);
 		}
@@ -134,7 +137,7 @@ function make_comment_atom($topic)
 
 		$body .= "	<entry>\n";
 		$body .= "		<id>$protocol://$server_name/comment/$comment_code</id>\n";
-		$body .= "		<title>" . $row[$i]["subject"] . "</title>\n";
+		$body .= "		<title>" . xml_encode($row[$i]["subject"]) . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["edit_time"]) . "</updated>\n";
 		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"$protocol://$server_name/comment/$comment_code\"/>\n";
 		$body .= "		<author>\n";
@@ -146,7 +149,7 @@ function make_comment_atom($topic)
 		}
 		$body .= "		</author>\n";
 		$body .= "		<source>\n";
-		$body .= "			<id>$article_title</id>\n";
+		$body .= "			<id>$protocol://$server_name/$article_code</id>\n";
 		$body .= "			<title>$article_title</title>\n";
 		$body .= "			<updated>$article_time</updated>\n";
 		$body .= "		</source>\n";
@@ -202,7 +205,7 @@ function make_journal_atom($zid)
 
 		$body .= "	<entry>\n";
 		$body .= "		<id>" . user_link($zid) . "journal/$journal_code</id>\n";
-		$body .= "		<title>" . $row[$i]["title"] . "</title>\n";
+		$body .= "		<title>" . xml_encode($row[$i]["title"]) . "</title>\n";
 		$body .= "		<updated>" . gmdate(DATE_ATOM, $row[$i]["publish_time"]) . "</updated>\n";
 		$body .= "		<link rel=\"alternate\" type=\"text/html\" href=\"" . user_link($zid) . "journal/" . gmdate("Y-m-d", $row[$i]["publish_time"]) . "/" . $row[$i]["slug"] . "\"/>\n";
 		$body .= "		<author>\n";
@@ -241,6 +244,16 @@ function list_map($list, $map)
 	}
 
 	return $a;
+}
+
+
+// decode all HTML entites except the ones XML understands (amp, lt, gt)
+function xml_encode($s)
+{
+	$s = html_entity_decode($s);
+	$s = htmlspecialchars($s, ENT_XML1);
+
+	return $s;
 }
 
 

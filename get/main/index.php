@@ -44,7 +44,7 @@ if ($auth_zid != "") {
 	writeln('<div style="width: 300px">');
 }
 
-$row = sql("select poll_id from poll where promoted = 1 order by publish_time desc limit 1");
+$row = sql("select poll_id from poll order by publish_time desc limit 1");
 if (count($row) > 0) {
 	$poll_id = $row[0]["poll_id"];
 	if ($auth_zid === "") {

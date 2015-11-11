@@ -28,7 +28,6 @@ $answer = $_POST["answer"];
 $time = time();
 $poll = db_new_rec("poll");
 $poll["poll_id"] = create_short(TYPE_POLL);
-$poll["promoted"] = 1;
 $poll["question"] = clean_text($question);
 $poll["slug"] = clean_url($question);
 $poll["type_id"] = $type_id;
@@ -44,4 +43,4 @@ for ($i = 0; $i < count($answer); $i++) {
 	db_set_rec("poll_answer", $poll_answer);
 }
 
-header("Location: /menu/");
+header("Location: /tools/");
