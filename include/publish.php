@@ -20,14 +20,17 @@
 function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, $dirty_body, $zid)
 {
 	global $doc_root;
+	global $spinner;
 
 	$pipe = db_get_rec("pipe", $pipe_id);
 	$topic = db_get_rec("topic", $topic_id);
+	$pipe_code = crypt_crockford_encode($pipe_id);
 
-	print_header("Publish Submission");
-	print_main_nav("pipe");
-	beg_main("cell");
-	beg_form();
+	$spinner[] = ["name" => "Pipe", "link" => "/pipe/"];
+	$spinner[] = ["name" => $title, "short" => $pipe_code, "link" => "/pipe/$pipe_code"];
+	$spinner[] = ["name" => "Publish", "link" => "/story/$pipe_code/publish"];
+
+	print_header(["title" => "Publish Submission", "form" => true]);
 
 	$topic_list = array();
 	$topic_keys = array();
@@ -66,7 +69,5 @@ function print_publish_box($pipe_id, $topic_id, $keywords, $title, $clean_body, 
 	//box_two('<a href="/icons">Icons</a>', "Publish,Preview");
 	box_two('<a href="/similar">' . get_text('Keyword Search') . '</a>', "Publish,Preview");
 
-	end_form();
-	end_main();
-	print_footer();
+	print_footer(["form" => true]);
 }

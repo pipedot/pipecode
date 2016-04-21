@@ -31,11 +31,11 @@ if ($s2 === "edit") {
 	$friendly_name = ucwords($topic["topic"]);
 }
 
-print_header($friendly_name);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Topic", "link" => "/topic/"];
+$spinner[] = ["name" => $friendly_name, "link" => "/topic/$friendly_name"];
+$spinner[] = ["name" => "Edit", "link" => "/topic/$friendly_name/edit"];
 
-writeln('<h1>' . $friendly_name . '</h1>');
+print_header(["title" => $friendly_name, "form" => true]);
 
 $icons = icon_list(false, true, true);
 
@@ -52,7 +52,4 @@ if ($s2 === "edit") {
 	box_two('<a href="/icons">' . get_text('Icons') . '</a>', "Delete,Save");
 }
 
-end_form();
-end_main();
 print_footer();
-

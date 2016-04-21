@@ -19,10 +19,10 @@
 
 require_admin();
 
-print_header("Topics");
-beg_main();
+$spinner[] = ["name" => "Topic", "link" => "/topic/"];
+$spinner[] = ["name" => "List", "link" => "/topic/list"];
 
-writeln('<h1>' . get_text('Topics') . '</h1>');
+print_header(["title" => "Topics"]);
 
 beg_tab();
 $list = db_get_list("topic", "topic");
@@ -42,5 +42,4 @@ end_tab();
 
 box_right('<a class="icon-16 plus-16" href="edit">' . get_text('Add') . '</a>');
 
-end_main();
 print_footer();

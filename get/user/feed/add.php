@@ -26,10 +26,10 @@ if ($col < 0 || $col > 2) {
 	fatal("Invalid col");
 }
 
-print_header();
-print_user_nav("feed");
-beg_main("cell");
-beg_form();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Add", "link" => "/feed/add"];
+
+print_header(["title" => "Add Feed", "form" => true]);
 
 writeln('<div class="dialog-title">' . get_text('Add Feed') . '</div>');
 writeln('<div class="dialog-body">');
@@ -67,6 +67,4 @@ writeln('</table>');
 
 writeln('</div>');
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

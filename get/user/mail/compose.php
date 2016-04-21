@@ -40,9 +40,10 @@ if ($mid > 0) {
 	$to = $contact["email"];
 }
 
-print_header("Compose", [], [], [], ["Mail", "Compose"], ["/mail/", "/mail/compose"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Mail", "link" => "/mail/"];
+$spinner[] = ["name" => "Compose", "link" => "/mail/compose"];
+
+print_header(["form" => true]);
 writeln('<input name="in_reply_to" type="hidden" value="' . $in_reply_to . '">');
 
 beg_tab();
@@ -53,6 +54,4 @@ end_tab();
 
 box_right("Send");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

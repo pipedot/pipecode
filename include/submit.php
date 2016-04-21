@@ -23,10 +23,11 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 	global $auth_zid;
 	global $protocol;
 	global $server_name;
+	global $spinner;
 
-	print_header("Submit Story");
-	print_main_nav("pipe");
-	beg_main("cell");
+	$spinner[] = ["name" => "Submit Story", "link" => "/submit"];
+
+	print_header(["form" => true]);
 
 	if ($preview) {
 		writeln('<h1>' . get_text('Preview') . '</h1>');
@@ -43,7 +44,6 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 		print_content($a);
 	}
 
-	beg_form();
 	writeln('<div class="dialog-title">' . get_text('Submit Story') . '</div>');
 	writeln('<div class="dialog-body">');
 
@@ -86,8 +86,6 @@ function print_submit_box($title, $dirty_body, $body, $topic_id, $preview)
 	writeln('</table>');
 	writeln('</div>');
 
-	end_form();
-	end_main();
-	print_footer();
+	print_footer(["form" => true]);
 }
 

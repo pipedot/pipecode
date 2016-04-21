@@ -19,13 +19,21 @@
 
 require_admin();
 
-$spinner[] = ["name" => "Tools", "link" => "/tools/"];
-$spinner[] = ["name" => "Hash", "link" => "/tools/hash"];
+if (!string_uses($s3, "[a-z][0-9]-")) {
+	fatal("Invalid topic");
+}
+$topic = db_get_rec("feed_topic", array("slug" => $s3));
 
-print_header();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Topic", "link" => "/feed/topic/"];
+$spinner[] = ["name" => $topic["name"], "link" => "/feed/topic/" . $topic["slug"]];
+$spinner[] = ["name" => "Remove", "link" => "/feed/topic/" . $topic["slug"] . "/delete"];
 
-dict_beg();
-dict_row("Hash", crypt_sha256($_POST["str"]));
-dict_end();
+print_header(["title" => "Remove Topic", "form" => true]);
 
-print_footer();
+writeln('<h1>' . get_text('Remove $1', [$topic["name"]]) . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] topic?', [$topic["name"]]) . '</p>');
+
+box_left("Remove");
+
+print_footer(["form" => true]);

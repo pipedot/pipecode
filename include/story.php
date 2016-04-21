@@ -23,13 +23,18 @@ function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $
 	global $doc_root;
 	global $protocol;
 	global $server_name;
+	global $spinner;
 
 	$story = db_get_rec("story", $story_id);
 	$topic = db_get_rec("topic", $topic_id);
+	$story_code = crypt_crockford_encode($story_id);
+	$story_date = gmdate("Y-m-d", $story["publish_time"]);
 
-	print_header();
-	print_main_nav("stories");
-	beg_main("cell");
+	$spinner[] = ["name" => "Story", "link" => "/story/"];
+	$spinner[] = ["name" => $story["title"], "short" => $story_code, "link" => "/story/$story_code"];
+	$spinner[] = ["name" => "Edit", "link" => "/story/$story_code/edit"];
+
+	print_header(["title" => "Edit Story", "form" => true]);
 
 	$topic_list = array();
 	$topic_keys = array();
@@ -40,7 +45,6 @@ function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $
 		$topic_keys[] = $k[$i];
 	}
 
-	beg_form();
 	writeln('<h1>' . get_text('Preview') . '</h1>');
 	$a["body"] = $story["body"];
 	$a["title"] = $title;
@@ -60,9 +64,7 @@ function print_story_box($story_id, $topic_id, $keywords, $title, $clean_body, $
 
 	box_two('<a href="/similar">' . get_text('Keyword Search') . '</a>', 'Publish,Preview');
 
-	end_form();
-	end_main();
-	print_footer();
+	print_footer(["form" => true]);
 }
 
 
@@ -171,6 +173,9 @@ function print_news($a)
 	global $protocol;
 	global $server_name;
 
+	if (!is_array($a)) {
+		$a = db_get_rec("article", $a);
+	}
 	$article_id = $a["article_id"];
 	$short_code = crypt_crockford_encode($article_id);
 	if (array_key_exists("thumb_id", $a)) {
@@ -217,7 +222,7 @@ function print_news($a)
 		writeln('			</div>');
 		writeln('			<div class="article-footer">');
 		writeln('				<div class="article-footer-left"><a href="' . $protocol . '://' . $server_name . '/article/' . $short_code . '">' . $comments["tag"] . '</a></div>');
-		writeln('				<div class="article-footer-right"><div style="display: inline-block">' . stream_vote_box($article_id) . '</div></div>');
+		writeln('				<div class="article-footer-right"><div class="article-vote-box">' . stream_vote_box($article_id) . '</div></div>');
 		writeln('			</div>');
 		writeln('		</td>');
 		writeln('	</tr>');

@@ -17,8 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Tools");
-beg_main();
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+
+print_header();
 
 menu_beg();
 menu_row(["caption" => "Ban IP", "description" => "Manage banned IP addresses", "icon" => "error", "link" => "/ban_ip/"]);
@@ -35,5 +36,4 @@ menu_row(["caption" => "Tools", "description" => "Tools for short codes", "icon"
 menu_row(["caption" => "Users", "description" => "List local users", "icon" => "users", "link" => "/user/"]);
 menu_end();
 
-end_main();
 print_footer();

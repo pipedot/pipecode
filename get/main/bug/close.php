@@ -22,8 +22,11 @@ require_developer();
 
 $bug = item_request(TYPE_BUG);
 
-print_header("Close Bug");
-beg_main();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Close", "link" => "/bug/close"];
+$actions[] = ["name" => "Report", "icon" => "ladybug", "link" => "/bug/report"];
+
+print_header(["title" => "Close Bug"]);
 beg_form();
 writeln('<h1>' . get_text('Close Bug') . '</h1>');
 
@@ -32,5 +35,4 @@ writeln('<p>' . get_text('Are you sure you want to close this bug?') . '</p>');
 box_left("Close");
 
 end_form();
-end_main();
 print_footer();

@@ -21,9 +21,11 @@ require_mine();
 
 $icons = icon_list(true, true, true);
 
-print_header("Add Topic", [], [], [], ["Reader", "Topic", "Add Topic"], ["/reader/", "/reader/topic/", "/reader/topic/add"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => "Topic", "link" => "/reader/topic/"];
+$spinner[] = ["name" => "Add", "link" => "/reader/topic/add"];
+
+print_header(["title" => "Add Topic", "form" => true]);
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name"));
@@ -33,7 +35,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

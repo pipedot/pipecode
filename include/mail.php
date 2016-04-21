@@ -165,9 +165,12 @@ function print_mail_dir($location)
 
 	require_mine();
 
-	print_header($location, ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $location], ["/mail/", strtolower("/mail/$location/")]);
+	$spinner[] = ["name" => "Mail", "link" => "/mail/"];
+	$spinner[] = ["name" => $location, "link" => "/mail/$location/"];
+	$actions[] = ["name" => "Compose", "icon" => "mail-compose", "link" => "/mail/compose"];
 
-	beg_main();
+	print_header(["form" => true]);
+
 	writeln('<table class="fill">');
 	writeln('<tr>');
 	writeln('<td style="vertical-align: top">');
@@ -232,17 +235,14 @@ function print_mail_dir($location)
 	writeln('</table>');
 
 	if (count($list) > 0) {
-		beg_form();
 		if ($location == "Junk" || $location == "Trash") {
 			box_right("Empty");
 		} else {
 			box_right("Delete All");
 		}
-		end_form();
 	}
 
-	end_main();
-	print_footer();
+	print_footer(["form" => true]);
 }
 
 

@@ -17,10 +17,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Tags", array("Share"), array("notepad"), array("/stream/share"));
-beg_main();
+$spinner[] = ["name" => "Tag", "link" => "/tag/"];
 
-writeln('<h1>' . get_text('Tags') . '</h1>');
+print_header(["title" => "Tags"]);
 
-end_main();
 print_footer();

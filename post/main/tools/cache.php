@@ -37,4 +37,3 @@ if ($cache === false) {
 db_del_rec("cache", $hash);
 
 die("deleted item [$hash]");
-

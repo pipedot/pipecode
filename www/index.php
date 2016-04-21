@@ -143,10 +143,13 @@ $slug = substr($request_uri, 1);
 if (string_uses($slug, "[A-Z][a-z][0-9]-_.")) {
 	if (db_has_rec("page", $slug)) {
 		$page = db_get_rec("page", $slug);
-		print_header($page["title"]);
-		beg_main("static");
+
+		$spinner[] = ["name" => $page["title"], "link" => "/$slug"];
+
+		print_header(["main" => "static"]);
+		//beg_main("static");
 		writeln($page["body"]);
-		end_main();
+		//end_main();
 		print_footer();
 		finish();
 	}

@@ -22,12 +22,13 @@ include("story.php");
 if (!string_uses($s2, "[a-z]")) {
 	fatal("Invalid topic");
 }
-$topic = $s2;
-$topic = db_get_rec("topic", array("slug" => $topic));
+$topic_name = $s2;
+$topic = db_get_rec("topic", ["slug" => $topic_name]);
 
-print_header("Topics");
-print_main_nav($topic);
-beg_main("cell");
+$spinner[] = ["name" => "Topic", "link" => "/topic/"];
+$spinner[] = ["name" => $topic_name, "link" => "/topic/$topic_name"];
+
+print_header();
 
 $items_per_page = 10;
 list($item_start, $page_footer) = page_footer("story", $items_per_page, array("topic_id" => $topic["topic_id"]));
@@ -39,6 +40,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();
-

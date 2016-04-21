@@ -32,9 +32,10 @@ if ($name == "") {
 	$name = "(blank)";
 }
 
-print_header("Edit Contact", ["Add"], ["plus"], ["/contact/add"], ["Contact", $name], ["/contact/", "/contact/$contact_id"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Contact", "link" => "/contact/"];
+$spinner[] = ["name" => $name, "link" => "/contact/$contact_id"];
+
+print_header(["title" => "Edit Contact", "form" => true]);
 
 beg_tab();
 print_row(["caption" => "Name", "text_key" => "name", "text_value" => $contact["name"]]);
@@ -43,8 +44,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
-
+print_footer(["form" => true]);

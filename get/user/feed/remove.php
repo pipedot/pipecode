@@ -22,15 +22,14 @@ require_mine();
 $feed_id = http_get_int("feed_id");
 $feed = db_get_rec("feed", $feed_id);
 
-print_header();
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Remove", "link" => "/feed/remove?feed_id=$feed_id"];
+
+print_header(["form" => true]);
 
 writeln('<h1>' . get_text('Remove Feed') . '</h1>');
 writeln('<p>' . get_text('Are you sure you want to remove [<b>$1</b>] from your page?', $feed["title"]) . '</p>');
 
 box_left("Remove");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

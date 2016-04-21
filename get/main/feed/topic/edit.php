@@ -25,9 +25,13 @@ if (!string_uses($s3, "[a-z][0-9]-")) {
 $topic = db_get_rec("feed_topic", array("slug" => $s3));
 $icons = icon_list(true, true, true);
 
-print_header($topic["name"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Topic", "link" => "/feed/topic/"];
+$spinner[] = ["name" => $topic["name"], "link" => "/feed/topic/" . $topic["slug"]];
+$spinner[] = ["name" => "Edit", "link" => "/feed/topic/" . $topic["slug"] . "/edit"];
+
+print_header(["title" => "Edit Topic", "form" => true]);
+
 writeln('<h1>' . $topic["name"] . '</h1>');
 
 beg_tab();
@@ -38,6 +42,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

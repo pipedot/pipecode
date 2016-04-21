@@ -19,18 +19,22 @@
 
 require_admin();
 
-$slug = http_get_string("slug", ["len" => 100, "valid" => "[a-z][A-Z][0-9]-_."]);
+if (!string_uses($s2, "[a-z][0-9]-", 100)) {
+	fatal("Invalid slug");
+}
+$slug = $s2;
+
 $page = db_get_rec("page", $slug);
 
-print_header("Remove Page");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Page", "link" => "/page/"];
+$spinner[] = ["name" => $page["title"], "link" => "/$slug"];
+$spinner[] = ["name" => "Remove", "link" => "/page/$slug/remove"];
+
+print_header(["title" => "Remove Page", "form" => true]);
 
 writeln('<h1>' . get_text('Remove Page') . '</h1>');
 writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] page?', [$slug]) . '</p>');
 
 box_left("Remove");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

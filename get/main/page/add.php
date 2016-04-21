@@ -19,9 +19,11 @@
 
 require_admin();
 
-print_header("Add Page");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Page", "link" => "/page/"];
+$spinner[] = ["name" => "Add", "link" => "/page/add"];
+
+print_header(["title" => "Add Page", "form" => true]);
+
 writeln('<h1>' . get_text("Add Page") . '</h1>');
 
 beg_tab();
@@ -31,6 +33,4 @@ end_tab();
 
 box_right("Add");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

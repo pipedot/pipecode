@@ -17,10 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Users");
-beg_main();
+$spinner[] = ["name" => "User", "link" => "/user/"];
 
-writeln('<h1>' . get_text('Users') . '</h1>');
+print_header(["title" => "Users"]);
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("select count(distinct zid) as item_count from user_conf", $items_per_page);
@@ -46,5 +45,4 @@ end_tab();
 
 writeln($page_footer);
 
-end_main();
 print_footer();

@@ -19,8 +19,10 @@
 
 require_admin();
 
-print_header("Drive");
-beg_main();
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+$spinner[] = ["name" => "Drive", "link" => "/drive/"];
+
+print_header();
 
 $row = sql("select count(size) as thumb_count, sum(size) as thumb_total from thumb inner join drive_data on thumb.hash = drive_data.hash");
 $thumb_count = $row[0]["thumb_count"];
@@ -40,20 +42,19 @@ $avatar_256_total = $row[0]["avatar_total"];
 
 dict_beg();
 dict_row("Avatar Count", number_format($avatar_count));
-dict_row("Avatar Size (64 x 64)", sys_format_size($avatar_64_total));
-dict_row("Avatar Size (128 x 128)", sys_format_size($avatar_128_total));
-dict_row("Avatar Size (256 x 256)", sys_format_size($avatar_256_total));
+dict_row("Avatar Size (64 x 64)", string_size($avatar_64_total));
+dict_row("Avatar Size (128 x 128)", string_size($avatar_128_total));
+dict_row("Avatar Size (256 x 256)", string_size($avatar_256_total));
 dict_end();
 
 dict_beg();
 dict_row("Cache Count", number_format($cache_count));
-dict_row("Cache Size", sys_format_size($cache_total));
+dict_row("Cache Size", string_size($cache_total));
 dict_end();
 
 dict_beg();
 dict_row("Thumbnail Count", number_format($thumb_count));
-dict_row("Thumbnail Size", sys_format_size($thumb_total));
+dict_row("Thumbnail Size", string_size($thumb_total));
 dict_end();
 
-end_main();
 print_footer();

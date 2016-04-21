@@ -19,9 +19,10 @@
 
 require_mine();
 
-print_header("Add Contact", [], [], [], ["Contact", "Add"], ["/contact/", "/contact/add"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Contact", "link" => "/contact/"];
+$spinner[] = ["name" => "Add", "link" => "/contact/add"];
+
+print_header(["title" => "Add Contact", "form" => true]);
 
 beg_tab();
 print_row(["caption" => "Name", "text_key" => "name", "text_value" => ""]);
@@ -30,7 +31,4 @@ end_tab();
 
 box_right("Add");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

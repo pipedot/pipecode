@@ -20,8 +20,11 @@
 require_feature("bug");
 require_login();
 
-print_header("Attach File", array("Report"), array("ladybug"), array("/bug/report"));
-beg_main();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Attach File", "link" => "/bug/attach"];
+$actions[] = ["name" => "Report", "icon" => "ladybug", "link" => "/bug/report"];
+
+print_header();
 beg_form("", "file");
 
 writeln('<h1>Attach File</h1>');
@@ -29,6 +32,4 @@ writeln('<h1>Attach File</h1>');
 box_two('<input name="upload" type="file">', "Upload");
 
 end_form();
-end_main();
 print_footer();
-

@@ -20,13 +20,11 @@
 include("story.php");
 include("image.php");
 
+$spinner[] = ["name" => "Journal", "link" => "/journal/"];
 if ($auth_zid === $zid) {
-	print_header("Journal", ["Write"], ["notepad"], ["/journal/write"], ["Journal"], ["/journal/"]);
-} else {
-	print_header("Journal", [], [], [], ["Journal"], ["/journal/"]);
+	$actions[] = ["name" => "Write", "icon" => "notepad", "link" => "/journal/write"];
 }
-print_user_nav("journal");
-beg_main("cell");
+print_header();
 
 $items_per_page = 20;
 if ($zid == $auth_zid) {
@@ -51,5 +49,4 @@ writeln($page_footer);
 
 box_center('<a class="icon-16 feed-16" href="atom">' . get_text('Journal Feed') . '</a>');
 
-end_main();
 print_footer();

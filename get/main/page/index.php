@@ -19,8 +19,10 @@
 
 require_admin();
 
-print_header("Pages");
-beg_main();
+$spinner[] = ["name" => "Page", "link" => "/page/"];
+
+print_header(["title" => "Pages"]);
+
 writeln('<h1>' . get_text('Pages') . '</h1>');
 
 dict_beg();
@@ -32,11 +34,10 @@ if (count($keys) == 0) {
 for ($i = 0; $i < count($keys); $i++) {
 	$page = $list[$keys[$i]];
 
-	dict_row('<a href="edit?slug=' . $page["slug"] . '" class="icon-16 notepad-16">' . $page["title"] . '</a>', '<a href="remove?slug=' . $page["slug"] . '" class="icon-16 minus-16">' . get_text('Remove') . '</a>');
+	dict_row('<a href="' . $page["slug"] . '/edit" class="icon-16 notepad-16">' . $page["title"] . '</a>', '<a href="' . $page["slug"] . '/remove" class="icon-16 minus-16">' . get_text('Remove') . '</a>');
 }
 dict_end();
 
 box_right('<a class="icon-16 plus-16" href="add">' . get_text('Add') . '</a>');
 
-end_main();
 print_footer();

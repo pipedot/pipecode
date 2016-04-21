@@ -19,7 +19,10 @@
 
 require_admin();
 
-$slug = http_get_string("slug", array("len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+if (!string_uses($s2, "[a-z][0-9]-", 100)) {
+	fatal("Invalid slug");
+}
+$slug = $s2;
 
 db_del_rec("page", $slug);
-header("Location: ./");
+header("Location: ../");

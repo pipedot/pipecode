@@ -21,20 +21,18 @@ require_admin();
 
 $icons = icon_list(true, false, false, true);
 
-print_header("Add Footer Link");
-beg_main();
-beg_form();
-writeln('<h1>' . get_text("Add Footer Link") . '</h1>');
+$spinner[] = ["name" => "Footer Link", "link" => "/footer_link/"];
+$spinner[] = ["name" => "Add", "link" => "/footer_link/add"];
+
+print_header(["title" => "Add Footer Link", "form" => true]);
 
 beg_tab();
-print_row(["caption" => "Title", "text_key" => "title"]);
+print_row(["caption" => "Name", "text_key" => "name"]);
+print_row(["caption" => "Slug", "text_key" => "slug"]);
 print_row(["caption" => "Icon", "option_key" => "icon", "option_list" => $icons]);
 print_row(["caption" => "Link", "text_key" => "link"]);
 end_tab();
 
 box_right("Add");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

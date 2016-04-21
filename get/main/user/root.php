@@ -23,9 +23,10 @@ if (!is_local_user($zid)) {
 }
 $conf = db_get_conf("user_conf", $zid);
 
-print_header($zid);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "User", "link" => "/user/"];
+$spinner[] = ["name" => $zid, "link" => "/user/$s2"];
+
+print_header(["title" => $zid, "form" => true]);
 
 writeln('<div class="box">');
 writeln('<dl class="dl-32" style="background-image: url(' . avatar_picture($zid, 64) . ')">');
@@ -50,6 +51,4 @@ if ($auth_user["admin"]) {
 	dict_end();
 }
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

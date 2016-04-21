@@ -19,8 +19,13 @@
 
 require_admin();
 
-$title = http_get_string("title", ["valid" => "[A-Z][a-z][0-9]_-. ", "len" => 20]);
+if (!string_uses($s2, "[a-z][0-9]-")) {
+	fatal("Invalid slug");
+}
+$slug = $s2;
 
-db_del_rec("footer_link", $title);
-header("Location: ./");
+$footer_link = db_get_rec("footer_link", $slug);
 
+db_del_rec("footer_link", $slug);
+
+header("Location: ../");

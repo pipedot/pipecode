@@ -22,15 +22,15 @@ require_mine();
 $avatar = item_request(TYPE_AVATAR);
 $avatar_code = $avatar["short_code"];
 
-print_header("Activate Avatar", [], [], [], ["Avatar", $avatar_code, "Activate"], ["/avatar/", "/avatar/$avatar_code", "/activate/$avatar_code/activate"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Avatar", "link" => "/avatar/"];
+$spinner[] = ["name" => $avatar_code, "link" => "/avatar/$avatar_code"];
+$spinner[] = ["name" => "Activate", "link" => "/avatar/$avatar_code/activate"];
+
+print_header(["title" => "Activate Avatar", "form" => true]);
 
 writeln('<h2>' . get_text('Set current avatar?') . '</h2>');
 writeln('<div class="box"><img alt="avatar" class="thumb" src="' . $protocol . '://' . $server_name . '/avatar/' . $avatar_code . '-256.jpg"></div>');
 
 box_left("Activate");
 
-end_form();
-end_main();
 print_footer();

@@ -19,19 +19,22 @@
 
 require_admin();
 
-$title = http_get_string("title", ["len" => 100, "valid" => "[A-Z][a-z][0-9]_-. "]);
+if (!string_uses($s2, "[a-z][0-9]-", 100)) {
+	fatal("Invalid slug");
+}
+$slug = $s2;
 
-$footer_link = db_get_rec("footer_link", $title);
+$footer_link = db_get_rec("footer_link", $slug);
 
-print_header("Remove Footer Link");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Footer Link", "link" => "/footer_link/"];
+$spinner[] = ["name" => $footer_link["name"], "link" => "/footer_link/$slug"];
+$spinner[] = ["name" => "Remove", "link" => "/footer_link/$slug/remove"];
 
-writeln('<h1>' . get_text('Remove Footer Link') . '</h1>');
-writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] link?', $title) . '</p>');
+print_header(["title" => "Remove Footer Link", "form" => true]);
+
+writeln('<h1>' . get_text('Remove $1', [$footer_link["name"]]) . '</h1>');
+writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] link?', $footer_link["name"]) . '</p>');
 
 box_left("Remove");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

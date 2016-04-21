@@ -17,8 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Icons");
-beg_main();
+$spinner[] = ["name" => "Icons", "link" => "/icons"];
+
+print_header();
 
 writeln('<table class="fill">');
 writeln('<tr>');
@@ -38,5 +39,4 @@ writeln('</td>');
 writeln('</tr>');
 writeln('</table>');
 
-end_main();
 print_footer();

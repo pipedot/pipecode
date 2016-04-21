@@ -27,10 +27,11 @@ if ($avatar["zid"] != $zid) {
 $avatar_code = $avatar["short_code"];
 $avatar_root = "$protocol://$server_name/avatar/$avatar_code";
 
-print_header("Avatar", [], [], [], ["Avatar", $avatar_code], ["/avatar/", "/avatar/$avatar_code"]);
-beg_main();
+$spinner[] = ["name" => "Avatar", "link" => "/avatar/"];
+$spinner[] = ["name" => $avatar_code, "link" => "/avatar/$avatar_code"];
 
-writeln('<h1>' . get_text('Avatar') . '</h1>');
+print_header(["title" => "Avatar"]);
+
 writeln('<div class="photo-frame">');
 writeln('	<img alt="avatar" class="thumb" src="' . $avatar_root . '-256.jpg">');
 writeln('	<div><a href="' . $avatar_root . '-64.png">' . get_text('Small') . ' (64x64)</a> | <a href="' . $avatar_root . '-128.jpg">' . get_text('Medium') . ' (128x128)</a> | <a href="' . $avatar_root . '-256.jpg">' . get_text('Large') . ' (256x256)</a></div>');
@@ -42,5 +43,4 @@ dict_row("Time", date("Y-m-d H:i", $avatar["time"]));
 dict_row("License", '<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>');
 dict_end();
 
-end_main();
 print_footer();

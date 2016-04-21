@@ -28,9 +28,11 @@ for ($i = 0; $i < count($row); $i++) {
 	$labels[] = $row[$i]["label_id"];
 }
 
-print_header("Edit Bug", array("Report"), array("ladybug"), array("/bug/report"));
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Edit Bug", "link" => "/bug/edit"];
+$actions[] = ["name" => "Report", "icon" => "ladybug", "link" => "/bug/report"];
+
+print_header(["form" => true]);
 
 writeln('<h1>Edit Bug</h1>');
 
@@ -53,7 +55,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

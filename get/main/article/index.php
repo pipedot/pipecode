@@ -17,10 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Articles");
-beg_main();
+$spinner[] = ["name" => "Articles", "link" => "/article/"];
 
-writeln('<h1>' . get_text('Articles') . '</h1>');
+print_header();
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("article", $items_per_page);
@@ -34,5 +33,4 @@ dict_end();
 
 writeln($page_footer);
 
-end_main();
 print_footer();

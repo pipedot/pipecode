@@ -22,11 +22,13 @@ include("story.php");
 include("diff.php");
 
 $pipe = item_request(TYPE_PIPE);
+$pipe_code = $pipe["short_code"];
 $story = db_find_rec("story", ["pipe_id" => $pipe["pipe_id"]]);
 
-print_header($pipe["title"]);
-print_main_nav("pipe");
-beg_main("cell");
+$spinner[] = ["name" => "Pipe", "link" => "/pipe/"];
+$spinner[] = ["name" => $pipe["title"], "short" => $pipe_code, "link" => "/pipe/$pipe_code"];
+
+print_header();
 
 print_pipe($pipe["pipe_id"]);
 
@@ -64,5 +66,4 @@ if ($story) {
 
 print_comments(TYPE_PIPE, $pipe);
 
-end_main();
 print_footer();

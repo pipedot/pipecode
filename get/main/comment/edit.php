@@ -30,14 +30,13 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 
 require_mine($comment["zid"]);
 
-print_header("Edit Comment");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Comment", "link" => "/comment/"];
+$spinner[] = ["name" => $comment["subject"], "short" => $comment["short_code"], "link" => "/comment/" . $comment["short_code"]];
+$spinner[] = ["name" => "Edit", "link" => "/comment/edit"];
 
-print_main_nav("stories");
-beg_main("cell");
+print_header(["title" => "Edit Comment", "form" => true]);
 
-writeln('<h1>' . get_text('Edit Comment') . '</h1>');
+//writeln('<h1>' . get_text('Edit Comment') . '</h1>');
 
 beg_tab();
 print_row(array("caption" => "Subject", "text_key" => "subject", "text_value" => $comment["subject"]));
@@ -69,7 +68,4 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 	writeln('</script>');
 }
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

@@ -29,11 +29,12 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 	$dirty_body = str_replace("\n", "<br>", $dirty_body);
 }
 
-print_header("Edit", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"], "Edit"], ["/journal/", $journal_link, "/journal/" . $journal["short_code"] . "/edit"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Journal", "link" => "/journal/"];
+$spinner[] = ["name" => $journal["title"], "short" => $journal["short_code"], "link" => $journal_link];
+$spinner[] = ["name" => "Edit", "link" => "/journal/" . $journal["short_code"] . "/edit"];
+$actions[] = ["name" => "Write", "icon" => "notepad", "link" => "/journal/write"];
 
-writeln('<h1>' . get_text('Edit') . '</h1>');
+print_header(["form" => true]);
 
 beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $journal["title"]));
@@ -69,7 +70,4 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

@@ -22,9 +22,11 @@ include("image.php");
 
 require_mine();
 
-print_header("Share");
-beg_main();
-beg_form("", "file");
+$spinner[] = ["name" => "Stream", "link" => "/stream/"];
+$spinner[] = ["name" => "Share", "link" => "/stream/share"];
+
+print_header(["form" => true]);
+//beg_form("", "file");
 
 writeln('<h1>' . get_text('Share') . '</h1>');
 
@@ -74,6 +76,5 @@ end_tab();
 
 box_right("Share");
 
-end_form();
-end_main();
-print_footer();
+//end_form();
+print_footer(["form" => true]);

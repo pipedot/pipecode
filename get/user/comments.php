@@ -17,8 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Comments", [], [], [], ["Comments"], ["/comments"]);
-beg_main();
+$spinner[] = ["name" => "Comments", "link" => "/comments"];
+
+print_header();
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("comment", $items_per_page, array("zid" => $zid));
@@ -34,5 +35,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();

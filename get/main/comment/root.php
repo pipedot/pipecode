@@ -26,8 +26,10 @@ $a = article_info($comment);
 $type_id = $a["type_id"];
 $article_code = crypt_crockford_encode($comment["article_id"]);
 
-print_header($comment["subject"]);
-beg_main();
+$spinner[] = ["name" => "Comment", "link" => "/comment/"];
+$spinner[] = ["name" => $comment["subject"], "short" => $comment["short_code"], "link" => "/comment/" . $comment["short_code"]];
+
+print_header();
 
 writeln('<h1>' . ucwords(item_type($type_id)) . '</h1>');
 $icon = item_icon($type_id);
@@ -120,6 +122,4 @@ if ($auth_user["admin"] || $auth_user["editor"]) {
 	end_form();
 }
 
-end_main();
 print_footer();
-

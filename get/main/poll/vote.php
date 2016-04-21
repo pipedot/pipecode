@@ -20,12 +20,14 @@
 include("poll.php");
 
 $poll = item_request(TYPE_POLL);
+$poll_code = $poll["short_code"];
 
-print_header("Poll");
-print_main_nav("poll");
-beg_main("cell");
+$spinner[] = ["name" => "Poll", "link" => "/poll/"];
+$spinner[] = ["name" => $poll["question"], "link" => "/poll/$poll_code"];
+$spinner[] = ["name" => "Vote", "link" => "/poll/$poll_code/vote"];
+
+print_header();
 
 vote_box($poll["poll_id"], true);
 
-end_main();
 print_footer();

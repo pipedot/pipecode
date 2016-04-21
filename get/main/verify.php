@@ -19,12 +19,12 @@
 
 require_https($https_enabled);
 
-$code = http_get_string("code", array("required" => false, "len" => 64, "valid" => "[0-9]abcdef"));
+$code = http_get_string("code", ["required" => false, "len" => 64, "valid" => "[0-9]abcdef"]);
 if ($code == "") {
 	$code = $s2;
 }
 if ($code == "") {
-	print_header("Verification Code");
+	print_header(["title" => "Verification Code", "form" => true]);
 	writeln('<hr>');
 	beg_main();
 	beg_form("/verify", "get");
@@ -39,9 +39,7 @@ if ($code == "") {
 
 	box_left("Verify");
 
-	end_form();
-	end_main();
-	print_footer();
+	print_footer(["form" => true]);
 	finish();
 }
 
@@ -57,9 +55,9 @@ $zid = strtolower($email_challenge["username"]) . "@$server_name";
 $new = !is_local_user($zid);
 
 if ($new) {
-	print_header("Set Password");
+	print_header(["title" => "Set Password", "form" => true]);
 } else {
-	print_header("Reset Password");
+	print_header(["title" => "Reset Password", "form" => true]);
 }
 writeln('<hr>');
 beg_main();
@@ -85,6 +83,4 @@ writeln('</table>');
 
 box_left("Save");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

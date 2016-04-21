@@ -19,8 +19,10 @@
 
 require_mine();
 
-print_header("Edit Feed", [], [], [], ["Feed", "Edit"], ["/feed/", "/feed/edit"]);
-beg_main();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Edit", "link" => "/feed/edit"];
+
+print_header(["title" => "Edit Feed"]);
 
 writeln('<table class="fill">');
 writeln('	<tr>');
@@ -45,5 +47,4 @@ for ($c = 0; $c < 3; $c++) {
 writeln('	</tr>');
 writeln('</table>');
 
-end_main();
 print_footer();

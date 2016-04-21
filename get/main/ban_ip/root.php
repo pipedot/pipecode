@@ -23,8 +23,11 @@ if (!string_uses($ip, "[0-9].:abcdef")) {
 }
 $ban_ip = db_get_rec("ban_ip", $ip);
 
-print_header("Banned IP Address");
-beg_main();
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+$spinner[] = ["name" => "Banned IP Addresses", "link" => "/ban_ip/"];
+$spinner[] = ["name" => $ip, "link" => "/ban_ip/$ip"];
+
+print_header(["title" => "Banned IP Address"]);
 
 writeln('<h1>' . get_text('Banned IP Address') . '</h1>');
 
@@ -57,5 +60,4 @@ if ($auth_user["admin"] || $auth_user["editor"]) {
 	end_form();
 }
 
-end_main();
 print_footer();

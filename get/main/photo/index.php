@@ -17,11 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-if ($auth_zid === "") {
-	print_header("Photos");
-} else {
-	print_header("Photos", array("Share"), array("notepad"), array(user_link($auth_zid) . "stream/share"));
-}
-beg_main();
-end_main();
+$spinner[] = ["name" => "Photo", "link" => "/photo/"];
+$actions[] = ["name" => "Share", "icon" => "share", "link" => "/stream/share"];
+
+print_header(["title" => "Photos"]);
+
 print_footer();

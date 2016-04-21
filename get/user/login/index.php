@@ -23,9 +23,9 @@ $auth = @$_COOKIE["auth"];
 $map = map_from_url_string($auth);
 $current_key = @$map["key"];
 
-print_header("Active Sessions", [], [], [], ["Login"], ["/login/"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Login", "link" => "/login/"];
+
+print_header(["title" => "Active Sessions", "form" => true]);
 
 beg_tab();
 $row = sql("select login_key, agent_id, os_id, last_time, country_name, address from login inner join ip on login.ip_id = ip.ip_id inner join country on ip.country_id = country.country_id where zid = ?", $zid);
@@ -71,7 +71,4 @@ end_tab();
 
 box_right("Delete All");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

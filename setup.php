@@ -76,8 +76,8 @@ if (http_post()) {
 	if (!db_has_database($sql_database)) {
 		sql("create database $sql_database");
 		sql("use $sql_database");
-		run_sql_file("$doc_root/schema.sql");
-		//run_sql_file("$doc_root/default.sql");
+		sql_file("$doc_root/schema.sql");
+		//sql_file("$doc_root/default.sql");
 
 		$zid = "$admin_username@$server_name";
 		$salt = random_hash();

@@ -24,9 +24,12 @@ require_mine();
 
 $feed = item_request(TYPE_READER);
 
-print_header($feed["name"], ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader", $feed["name"]], ["/reader/", "/reader/" . $feed["slug"]]);
-print_reader_nav();
-beg_main("cell");
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => $feed["name"], "link" => "/reader/" . $feed["slug"]];
+$actions[] = ["name" => "Add", "icon" => "plus", "link" => "/reader/add"];
+$actions[] = ["name" => "Edit", "icon" => "news", "link" => "/reader/" . $feed["slug"] . "/edit"];
+
+print_header();
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("select count(*) as item_count from article where feed_id = ?", $items_per_page, array($feed["feed_id"]));
@@ -38,5 +41,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();

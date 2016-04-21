@@ -20,19 +20,21 @@
 require_editor();
 
 $pipe = item_request(TYPE_PIPE);
+$pipe_code = $pipe["short_code"];
 
-print_header("Close Submission");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Pipe", "link" => "/pipe/"];
+$spinner[] = ["name" => $pipe["title"], "short" => $pipe_code, "link" => "/pipe/$pipe_code"];
+$spinner[] = ["name" => "Close", "link" => "/pipe/$pipe_code/close"];
+
+print_header(["title" => "Close Submission", "form" => true]);
+
 writeln('<h1>' . get_text('Close Submission') . '</h1>');
-
 writeln('<p>' . get_text('Are you sure you want to close this submission? The article will no longer show in the pipe and voting will be disabled.') . '</p>');
-writeln('<h2>' . get_text('Reason') . '</h2>');
-writeln('<p>' . get_text('Give a short reason for closing the article.') . '</p>');
-writeln('<input name="reason" type="text" len="50" required>');
 
-box_left("Close");
+beg_tab();
+print_row(array("caption" => "Reason", "text_key" => "reason", "required" => true));
+end_tab();
 
-end_form();
-end_main();
-print_footer();
+box_right("Close");
+
+print_footer(["form" => true]);

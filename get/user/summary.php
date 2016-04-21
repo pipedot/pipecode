@@ -17,8 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Summary", [], [], [], ["Summary"], ["/summary"]);
-beg_main("dual-table");
+$spinner[] = ["name" => "Summary", "link" => "/summary"];
+
+print_header(["main" => "dual-table"]);
+
 writeln('<div class="dual-left">');
 
 dict_beg("Information");
@@ -122,6 +124,5 @@ if (count($row) > 0) {
 }
 
 writeln('</div>');
-end_main();
-print_footer();
 
+print_footer();

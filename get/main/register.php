@@ -23,11 +23,11 @@ include("mail.php");
 require_https($https_enabled);
 require_feature("register");
 
-print_header("Register");
-writeln('<hr>');
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Register", "link" => "/register"];
 
+print_header(["form" => true]);
+
+writeln('<hr>');
 writeln('<h1>' . get_text('Create Account') . '</h1>');
 writeln('<table>');
 writeln('	<tr>');
@@ -65,6 +65,4 @@ writeln('</table>');
 
 box_left("Register");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

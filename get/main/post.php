@@ -25,8 +25,7 @@ include("story.php");
 
 $item = item_request();
 
-print_header("Post Comment");
-beg_main();
+print_header(["title" => "Post Comment"]);
 
 if ($item["short_type_id"] == TYPE_COMMENT) {
 	$subject = $item["subject"];
@@ -64,5 +63,4 @@ if ($item["short_type_id"] == TYPE_COMMENT) {
 
 print_post_box($article_id, $subject, "", false);
 
-end_main();
 print_footer();

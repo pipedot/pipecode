@@ -23,11 +23,10 @@ $keywords = http_get_string("keywords", ["required" => false, "len" => 100, "val
 $beg_time = $now - DAYS * 15;
 $end_time = $now + DAYS * 15;
 
-print_header("Keyword Search");
-beg_main();
-beg_form("", "get");
+$spinner[] = ["name" => "Similar", "link" => "/similar"];
 
-writeln('<h1>' . get_text('Keyword Search') . '</h1>');
+print_header();
+beg_form("", "get");
 
 beg_tab();
 print_row(array("caption" => "Keywords", "text_key" => "keywords", "text_value" => $keywords));
@@ -54,6 +53,4 @@ if ($keywords != "") {
 }
 
 end_form();
-end_main();
 print_footer();
-

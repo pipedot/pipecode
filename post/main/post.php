@@ -60,8 +60,7 @@ $time = time();
 if (http_post("preview")) {
 	$zid = $auth_zid;
 
-	print_header("Post Comment");
-	beg_main();
+	print_header(["title" => "Post Comment"]);
 
 	writeln('<h1>Preview</h1>');
 	writeln('<p>Check your links before you post!</p>');
@@ -73,7 +72,6 @@ if (http_post("preview")) {
 
 	print_post_box($article_id, $subject, $dirty_body, $coward);
 
-	end_main();
 	print_footer();
 	finish();
 }

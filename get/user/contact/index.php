@@ -19,8 +19,10 @@
 
 require_mine();
 
-print_header("Contacts", ["Add"], ["plus"], ["/contact/add"], ["Contact"], ["/contact/"]);
-beg_main();
+$spinner[] = ["name" => "Contact", "link" => "/contact/"];
+$actions[] = ["name" => "Add", "icon" => "plus", "link" => "/contact/add"];
+
+print_header(["title" => "Contacts"]);
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("contact", $items_per_page, ["zid" => $zid]);
@@ -47,5 +49,4 @@ dict_end();
 
 writeln($page_footer);
 
-end_main();
 print_footer();

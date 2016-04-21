@@ -19,9 +19,9 @@
 
 require_mine();
 
-print_header("Notifications", [], [], [], ["Notifications"], ["/notification/"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Notifications", "link" => "/notification/"];
+
+print_header(["title" => "Notifications", "form" => true]);
 
 $items_per_page = 10;
 list($item_start, $page_footer) = page_footer("notification", $items_per_page, ["zid" => $zid]);
@@ -39,6 +39,4 @@ if (count($row) == 0) {
 
 writeln($page_footer);
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

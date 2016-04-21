@@ -20,10 +20,14 @@
 require_mine();
 
 $journal = item_request(TYPE_JOURNAL);
+$journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);
 
-print_header("Publish", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"], "Publish"], ["/journal/", "/journal/" . $journal["short_code"], "/journal/" . $journal["short_code"] . "/publish"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Journal", "link" => "/journal/"];
+$spinner[] = ["name" => $journal["title"], "short" => $journal["short_code"], "link" => $journal_link];
+$spinner[] = ["name" => "Publish", "link" => "/journal/" . $journal["short_code"] . "/publish"];
+$actions[] = ["name" => "Write", "icon" => "notepad", "link" => "/journal/write"];
+
+print_header(["form" => true]);
 
 writeln('<h1>' . get_text('Publish') . '</h1>');
 writeln('<p>' . get_text('Ready to publish the journal entry [<b>$1</b>]?', $journal["title"]) . '</p>');
@@ -32,6 +36,4 @@ box_left("Publish");
 
 end_form();
 end_main();
-print_footer();
-
-
+print_footer(["form" => true]);

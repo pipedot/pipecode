@@ -21,8 +21,10 @@ require_editor();
 
 $junk = true;
 
-print_header("Junk");
-beg_main();
+$spinner[] = ["name" => "Junk", "link" => "/junk/"];
+$spinner[] = ["name" => "Anonymous", "link" => "/anonymous"];
+
+print_header(["title" => "Anonymous Comments", "form" => true]);
 
 writeln('<h1>' . get_text('Anonymous Comments') . '</h1>');
 
@@ -30,13 +32,11 @@ $row = sql("select comment_id, article_id, body, edit_time, junk_status, subject
 if (count($row) == 0) {
 	writeln('<p>' . get_text('No unmarked anonymous comments') . '</p>');
 } else {
-	beg_form();
 	for ($i = 0; $i < count($row); $i++) {
 		print_comment($row[$i], true);
 	}
 
 	box_two('<a href="?default=spam">' . get_text('Default to Spam') . '</a>', "Save");
-	end_form();
 }
 
 //<div id="select_all">Select All</div>
@@ -46,6 +46,4 @@ if (count($row) == 0) {
 //});
 //</script>
 
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

@@ -19,10 +19,10 @@
 
 require_mine();
 
-print_header("Drive");
-beg_main();
-beg_form();
-writeln('<h1>Create Folder</h1>');
+$spinner[] = ["name" => "Drive", "link" => "/drive/"];
+$spinner[] = ["name" => "Create Folder", "link" => "/drive/?mkdir"];
+
+print_header(["form" => true]);
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name"));
@@ -30,7 +30,4 @@ end_tab();
 
 box_right("Create");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

@@ -19,13 +19,22 @@
 
 require_admin();
 
-$spinner[] = ["name" => "Tools", "link" => "/tools/"];
-$spinner[] = ["name" => "Hash", "link" => "/tools/hash"];
+if (!string_uses($s2, "[a-z][0-9]-")) {
+	fatal("Invalid slug");
+}
+$old_slug = $s2;
 
-print_header();
+$name = http_post_string("name", ["valid" => "[A-Z][a-z][0-9]_-. ", "len" => 100]);
+$slug = http_post_string("slug", ["valid" => "[a-z][0-9]-", "len" => 100]);
+$icon = http_post_string("icon", ["valid" => "[a-z][0-9]-", "len" => 20, "required" => false]);
+$link = http_post_string("link", ["valid" => "[a-z][A-Z][0-9]~@#$%&()-_=+[];:,./?", "len" => 200]);
 
-dict_beg();
-dict_row("Hash", crypt_sha256($_POST["str"]));
-dict_end();
+$footer_link = db_get_rec("footer_link", $old_slug);
+$footer_link["slug"] = $slug;
+$footer_link["name"] = $name;
+$footer_link["icon"] = $icon;
+$footer_link["link"] = $link;
+db_set_rec("footer_link", $footer_link);
 
-print_footer();
+header("Location: ./");
+

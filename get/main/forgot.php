@@ -19,10 +19,11 @@
 
 require_https($https_enabled);
 
-print_header("Forgot Password");
+$spinner[] = ["name" => "Forgot Password", "link" => "/forgot"];
+
+print_header(["form" => true]);
+
 writeln('<hr>');
-beg_main();
-beg_form();
 writeln('<h1>' . get_text('Forgot Password?') . '</h1>');
 
 writeln('<table class="login">');
@@ -34,7 +35,4 @@ writeln('</table>');
 
 box_left("Send");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

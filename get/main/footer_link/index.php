@@ -19,22 +19,21 @@
 
 require_admin();
 
-print_header("Footer Links");
-beg_main();
-writeln('<h1>' . get_text('Footer Links') . '</h1>');
+$spinner[] = ["name" => "Footer Link", "link" => "/footer_link/"];
+
+print_header(["title" => "Footer Links"]);
+
+//writeln('<h1>' . get_text('Footer Links') . '</h1>');
 
 dict_beg();
-$row = sql("select title, icon, link from footer_link order by title");
-for ($i = 0; $i < count($row); $i++) {
-	$icon = $row[$i]["icon"];
-	if (!$icon) {
-		$icon = "globe";
+$list = db_get_list("footer_link", "name");
+foreach ($list as $item) {
+	if (!$item["icon"]) {
+		$item["icon"] = "globe";
 	}
-	dict_row('<a class="icon-16 ' . $icon . '-16" href="edit?title=' . urlencode($row[$i]["title"]) . '">' . $row[$i]["title"] . '</a>', '<a class="icon-16 minus-16" href="remove?title=' . urlencode($row[$i]["title"]) . '">Remove</a>');
+	dict_row('<a class="icon-16 ' . $item["icon"] . '-16" href="' . $item["slug"] . '">' . $item["name"] . '</a>', '<a class="icon-16 minus-16" href="' . $item["slug"] . '/remove">Remove</a>');
 }
 dict_end();
 box_right('<a class="icon-16 plus-16" href="add">Add</a>');
 
-end_main();
 print_footer();
-

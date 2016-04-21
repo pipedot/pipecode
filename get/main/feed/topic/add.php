@@ -21,9 +21,12 @@ require_admin();
 
 $icons = icon_list(true, true, true);
 
-print_header("New Topic");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Topic", "link" => "/feed/topic/"];
+$spinner[] = ["name" => "Add", "link" => "/feed/topic/add"];
+
+print_header(["title" => "New Topic", "form" => true]);
+
 writeln('<h1>' . get_text('New Topic') . '</h1>');
 
 beg_tab();
@@ -34,6 +37,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

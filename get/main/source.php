@@ -17,10 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Source Code");
-beg_main();
+$spinner[] = ["name" => "Source Code", "link" => "/source"];
 
-writeln('<h1>' . get_text('Source Code') . '</h1>');
+print_header();
+
 writeln('<p>' . get_text('This source code of this site is licensed under the GNU Affero General Public License') . '</p>');
 
 $body = fs_slurp("$doc_root/license.html");
@@ -44,6 +44,4 @@ dict_row("GitHub Repository", '<a href="https://github.com/pipedot/pipecode">htt
 dict_row("This Site", '<a href="/download" rel="nofollow">' . $tarball . '</a>');
 dict_end();
 
-end_main();
 print_footer();
-

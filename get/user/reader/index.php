@@ -22,7 +22,12 @@ include("story.php");
 
 require_mine();
 
-print_header("Reader", ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader"], ["/reader/"]);
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$actions[] = ["name" => "Add", "icon" => "plus", "link" => "/reader/add"];
+$actions[] = ["name" => "Edit", "icon" => "news", "link" => "/reader/topic/"];
+
+print_header(["main" => "none"]);
+
 print_reader_nav();
 beg_main("cell");
 
@@ -36,5 +41,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();

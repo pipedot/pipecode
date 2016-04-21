@@ -219,9 +219,13 @@ function item_request($type_id = 0)
 			fatal("Invalid short code");
 		}
 		$short_id = crypt_crockford_decode($short_code);
+		$short_code = crypt_crockford_encode($short_id);
 		$type = item_type($type_id);
 
-		return db_get_rec($type, $short_id);
+		$rec = db_get_rec($type, $short_id);
+		$rec["short_code"] = $short_code;
+
+		return $rec;
 	} else {
 		if ($type_id == TYPE_BUG_FILE) {
 			$short_code = $s3;

@@ -17,19 +17,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Topics");
-print_main_nav("topics");
-beg_main("cell");
+$spinner[] = ["name" => "Topic", "link" => "/topic/"];
 
-writeln('<h1>' . get_text('Topics') . '</h1>');
+print_header(["title" => "Topics"]);
 
 $list = db_get_list("topic", "topic");
-$k = array_keys($list);
-for ($i = 0; $i < count($list); $i++) {
-	$topic = $list[$k[$i]];
+foreach ($list as $topic) {
 	writeln('<a class="topic-box ' . $topic["icon"] . '-64" href="/topic/' . $topic["slug"] . '">' . $topic["topic"] . '</a>');
 }
 
-end_main();
 print_footer();
-

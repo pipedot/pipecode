@@ -1,7 +1,7 @@
 <?
 //
 // tools - general utility functions
-// Copyright (C) 1998-2015 Bryan Beicker <bryan@beicker.com>
+// Copyright (C) 1998-2016 Bryan Beicker <bryan@beicker.com>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,16 +17,26 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-const SECONDS = 1;
-const MINUTES = 60;
-const HOURS = 3600;
 const DAYS = 86400;
+const HOURS = 3600;
+const MINUTES = 60;
+const SECONDS = 1;
 const WEEKS = 604800;
 const YEARS = 31536000;
 
 $cache_count = 0;
 $sql_count = 0;
 $writeln_size = 0;
+
+
+function array_get($ary, $key, $default = "")
+{
+	if (array_key_exists($key, $ary)) {
+		return $ary[$key];
+	} else {
+		return $default;
+	}
+}
 
 
 function assert_equal($x, $y)
@@ -91,13 +101,22 @@ function assert_true($test)
 }
 
 
-function beg_form($action = "", $method = "post")
+function beg_form($a = "", $method = "post")
 {
+	if (is_bool($a)) {
+		$action = "";
+	} else if (is_array($a)) {
+		$action = array_get($a, "action");
+		$method = array_get($a, "method", $method);
+	} else {
+		$action = $a;
+	}
+
 	writeln('<form' . ($action == '' ? '' : ' action="' . $action . '"' ) . ($method == 'post' || $method == 'file' ? ' method="post"' : '' ) . ($method == 'file' ? ' enctype="multipart/form-data"' : '') . '>');
 }
 
 
-function beg_tab($caption = "", $a = [])
+function beg_tab($caption = "", $a = array())
 {
 	$s = '<table';
 	if (array_key_exists("id", $a)) {
@@ -120,6 +139,61 @@ function beg_tab($caption = "", $a = [])
 		}
 		writeln('	</tr>');
 	}
+}
+
+
+function box_buttons($buttons)
+{
+	if (string_has($buttons, "<") || string_has($buttons, ".")) {
+		return $buttons;
+	} else {
+		$a = explode(",", $buttons);
+		$s = "";
+		for ($i = 0; $i < count($a); $i++) {
+			$value = trim($a[$i]);
+			$name = strtolower($value);
+			$name = str_replace(" ", "_", $name);
+			$s .= '<input type="submit" name="' . $name . '" value="' . get_text($value) . '"> ';
+		}
+		return trim($s);
+	}
+}
+
+
+function box_center($buttons)
+{
+	writeln('<div class="box-center">' . box_buttons($buttons) . '</div>');
+}
+
+
+function box_left($buttons)
+{
+	writeln('<div class="box-left">' . box_buttons($buttons) . '</div>');
+}
+
+
+function box_right($buttons)
+{
+	writeln('<div class="box-right">' . box_buttons($buttons) . '</div>');
+}
+
+
+function box_three($left, $center, $right)
+{
+	writeln('<div class="box-three">');
+	writeln('	<div>' . box_buttons($left) . '</div>');
+	writeln('	<div>' . box_buttons($center) . '</div>');
+	writeln('	<div>' . box_buttons($right) . '</div>');
+	writeln('</div>');
+}
+
+
+function box_two($left, $right)
+{
+	writeln('<div class="box-two">');
+	writeln('	<div>' . box_buttons($left) . '</div>');
+	writeln('	<div>' . box_buttons($right) . '</div>');
+	writeln('</div>');
 }
 
 
@@ -149,27 +223,6 @@ function cache_beg($key)
 }
 
 
-function cache_end($expire = -1)
-{
-	global $writeln_cache;
-	global $writeln_key;
-	global $writeln_buffer;
-	global $cache_enabled;
-
-	$cache_enabled = true;
-
-	$writeln_cache = false;
-	$s = implode("\n", $writeln_buffer);
-	$writeln_buffer = [];
-	cache_set($writeln_key, $s, $expire);
-	$writeln_key = "";
-
-	$cache_enabled = false;
-
-	return $s;
-}
-
-
 function cache_delete($key)
 {
 	global $cache_enabled;
@@ -191,6 +244,27 @@ function cache_delete($key)
 	}
 
 	$memcache->delete($key);
+}
+
+
+function cache_end($expire = -1)
+{
+	global $writeln_cache;
+	global $writeln_key;
+	global $writeln_buffer;
+	global $cache_enabled;
+
+	$cache_enabled = true;
+
+	$writeln_cache = false;
+	$s = implode("\n", $writeln_buffer);
+	$writeln_buffer = [];
+	cache_set($writeln_key, $s, $expire);
+	$writeln_key = "";
+
+	$cache_enabled = false;
+
+	return $s;
 }
 
 
@@ -371,43 +445,6 @@ function crypt_crc32($src)
 }
 
 
-function gz_slap($path, $data)
-{
-	$size = strlen($data);
-	$fp = @gzopen($path, "w9");
-	if ($fp === false) {
-		return false;
-	}
-	if (@gzwrite($fp, $data) != $size) {
-		return false;
-	}
-
-	return @gzclose($fp);
-}
-
-
-function gz_slurp($path)
-{
-	$fp = @gzopen($path, "r");
-	if (!$fp) {
-		return false;
-	}
-
-	$data = "";
-	while (!@gzeof($fp)) {
-		$data .= @gzread($fp, 1024);
-	}
-	@gzclose($fp);
-
-	return $data;
-}
-
-
-function http_modified($time, $etag) {
-	return !((isset($_SERVER["HTTP_IF_MODIFIED_SINCE"]) && strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]) >= $time) || (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $etag));
-}
-
-
 function crypt_crc32_file($path)
 {
 	return string_pad(@hash_file("crc32b", $path), 8);
@@ -433,6 +470,26 @@ function crypt_escape($src)
 	$s = str_replace(":", "\\:", $s);
 
 	return $s;
+}
+
+
+function crypt_gzip_file($src_path, $dst_path, $level = "")
+{
+	$src_fp = @fopen($src_path, "r");
+	if (!$src_fp) {
+		return false;
+	}
+	$dst_fp = @gzopen($dst_path, "w" . $level);
+	if (!$dst_fp) {
+		return false;
+	}
+	while (!feof($src_fp)) {
+		gzwrite($dst_fp, fread($src_fp, 8192));
+	}
+	gzclose($dst_fp);
+	fclose($src_fp);
+
+	return true;
 }
 
 
@@ -583,16 +640,14 @@ function db_del_rec($table, $id)
 	global $db_table;
 	global $cache_enabled;
 
-	if (!array_key_exists($table, $db_table)) {
-		die("unknown table [$table]");
-	}
+	db_verify_table($table);
 	$key = db_key($table);
 	if (is_array($key)) {
 		if (!is_array($id)) {
-			die("error [id is not the full key] function [db_del_rec] table [$table] id [$id]");
+			fatal_error("id is not the full key");
 		}
 		$sql = "delete from $table where ";
-		$a = array();
+		$a = [];
 		for ($i = 0; $i < count($key); $i++) {
 			$sql .= $key[$i] . " = ? and ";
 			$a[] = $id[$key[$i]];
@@ -609,12 +664,59 @@ function db_del_rec($table, $id)
 }
 
 
-function db_get_conf($table, $id = false)
+function db_find_rec($table, $id)
 {
 	global $db_table;
-	global $default_conf;
 	global $cache_enabled;
 
+	db_verify_table($table);
+	if ($cache_enabled && !is_array($id)) {
+		$cache_key = "$table.rec.$id";
+		$s = cache_get($cache_key);
+		if ($s !== false) {
+			return map_from_conf_string($s);
+		}
+	}
+
+	$key = db_key($table);
+	$tab = $db_table[$table];
+
+	if (is_array($id)) {
+		$k = array_keys($id);
+		$a = [];
+		$sql = "select * from $table where ";
+		for ($i = 0; $i < count($id); $i++) {
+			$sql .= $k[$i] . ' = ? and ';
+			$a[] = $id[$k[$i]];
+		}
+		$sql = substr($sql, 0, -5);
+		$row = sql($sql, $a);
+	} else {
+		$row = sql("select * from $table where $key = ?", $id);
+	}
+	if (count($row) == 0) {
+		return false;
+	}
+	$rec = [];
+	for ($i = 0; $i < count($tab); $i++) {
+		$rec[$tab[$i]["name"]] = $row[0][$tab[$i]["name"]];
+	}
+
+	if ($cache_enabled && !is_array($id)) {
+		cache_set($cache_key, map_to_conf_string($rec));
+	}
+
+	return $rec;
+}
+
+
+function db_get_conf($table, $id = false)
+{
+	global $cache_enabled;
+	global $db_table;
+	global $default_conf;
+
+	db_verify_table($table);
 	if ($id !== false) {
 		$key = db_key($table);
 	}
@@ -631,15 +733,18 @@ function db_get_conf($table, $id = false)
 		}
 	}
 
-	$map = array();
-//	$row = sql("select name, value from default_conf where conf = ?", $table);
-//	for ($i = 0; $i < count($row); $i++) {
-//		$map[$row[$i]["name"]] = $row[$i]["value"];
-//	}
-	if (array_key_exists($table, $default_conf)) {
-		$keys = array_keys($default_conf[$table]);
-		for ($i = 0; $i < count($keys); $i++) {
-			$map[$keys[$i]] = $default_conf[$table][$keys[$i]];
+	$map = [];
+	if (is_array($default_conf)) {
+		if (array_key_exists($table, $default_conf)) {
+			$keys = array_keys($default_conf[$table]);
+			for ($i = 0; $i < count($keys); $i++) {
+				$map[$keys[$i]] = $default_conf[$table][$keys[$i]];
+			}
+		}
+	} else {
+		$row = sql("select name, value from default_conf where conf = ?", $table);
+		for ($i = 0; $i < count($row); $i++) {
+			$map[$row[$i]["name"]] = $row[$i]["value"];
 		}
 	}
 
@@ -665,15 +770,13 @@ function db_get_count($table, $id)
 {
 	global $db_table;
 
-	if (!array_key_exists($table, $db_table)) {
-		die("unknown table [$table]");
-	}
+	db_verify_table($table);
 	$key = db_key($table);
 	$tab = $db_table[$table];
 
 	if (is_array($id)) {
 		$k = array_keys($id);
-		$a = array();
+		$a = [];
 		$sql = "select count(*) as row_count from $table where ";
 		for ($i = 0; $i < count($id); $i++) {
 			$sql .= $k[$i] . ' = ? and ';
@@ -689,22 +792,20 @@ function db_get_count($table, $id)
 }
 
 
-function db_get_list($table, $order = "", $where = array())
+function db_get_list($table, $order = "", $where = [])
 {
 	global $db_table;
 
-	if (!array_key_exists($table, $db_table)) {
-		die("unknown table [$table]");
-	}
+	db_verify_table($table);
 	if (strlen($order) > 0) {
 		if (!string_uses($order, "[a-z][A-Z][0-9]_, ")) {
-			die("invalid order [$order]");
+			fatal_error("Invalid order");
 		}
 	}
 	$key = db_key($table);
 	$tab = $db_table[$table];
 
-	$a = array();
+	$a = [];
 	if (count($where) > 0) {
 		$w = " where ";
 		$k = array_keys($where);
@@ -724,10 +825,10 @@ function db_get_list($table, $order = "", $where = array())
 	}
 
 	$row = sql("select * from $table$w$o", $a);
-	$a = array();
+	$a = [];
 	for ($i = 0; $i < count($row); $i++) {
 		if (is_array($key)) {
-			$b = array();
+			$b = [];
 			for ($j = 0; $j < count($key); $j++) {
 				$b[] = $row[$i][$key[$j]];
 			}
@@ -735,7 +836,7 @@ function db_get_list($table, $order = "", $where = array())
 		} else {
 			$n = $row[$i][$key];
 		}
-		$b = array();
+		$b = [];
 		for ($j = 0; $j < count($tab); $j++) {
 			$b[$tab[$j]["name"]] = $row[$i][$tab[$j]["name"]];
 		}
@@ -750,59 +851,7 @@ function db_get_rec($table, $id)
 {
 	$rec = db_find_rec($table, $id);
 	if ($rec === false) {
-		if (is_array($id)) {
-			die("record not found - table [$table] id [" . map_to_tag_string($id) . "]");
-		} else {
-			die("record not found - table [$table] id [$id]");
-		}
-	}
-
-	return $rec;
-}
-
-
-function db_find_rec($table, $id)
-{
-	global $db_table;
-	global $cache_enabled;
-
-	if ($cache_enabled && !is_array($id)) {
-		$cache_key = "$table.rec.$id";
-		$s = cache_get($cache_key);
-		if ($s !== false) {
-			return map_from_conf_string($s);
-		}
-	}
-
-	if (!array_key_exists($table, $db_table)) {
-		die("unknown table [$table]");
-	}
-	$key = db_key($table);
-	$tab = $db_table[$table];
-
-	if (is_array($id)) {
-		$k = array_keys($id);
-		$a = array();
-		$sql = "select * from $table where ";
-		for ($i = 0; $i < count($id); $i++) {
-			$sql .= $k[$i] . ' = ? and ';
-			$a[] = $id[$k[$i]];
-		}
-		$sql = substr($sql, 0, -5);
-		$row = sql($sql, $a);
-	} else {
-		$row = sql("select * from $table where $key = ?", $id);
-	}
-	if (count($row) == 0) {
-		return false;
-	}
-	$rec = array();
-	for ($i = 0; $i < count($tab); $i++) {
-		$rec[$tab[$i]["name"]] = $row[0][$tab[$i]["name"]];
-	}
-
-	if ($cache_enabled && !is_array($id)) {
-		cache_set($cache_key, map_to_conf_string($rec));
+		fatal_error("Record not found");
 	}
 
 	return $rec;
@@ -824,6 +873,7 @@ function db_has_rec($table, $id)
 	global $db_table;
 	global $cache_enabled;
 
+	db_verify_table($table);
 	if ($cache_enabled && !is_array($id)) {
 		$cache_key = "$table.rec.$id";
 		if (cache_has($cache_key)) {
@@ -832,11 +882,11 @@ function db_has_rec($table, $id)
 	}
 
 	if (!array_key_exists($table, $db_table)) {
-		die("unknown table [$table]");
+		fatal_error("Unknown table");
 	}
 	if (is_array($id)) {
 		$k = array_keys($id);
-		$a = array();
+		$a = [];
 		$sql = "select * from $table where ";
 		for ($i = 0; $i < count($id); $i++) {
 			$sql .= $k[$i] . ' = ? and ';
@@ -859,7 +909,8 @@ function db_key($table)
 {
 	global $db_table;
 
-	$key = array();
+	db_verify_table($table);
+	$key = [];
 	$tab = $db_table[$table];
 	for ($i = 0; $i < count($tab); $i++) {
 		if (array_key_exists("key", $tab[$i])) {
@@ -889,9 +940,10 @@ function db_new_rec($table)
 {
 	global $db_table;
 
+	db_verify_table($table);
 	$key = db_key($table);
 	$tab = $db_table[$table];
-	$rec = array();
+	$rec = [];
 	for ($i = 0; $i < count($tab); $i++) {
 		$value = "";
 		if (array_key_exists("auto", $tab[$i])) {
@@ -916,15 +968,16 @@ function db_rollback()
 
 function db_set_conf($table, $map, $id = false)
 {
-	global $db_table;
 	global $cache_enabled;
+	global $db_table;
 	global $default_conf;
 
+	db_verify_table($table);
 	if ($id !== false) {
 		$key = db_key($table);
 	}
-	$current = array();
-	$default = array();
+	$current = [];
+	$default = [];
 
 	if ($id === false) {
 		$row = sql("select name, value from $table");
@@ -935,16 +988,15 @@ function db_set_conf($table, $map, $id = false)
 		$current[$row[$i]["name"]] = $row[$i]["value"];
 	}
 
-	//$row = sql("select name, value from default_conf where conf = ?", $table);
-	//for ($i = 0; $i < count($row); $i++) {
-	//	$default[$row[$i]["name"]] = $row[$i]["value"];
-	//}
-	if (array_key_exists($table, $default_conf)) {
-		$default = $default_conf[$table];
-//		$keys = array_keys($default_conf[$table]);
-//		for ($i = 0; $i < count($keys); $i++) {
-//			$default[$keys[$i]] = $default_conf[$table][$keys[$i]];
-//		}
+	if (is_array($default_conf)) {
+		if (array_key_exists($table, $default_conf)) {
+			$default = $default_conf[$table];
+		}
+	} else {
+		$row = sql("select name, value from default_conf where conf = ?", $table);
+		for ($i = 0; $i < count($row); $i++) {
+			$default[$row[$i]["name"]] = $row[$i]["value"];
+		}
 	}
 
 	$k = array_keys($map);
@@ -999,13 +1051,11 @@ function db_set_rec($table, $rec)
 	global $db_table;
 	global $cache_enabled;
 
-	if (!array_key_exists($table, $db_table)) {
-		die("unknown table [$table]");
-	}
+	db_verify_table($table);
 	$key = db_key($table);
 	$tab = $db_table[$table];
 	if (is_array($key)) {
-		$id = array();
+		$id = [];
 		for ($i = 0; $i < count($key); $i++) {
 			$id[$key[$i]] = $rec[$key[$i]];
 		}
@@ -1029,7 +1079,7 @@ function db_set_rec($table, $rec)
 		$insert = true;
 	}
 
-	$a = array();
+	$a = [];
 	if ($insert) {
 		$sql = "insert into $table (";
 		for ($i = 0; $i < count($tab); $i++) {
@@ -1084,12 +1134,17 @@ function db_set_rec($table, $rec)
 }
 
 
-function default_error($text)
+function db_verify_table($table)
 {
-	if (defined("FATAL_ERROR")) {
-		fatal_error($text);
+	global $db_table;
+
+	if (!array_key_exists($table, $db_table)) {
+		if (strlen($table) <= 20 && string_uses($table, "[a-z][A-Z][0-9]_")) {
+			fatal_error("Unknown table [$table]");
+		} else {
+			fatal_error("Unknown table");
+		}
 	}
-	die("error: $text");
 }
 
 
@@ -1106,6 +1161,20 @@ function dict_beg($caption1 = "", $caption2 = "")
 		writeln('		<th colspan="2">' . get_text($caption1) . '</th>');
 		writeln('	</tr>');
 	}
+}
+
+
+function dict_end()
+{
+	writeln('</table>');
+}
+
+
+function dict_none($caption = "none")
+{
+	writeln('	<tr>');
+	writeln('		<td colspan="2">(' . get_text($caption) . ')</td>');
+	writeln('	</tr>');
 }
 
 
@@ -1168,20 +1237,6 @@ function dict_row($name, $value = "")
 }
 
 
-function dict_none($caption = "(none)")
-{
-	writeln('	<tr>');
-	writeln('		<td colspan="2">' . get_text($caption) . '</td>');
-	writeln('	</tr>');
-}
-
-
-function dict_end()
-{
-	writeln('</table>');
-}
-
-
 function end_form()
 {
 	writeln('</form>');
@@ -1191,6 +1246,19 @@ function end_form()
 function end_tab()
 {
 	writeln('</table>');
+}
+
+
+function fatal_error($error, $code = 400)
+{
+	if (function_exists("fatal")) {
+		fatal($error, $code);
+	}
+	if ($code != 200) {
+		http_response_code($code);
+	}
+	header_text();
+	die("error: $error");
 }
 
 
@@ -1418,6 +1486,38 @@ function get_text($singular, $arg = [])
 }
 
 
+function gz_slap($path, $data)
+{
+	$size = strlen($data);
+	$fp = @gzopen($path, "w9");
+	if ($fp === false) {
+		return false;
+	}
+	if (@gzwrite($fp, $data) != $size) {
+		return false;
+	}
+
+	return @gzclose($fp);
+}
+
+
+function gz_slurp($path)
+{
+	$fp = @gzopen($path, "r");
+	if (!$fp) {
+		return false;
+	}
+
+	$data = "";
+	while (!@gzeof($fp)) {
+		$data .= @gzread($fp, 1024);
+	}
+	@gzclose($fp);
+
+	return $data;
+}
+
+
 function header_expires($delta = 0)
 {
 	if ($delta == 0) {
@@ -1442,29 +1542,29 @@ function header_last_modified($time)
 
 function header_text()
 {
-	header("Content-Type: text/plain");
+	header("Content-Type: text/plain; charset=utf-8");
 }
 
 
-function http_cookie_bool($name, $arg = array())
+function http_cookie_bool($name, $arg = [])
 {
 	return http_test_bool($name, "cookie", $arg);
 }
 
 
-function http_cookie_date($name, $arg = array())
+function http_cookie_date($name, $arg = [])
 {
 	return http_test_date($name, "cookie", $arg);
 }
 
 
-function http_cookie_int($name, $arg = array())
+function http_cookie_int($name, $arg = [])
 {
 	return http_test_int($name, "cookie", $arg);
 }
 
 
-function http_cookie_string($name, $arg = array())
+function http_cookie_string($name, $arg = [])
 {
 	return http_test_string($name, "cookie", $arg);
 }
@@ -1510,10 +1610,77 @@ function http_get_string($name, $arg = array())
 }
 
 
-function http_post($submit = "")
+function http_host($required = true)
 {
+	if (array_key_exists("HTTP_HOST", $_SERVER)) {
+		$host = strtolower($_SERVER["HTTP_HOST"]);
+		if (valid_host($host)) {
+			return $host;
+		}
+	}
+
+	if ($required) {
+		die("host header not found");
+	} else {
+		return "";
+	}
+}
+
+
+function http_modified($time, $etag) {
+	return !((isset($_SERVER["HTTP_IF_MODIFIED_SINCE"]) && strtotime($_SERVER["HTTP_IF_MODIFIED_SINCE"]) >= $time) || (isset($_SERVER["HTTP_IF_NONE_MATCH"]) && $_SERVER["HTTP_IF_NONE_MATCH"] == $etag));
+}
+
+
+function http_origin($required = false)
+{
+	if (array_key_exists("HTTP_ORIGIN", $_SERVER)) {
+		$a = parse_url($_SERVER["HTTP_ORIGIN"]);
+		$scheme = strtolower($a["scheme"]);
+		$host = strtolower($a["host"]);
+		if (($scheme === "http" || $scheme === "https") && valid_host($host)) {
+			return "$scheme://$host";
+		}
+	}
+
+	if ($required) {
+		die("origin header not found");
+	} else {
+		return "";
+	}
+}
+
+
+function http_path()
+{
+	$path = array_get($_SERVER, "REQUEST_URI", "/");
+	if (strlen($path) == 0 || substr($path, 0, 1) !== "/") {
+		$path = "/";
+	} else {
+		$pos = strpos($path, "?");
+		if ($pos !== false) {
+			$path = substr($path, 0, $pos);
+		}
+	}
+
+	return $path;
+}
+
+
+function http_post($submit = "", $same_origin = true)
+{
+	if ($same_origin) {
+		$host = http_scheme() . "://" . http_host();
+		$origin = http_origin();
+		$referer = http_referer(true);
+
+		if ($origin !== $host && $referer !== $host) {
+			return false;
+		}
+	}
+
 	if ($submit == "") {
-		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		if ($_SERVER["REQUEST_METHOD"] === "POST") {
 			return true;
 		}
 	} else {
@@ -1550,78 +1717,82 @@ function http_post_string($name, $arg = array())
 }
 
 
+function http_referer($origin_only = false)
+{
+	if (array_key_exists("HTTP_REFERER", $_SERVER)) {
+		$a = parse_url($_SERVER["HTTP_REFERER"]);
+		$scheme = strtolower($a["scheme"]);
+		$host = strtolower($a["host"]);
+		if (($scheme === "http" || $scheme === "https") && valid_host($host)) {
+			if ($origin_only) {
+				return "$scheme://$host";
+			} else {
+				$path = string_clean($a["path"], "[a-z][A-Z][0-9]-_.+()/");
+				if (substr($path, 0, 1) !== "/") {
+					return "$scheme://$host/";
+				} else {
+					return "$scheme://$host$path";
+				}
+			}
+		}
+	}
+
+	return "";
+}
+
+
+function http_scheme()
+{
+	if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == 1) || isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {
+		return "https";
+	} else {
+		return "http";
+	}
+}
+
+
 function http_slap($url, $data, $timeout = 5)
 {
-	if (function_exists("curl_init")) {
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-		$data = curl_exec($ch);
-		curl_close($ch);
-
-		return $data;
+	if (!function_exists("curl_init")) {
+		fatal_error("curl not available");
 	}
 
-	if (ini_get("allow_url_fopen")) {
-		$context = stream_context_create(array('http' => array(
-		    'method' => "POST",
-		    'header' => "Content-Type: application/x-www-form-urlencoded",
-		    'timeout' => 14 * 60,
-		    'content' => $data
-		)));
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+	$data = curl_exec($ch);
+	curl_close($ch);
 
-		return @file_get_contents($url, false, $context);
-	}
-
-	die("unable to slap - url [$url] allow_url_fopen [disabled] curl [disabled]");
+	return $data;
 }
 
 
 function http_slurp($url, $timeout = 5)
 {
-	if (function_exists("curl_init")) {
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		$data = curl_exec($ch);
-		curl_close($ch);
-
-		return $data;
+	if (!function_exists("curl_init")) {
+		fatal_error("curl not available");
 	}
 
-	if (ini_get("allow_url_fopen")) {
-		return @file_get_contents($url);
-	}
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+	curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+	$data = curl_exec($ch);
+	curl_close($ch);
 
-	die("unable to slurp - url [$url] allow_url_fopen [disabled] curl [disabled]");
+	return $data;
 }
 
 
-function http_test_bool($name, $method, $arg = array())
+function http_test_bool($name, $method, $arg = [])
 {
-	if ($method == "get") {
-		$value = @$_GET[$name];
-		if ($value == "") {
-			$value = http_get($name);
-		}
-	} else if ($method == "post") {
-		$value = @$_POST[$name];
-	} else if ($method == "cookie") {
-		$value = @$_COOKIE[$name];
-	} else {
-		$value = $name;
-	}
-	if (array_key_exists("numeric", $arg)) {
-		$numeric = $arg["numeric"];
-	} else {
-		$numeric = false;
-	}
-	if ($value == 1 || $value == "1" || $value == "on" || $value == "true") {
+	$value = http_test_value($name, $method);
+	$numeric = array_get($arg, "numeric", false);
+	if ($value === 1 || $value === "1" || $value === "on" || $value === "true") {
 		if ($numeric) {
 			return 1;
 		} else {
@@ -1630,26 +1801,15 @@ function http_test_bool($name, $method, $arg = array())
 	}
 	if ($numeric) {
 		return 0;
+	} else {
+		return false;
 	}
-
-	return false;
 }
 
 
-function http_test_date($name, $method, $arg = array())
+function http_test_date($name, $method, $arg = [])
 {
-	if ($method == "get") {
-		$value = @$_GET[$name];
-		if ($value == "") {
-			$value = http_get($name);
-		}
-	} else if ($method == "post") {
-		$value = @$_POST[$name];
-	} else if ($method == "cookie") {
-		$value = @$_COOKIE[$name];
-	} else {
-		$value = $name;
-	}
+	$value = http_test_value($name, $method);
 	// 1262423045
 	if (strlen($value) <= 10) {
 		if (string_uses($value, "[0-9]")) {
@@ -1678,59 +1838,40 @@ function http_test_date($name, $method, $arg = array())
 	if (!($time === false)) {
 		return $time;
 	}
-	if (array_key_exists("required", $arg)) {
-		$required = $arg["required"];
-	} else {
-		$required = true;
-	}
+	$required = array_get($arg, "required", true);
 	if (array_key_exists("default", $arg)) {
-			return $arg["default"];
+		return $arg["default"];
 	} else if ($required) {
-		default_error("value not found - method [$method] type [date] name [$name]");
+		fatal_error("Missing value - method [$method] type [date] name [$name]");
 	}
 
 	return 0;
 }
 
 
-function http_test_int($name, $method, $arg = array())
+function http_test_int($name, $method, $arg = [])
 {
-	if ($method == "get") {
-		$value = @$_GET[$name];
-		if ($value == "") {
-			$value = http_get($name);
-		}
-	} else if ($method == "post") {
-		$value = @$_POST[$name];
-	} else if ($method == "cookie") {
-		$value = @$_COOKIE[$name];
-	} else {
-		$value = $name;
-	}
-	if (array_key_exists("required", $arg)) {
-		$required = $arg["required"];
-	} else {
-		$required = true;
-	}
+	$value = http_test_value($name, $method);
+	$required = array_get($arg, "required", true);
 	if ($value == "") {
 		if (array_key_exists("default", $arg)) {
 			return $arg["default"];
 		} else if ($required) {
-			default_error("value not found - method [$method] type [int] name [$name]");
+			fatal_error("Missing value - method [$method] type [int] name [$name]");
 		} else {
 			return 0;
 		}
 	}
 	if (!string_uses($value, "[0-9]-")) {
-		default_error("invalid value - method [$method] type [int] name [$name] value [$value]");
+		fatal_error("Invalid value - method [$method] type [int] name [$name]");
 	}
 	if (strlen($value) == 1) {
-		if ($value == "-") {
-			default_error("invalid value - method [$method] type [int] name [$name] value [$value]");
+		if ($value === "-") {
+			fatal_error("Invalid value - method [$method] type [int] name [$name]");
 		}
 	} else if (strlen($value) > 1) {
 		if (!string_uses(substr($value, 1), "[0-9]")) {
-			default_error("invalid value - method [$method] type [int] name [$name] value [$value]");
+			fatal_error("Invalid value - method [$method] type [int] name [$name]");
 		}
 	}
 
@@ -1738,47 +1879,24 @@ function http_test_int($name, $method, $arg = array())
 }
 
 
-function http_test_string($name, $method, $arg = array())
+function http_test_string($name, $method, $arg = [])
 {
-	if ($method == "get") {
-		$value = @$_GET[$name];
-		if ($value == "") {
-			$value = http_get($name);
-		}
-	} else if ($method == "post") {
-		$value = @$_POST[$name];
-	} else if ($method == "cookie") {
-		$value = @$_COOKIE[$name];
-	} else {
-		$value = $name;
-	}
+	$value = http_test_value($name, $method);
 	$value = trim($value);
-	if (array_key_exists("len", $arg)) {
-		$len = $arg["len"];
-	} else {
-		$len = 0;
-	}
-	if (array_key_exists("required", $arg)) {
-		$required = $arg["required"];
-	} else {
-		$required = true;
-	}
-	if (array_key_exists("valid", $arg)) {
-		$valid = $arg["valid"];
-	} else {
-		$valid = "[a-z][A-Z][0-9]`~!@#\$%^&*()_+-=[]\\{}|;':\",./<>? ";
-	}
+	$len = array_get($arg, "len", 0);
+	$required = array_get($arg, "required", true);
+	$valid = array_get($arg, "valid", "[KEYBOARD]");
 	if ($value == "") {
 		if (array_key_exists("default", $arg)) {
 			return $arg["default"];
 		} else if ($required) {
-			default_error("value not found - method [$method] type [text] name [$name]");
+			fatal_error("Missing value - method [$method] type [string] name [$name]");
 		} else {
 			return "";
 		}
 	}
 	if (!string_uses($value, $valid)) {
-		default_error("invalid value - method [$method] type [string] name [$name] value [$value]");
+		fatal_error("Invalid value - method [$method] type [string] name [$name]");
 	}
 	if ($len > 0 && strlen($value) > $len) {
 		return substr($value, 0, $len);
@@ -1788,58 +1906,37 @@ function http_test_string($name, $method, $arg = array())
 }
 
 
-function box_center($buttons)
+function http_test_value($name, $method)
 {
-	writeln('<div class="box-center">' . box_buttons($buttons) . '</div>');
-}
-
-
-function box_left($buttons)
-{
-	writeln('<div class="box-left">' . box_buttons($buttons) . '</div>');
-}
-
-
-function box_right($buttons)
-{
-	writeln('<div class="box-right">' . box_buttons($buttons) . '</div>');
-}
-
-
-function box_two($left, $right)
-{
-	writeln('<div class="box-two">');
-	writeln('	<div>' . box_buttons($left) . '</div>');
-	writeln('	<div>' . box_buttons($right) . '</div>');
-	writeln('</div>');
-}
-
-
-function box_three($left, $center, $right)
-{
-	writeln('<div class="box-three">');
-	writeln('	<div>' . box_buttons($left) . '</div>');
-	writeln('	<div>' . box_buttons($center) . '</div>');
-	writeln('	<div>' . box_buttons($right) . '</div>');
-	writeln('</div>');
-}
-
-
-function box_buttons($buttons)
-{
-	if (string_has($buttons, "<") || string_has($buttons, ".")) {
-		return $buttons;
-	} else {
-		$a = explode(",", $buttons);
-		$s = "";
-		for ($i = 0; $i < count($a); $i++) {
-			$value = trim($a[$i]);
-			$name = strtolower($value);
-			$name = str_replace(" ", "_", $name);
-			$s .= '<input type="submit" name="' . $name . '" value="' . get_text($value) .'"> ';
-		}
-		return trim($s);
+	if (!string_uses($name, "[a-z][0-9]-_")) {
+		fatal_error("Invalid name");
 	}
+	if ($method === "get") {
+		$value = array_get($_GET, $name);
+		if ($value === "") {
+			$value = http_get($name);
+		}
+	} else if ($method === "post") {
+		$value = array_get($_POST, $name);
+	} else if ($method === "cookie") {
+		$value = array_get($_COOKIE, $name);
+	} else {
+		fatal_error("Invalid method");
+	}
+
+	return trim($value);
+}
+
+
+function link_16($icon, $link = "", $name = "")
+{
+	if (is_array($icon)) {
+		$link = array_get($icon, "link");
+		$name = array_get($icon, "name");
+		$icon = array_get($icon, "icon");
+	}
+
+	return '<a class="icon-16 ' . $icon . '-16" href="' . $link . '">' . $name . '</a>';
 }
 
 
@@ -2052,7 +2149,7 @@ function open_database()
 	try {
 		$sql_dbh = new PDO($sql_server, $sql_user, $sql_pass);
 	} catch (PDOException $exception) {
-		default_error($exception->getMessage());
+		fatal_error($exception->getMessage());
 	}
 
 	$sql_dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -2094,7 +2191,7 @@ function print_row($a)
 	if (array_key_exists("text_key", $a)) {
 		writeln('			<div class="row-tab">');
 		writeln('				<div' . $indent_width . ' class="row-caption">' . $a["caption"] . '</div>');
-		writeln('				<div><div class="row-outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . @$a["text_value"] . '"></div></div>');
+		writeln('				<div><div class="row-outline"><input id="' . $a["text_key"] . '" name="' . $a["text_key"] . '" type="text"' . $required . ' value="' . str_replace("\"", "&quot;", @$a["text_value"]) . '"></div></div>');
 		if (array_key_exists("text_default", $a)) {
 			writeln('				<div class="row-action"><div class="row-button undo-16" title="Reset" onclick="$(\'#' . $a["text_key"] . '\').val(\'' . addcslashes($a["text_default"], "\\") .'\')"></div></div>');
 		}
@@ -2129,13 +2226,13 @@ function print_row($a)
 		for ($i = 0; $i < count($a["option_list"]); $i++) {
 			if (array_key_exists("option_keys", $a)) {
 				if ($a["option_keys"][$i] == @$a["option_value"]) {
-					writeln('					<option selected="selected" value="' . $a["option_keys"][$i] . '">' . $a["option_list"][$i] . '</option>');
+					writeln('					<option selected value="' . $a["option_keys"][$i] . '">' . $a["option_list"][$i] . '</option>');
 				} else {
 					writeln('					<option value="' . $a["option_keys"][$i] . '">' . $a["option_list"][$i] . '</option>');
 				}
 			} else {
 				if ($a["option_list"][$i] == @$a["option_value"]) {
-					writeln('					<option selected="selected">' . $a["option_list"][$i] . '</option>');
+					writeln('					<option selected>' . $a["option_list"][$i] . '</option>');
 				} else {
 					writeln('					<option>' . $a["option_list"][$i] . '</option>');
 				}
@@ -2197,7 +2294,7 @@ function print_row($a)
 
 function random_hash()
 {
-	return crypt_sha256(time() . getmypid() . rand());
+	return bin2hex(openssl_random_pseudo_bytes(32));
 }
 
 
@@ -2212,13 +2309,11 @@ function require_https($force = true)
 	if (!$force) {
 		return;
 	}
-	if (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] == "on" || $_SERVER["HTTPS"] == 1) || isset($_SERVER["HTTP_X_FORWARDED_PROTO"]) && $_SERVER["HTTP_X_FORWARDED_PROTO"] == "https") {
+	if (http_scheme() === "https") {
 		return;
 	}
-	$http_host = $_SERVER["HTTP_HOST"];
-	$request_uri = $_SERVER["REQUEST_URI"];
 
-	header("Location: https://$http_host$request_uri");
+	header("Location: https://" . http_host() . http_path());
 	die();
 }
 
@@ -2245,28 +2340,12 @@ function run_sql($sql, $arg = array(), $fatal = true)
 		$msg = $exception->getMessage();
 		$sql_error = "sql [$sql] arg [" . implode(", ", $arg) . "] msg [$msg]";
 		if ($fatal) {
-			default_error($sql_error);
+			fatal_error($sql_error);
 		}
 		return false;
 	}
 
 	return $row;
-}
-
-
-function run_sql_file($path)
-{
-	$lines = file($path);
-	$sql = "";
-	for ($i = 0; $i < count($lines); $i++) {
-		if ($lines[$i] != "" && substr($lines[$i], 0, 2) != "--") {
-			$sql .= $lines[$i];
-			if (substr(trim($lines[$i]), -1, 1) == ';') {
-				sql($sql);
-				$sql = "";
-			}
-		}
-	}
 }
 
 
@@ -2298,7 +2377,7 @@ function sql($sql)
 	} catch (PDOException $exception) {
 		$msg = $exception->getMessage();
 		$sql_error = "sql [$sql] arg [" . implode(", ", $arg) . "] msg [$msg]";
-		default_error($sql_error);
+		fatal_error($sql_error);
 		return false;
 	}
 
@@ -2306,17 +2385,30 @@ function sql($sql)
 }
 
 
+function sql_file($path)
+{
+	$lines = file($path);
+	$sql = "";
+	for ($i = 0; $i < count($lines); $i++) {
+		if ($lines[$i] != "" && substr($lines[$i], 0, 2) != "--") {
+			$sql .= $lines[$i];
+			if (substr(trim($lines[$i]), -1, 1) == ';') {
+				sql($sql);
+				$sql = "";
+			}
+		}
+	}
+}
+
+
 function string_clean($test, $valid, $length = -1)
 {
-	$v = str_replace("[a-z]", "abcdefghijklmnopqrstuvwxyz", $valid);
-	$v = str_replace("[A-Z]", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", $v);
-	$v = str_replace("[0-9]", "0123456789", $v);
-
+	$valid = string_expand($valid);
 	$s = trim($test);
 	$t = "";
 	for ($i = 0; $i < strlen($s); $i++) {
 		$c = substr($s, $i, 1);
-		if (strpos($v, $c) !== false) {
+		if (strpos($valid, $c) !== false) {
 			$t .= $c;
 		}
 	}
@@ -2325,6 +2417,17 @@ function string_clean($test, $valid, $length = -1)
 		return substr($t, 0, $length);
 	}
 	return $t;
+}
+
+
+function string_expand($str)
+{
+	$str = str_replace("[KEYBOARD]", "[A-Z][a-z][0-9]`~!@#\$%^&*()_+-=[]\\{}|;':\",./<>? ", $str);
+	$str = str_replace("[a-z]", "abcdefghijklmnopqrstuvwxyz", $str);
+	$str = str_replace("[A-Z]", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", $str);
+	$str = str_replace("[0-9]", "0123456789", $str);
+
+	return $str;
 }
 
 
@@ -2370,6 +2473,178 @@ function string_replace_all($search, $replacement, $source)
 }
 
 
+function string_simplify($src)
+{
+	// math
+	$a["&minus;"] = "-";
+	$a["&ne;"] = "!=";
+	$a["&le;"] = "<=";
+	$a["&ge;"] = ">=";
+	$a["&times;"] = "*";
+	$a["&divide;"] = "/";
+
+	// symbols
+	$a["&copy;"] = "(C)";
+	$a["&frac14;"] = "1/4";
+	$a["&frac12;"] = "1/2";
+	$a["&frac34;"] = "3/4";
+	$a["&reg;"] = "(R)";
+	$a["&sup1;"] = "^1";
+	$a["&sup2;"] = "^2";
+	$a["&sup3;"] = "^3";
+	$a["&hellip;"] = "...";
+	$a["&prime;"] = "'";
+	$a["&Prime;"] = "''";
+	$a["&frasl;"] = "/";
+	$a["&trade;"] = "TM";
+
+	// punctuation
+	$a["&ensp;"] = " ";
+	$a["&emsp;"] = " ";
+	$a["&thinsp;"] = " ";
+	$a["&mdash;"] = "-";
+	$a["&ndash;"] = "-";
+	$a["&lsquo;"] = "'";
+	$a["&rsquo;"] = "'";
+	$a["&ldquo;"] = "\"";
+	$a["&rdquo;"] = "\"";
+
+	// upper case
+	$a["&Agrave;"] = "A";
+	$a["&Aacute;"] = "A";
+	$a["&Acirc;"] = "A";
+	$a["&Atilde;"] = "A";
+	$a["&Auml;"] = "A";
+	$a["&Aring;"] = "A";
+	$a["&AElig;"] = "AE";
+	$a["&Ccedil;"] = "C";
+	$a["&Egrave;"] = "E";
+	$a["&Eacute;"] = "E";
+	$a["&Ecirc;"] = "E";
+	$a["&Euml;"] = "E";
+	$a["&Igrave;"] = "I";
+	$a["&Iacute;"] = "I";
+	$a["&Icirc;"] = "I";
+	$a["&Iuml;"] = "I";
+	$a["&ETH;"] = "D";
+	$a["&Ntilde;"] = "N";
+	$a["&Ograve;"] = "O";
+	$a["&Oacute;"] = "O";
+	$a["&Ocirc;"] = "O";
+	$a["&Otilde;"] = "O";
+	$a["&Ouml;"] = "O";
+	$a["&Oslash;"] = "O";
+	$a["&Ugrave;"] = "U";
+	$a["&Uacute;"] = "U";
+	$a["&Ucirc;"] = "U";
+	$a["&Uuml;"] = "U";
+	$a["&Yacute;"] = "Y";
+
+	// lower case
+	$a["&agrave;"] = "a";
+	$a["&aacute;"] = "a";
+	$a["&acirc;"] = "a";
+	$a["&atilde;"] = "a";
+	$a["&auml;"] = "a";
+	$a["&aring;"] = "a";
+	$a["&aelig;"] = "ae";
+	$a["&ccedil;"] = "c";
+	$a["&egrave;"] = "e";
+	$a["&eacute;"] = "e";
+	$a["&ecirc;"] = "e";
+	$a["&euml;"] = "e";
+	$a["&igrave;"] = "i";
+	$a["&iacute;"] = "i";
+	$a["&icirc;"] = "i";
+	$a["&iuml;"] = "i";
+	$a["&ntilde;"] = "n";
+	$a["&ograve;"] = "o";
+	$a["&oacute;"] = "o";
+	$a["&ocirc;"] = "o";
+	$a["&otilde;"] = "o";
+	$a["&ouml;"] = "o";
+	$a["&oslash;"] = "o";
+	$a["&ugrave;"] = "u";
+	$a["&uacute;"] = "u";
+	$a["&ucirc;"] = "u";
+	$a["&uuml;"] = "u";
+	$a["&yacute;"] = "y";
+	$a["&yuml;"] = "y";
+	$a["&fnof;"] = "f";
+
+	$s = htmlentities($src, ENT_NOQUOTES | ENT_HTML5, "UTF-8");
+	$s = strtr($s, $a);
+	$s = html_entity_decode($s, ENT_NOQUOTES | ENT_HTML5, "UTF-8");
+	$s = string_clean($s, "[KEYBOARD]");
+
+	return $s;
+}
+
+
+function string_size($bytes, $binary = false)
+{
+	if ($binary) {
+		$d = 1024;
+		// NOTE: the SI symbol for kibi is an uppercase K
+		$units = array("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB");
+	} else {
+		$d = 1000;
+		// NOTE: the SI symbol for kilo is a lowercase k
+		$units = array("B", "kB", "MB", "GB", "TB", "PB", "EB");
+	}
+
+	$n = $bytes;
+	for ($i = 0; $i < count($units) - 1; $i++) {
+		if ($n < $d) {
+			break;
+		}
+		$n = $n / $d;
+	}
+
+	if ($i == 0) {
+		return $bytes . " " . $units[$i];
+	} else {
+		return round($n, 2) . " " . $units[$i];
+	}
+}
+
+
+function string_slug($src)
+{
+	// add a break after block tags
+	$s = str_replace("<br>", "<br> ", $src);
+	$s = str_replace("<hr>", "<hr> ", $s);
+	$block = ["article", "blockquote", "div", "dd", "dl", "dt", "figure", "footer", "h1", "h2", "h3", "h4", "h5", "h6", "header", "li", "nav", "ol", "p", "pre", "section", "ul"];
+	foreach ($block as $tag) {
+		$s = str_replace("</$tag>", "</$tag> ", $s);
+	}
+
+	// remove tags and entities
+	$s = strip_tags($s);
+	$s = html_entity_decode($s);
+
+	// preserve dashes
+	$dashes = explode(" ", html_entity_decode("&ndash; &mdash; &minus;"));
+	$s = str_replace($dashes, " ", $s);
+
+	// simplify characters
+	setlocale(LC_CTYPE, 'en_US.utf8');
+	$s = iconv('UTF-8', 'ASCII//TRANSLIT', utf8_encode($s));
+
+	// replace symbols
+	$symbols = ["~", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "_", "=", "+", "{", "}", "[", "]", "\\", "|", ";", ":", ",", ".", "/", "?"];
+	$s = str_replace($symbols, " ", $s);
+
+	// clean up
+	$s = string_clean($s, "[a-z][A-Z][0-9] ");
+	$s = strtolower(trim($s));
+	$s = str_replace(" ", "-", $s);
+	$s = string_replace_all("--", "-", $s);
+
+	return $s;
+}
+
+
 function string_uses($src, $uses)
 {
 	// force src to be a string
@@ -2380,18 +2655,14 @@ function string_uses($src, $uses)
 		return false;
 	}
 
-	if ($uses == "[ALL]") {
+	if ($uses === "[ALL]") {
 		return true;
 	}
-
-	$chars = str_replace("[A-Z]", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", $uses);
-	$chars = str_replace("[a-z]", "abcdefghijklmnopqrstuvwxyz", $chars);
-	$chars = str_replace("[0-9]", "0123456789", $chars);
-	$chars = str_replace("[KEYBOARD]", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`~!@#\$%^&*()_+-=[]\\{}|;':\",./<>? ", $chars);
+	$uses = string_expand($uses);
 
 	for ($i = 0; $i < strlen($s); $i++) {
 		$c = substr($s, $i, 1);
-		if (strpos($chars, $c) === false) {
+		if (strpos($uses, $c) === false) {
 			return false;
 		}
 	}
@@ -2400,31 +2671,25 @@ function string_uses($src, $uses)
 }
 
 
-function sys_format_size($bytes, $binary = false)
+function valid_host($host)
 {
-	if ($binary) {
-		$d = 1024;
-		// NOTE: the SI symbol for kibi has an uppercase K
-		$units = array("B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB");
-	} else {
-		$d = 1000;
-		// NOTE: the SI symbol for kilo has a lowercase k
-		$units = array("B", "kB", "MB", "GB", "TB", "PB", "EB");
+	if (strlen($host) < 3) {
+		return false;
+	}
+	if (!string_has($host, ".")) {
+		return false;
+	}
+	if (string_has($host, "..")) {
+		return false;
+	}
+	if (substr($host, 0, 1) === "." || substr($host, -1) === ".") {
+		return false;
+	}
+	if (!string_uses($host, "[a-z][A-Z][0-9]-.")) {
+		return false;
 	}
 
-	$n = $bytes;
-	for ($i = 0; $i <= 4; $i++) {
-		if ($n < $d) {
-			break;
-		}
-		$n = $n / $d;
-	}
-
-	if ($i == 0) {
-		return $n . " " . $units[$i];
-	} else {
-		return round($n, 2) . " " . $units[$i];
-	}
+	return true;
 }
 
 

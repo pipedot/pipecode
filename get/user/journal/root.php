@@ -27,16 +27,15 @@ if (!$journal["published"] && $zid != $auth_zid) {
 	fatal("Not published");
 }
 
+$spinner[] = ["name" => "Journal", "link" => "/journal/"];
+$spinner[] = ["name" => $journal["title"], "short" => $journal["short_code"], "link" => $journal_link];
 if ($auth_zid === $zid) {
-	print_header("Journal", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"]], ["/journal/", $journal_link]);
-} else {
-	print_header("Journal", [], [], [], ["Journal", $journal["title"]], ["/journal/", $journal_link]);
+	$actions[] = ["name" => "Write", "icon" => "notepad", "link" => "/journal/write"];
 }
-print_user_nav("journal");
-beg_main("cell");
+
+print_header();
 
 print_journal($journal["journal_id"]);
 print_comments(TYPE_JOURNAL, $journal);
 
-end_main();
 print_footer();

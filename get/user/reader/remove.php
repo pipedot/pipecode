@@ -21,15 +21,15 @@ require_mine();
 
 $feed = item_request(TYPE_READER);
 
-print_header("Remove Feed", [], [], [], ["Reader", $feed["name"], "Remove Feed"], ["/reader/", "/reader/" . $feed["slug"], "/reader/" . $feed["slug"] . "/remove"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => $feed["name"], "link" => "/reader/" . $feed["slug"]];
+$spinner[] = ["name" => "Remove", "link" => "/reader/" . $feed["slug"] . "/remove"];
+
+print_header(["title" => "Remove Feed", "form" => true]);
+
 writeln('<h1>' . get_text('Remove Feed') . '</h1>');
 writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] feed?', $feed["name"]) . '</p>');
 
 box_left("Remove");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

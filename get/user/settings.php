@@ -22,9 +22,9 @@ require_mine();
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 $languages = lang_list();
 
-print_header("Settings", [], [], [], ["Settings"], ["/settings"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Settings", "link" => "/settings"];
+
+print_header(["form" => true]);
 
 beg_tab("Information");
 print_row(array("caption" => "Display Name", "text_key" => "display_name", "text_value" => $user_conf["display_name"]));
@@ -70,8 +70,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
-
+print_footer(["form" => true]);

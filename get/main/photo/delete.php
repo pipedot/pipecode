@@ -18,6 +18,7 @@
 //
 
 $photo = item_request(TYPE_PHOTO);
+$photo_code = $photo["short_code"];
 
 if ($photo["zid"] !== $auth_zid) {
 	fatal("Not your photo");
@@ -26,9 +27,11 @@ if ($photo["zid"] !== $auth_zid) {
 $path = public_path($photo["time"]) . "/photo_{$photo["short_code"]}_256x256.jpg";
 $photo_url = "$protocol://$server_name$path?" . fs_time("$doc_root/www$path");
 
-print_header("Delete Photo");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Photo", "link" => "/photo/"];
+$spinner[] = ["name" => $photo_code, "link" => "/photo/$photo_code"];
+$spinner[] = ["name" => "Remove", "link" => "/photo/$photo_code/remove"];
+
+print_header(["form" => true]);
 
 writeln('<h1>' . get_text('Delete Photo') . '</h1>');
 writeln('<p>' . get_text('Are you sure you want to delete this photo?') . '</p>');
@@ -39,9 +42,6 @@ writeln('		<td style="background-color: #eeeeee; padding: 8px;"><img style="widt
 writeln('	</tr>');
 writeln('</table>');
 
-box_left("Delete");
+box_left("Remove");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

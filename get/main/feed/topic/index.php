@@ -17,17 +17,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Topics");
-beg_main();
-writeln('<h1>' . get_text('Topics') . '</h1>');
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Topic", "link" => "/feed/topic/"];
+
+print_header(["title" => "Feed Topics"]);
 
 $list = db_get_list("feed_topic", "name");
-$k = array_keys($list);
-for ($i = 0; $i < count($list); $i++) {
-	$topic = $list[$k[$i]];
+foreach ($list as $topic) {
 	writeln('<a class="topic-box ' . $topic["icon"] . '-64" href="' . $topic["slug"] . '">' . $topic["name"] . '</a>');
 }
 
-end_main();
 print_footer();
-

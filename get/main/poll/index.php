@@ -17,11 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Polls");
-print_main_nav("poll");
-beg_main("cell");
+$spinner[] = ["name" => "Poll", "link" => "/poll/"];
 
-writeln('<h1>' . get_text('Polls') . '</h1>');
+print_header(["title" => "Polls"]);
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("poll", $items_per_page);
@@ -36,5 +34,4 @@ dict_end();
 
 writeln($page_footer);
 
-end_main();
 print_footer();

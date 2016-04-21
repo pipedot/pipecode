@@ -20,9 +20,10 @@
 require_feature("bug");
 require_login();
 
-print_header("Report Bug", array("Report"), array("ladybug"), array("/bug/report"));
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Report Bug", "link" => "/bug/report"];
+
+print_header(["form" => true]);
 
 writeln('<h1>Report Bug</h1>');
 
@@ -68,7 +69,4 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 
 box_right("Report");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

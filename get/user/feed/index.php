@@ -19,11 +19,11 @@
 
 include("feed.php");
 
-if ($zid == $auth_zid) {
-	print_header("", ["Edit"], ["news"], ["/feed/edit"], ["Feed"], ["/feed/"]);
-} else {
-	print_header("Feed", [], [], [], ["Feed"], ["/feed/"]);
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+if ($zid === $auth_zid) {
+	$actions[] = ["name" => "Edit", "icon" => "news", "link" => "/feed/edit"];
 }
+print_header(["title" => ""]);
 
 print_feed_page($zid);
 

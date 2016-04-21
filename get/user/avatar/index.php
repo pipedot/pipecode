@@ -17,8 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Avatar", [], [], [], ["Avatar"], ["/avatar/"]);
-beg_main();
+$spinner[] = ["name" => "Avatar", "link" => "/avatar/"];
+
+print_header();
 
 $current_code = crypt_crockford_encode($user_conf["avatar_id"]);
 $current_root = "$protocol://$server_name/avatar/$current_code";
@@ -63,5 +64,4 @@ if ($zid === $auth_zid) {
 	end_form();
 }
 
-end_main();
 print_footer();

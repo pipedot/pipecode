@@ -21,16 +21,16 @@ require_mine();
 
 $topic = item_request(TYPE_READER_TOPIC);
 
-print_header("Remove Topic", [], [], [], ["Reader", "Topic", $topic["name"], "Remove"], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"], "/reader/topic/" . $topic["slug"] . "/remove"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => "Topic", "link" => "/reader/topic/"];
+$spinner[] = ["name" => $topic["name"], "link" => "/reader/topic/" . $topic["slug"]];
+$spinner[] = ["name" => "Remove", "link" => "/reader/topic/" . $topic["slug"] . "/remove"];
+
+print_header(["title" => "Remove Topic", "form" => true]);
+
 writeln('<h1>' . get_text('Remove Topic') . '</h1>');
 writeln('<p>' . get_text('Are you sure you want to remove the [<b>$1</b>] topic?', $topic["name"]) . '</p>');
 
 box_left("Remove");
 
-end_form();
-end_main();
-print_footer();
-
-
+print_footer(["form" => true]);

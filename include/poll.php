@@ -69,19 +69,16 @@ function vote_box($poll_id, $vote)
 			$tag = nget_text('<b>$1</b> point', '<b>$1</b> points', $votes, [$votes]);
 		}
 
-		writeln('	<table class="fill">');
-		writeln('		<tr>');
-		writeln('			<td style="width: 40px"><input type="submit" value="Vote"></td>');
-		writeln('			<td style="white-space: nowrap;"><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></td>');
-		writeln('			<td class="right" style="white-space: nowrap;">' . $tag . '</td>');
-		writeln('		</tr>');
-		writeln('	</table>');
+		writeln('	<div class="poll-footer">');
+		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></div>');
+		writeln('		<div><input type="submit" value="Vote"></div>');
+		writeln('	</div>');
 
 		end_form();
 	} else {
 		$total = 0;
 		$votes = array();
-		writeln('	<table style="width: 100%">');
+		writeln('	<table class="poll-results">');
 		writeln('		<tr>');
 		writeln('			<td class="poll-question">' . $poll["question"] . '</td>');
 		writeln('		</tr>');
@@ -122,18 +119,17 @@ function vote_box($poll_id, $vote)
 			writeln('			<td class="poll-answer">' . $answer["answer"] . '</td>');
 			writeln('		</tr>');
 			writeln('		<tr>');
-			writeln('			<td><table class="poll-result"><tr><th style="width: ' . $percent . '%"></th><td style="width: ' . (100 - $percent) . '%">' . $tag . '</td></tr></table></td>');
+			writeln('			<td><table class="poll-result"><tr><th class="width-' . $percent . '"></th><td class="width-' . (100 - $percent) . '">' . $tag . '</td></tr></table></td>');
 			writeln('		</tr>');
 		}
 		writeln('	</table>');
 
 		writeln('	<div class="poll-footer">');
 		writeln('		<div><a href="/poll/' . $day . '/' . $clean . '">' . $comments["tag"] . '</a></div>');
-		writeln('		<div class="poll-short">(<a href="/' . $poll_code . '">#' . $poll_code . '</a>)</div>');
 		if ($auth_zid === "") {
-			writeln('		<div class="right">' . $total_tag . '</div>');
+			writeln('		<div>' . $total_tag . '</div>');
 		} else {
-			writeln('		<div class="right"><a href="/poll/' . $poll_code . '/vote">' . $total_tag . '</a></div>');
+			writeln('		<div><a href="/poll/' . $poll_code . '/vote">' . $total_tag . '</a></div>');
 		}
 		writeln('	</div>');
 	}

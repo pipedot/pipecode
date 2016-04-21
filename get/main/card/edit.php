@@ -29,9 +29,10 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 	$dirty_body = str_replace("\n", "<br>", $dirty_body);
 }
 
-print_header("Edit Card");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Card", "link" => "/card/"];
+$spinner[] = ["name" => "Edit", "link" => "/card/edit"];
+
+print_header(["form" => true]);
 
 writeln('<h1>' . get_text('Edit Card') . '</h1>');
 
@@ -72,7 +73,4 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

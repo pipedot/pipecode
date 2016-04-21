@@ -17,20 +17,41 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-include("feed.php");
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
 
 print_header();
-print_main_nav("feed");
-beg_main("cell");
 
-$zid = "bryan@$server_name";
-print_feed_page($zid);
+$items_per_page = 50;
+list($item_start, $page_footer) = page_footer("feed", $items_per_page);
 
-if ($auth_zid === "") {
-	box_center("This is a sample feed page. <a href=\"" . ($https_enabled ? "https" : $protocol ) . "://$server_name/login\">Login</a> to create your own.");
-} else {
-	box_center("This is a sample feed page. <a href=\"" . user_link($auth_zid) . "feed/edit\">Create</a> your own <a href=\"" . user_link($auth_zid) . "\">feed page</a>.");
+// TODO: delete soon
+writeln('<div class="balloon">');
+writeln('	<dl class="dl-32 bulb-32">');
+writeln('		<dt>Link Changed</dt>');
+writeln('		<dd>This page used to be a <a href="' . $protocol . '://bryan.' . $server_name . '/feed/">hard link to a sample user\'s feed page</a>. Please update your links.</dd>');
+writeln('	</dl>');
+writeln('</div>');
+
+dict_beg();
+$row = sql("select * from feed order by title limit $item_start, $items_per_page");
+for ($i = 0; $i < count($row); $i++) {
+	$short_code = crypt_crockford_encode($row[$i]["feed_id"]);
+	if ($row[$i]["title"] == "") {
+		$title = "(none)";
+	} else {
+		$title = $row[$i]["title"];
+	}
+	if (fs_is_file("$doc_root/www/pub/favicon/$short_code.png")) {
+		$icon = ' style="background-image: url(/pub/favicon/' . $short_code . '.png)"';
+	} else {
+		$icon = "";
+	}
+
+	//dict_row('<a class="favicon-16"' . $icon . ' href="/feed/' . $row[$i]["slug"] . '">' . $title . '</a>', date("Y-m-d H:i", $row[$i]["time"]));
+	dict_row('<a class="favicon-16"' . $icon . ' href="/feed/' . $row[$i]["slug"] . '">' . $title . '</a>', '<a class="icon-16 plus-16" href="/feed/' . $row[$i]["slug"] . '/add">' . get_text('Add') . '</a>');
 }
+dict_end();
 
-end_main();
+writeln($page_footer);
+
 print_footer();

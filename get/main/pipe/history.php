@@ -17,9 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Pipe History");
-beg_main();
-writeln('<h1>' . get_text('Pipe History') . '</h1>');
+$spinner[] = ["name" => "Pipe", "link" => "/pipe/"];
+$spinner[] = ["name" => "History", "link" => "/pipe/history"];
+
+print_header(["title" => "Pipe History"]);
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("pipe", $items_per_page);
@@ -64,5 +65,4 @@ end_tab();
 
 writeln($page_footer);
 
-end_main();
 print_footer();

@@ -45,10 +45,12 @@ if ($needle != "") {
 		fatal("Unknown haystack");
 	}
 
-	print_header("$needle - Search");
-	print_main_nav("search");
+	$spinner[] = ["name" => "Search", "link" => "/search/"];
 
-	beg_main("search");
+	print_header(["title" => "$needle - Search"]);
+	//print_main_nav("search");
+
+	//beg_main("search");
 	search_box($needle, $haystack);
 	$row = sql($sql, $needle, $needle);
 	if (count($row) == 0) {
@@ -96,15 +98,17 @@ if ($needle != "") {
 			//search_result($title, $link, $zid, $time, $body);
 		}
 	}
-	end_main();
+	//end_main();
 
 	print_footer();
 	finish();
 }
 
-print_header("Search");
-print_main_nav("search");
-beg_main("search");
+$spinner[] = ["name" => "Search", "link" => "/search/"];
+
+print_header();
+//print_main_nav("search");
+//beg_main("search");
 search_box();
-end_main();
+//end_main();
 print_footer();

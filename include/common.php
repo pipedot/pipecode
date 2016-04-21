@@ -55,8 +55,9 @@ $story_image_style[2] = "Icon";
 $story_image_style[3] = "Image";
 
 
-function print_header($title = "", $link_name = [], $link_icon = [], $link_url = [], $spin_name = [], $spin_link = [])
+function print_header($a = [])
 {
+	global $actions;
 	global $auth_user;
 	global $auth_zid;
 	global $doc_root;
@@ -68,34 +69,48 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 	global $server_conf;
 	global $server_name;
 	global $server_title;
+	global $spinner;
 	global $user_page;
 	global $zid;
 
 	header_expires();
 	header_html();
+	// TODO: remove unsafe-eval (ckeditor) and unsafe-inline (style and scripts)
+	//header("Content-Security-Policy: default-src 'self'; img-src *; script-src $protocol://$server_name; style-src $protocol://$server_name; font-src 'none'; object-src 'none'; child-src 'none'; frame-ancestors 'none'; form-action 'self'; referrer origin-when-cross-origin");
+	header("Content-Security-Policy-Report-Only: default-src 'self'; img-src *; script-src $protocol://$server_name 'unsafe-eval' 'unsafe-inline'; style-src $protocol://$server_name 'unsafe-inline'; font-src 'none'; object-src 'none'; child-src 'none'; frame-ancestors 'none'; form-action 'self'; referrer origin-when-cross-origin");
+	// XXX: deprecated by CSP
+	header("X-Frame-Options: DENY");
 
 	writeln('<!DOCTYPE html>');
 	writeln('<html>');
 	writeln('<head>');
 
-	if ($title != "") {
-		$title = get_text($title) . " - ";
-	}
-	if ($user_page == "") {
-		$title .= $server_title;
+	if (array_key_exists("title", $a)) {
+		if ($a["title"] == "") {
+			$title = "";
+		} else {
+			$title = get_text($a["title"]) . " - ";
+		}
+	} else if (count($spinner) > 0) {
+		$title = get_text($spinner[count($spinner) - 1]["name"]) . " - ";
 	} else {
+		$title = "";
+	}
+	if ($user_page) {
 		$title .= $user_page . '.' . $server_name;
 		$picture = avatar_picture($zid, 128);
+	} else {
+		$title .= $server_title;
 	}
 	writeln('<title>' . $title . '</title>');
 	writeln('<meta charset="utf-8">');
 	writeln('<meta name="viewport" content="width=device-width, initial-scale=1">');
 	print $meta;
 
-	if ($user_page === "") {
-		writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon">');
-	} else {
+	if ($user_page) {
 		writeln('<link rel="icon" href="' . avatar_picture($zid, 64) . '" sizes="64x64" type="image/png">');
+	} else {
+		writeln('<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" type="image/x-icon">');
 	}
 
 	writeln('<link rel="stylesheet" href="' . $protocol . '://' . $server_name . '/style.css?t=' . fs_time("$doc_root/www/style.css") . '">');
@@ -105,7 +120,7 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 		writeln('html { font-size: 80%; }');
 		writeln('</style>');
 	}
-	if ($user_page === "" && $request_script == "/") {
+	if ($user_page == "" && $request_script == "/") {
 		writeln('<link rel="alternate" href="/atom" type="application/atom+xml" title="Stories">');
 	}
 	if ($auth_user["javascript_enabled"]) {
@@ -119,112 +134,94 @@ function print_header($title = "", $link_name = [], $link_icon = [], $link_url =
 
 	writeln('<header class="title">');
 
-	if ($user_page === "") {
-		writeln('	<div><a class="logo" href="' . $protocol . '://' . $server_name . '/"></a></div>');
-	} elseif (count($spin_name) == 0) {
-		writeln('	<div class="spinner">');
-		writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="top"></div></a>');
-		writeln('		<a class="txt" href="/">' . $zid . '</a>');
-		writeln('	</div>');
+	writeln('	<div class="spinner">');
+	if (count($spinner) == 0) {
+		if ($user_page == "") {
+			writeln('		<a class="logo-64" href="/"></a>');
+			writeln('		<a class="logo-text" href="/"></a>');
+		} else {
+			writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="top"></div></a>');
+			writeln('		<a class="txt" href="/">' . $zid . '</a>');
+		}
 	} else {
-		writeln('	<div class="spinner">');
-		writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="beg"></div></a>');
-		for ($i = 0; $i < count($spin_name); $i++) {
-			writeln('		<a class="bar" href="' . $spin_link[$i] . '">' . $spin_name[$i] . '</a>');
-			if ($i < count($spin_name) - 1) {
-				writeln('		<a class="sep" href="' . $spin_link[$i] . '"></a>');
+		if ($user_page == "") {
+			writeln('		<a class="logo-64" href="/"></a>');
+			writeln('		<a class="start" href="' . $spinner[0]["link"] . '"></a>');
+		} else {
+			writeln('		<a class="pic" href="/" style="background-image: url(' . $picture . ')"><div class="root"></div></a>');
+		}
+		$last = count($spinner) - 1;
+		foreach ($spinner as $i => $item) {
+			if (array_key_exists("short", $item)) {
+				writeln('		<a class="bar short" href="' . $item["link"] . '">' . $item["short"] . '</a>');
+				writeln('		<a class="bar long" href="' . $item["link"] . '">' . $item["name"] . '</a>');
+			} else {
+				writeln('		<a class="bar" href="' . $item["link"] . '">' . $item["name"] . '</a>');
+			}
+			if ($i < $last) {
+				writeln('		<a class="sep" href="' . $item["link"] . '"></a>');
 			}
 		}
-		writeln('		<a class="end" href="' . $spin_link[$i - 1] . '"></a>');
-		writeln('	</div>');
+		writeln('		<a class="end" href="' . $spinner[$last]["link"] . '"></a>');
 	}
+	writeln('	</div>');
 
-	if ($auth_zid === "") {
-		$notification_count = 0;
-	} else {
+	if ($auth_zid) {
 		$notification_count = db_get_count("notification", ["zid" => $auth_zid]);
+	} else {
+		$notification_count = 0;
 	}
 
-	if ($user_page === "") {
-		if ($auth_zid === "") {
-			if ($server_conf["submit_enabled"]) {
-				$link_name[] = "Submit";
-			}
-			if ($server_conf["register_enabled"]) {
-				$link_name[] = "Register";
-			}
-			$link_name[] = "Login";
-		} else {
-			if ($server_conf["submit_enabled"]) {
-				$link_name[] = "Submit";
-			}
-			$link_name[] = "Menu";
-			if (($auth_user["admin"] || $auth_user["editor"]) && $request_script != "/tools/") {
-				$link_name[] = "Tools";
-			}
-			if ($notification_count > 0) {
-				$link_name[] = "Notifications";
-			}
-			$link_name[] = "Logout";
-		}
+	if ($user_page) {
+		$actions[] = ["name" => "Server", "icon" => "logo", "link" => "$protocol://$server_name/"];
 	} else {
-		if ($auth_zid === "") {
-			$link_name[] = "Server";
-			$link_name[] = "Login";
-		} else {
-			$link_name[] = "Server";
-			if ($notification_count > 0) {
-				$link_name[] = "Notifications";
-			}
-			$link_name[] = "Logout";
+		if ($server_conf["submit_enabled"]) {
+			$actions[] = ["name" => "Submit", "icon" => "notepad", "link" => "/submit"];
 		}
+		if ($auth_zid) {
+			$actions[] = ["name" => "Menu", "icon" => "user", "link" => user_link($auth_zid)];
+			if (($auth_user["admin"] || $auth_user["editor"]) && $request_script != "/tools/") {
+				$actions[] = ["name" => "Tools", "icon" => "tools", "link" => "/tools/"];
+			}
+		}
+	}
+	if ($auth_zid) {
+		if ($notification_count > 0) {
+			$actions[] = ["name" => "Notifications", "icon" => "bulb", "link" => user_link($auth_zid) . "notification/"];
+		}
+		$actions[] = ["name" => "Logout", "icon" => "exit", "link" => "$protocol://$server_name/logout"];
+	} else {
+		if ($server_conf["register_enabled"]) {
+			$actions[] = ["name" => "Register", "icon" => "register", "link" => ($https_enabled ? "https" : $protocol ) . "://$server_name/register"];
+		}
+		$actions[] = ["name" => "Login", "icon" => "users", "link" => ($https_enabled ? "https" : $protocol ) . "://$server_name/login"];
 	}
 
 	writeln("	<ul>");
-	for ($i = 0; $i < count($link_name); $i++) {
-		$name = $link_name[$i];
-		$icon = "";
-		$link = "";
-
-		if ($name == "Submit") {
-			$icon = "notepad";
-			$link = "/submit";
-		} else if ($name == "Menu") {
-			$icon = "user";
-			$link = user_link($auth_zid);
-		} else if ($name == "Notifications") {
-			$name = "Notifications ($notification_count)";
-			$icon = "bulb";
-			$link = user_link($auth_zid) . "notification/";
+	foreach ($actions as $item) {
+		$name = $item["name"];
+		if ($name == "Notifications") {
+			$name = get_text('Notifications ($1)', $notification_count);
 		} else if ($name == "Server") {
 			$name = $server_title;
-			$icon = "logo";
-			$link = "$protocol://$server_name/";
-		} else if ($name == "Tools") {
-			$icon = "tools";
-			$link = "/tools/";
-		} else if ($name == "Register") {
-			$icon = "register";
-			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/register";
-		} else if ($name == "Login") {
-			$icon = "users";
-			$link = ($https_enabled ? "https" : $protocol ) . "://$server_name/login";
-		} else if ($name == "Logout") {
-			$icon = "exit";
-			$link = "$protocol://$server_name/logout";
+		} else {
+			$name = get_text($name);
 		}
 
-		if ($icon == "") {
-			$icon = $link_icon[$i];
-		}
-		if ($link == "") {
-			$link = $link_url[$i];
-		}
-
-		writeln("		<li><a href=\"$link\" class=\"icon-16 {$icon}-16\">" . get_text($name) . "</a></li>");
+		//writeln('		<li>' . link_16(["icon" => $item["icon"], "link" => $item["link"], "name" => $name]) . '</li>');
+		writeln('		<li><a class="icon-16 ' . $item["icon"] . '-16" href="' . $item["link"] . '">' . $name . '</a></li>');
 	}
 	writeln("	</ul>");
 	writeln('</header>');
+
+	$main = array_get($a, "main");
+	if ($main != "none") {
+		beg_main($main);
+	}
+
+	if (array_key_exists("form", $a)) {
+		beg_form($a["form"]);
+	}
 }
 
 
@@ -235,13 +232,8 @@ function print_main_nav($selected)
 	global $server_name;
 	global $zid;
 
-	if ($auth_zid === "") {
-		$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
-		$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "feed/", "stream/");
-	} else {
-		$section_name = array("stories", "pipe", "poll", "search", "topics", "stream");
-		$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "stream/");
-	}
+	$section_name = array("stories", "pipe", "poll", "search", "topics", "feed", "stream");
+	$section_link = array("story/", "pipe/", "poll/", "search", "topic/", "feed/", "stream/");
 
 	writeln('<nav class="sections">');
 
@@ -511,17 +503,30 @@ function page_footer($table, $items_per_page, $where = array())
 }
 
 
-function print_footer()
+function print_footer($a = [])
 {
 	global $user_page;
 	global $server_name;
 	global $server_title;
 	global $server_slogan;
 
+	if (array_key_exists("form", $a)) {
+		end_form();
+	}
+
+	if (array_key_exists("main", $a)) {
+		$main = $a["main"];
+	} else {
+		$main = "";
+	}
+	if ($main != "none") {
+		end_main($main);
+	}
+
 	if ($user_page == "") {
-		$row = sql("select title, icon, link from footer_link order by title");
+		$row = sql("select name, icon, link from footer_link order by name");
 		for ($i = 0; $i < count($row); $i++) {
-			$links[$row[$i]["title"]] = ["icon" => $row[$i]["icon"], "link" => $row[$i]["link"]];
+			$links[$row[$i]["name"]] = ["icon" => $row[$i]["icon"], "link" => $row[$i]["link"]];
 		}
 
 		$links["Feed"] = ["icon" => "feed", "link" => "/atom"];
@@ -533,12 +538,12 @@ function print_footer()
 		ksort($links);
 		$keys = array_keys($links);
 		for ($i = 0; $i < count($links); $i++) {
-			$title = $keys[$i];
-			$icon = $links[$title]["icon"];
+			$name = $keys[$i];
+			$icon = $links[$name]["icon"];
 			if ($icon) {
 				$icon = " class=\"icon-16 $icon-16\"";
 			}
-			writeln('		<a' . $icon . ' href="' . $links[$title]["link"] . '">' . get_text($title) . '</a>');
+			writeln('		<a' . $icon . ' href="' . $links[$name]["link"] . '">' . get_text($name) . '</a>');
 		}
 
 		writeln('	</div>');
@@ -712,7 +717,7 @@ function print_noscript()
 	if ($auth_zid === "") {
 		writeln('	<li>Sign in and uncheck the "Use JavaScript" option on your account settings page.</li>');
 	} else {
-		writeln('	<li>Uncheck the "Use JavaScript" option on your <a href="' . user_link($auth_zid) . 'profile/">account settings page</a>.</li>');
+		writeln('	<li>Uncheck the "Use JavaScript" option on your <a href="' . user_link($auth_zid) . 'settings">settings page</a>.</li>');
 	}
 	writeln('</ul>');
 	writeln('</div>');
@@ -1009,16 +1014,31 @@ function print_comments($type_id, $rec)
 }
 
 
+function avatar_id($zid)
+{
+	$row = sql("select value from user_conf where name = 'avatar_id' and zid = ?", $zid);
+	if (count($row) == 0) {
+		return 0;
+	}
+
+	return (int) $row[0]["value"];
+}
+
+
 function avatar_picture($zid, $size)
 {
 	global $protocol;
 	global $server_name;
 
-	$row = sql("select value from user_conf where name = 'avatar_id' and zid = ?", $zid);
-	if (count($row) == 0) {
+//	$row = sql("select value from user_conf where name = 'avatar_id' and zid = ?", $zid);
+//	if (count($row) == 0) {
+//		return "";
+//	}
+	$avatar_id = avatar_id($zid);
+	if (!$avatar_id) {
 		return "";
 	}
-	$avatar_code = crypt_crockford_encode($row[0]["value"]);
+	$avatar_code = crypt_crockford_encode($avatar_id);
 	if ($size == 64) {
 		$ext = "png";
 	} else {
@@ -1116,6 +1136,8 @@ function find_server_feed_id()
 	$row = sql("select feed_id from feed where uri = ? or uri = ?", $http, $https);
 	if (count($row) > 0) {
 		$server_feed_id = $row[0]["feed_id"];
+	} else {
+		$server_feed_id = 0;
 	}
 }
 
@@ -1575,15 +1597,13 @@ function fatal($title, $icon = "error", $name = "", $value = "", $code = 200)
 		$title = "$name - $title";
 	}
 
-	print_header($title);
-	beg_main();
+	print_header(["title" => $title]);
 	writeln('<div class="balloon">');
 	writeln('	<dl class="dl-32 ' . $icon . '-32">');
 	writeln('		<dt>' . get_text($name) . '</dt>');
 	writeln('		<dd>' . get_text($value) . '</dd>');
 	writeln('	</dl>');
 	writeln('</div>');
-	end_main();
 	print_footer();
 	finish();
 }
@@ -1627,7 +1647,6 @@ function finish($msg = "")
 	die($msg);
 }
 
-
 $request_uri = $_SERVER["REQUEST_URI"];
 if (string_has($request_uri, "?")) {
 	$request_script = substr($request_uri, 0, strpos($request_uri, "?"));
@@ -1669,6 +1688,7 @@ $mine = false;
 $a = explode(".", $server_name);
 $server_level = count($a);
 $a = explode(".", $http_host);
+//die("http_host [$http_host]");
 if (count($a) == $server_level + 1) {
 	if ($server_redirect_enabled && $a[1] . "." . $a[2] != $server_name) {
 		header("Location: $protocol://" . $a[0] . ".$server_name$request_uri");

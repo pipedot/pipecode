@@ -22,8 +22,12 @@ require_mine();
 $journal = item_request(TYPE_JOURNAL);
 $journal_link = item_link(TYPE_JOURNAL, $journal["journal_id"], $journal);
 
-print_header("Media", ["Write"], ["notepad"], ["/journal/write"], ["Journal", $journal["title"], "Media"], ["/journal/", $journal_link, "/journal/" . $journal["short_code"] . "/media"]);
-beg_main();
+$spinner[] = ["name" => "Journal", "link" => "/journal/"];
+$spinner[] = ["name" => $journal["title"], "short" => $journal["short_code"], "link" => $journal_link];
+$spinner[] = ["name" => "Media", "link" => "/journal/" . $journal["short_code"] . "/media"];
+$actions[] = ["name" => "Write", "icon" => "notepad", "link" => "/journal/write"];
+
+print_header();
 beg_form("", "file");
 
 //writeln('<h1>Journal</h1>');
@@ -34,7 +38,7 @@ beg_form("", "file");
 //}
 
 //writeln('<h2>Photos</h2>');
-writeln('<h1>' . get_text('Photos') . '</h1>');
+//writeln('<h1>' . get_text('Photos') . '</h1>');
 
 beg_tab();
 writeln('	<tr>');
@@ -53,7 +57,7 @@ for ($i = 0; $i < count($row); $i++) {
 	$photo_code = crypt_crockford_encode($row[$i]["photo_id"]);
 	writeln('	<tr>');
 	writeln('		<td><a class="icon-16 picture-16" href="' . $protocol . "://" . $server_name . "/photo/" . $photo_code . '">' . $row[$i]["original_name"] . '</a></td>');
-	writeln('		<td class="center">' . sys_format_size($row[$i]["size"]) . '</td>');
+	writeln('		<td class="center">' . string_size($row[$i]["size"]) . '</td>');
 	writeln('		<td class="center">' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 	writeln('		<td class="right"><a class="icon-16 minus-16" href="' . $protocol . '://' . $server_name . '/photo/' . $photo_code . '/delete">' . get_text('Delete') . '</a></td>');
 	writeln('	</tr>');
@@ -63,6 +67,4 @@ end_tab();
 box_two('<input name="upload" type="file">', "Upload");
 
 end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

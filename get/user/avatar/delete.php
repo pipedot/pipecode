@@ -22,16 +22,15 @@ require_mine();
 $avatar = item_request(TYPE_AVATAR);
 $avatar_code = $avatar["short_code"];
 
-print_header("Delete Avatar", [], [], [], ["Avatar", $avatar_code, "Delete"], ["/avatar/", "/avatar/$avatar_code", "/activate/$avatar_code/delete"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Avatar", "link" => "/avatar/"];
+$spinner[] = ["name" => $avatar_code, "link" => "/avatar/$avatar_code"];
+$spinner[] = ["name" => "Delete", "link" => "/avatar/$avatar_code/delete"];
+
+print_header(["title" => "Delete Avatar", "form" => true]);
 
 writeln('<h2>' . get_text('Delete this avatar?') . '</h2>');
 writeln('<div class="box"><img alt="avatar" class="thumb" src="' . $protocol . '://' . $server_name . '/avatar/' . $avatar_code . '-256.jpg"></div>');
 
 box_left("Delete");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

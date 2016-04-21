@@ -26,7 +26,9 @@ require_feature("bug");
 if (string_uses($s2, "[A-Z][0-9]")) {
 	$bug = item_request(TYPE_BUG);
 
-	print_header("Bug", array("Report"), array("ladybug"), array("/bug/report"));
+	$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+
+	print_header();
 	beg_main();
 
 	writeln('<div class="bug-table">');
@@ -84,8 +86,9 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 } else if (string_uses($s2, "[a-z][0-9]-")) {
 	$bug_label = db_get_rec("bug_label", array("label_tag" => $s2));
 
-	print_header("Label = " . $bug_label["label_name"], array("Report"), array("ladybug"), array("/bug/report"));
-	beg_main();
+	$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+
+	print_header(["title" => "Label = " . $bug_label["label_name"]]);
 	writeln('<h1>Label = ' . $bug_label["label_name"] . '</h1>');
 
 	$items_per_page = 100;
@@ -121,7 +124,4 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 	fatal("Invalid request");
 }
 
-end_main();
 print_footer();
-
-

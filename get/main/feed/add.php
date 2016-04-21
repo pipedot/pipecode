@@ -47,9 +47,11 @@ if ($topic_new) {
 	$topic_value = -1;
 }
 
-print_header("Add Feed");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => $feed["title"], "short" => $feed["slug"], "link" => "/feed/"];
+$spinner[] = ["name" => "Add", "link" => "/feed/add"];
+
+print_header(["title" => "Add Feed", "form" => true]);
 writeln('<h1>' . get_text('Add Feed') . '</h1>');
 
 beg_tab();
@@ -60,7 +62,4 @@ end_tab();
 
 box_right("Add");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

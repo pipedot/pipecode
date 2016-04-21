@@ -17,8 +17,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Comments");
-beg_main();
+$spinner[] = ["name" => "Comment", "link" => "/comment/"];
+
+print_header(["title" => "Recent Comments"]);
 
 writeln('<h1>' . get_text('Recent Comments') . '</h1>');
 
@@ -38,5 +39,4 @@ writeln($page_footer);
 
 box_center('<a class="icon-16 feed-16" href="atom">Comment Feed</a>');
 
-end_main();
 print_footer();

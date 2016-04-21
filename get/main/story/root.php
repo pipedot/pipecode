@@ -27,24 +27,26 @@ if (string_has($s2, "-") && $s3 === "") {
 		fatal("Invalid date");
 	}
 	$date_end = $date_beg + DAYS;
+	$story_date = gmdate("Y-m-d", $date_beg);
+
+	$spinner[] = ["name" => "Story", "link" => "/story/"];
+	$spinner[] = ["name" => $story_date, "link" => "/story/$story_date/"];
 
 	print_header();
-	print_main_nav("stories");
-	beg_main("cell");
 
 	$row = sql("select story_id from story where publish_time > ? and publish_time < ? order by publish_time desc", $date_beg, $date_end);
 	if (count($row) == 0) {
-		writeln("No stories published on [" . gmdate("Y-m-d", $date_beg) . "]");
+		writeln('<p>' . get_text('No stories published on $1.', gmdate("Y-m-d", $date_beg)) . '</p>');
 	}
 	for ($i = 0; $i < count($row); $i++) {
 		print_story($row[$i]["story_id"]);
 	}
 
-	end_main();
 	print_footer();
 } else {
 	$story = item_request(TYPE_STORY);
-	$short_code = crypt_crockford_encode($story["story_id"]);
+	$story_date = gmdate("Y-m-d", $story["publish_time"]);;
+	$story_code = crypt_crockford_encode($story["story_id"]);
 
 	if ($story["image_id"] > 0) {
 		$image = db_get_rec("image", $story["image_id"]);
@@ -57,7 +59,7 @@ if (string_has($s2, "-") && $s3 === "") {
 
 	$meta .= "<meta property=\"og:title\" content=\"{$story["title"]}\">\n";
 	$meta .= "<meta property=\"og:type\" content=\"article\">\n";
-	$meta .= "<meta property=\"og:url\" content=\"http://$server_name/story/$short_code\">\n";
+	$meta .= "<meta property=\"og:url\" content=\"http://$server_name/story/$story_code\">\n";
 	$meta .= "<meta property=\"og:description\" content=\"" . make_description($story["body"]) . "\">\n";
 	$meta .= "<meta property=\"og:image\" content=\"http://$server_name$image_path\">\n";
 	if ($https_enabled) {
@@ -69,16 +71,21 @@ if (string_has($s2, "-") && $s3 === "") {
 	$meta .= "<meta property=\"og:site_name\" content=\"$server_title\">\n";
 	$meta .= "<link rel=\"image_src\" href=\"http://$server_name$image_path\" type=\"$image_type\">\n";
 
-	print_header($story["title"]);
-	print_main_nav("stories");
-	beg_main("cell");
+	$spinner[] = ["name" => "Story", "link" => "/story/"];
+	if ($s2 == $story_date) {
+		$spinner[] = ["name" => $story_date, "link" => "/story/$story_date/"];
+		$spinner[] = ["name" => $story["title"], "short" => $story_code, "link" => "/story/$story_date/" . $story["slug"]];
+	} else {
+		$spinner[] = ["name" => $story["title"], "short" => $story_code, "link" => "/story/$story_code"];
+	}
 
-//	if (cache_beg("story.$short_code.html")) {
+	print_header();
+
+//	if (cache_beg("story.$story_code.html")) {
 		print_story($story);
 		print_comments(TYPE_STORY, $story);
 //		cache_end();
 //	}
 
-	end_main();
 	print_footer();
 }

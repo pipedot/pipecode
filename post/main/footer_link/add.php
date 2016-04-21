@@ -19,7 +19,8 @@
 
 require_admin();
 
-$title = http_post_string("title", ["valid" => "[A-Z][a-z][0-9]_-. ", "len" => 20]);
+$name = http_post_string("name", ["valid" => "[A-Z][a-z][0-9]_-. ", "len" => 100]);
+$slug = http_post_string("slug", ["valid" => "[a-z][0-9]-", "len" => 100]);
 $icon = http_post_string("icon", ["valid" => "[a-z][0-9]-", "len" => 20, "required" => false]);
 $link = http_post_string("link", ["valid" => "[a-z][A-Z][0-9]~@#$%&()-_=+[];:,./?", "len" => 200]);
 
@@ -28,10 +29,10 @@ if (db_has_rec("footer_link", $title)) {
 }
 
 $footer_link = db_new_rec("footer_link");
-$footer_link["title"] = $title;
+$footer_link["name"] = $name;
+$footer_link["slug"] = $slug;
 $footer_link["icon"] = $icon;
 $footer_link["link"] = $link;
 db_set_rec("footer_link", $footer_link);
 
 header("Location: ./");
-

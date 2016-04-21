@@ -19,13 +19,12 @@
 
 include("image.php");
 
-if ($auth_zid === "") {
-	print_header("Stream");
-} else {
-	print_header("Stream", array("Share"), array("share"), array(user_link($auth_zid) . "stream/share"));
+$spinner[] = ["name" => "Stream", "link" => "/stream/"];
+if ($auth_zid !== "") {
+	$actions[] = ["name" => "Share", "icon" => "share", "link" => user_link($auth_zid) . "stream/share"];
 }
 
-beg_main("stream");
+print_header(["main" => "stream"]);
 
 $items_per_page = 50;
 list($item_start, $page_footer) = page_footer("stream_main", $items_per_page);
@@ -35,6 +34,5 @@ for ($i = 0; $i < count($row); $i++) {
 	print_card($row[$i]["article_id"]);
 }
 
-end_main("stream");
 writeln($page_footer);
-print_footer();
+print_footer(["main" => "stream"]);

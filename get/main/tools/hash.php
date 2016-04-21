@@ -19,16 +19,14 @@
 
 require_admin();
 
-print_header("Hash");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+$spinner[] = ["name" => "Hash", "link" => "/tools/hash"];
+
+print_header(["form" => true]);
+
 beg_tab("Enter a String to Hash");
 print_row(array("caption" => "String", "text_key" => "str"));
 end_tab();
 box_right("Hash");
-end_form();
 
-end_main();
-print_footer();
-
-
+print_footer(["form" => true]);

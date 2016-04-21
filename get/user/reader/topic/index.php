@@ -21,8 +21,11 @@ include("feed.php");
 
 require_mine();
 
-print_header("Topic", [], [], [], ["Reader", "Topic"], ["/reader/", "/reader/topic/"]);
-beg_main();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => "Topic", "link" => "/reader/topic/"];
+
+print_header();
+
 writeln('<h1>' . get_text('Edit Topics') . '</h1>');
 
 dict_beg();
@@ -48,8 +51,4 @@ for ($t = 0; $t < count($topic_row); $t++) {
 
 box_right('<a class="icon-16 feed-16" href="../add">' . get_text('Add Feed') . '</a> | <a class="icon-16 news-16" href="add">' . get_text('Add Topic') . '</a> | <a class="icon-16 opml-16" href="../export">' . get_text('Export') . '</a>');
 
-end_form();
-end_main();
 print_footer();
-
-

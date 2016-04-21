@@ -25,13 +25,14 @@ require_editor();
 
 clean_tmp_images();
 $story = item_request(TYPE_STORY);
+$story_code = $story["short_code"];
 $images = build_preview_images($story["body"]);
 
-print_header();
-print_main_nav("stories");
-beg_main("cell");
-beg_form();
-writeln('<h1>' . get_text('Select Image') . '</h1>');
+$spinner[] = ["name" => "Story", "link" => "/story/"];
+$spinner[] = ["name" => $story["title"], "short" => $story_code, "link" => "/story/$story_code"];
+$spinner[] = ["name" => "Image", "link" => "/story/$story_code/image"];
+
+print_header(["form" => true]);
 
 writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
 writeln('	<table>');
@@ -64,6 +65,4 @@ for ($i = 0; $i < count($images); $i++) {
 
 box_right("Continue");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

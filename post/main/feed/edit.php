@@ -23,15 +23,11 @@ $feed = item_request(TYPE_FEED);
 $short_code = crypt_crockford_encode($feed["feed_id"]);
 
 if (http_post("delete")) {
-	print_header("Edit Feed");
-	beg_main();
-	beg_form();
+	print_header(["title" => "Delete Feed", "form" => true]);
 	writeln('<h1>Delete Feed</h1>');
 	writeln("<p>Are you sure you want to delete the [<b>" . $feed["title"] . "</b>] feed and all of its articles?</p>");
 	box_left("Sure");
-	end_form();
-	end_main();
-	print_footer();
+	print_footer(["form" => true]);
 	finish();
 }
 if (http_post("sure")) {
@@ -56,4 +52,3 @@ $feed["topic_id"] = $topic_id;
 db_set_rec("feed", $feed);
 
 header("Location: /feed/$slug");
-

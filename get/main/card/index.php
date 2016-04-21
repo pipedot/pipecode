@@ -17,10 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+$spinner[] = ["name" => "Card", "link" => "/card/"];
+
 print_header();
-beg_main();
 
 writeln('<h1>' . get_text('Cards') . '</h1>');
 
-end_main();
 print_footer();

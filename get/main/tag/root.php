@@ -24,19 +24,14 @@ if (!string_uses($tag, "[a-z][0-9]")) {
 	fatal("Invalid tag");
 }
 
-if ($auth_zid === "") {
-	print_header("#$tag");
-} else {
-	print_header("#$tag", array("Share"), array("share"), array(user_link($auth_zid) . "stream/share"));
-}
+$spinner[] = ["name" => "Tag", "link" => "/tag/"];
+$spinner[] = ["name" => "#$tag", "link" => "/tag/$tag"];
 
-beg_main("stream");
+print_header(["title" => "#$tag", "main" => "stream"]);
 
 $row = sql("select card.card_id from card inner join card_tags on card.card_id = card_tags.card_id where tag = ? order by edit_time desc", $tag);
 for ($i = 0; $i < count($row); $i++) {
 	print_card($row[$i]["card_id"]);
 }
 
-end_main("stream");
-print_footer();
-
+print_footer(["main" => "stream"]);

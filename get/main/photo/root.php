@@ -21,12 +21,11 @@ include("image.php");
 
 $photo = item_request(TYPE_PHOTO);
 
-if ($auth_zid === "") {
-	print_header("Photo");
-} else {
-	print_header("Photo", array("Share"), array("share"), array(user_link($auth_zid) . "stream/share"));
-}
-beg_main();
+$spinner[] = ["name" => "Photo", "link" => "/photo/"];
+$spinner[] = ["name" => $photo["short_code"], "link" => "/photo/" . $photo["short_code"]];
+$actions[] = ["name" => "Share", "icon" => "share", "link" => "/stream/share"];
+
+print_header(["title" => "Photo"]);
 
 writeln('<h1>' . get_text('Photo') . '</h1>');
 
@@ -52,5 +51,4 @@ dict_row("Time", date("Y-m-d H:i", $photo["time"]));
 dict_row("License", '<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>');
 dict_end();
 
-end_main();
 print_footer();

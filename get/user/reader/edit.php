@@ -31,9 +31,11 @@ for ($i = 0; $i < count($list); $i++) {
 	$topic_names[] = $topic["name"];
 }
 
-print_header("Edit Feed", [], [], [], ["Reader", $feed["name"], "Edit Feed"], ["/reader/", "/reader/" . $feed["slug"], "/reader/" . $feed["slug"] . "/edit"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => $feed["name"], "link" => "/reader/" . $feed["slug"]];
+$spinner[] = ["name" => "Edit", "link" => "/reader/" . $feed["slug"] . "/edit"];
+
+print_header(["title" => "Edit Feed", "form" => true]);
 
 beg_tab();
 print_row(array("caption" => "Name", "text_key" => "name", "text_value" => $feed["name"]));
@@ -43,9 +45,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
 print_footer();
-
-
-

@@ -20,10 +20,11 @@
 expire_auth();
 require_https($https_enabled);
 
-print_header("Login");
+$spinner[] = ["name" => "Login", "link" => "/login/"];
+
+print_header(["form" => true]);
+
 writeln('<hr>');
-beg_main();
-beg_form();
 writeln('<h1>' . get_text('Login') . '</h1>');
 
 writeln('<table class="login">');
@@ -39,6 +40,4 @@ writeln('</table>');
 
 box_left('<input type="submit" value="' . get_text('Login') . '"> <a href="/forgot">' . get_text('Forgot Password?') . '</a>');
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

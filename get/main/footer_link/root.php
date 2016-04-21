@@ -19,13 +19,26 @@
 
 require_admin();
 
-$spinner[] = ["name" => "Tools", "link" => "/tools/"];
-$spinner[] = ["name" => "Hash", "link" => "/tools/hash"];
+if (!string_uses($s2, "[a-z][0-9]-", 100)) {
+	fatal("Invalid slug");
+}
+$slug = $s2;
 
-print_header();
+$footer_link = db_get_rec("footer_link", $slug);
+$icons = icon_list(true, false, false, true);
 
-dict_beg();
-dict_row("Hash", crypt_sha256($_POST["str"]));
-dict_end();
+$spinner[] = ["name" => "Footer Link", "link" => "/footer_link/"];
+$spinner[] = ["name" => $footer_link["name"], "link" => "/footer_link/$slug"];
+
+print_header(["form" => true]);
+
+beg_tab();
+print_row(["caption" => "Name", "text_key" => "name", "text_value" => $footer_link["name"]]);
+print_row(["caption" => "Slug", "text_key" => "slug", "text_value" => $slug]);
+print_row(["caption" => "Icon", "option_key" => "icon", "option_list" => $icons, "option_value" => $footer_link["icon"]]);
+print_row(["caption" => "Link", "text_key" => "link", "text_value" => $footer_link["link"]]);
+end_tab();
+
+box_right("Save");
 
 print_footer();

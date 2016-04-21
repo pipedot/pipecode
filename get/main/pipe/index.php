@@ -19,9 +19,9 @@
 
 include("pipe.php");
 
-print_header("Pipe");
-print_main_nav("pipe");
-beg_main("cell");
+$spinner[] = ["name" => "Pipe", "link" => "/pipe/"];
+
+print_header();
 
 writeln('<h1>' . get_text('Stories in the Pipe') . '</h1>');
 writeln('<p>' . get_text('These are stories waiting to be published to the main page. Remember, anyone can <a href="/submit">submit</a> a new story!') . '</p>');
@@ -44,7 +44,6 @@ if (count($pipes) == 0) {
 if (count($pipes) > 0) {
 	box_center('<a class="icon-16 calendar-16" href="history">' . get_text('History') . '</a>');
 }
-end_main();
 
 if ($auth_user["javascript_enabled"]) {
 ?>

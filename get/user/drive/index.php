@@ -19,8 +19,9 @@
 
 require_mine();
 
-print_header("Drive");
-beg_main();
+$spinner[] = ["name" => "Drive", "link" => "/drive/"];
+
+print_header();
 
 //$path = "/";
 //writeln('<h1>' . $path . '</h1>');
@@ -40,5 +41,4 @@ print_drive_folder($path, $auth_zid);
 
 box_right('<a class="icon-16 folder_new-16" href="?mkdir">Create Folder</a>');
 
-end_main();
 print_footer();

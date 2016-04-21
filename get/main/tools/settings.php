@@ -23,10 +23,10 @@ require_https($https_enabled);
 $zones = DateTimeZone::listIdentifiers(DateTimeZone::ALL);
 $languages = lang_list();
 
-print_header("Settings");
-beg_main();
-beg_form();
-writeln('<h1>' . get_text('Settings') . '</h1>');
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+$spinner[] = ["name" => "Settings", "link" => "/tools/settings"];
+
+print_header(["form" => true]);
 
 beg_tab("Name");
 print_row(array("caption" => "Domain", "text_key" => "server_name", "text_value" => $server_conf["server_name"]));
@@ -70,7 +70,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
 print_footer();
-

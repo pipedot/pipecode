@@ -24,8 +24,11 @@ require_developer();
 
 $bug = item_request(TYPE_BUG);
 
-print_header("Attachments", array("Report"), array("ladybug"), array("/bug/report"));
-beg_main();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Attachments", "link" => "/bug/attachments"];
+$actions[] = ["name" => "Report", "icon" => "ladybug", "link" => "/bug/report"];
+
+print_header();
 
 writeln('<h1>Attachments</h1>');
 
@@ -42,7 +45,7 @@ for ($i = 0; $i < count($row); $i++) {
 	$bug_file_code = crypt_crockford_encode($row[$i]["bug_file_id"]);
 	writeln('	<tr>');
 	writeln('		<td><a class="icon-16 ' . file_icon($row[$i]["type"]) . '" href="/pub/bug/' . $bug_file_code . '.' . $row[$i]["type"] . '">' . $row[$i]["name"] . '</a></td>');
-	writeln('		<td>' . sys_format_size($row[$i]["size"]) . '</a></td>');
+	writeln('		<td>' . string_size($row[$i]["size"]) . '</a></td>');
 	writeln('		<td>' . date("Y-m-d H:i", $row[$i]["time"]) . '</td>');
 	writeln('		<td>' . user_link($row[$i]["zid"], ["tag" => true]) . '</td>');
 	writeln('		<td class="right"><a class="icon-16 delete-16" href="/bug/delete/' . $bug_file_code . '">Delete</a></td>');
@@ -52,6 +55,4 @@ end_tab();
 
 box_right('<a class="icon-16 clip-16" href="/bug/' . $bug["short_code"] . '/attach">Attach</a>');
 
-end_main();
 print_footer();
-

@@ -27,12 +27,14 @@ if (!string_uses($mail_id, "[0-9]")) {
 $message = db_get_rec("mail", $mail_id);
 require_mine($message["zid"]);
 
-if (string_has($message["mail_from"], "no-reply@")) {
-	print_header($message["subject"], ["Compose"], ["mail-compose"], ["/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view/$mail_id"]);
-} else {
-	print_header($message["subject"], ["Reply", "Compose"], ["mail-reply", "mail-compose"], ["/mail/compose?mid=$mail_id", "/mail/compose"], ["Mail", $message["subject"]], ["/mail/", "/mail/view/$mail_id"]);
+$spinner[] = ["name" => "Mail", "link" => "/mail/"];
+$spinner[] = ["name" => $message["subject"], "short" => $mail_id, "link" => "/mail/view/$mail_id"];
+$actions[] = ["name" => "Compose", "icon" => "mail-compose", "link" => "/mail/compose"];
+if (!string_has($message["mail_from"], "no-reply@")) {
+	$actions[] = ["name" => "Reply", "icon" => "mail-reply", "link" => "/mail/compose?mid=$mail_id"];
 }
-beg_main();
+
+print_header(["form" => true]);
 
 beg_tab();
 writeln('	<tr>');
@@ -64,7 +66,6 @@ writeln('</td>');
 writeln('</tr>');
 end_tab();
 
-beg_form();
 if ($message["location"] == "Junk") {
 	box_right("Restore,Delete,Expunge");
 } else if ($message["location"] == "Trash") {
@@ -74,6 +75,5 @@ if ($message["location"] == "Junk") {
 } else {
 	box_right("Junk,Delete");
 }
-end_form();
-end_main();
-print_footer();
+
+print_footer(["form" => true]);

@@ -19,12 +19,18 @@
 
 require_admin();
 
-$slug = http_get_string("slug", array("len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+if (!string_uses($s2, "[a-z][0-9]-", 100)) {
+	fatal("Invalid slug");
+}
+$slug = $s2;
+
 $page = db_get_rec("page", $slug);
 
-print_header("Edit Page");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Page", "link" => "/page/"];
+$spinner[] = ["name" => $page["title"], "link" => "/$slug"];
+$spinner[] = ["name" => "Edit", "link" => "/page/$slug/edit"];
+
+print_header(["title" => "Edit Page", "form" => true]);
 
 beg_tab("Edit Page");
 print_row(array("caption" => "Title", "text_key" => "title", "text_value" => $page["title"]));
@@ -68,6 +74,4 @@ writeln('</script>');
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

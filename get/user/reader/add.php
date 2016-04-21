@@ -21,9 +21,11 @@ include("feed.php");
 
 require_mine();
 
-print_header("Add Feed", [], [], [], ["Reader", "Add Feed"], ["/reader/", "/reader/add"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => "Add", "link" => "/reader/add"];
+
+print_header(["title" => "Add Feed", "form" => true]);
+
 writeln('<h1>' . get_text('New Feed') . '</h1>');
 
 beg_tab();
@@ -41,6 +43,4 @@ for ($i = 0; $i < count($list); $i++) {
 	writeln('<a class="topic-box ' . $topic["icon"] . '-64" href="' . $protocol . '://' . $server_name . '/feed/topic/' . $topic["slug"] . '">' . $topic["name"] . '</a>');
 }
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

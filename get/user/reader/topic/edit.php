@@ -22,9 +22,13 @@ require_mine();
 $topic = item_request(TYPE_READER_TOPIC);
 $icons = icon_list(true, true, true);
 
-print_header("Edit Topic", [], [], [], ["Reader", "Topic", $topic["name"], "Edit"], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"], "/reader/topic/" . $topic["slug"] . "/edit"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => "Topic", "link" => "/reader/topic/"];
+$spinner[] = ["name" => $topic["name"], "link" => "/reader/topic/" . $topic["slug"]];
+$spinner[] = ["name" => "Edit", "link" => "/reader/topic/" . $topic["slug"] . "/edit"];
+
+print_header(["title" => "Edit Topic", "form" => true]);
+
 writeln('<h1>' . get_text('Edit Topic') . '</h1>');
 
 beg_tab();
@@ -35,9 +39,4 @@ end_tab();
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
-
-
+print_footer(["form" => true]);

@@ -19,8 +19,9 @@
 
 include("story.php");
 
-print_header("Submissions", [], [], [], ["Submissions"], ["/submissions"]);
-beg_main();
+$spinner[] = ["name" => "Submissions", "link" => "/submissions"];
+
+print_header();
 
 $items_per_page = 10;
 list($item_start, $page_footer) = page_footer("story", $items_per_page, ["author_zid" => $zid]);
@@ -39,6 +40,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();
-

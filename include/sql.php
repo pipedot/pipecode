@@ -434,9 +434,9 @@ $db_table["feed"] = array(
 
 $db_table["feed_topic"] = array(
 	array("name" => "topic_id", "key" => true, "auto" => true),
+	array("name" => "slug"),
 	array("name" => "icon"),
-	array("name" => "name"),
-	array("name" => "slug")
+	array("name" => "name")
 );
 
 $db_table["feed_user"] = array(
@@ -447,9 +447,10 @@ $db_table["feed_user"] = array(
 );
 
 $db_table["footer_link"] = array(
-	array("name" => "title", "key" => true),
+	array("name" => "slug", "key" => true),
 	array("name" => "icon"),
-	array("name" => "link")
+	array("name" => "link"),
+	array("name" => "name")
 );
 
 $db_table["image"] = array(

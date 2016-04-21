@@ -26,8 +26,9 @@ $page = http_get_int("page", array("default" => 1, "required" => false));
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("select count(*) as item_count from comment inner join comment_vote on comment.comment_id = comment_vote.comment_id where comment.zid = ? and value <> 0", $items_per_page, $zid);
 
-print_header("Karma", [], [], [], ["Karma"], ["/karma/"]);
-beg_main();
+$spinner[] = ["name" => "Karma", "link" => "/karma/"];
+
+print_header();
 
 writeln('<h1>' . get_text('Current') . '</h1>');
 writeln('<div class="icon-32 ' . $icon . '-32">' . get_text($description) . ' (' . $karma . ')</div>');
@@ -65,5 +66,4 @@ end_tab();
 
 writeln($page_footer);
 
-end_main();
 print_footer();

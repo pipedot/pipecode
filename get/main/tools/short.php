@@ -17,9 +17,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-print_header("Tools");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+$spinner[] = ["name" => "Short", "link" => "/tools/short"];
+
+print_header(["form" => true]);
 
 beg_tab("Short Code Encode");
 print_row(array("caption" => "Integer", "text_key" => "short_encode"));
@@ -31,6 +32,4 @@ print_row(array("caption" => "Short Code", "text_key" => "short_decode"));
 end_tab();
 box_right("Decode");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

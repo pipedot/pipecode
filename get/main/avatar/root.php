@@ -21,13 +21,14 @@ include("drive.php");
 include("avatar.php");
 
 if (string_uses($s2, "[A-Z][0-9]")) {
-	print_header("Avatar");
-	beg_main();
-
 	$avatar = item_request(TYPE_AVATAR);
 	$avatar_code = $avatar["short_code"];
 
-	writeln('<h1>' . get_text('Avatar') . '</h1>');
+	$spinner[] = ["name" => "Avatar", "link" => "/avatar/"];
+	$spinner[] = ["name" => $avatar_code, "link" => "/avatar/$avatar_code"];
+
+	print_header(["title" => "Avatar"]);
+
 	writeln('<div class="photo-frame">');
 	writeln('	<img alt="avatar" class="thumb" src="' . $avatar_code . '-256.jpg">');
 	writeln('	<div><a href="' . $avatar_code . '-64.png">' . get_text('Small') . ' (64x64)</a> | <a href="' . $avatar_code . '-128.jpg">' . get_text('Medium') . ' (128x128)</a> | <a href="' . $avatar_code . '-256.jpg">' . get_text('Large') . ' (256x256)</a></div>');
@@ -39,7 +40,6 @@ if (string_uses($s2, "[A-Z][0-9]")) {
 	dict_row("License", '<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>');
 	dict_end();
 
-	end_main();
 	print_footer();
 	finish();
 }

@@ -22,8 +22,10 @@ include("story.php");
 $feed = item_request(TYPE_FEED);
 $feed_code = crypt_crockford_encode($feed["feed_id"]);
 
-print_header($feed["title"]);
-beg_main();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => $feed["title"], "short" => $feed["slug"], "link" => "/feed/" . $feed["slug"]];
+
+print_header();
 
 if (fs_is_file("$doc_root/www/pub/favicon/$feed_code.png")) {
 	$icon = ' style="background-image: url(/pub/favicon/' . $feed_code . '.png)"';
@@ -57,5 +59,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();

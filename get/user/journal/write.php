@@ -19,11 +19,10 @@
 
 require_mine();
 
-print_header("Write", [], [], [], ["Journal", "Write"], ["/journal/", "/journal/write"]);
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Journal", "link" => "/journal/"];
+$spinner[] = ["name" => "Write", "link" => "/journal/write"];
 
-writeln('<h1>' . get_text('Write') . '</h1>');
+print_header(["form" => true]);
 
 beg_tab();
 print_row(array("caption" => "Title", "text_key" => "title"));
@@ -58,7 +57,4 @@ if ($auth_user["javascript_enabled"] && $auth_user["wysiwyg_enabled"]) {
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

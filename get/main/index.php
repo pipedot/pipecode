@@ -20,7 +20,7 @@
 include("story.php");
 include("poll.php");
 
-print_header();
+print_header(["main" => "none"]);
 print_main_nav("stories");
 beg_main("cell");
 
@@ -41,7 +41,7 @@ if ($auth_zid != "") {
 	print_user_box();
 	print_notification_box();
 } else {
-	writeln('<div style="width: 300px">');
+	writeln('<div class="right-bar">');
 }
 
 $row = sql("select poll_id from poll order by publish_time desc limit 1");
@@ -96,4 +96,3 @@ if ($auth_zid === "") {
 writeln('</aside>');
 
 print_footer();
-

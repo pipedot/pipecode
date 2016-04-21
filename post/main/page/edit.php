@@ -21,7 +21,11 @@ include("clean.php");
 
 require_admin();
 
-$old_slug = http_get_string("slug", array("len" => 100, "valid" => "[a-z][A-Z][0-9]-_."));
+if (!string_uses($s2, "[a-z][0-9]-", 100)) {
+	fatal("Invalid slug");
+}
+$old_slug = $s2;
+
 $title = clean_subject();
 $new_slug = clean_slug();
 list($clean, $dirty) = clean_body();
@@ -36,4 +40,4 @@ $page["title"] = $title;
 $page["body"] = $clean;
 db_set_rec("page", $page);
 
-header("Location: ./");
+header("Location: ../");

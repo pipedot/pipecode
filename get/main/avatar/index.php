@@ -17,4 +17,23 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+$spinner[] = ["name" => "Avatar", "link" => "/avatar/"];
 
+print_header(["title" => "Avatars"]);
+
+$items_per_page = 100;
+list($item_start, $page_footer) = page_footer("select count(distinct zid) as item_count from user_conf", $items_per_page);
+
+$row = sql("select distinct zid from user_conf order by zid limit $item_start, $items_per_page");
+writeln('<div class="gallery">');
+foreach ($row as $avatar) {
+	$zid = $avatar["zid"];
+	$avatar_id = avatar_id($zid);
+	$avatar_code = crypt_crockford_encode($avatar_id);
+	writeln('	<a href="' . $avatar_code . '"><img alt="' . $zid . '" class="thumb" src="' . $avatar_code . '-256.jpg" title="' . $zid . '"></a>');
+}
+writeln('</div>');
+
+writeln($page_footer);
+
+print_footer();

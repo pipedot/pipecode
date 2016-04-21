@@ -25,13 +25,13 @@ if ($short === false) {
 	fatal("Unable to find record");
 }
 
-$type_id = item_type($short["type_id"]);
+$type_id = $short["type_id"];
+$type = item_type($type_id);
 $link = item_link($type_id, $short_id);
 
-print_header();
-beg_main();
+$spinner[] = ["name" => "Short Link", "link" => "/$short_code+"];
 
-writeln('<h1>' . get_text('Short Link') . '</h1>');
+print_header();
 
 dict_beg();
 dict_row("Code", $short_code);
@@ -39,15 +39,11 @@ dict_row("Type", item_type($type_id));
 dict_row("URL", '<a href="' . $link . '">' . $link . '</a>');
 dict_end();
 
-beg_tab();
-writeln('	<tr>');
-writeln('		<td style="background-color: #ffffff; text-align: center"><img class="map" src="/map/' . $short_code . '"></td>');
-writeln('	</tr>');
-end_tab();
+writeln('<div class="map-frame"><img class="map" src="/map/' . $short_code . '"></div>');
 
-$country = array();
-$city = array();
-$timezone = array();
+$country = [];
+$city = [];
+$timezone = [];
 $row = sql("select remote_ip, count(remote_ip) as hits from short_view where short_id = ? group by remote_ip", $short_id);
 for ($i = 0; $i < count($row); $i++) {
 	$geo = geo_ip($row[$i]["remote_ip"]);
@@ -102,5 +98,4 @@ for ($i = 0; $i < count($timezone); $i++) {
 }
 dict_end();
 
-end_main();
 print_footer();

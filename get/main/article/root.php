@@ -20,12 +20,14 @@
 include("story.php");
 
 $article = item_request(TYPE_ARTICLE);
+$article_code = $article["short_code"];
 $article["type_id"] = TYPE_ARTICLE;
 $article["type"] = "article";
-$short_code = crypt_crockford_encode($article["article_id"]);
 
-print_header($article["title"]);
-beg_main();
+$spinner[] = ["name" => "Article", "link" => "/article/"];
+$spinner[] = ["name" => $article["title"], "short" => $article_code, "link" => "/article/$article_code"];
+
+print_header();
 
 print_news_large($article);
 
@@ -61,5 +63,4 @@ writeln('</table>');
 
 print_comments(TYPE_ARTICLE, $article);
 
-end_main();
 print_footer();

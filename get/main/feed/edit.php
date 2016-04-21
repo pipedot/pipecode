@@ -20,11 +20,13 @@
 require_admin();
 
 $feed = item_request(TYPE_FEED);
-$short_code = crypt_crockford_encode($feed["feed_id"]);
+$feed_code = crypt_crockford_encode($feed["feed_id"]);
 
-print_header("Edit Feed");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => $feed["title"], "short" => $feed["slug"], "link" => "/feed/$feed_code"];
+$spinner[] = ["name" => "Edit", "link" => "/feed/$feed_code/edit"];
+
+print_header(["title" => "Edit Feed", "form" => true]);
 
 writeln('<h1>' . get_text('Edit Feed') . '</h1>');
 
@@ -56,6 +58,4 @@ end_tab();
 
 box_right("Delete,Save");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);

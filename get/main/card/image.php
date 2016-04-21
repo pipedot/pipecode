@@ -27,10 +27,11 @@ $link_url = $card["link_url"];
 
 $images = build_preview_images("<a href=\"$link_url\">link</a>");
 
-print_header();
+$spinner[] = ["name" => "Card", "link" => "/card/"];
+$spinner[] = ["name" => "Image", "link" => "/card/image"];
 
-beg_main();
-beg_form();
+print_header(["form" => true]);
+
 writeln('<h1>' . get_text('Select Image') . '</h1>');
 
 writeln('<label style="border: 1px solid #888888; border-radius: 4px; float: left; padding: 8px; margin-right: 8px; margin-bottom: 8px;">');
@@ -70,7 +71,4 @@ for ($i = 0; $i < count($images); $i++) {
 
 box_right("Save");
 
-end_form();
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

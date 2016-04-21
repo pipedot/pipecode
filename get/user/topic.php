@@ -25,11 +25,12 @@ if (strlen($topic) > 0 && !string_uses($topic, "[a-z][0-9]-")) {
 	fatal("Invalid topic");
 }
 
-if ($topic == "") {
-	print_header("Topics", [], [], [], ["Topic"], ["/topic/"]);
-} else {
-	print_header(ucwords($topic), [], [], [], ["Topic", ucwords($topic)], ["/topic/", "/topic/$topic"]);
+$spinner[] = ["name" => "Topic", "link" => "/topic/"];
+if ($topic != "") {
+	$spinner[] = ["name" => ucwords($topic), "link" => "/topic/$topic"];
 }
+
+print_header(["main" => "none"]);
 
 if ($topic != "") {
 	print_user_nav($topic);
@@ -64,6 +65,5 @@ if ($topic == "") {
 
 	writeln($page_footer);
 }
-end_main();
 
 print_footer();

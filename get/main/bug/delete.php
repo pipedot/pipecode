@@ -24,9 +24,11 @@ require_developer();
 
 $bug_file = item_request(TYPE_BUG_FILE);
 
-print_header("Delete File", array("Report"), array("ladybug"), array("/bug/report"));
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Delete File", "link" => "/bug/delete"];
+$actions[] = ["name" => "Report", "icon" => "ladybug", "link" => "/bug/report"];
+
+print_header(["form" => true]);
 
 writeln('<h1>Delete File</h1>');
 
@@ -38,7 +40,5 @@ end_tab();
 
 box_left("Delete");
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);
 

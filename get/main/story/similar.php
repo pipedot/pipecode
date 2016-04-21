@@ -20,13 +20,17 @@
 include("story.php");
 
 $story = item_request(TYPE_STORY);
+$story_code = $story["short_code"];
 
 $keywords = $story["keywords"];
 $beg_time = $story["publish_time"] - DAYS * 15;
 $end_time = $story["publish_time"] + DAYS * 15;
 
-print_header("Similar News");
-beg_main();
+$spinner[] = ["name" => "Story", "link" => "/story/"];
+$spinner[] = ["name" => $story["title"], "short" => $story_code, "link" => "/story/$story_code"];
+$spinner[] = ["name" => "Similar", "link" => "/story/$story_code/similar"];
+
+print_header(["title" => "Similar News"]);
 
 writeln('<h1>' . get_text('Story') . '</h1>');
 writeln('<a class="icon-16 news-16" href="' . item_link(TYPE_STORY, $story["story_id"], $story) . '">' . $story["title"]  . '</a>');
@@ -48,5 +52,4 @@ if (count($row) == 0) {
 	writeln($page_footer);
 }
 
-end_main();
 print_footer();

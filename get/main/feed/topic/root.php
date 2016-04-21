@@ -22,9 +22,11 @@ if (!string_uses($s3, "[a-z]")) {
 }
 $topic = db_get_rec("feed_topic", ["slug" => $s3]);
 
-print_header($topic["name"]);
-beg_main();
-writeln('<h1>' . $topic["name"] . '</h1>');
+$spinner[] = ["name" => "Feed", "link" => "/feed/"];
+$spinner[] = ["name" => "Topic", "link" => "/feed/topic/"];
+$spinner[] = ["name" => $topic["name"], "link" => "/feed/topic/" . $topic["slug"]];
+
+print_header();
 
 dict_beg();
 $list = db_get_list("feed", "title", ["topic_id" => $topic["topic_id"]]);
@@ -46,5 +48,4 @@ for ($i = 0; $i < count($list); $i++) {
 }
 dict_end();
 
-end_main();
 print_footer();

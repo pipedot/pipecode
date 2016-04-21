@@ -19,23 +19,21 @@
 
 include("drive.php");
 
-print_header("Thumbnail");
-beg_main();
+$spinner[] = ["name" => "Thumbnail", "link" => "/thumb/"];
 
-writeln('<h1>' . get_text('Thumbnails') . '</h1>');
+print_header(["title" => "Thumbnails"]);
 
 $items_per_page = 100;
 list($item_start, $page_footer) = page_footer("thumb", $items_per_page);
 
-$row = sql("select * from thumb order by time desc limit $item_start, $items_per_page");
+$row = sql("select thumb_id from thumb order by time desc limit $item_start, $items_per_page");
 writeln('<div class="gallery">');
-for ($i = 0; $i < count($row); $i++) {
-	$short_code = crypt_crockford_encode($row[$i]["thumb_id"]);
-	writeln('	<a href="' . $short_code . '"><img alt="thumbnail" class="thumb" src="' . $short_code . '.jpg"></a>');
+foreach ($row as $thumb) {
+	$thumb_code = crypt_crockford_encode($thumb["thumb_id"]);
+	writeln('	<a href="' . $thumb_code . '"><img alt="thumbnail" class="thumb" src="' . $thumb_code . '.jpg"></a>');
 }
 writeln('</div>');
 
 writeln($page_footer);
 
-end_main();
 print_footer();

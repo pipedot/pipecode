@@ -21,9 +21,10 @@ include("diff.php");
 
 $card = item_request(TYPE_CARD);
 
+$spinner[] = ["name" => "Card", "link" => "/card/"];
+$spinner[] = ["name" => "History", "link" => "/card/history"];
+
 print_header("Card History");
-beg_main();
-beg_form();
 
 writeln('<h1>' . get_text('Card') . '</h1>');
 
@@ -46,6 +47,4 @@ if (count($row) > 0) {
 	}
 }
 
-end_main();
 print_footer();
-

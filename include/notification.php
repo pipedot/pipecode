@@ -36,7 +36,7 @@ function print_notification_box()
 
 	writeln('</div>');
 	writeln('<div class="dialog-body center">');
-	writeln('<a class="icon-16 bulb-16" href="' . user_link($auth_zid) . 'notification/">' . get_text('More ($1)', $notification_count) . ')</a> | <a class="icon-16 broom-16" href="' . user_link($auth_zid) . 'notification/clear">' . get_text('Clear') . '</a>');
+	writeln('<a class="icon-16 bulb-16" href="' . user_link($auth_zid) . 'notification/">' . get_text('More ($1)', $notification_count) . '</a> | <a class="icon-16 broom-16" href="' . user_link($auth_zid) . 'notification/clear">' . get_text('Clear') . '</a>');
 	writeln('</div>');
 }
 

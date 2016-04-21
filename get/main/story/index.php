@@ -19,9 +19,9 @@
 
 include("story.php");
 
-print_header();
-print_main_nav("stories");
-beg_main("cell");
+$spinner[] = ["name" => "Story", "link" => "/story/"];
+
+print_header(["title" => "Stories"]);
 
 $items_per_page = 10;
 list($item_start, $page_footer) = page_footer("story", $items_per_page);
@@ -33,5 +33,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();

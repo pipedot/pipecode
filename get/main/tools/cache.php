@@ -21,15 +21,14 @@ include("drive.php");
 
 require_admin();
 
-print_header("Cache");
-beg_main();
-beg_form();
+$spinner[] = ["name" => "Tools", "link" => "/tools/"];
+$spinner[] = ["name" => "Cache", "link" => "/tools/cache"];
+
+print_header(["form" => true]);
+
 beg_tab("Delete From Cache");
 print_row(array("caption" => "URL or URL Hash", "text_key" => "hash"));
 end_tab();
 box_right("Delete");
-end_form();
 
-end_main();
-print_footer();
-
+print_footer(["form" => true]);

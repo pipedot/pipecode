@@ -19,8 +19,11 @@
 
 require_feature("bug");
 
-print_header("Closed Bugs", array("Report"), array("ladybug"), array("/bug/report"));
-beg_main();
+$spinner[] = ["name" => "Bug", "link" => "/bug/"];
+$spinner[] = ["name" => "Closed Bugs", "link" => "/bug/history"];
+$actions[] = ["name" => "Report", "icon" => "ladybug", "link" => "/bug/report"];
+
+print_header();
 writeln('<h1>' . get_text('Closed Bugs') . '</h1>');
 
 $items_per_page = 100;
@@ -53,5 +56,4 @@ end_tab();
 writeln($page_footer);
 box_center('<a class="icon-16 calendar-16" href="history">' . get_text('History') . '</a>');
 
-end_main();
 print_footer();

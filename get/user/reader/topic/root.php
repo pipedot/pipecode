@@ -24,7 +24,14 @@ require_mine();
 
 $topic = item_request(TYPE_READER_TOPIC);
 
-print_header($topic["name"], ["Add", "Edit"], ["plus", "news"], ["/reader/add", "/reader/topic/"], ["Reader", "Topic", $topic["name"]], ["/reader/", "/reader/topic/", "/reader/topic/" . $topic["slug"]]);
+$spinner[] = ["name" => "Reader", "link" => "/reader/"];
+$spinner[] = ["name" => "Topic", "link" => "/reader/topic/"];
+$spinner[] = ["name" => $topic["name"], "link" => "/reader/topic/" . $topic["slug"]];
+$actions[] = ["name" => "Add", "icon" => "plus", "link" => "/reader/add"];
+$actions[] = ["name" => "Edit", "icon" => "news", "link" => "/reader/edit"];
+
+print_header(["main" => "none"]);
+
 print_reader_nav();
 beg_main("cell");
 
@@ -38,6 +45,4 @@ for ($i = 0; $i < count($row); $i++) {
 
 writeln($page_footer);
 
-end_main();
 print_footer();
-

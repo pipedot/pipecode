@@ -19,13 +19,12 @@
 
 require_admin();
 
-$spinner[] = ["name" => "Tools", "link" => "/tools/"];
-$spinner[] = ["name" => "Hash", "link" => "/tools/hash"];
+if (!string_uses($s3, "[a-z][0-9]-")) {
+	fatal("Invalid topic");
+}
+$feed_topic = db_get_rec("feed_topic", ["slug" => $s3]);
 
-print_header();
+db_del_rec("feed_topic", $feed_topic["topic_id"]);
+sql("update feed set topic_id = 0 where topic_id = ?", $feed_topic["topic_id"]);
 
-dict_beg();
-dict_row("Hash", crypt_sha256($_POST["str"]));
-dict_end();
-
-print_footer();
+header("Location: /feed/topic/list");

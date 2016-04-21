@@ -19,13 +19,12 @@
 
 require_admin();
 
-print_header("Create Poll");
-print_main_nav("poll");
-beg_main("cell");
+$spinner[] = ["name" => "Poll", "link" => "/poll/"];
+$spinner[] = ["name" => "Create", "link" => "/poll/create"];
+
+print_header(["title" => "Create Poll", "form" => true]);
 
 writeln('<h1>' . get_text('Create Poll') . '</h1>');
-
-beg_form();
 
 beg_tab();
 print_row(array("caption" => "Question", "text_key" => "question"));
@@ -68,6 +67,4 @@ $('.minus-16').live('click', function() {
 </script>
 <?
 
-end_form();
-end_main();
-print_footer();
+print_footer(["form" => true]);
