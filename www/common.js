@@ -1,6 +1,6 @@
 //
 // Pipecode - distributed social network
-// Copyright (C) 2014-2015 Bryan Beicker <bryan@pipedot.org>
+// Copyright (C) 2014-2016 Bryan Beicker <bryan@pipedot.org>
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU Affero General Public License as
